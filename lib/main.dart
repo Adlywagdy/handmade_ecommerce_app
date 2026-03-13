@@ -9,6 +9,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
   const HandcraftedEcommerceApp({super.key});
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp();
+    return GetMaterialApp(debugShowCheckedModeBanner: false, home: Scaffold());
   }
 }
