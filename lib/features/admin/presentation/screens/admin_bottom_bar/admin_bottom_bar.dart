@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../../core/widgets/custom_bottom_bar.dart';
+import '../dashboard/dashboard_screen.dart';
 
 class AdminBottomBarScreen extends StatelessWidget {
   const AdminBottomBarScreen({super.key});
@@ -11,7 +12,7 @@ class AdminBottomBarScreen extends StatelessWidget {
         BottomNavItem(
           iconPath: 'assets/images/dashboard.svg',
           label: 'Dashboard',
-          page: Center(child: Text("Dashboard", style: TextStyle(color: Colors.black))),
+          page: DashboardScreen(),
         ),
         BottomNavItem(
           iconPath: 'assets/images/sellers.svg',
