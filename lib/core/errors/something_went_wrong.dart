@@ -1,18 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
-class SomethingWentWrong extends StatefulWidget {
+class SomethingWentWrong extends StatelessWidget {
   const SomethingWentWrong({super.key});
 
   @override
-  State<SomethingWentWrong> createState() => _SomethingWentWrongState();
-}
-
-class _SomethingWentWrongState extends State<SomethingWentWrong> {
-  @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
-    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: Center(
@@ -20,7 +15,7 @@ class _SomethingWentWrongState extends State<SomethingWentWrong> {
           mainAxisAlignment: .center,
           children: [
             SvgPicture.asset('assets/icons/something_went_wrong.svg'),
-            SizedBox(height: height * 0.05),
+            SizedBox(height: 35),
             Text(
               'Something went wrong',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
@@ -34,12 +29,14 @@ class _SomethingWentWrongState extends State<SomethingWentWrong> {
               ),
               textAlign: .center,
             ),
-            SizedBox(height: height * 0.1),
+            SizedBox(height: 50),
             InkWell(
-              onTap: () {},
+              onTap: () {
+                Get.back();
+              },
               child: Container(
-                height: height * 0.06,
-                width: width * 0.35,
+                height: 50,
+                width: 135,
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(12),
@@ -51,7 +48,7 @@ class _SomethingWentWrongState extends State<SomethingWentWrong> {
                     style: TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Color(0xff8B4513),
+                      color: commonColor,
                       fontFamily: 'Plus Jakarta Sans',
                     ),
                   ),

@@ -1,18 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
-class NoInternetConnection extends StatefulWidget {
+class NoInternetConnection extends StatelessWidget {
   const NoInternetConnection({super.key});
 
   @override
-  State<NoInternetConnection> createState() => _NoInternetConnectionState();
-}
-
-class _NoInternetConnectionState extends State<NoInternetConnection> {
-  @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.sizeOf(context).height;
-    final width = MediaQuery.sizeOf(context).width;
     return Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: Center(
@@ -20,7 +14,7 @@ class _NoInternetConnectionState extends State<NoInternetConnection> {
           mainAxisAlignment: .center,
           children: [
             SvgPicture.asset('assets/icons/no_internet_connection.svg'),
-            SizedBox(height: height * 0.05),
+            SizedBox(height: 35),
             Text(
               'No internet connection',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
@@ -34,14 +28,16 @@ class _NoInternetConnectionState extends State<NoInternetConnection> {
               ),
               textAlign: .center,
             ),
-            SizedBox(height: height * 0.1),
+            SizedBox(height: 50),
             InkWell(
-              onTap: () {},
+              onTap: () {
+
+              },
               child: Container(
-                height: height * 0.06,
-                width: width * 0.55,
+                height: 50,
+                width: 200,
                 decoration: BoxDecoration(
-                  color: Color(0xff8B4513),
+                  color: commonColor,
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/errors/no_internet_connection.dart';
+import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'features/admin/presentation/screens/admin_bottom_bar/admin_bottom_bar.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,7 +22,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          home: const AdminBottomBarScreen(),
+          home: SplashScreen(),
         );
       },
     );
