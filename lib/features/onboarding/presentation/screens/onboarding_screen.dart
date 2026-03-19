@@ -40,7 +40,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 305,
               child: Text(
                 textAlign: TextAlign.center,
-                OnboardingTitle_Subtitle.titles[count - 1],
+                OnboardingTitleDescription.titles[count - 1],
                 style: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
               ),
             ),
@@ -49,7 +49,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 312,
               child: Text(
                 textAlign: TextAlign.center,
-                OnboardingTitle_Subtitle.subTitle[count - 1],
+                OnboardingTitleDescription.subTitle[count - 1],
                 style: TextStyle(fontSize: 16, color: Color(0xff8B7A6F)),
               ),
             ),

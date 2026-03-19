@@ -1,6 +1,5 @@
 part of 'customer_cubit.dart';
 
-@immutable
-sealed class CustomerState {}
+abstract class CustomerState {}
 
 final class CustomerInitial extends CustomerState {}
