@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/dashboard/dashboard_screen.dart';
+import 'package:handmade_ecommerce_app/features/admin/presentation/screens/sellers/sellers_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/product_details_screen.dart';
@@ -25,6 +26,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
+          // home: const CustomerHomeScreen(),
           home: ProductDetailsScreen(product: productsListData[0]),
         );
       },
