@@ -4,7 +4,7 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchcategorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchedproductitemlowercolumn.dart';
 
@@ -75,6 +75,7 @@ class CustomerSearchScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
                 child: ProductItem(
+                  cardclipBehavior: .antiAlias,
                   product: productsListData[index],
                   imageflex: 2,
                   lowercolumnflex: 1,

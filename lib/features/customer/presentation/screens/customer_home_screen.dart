@@ -7,7 +7,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/data/test_produc
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/categorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customfeaturerow.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/featuredproductitemlowercolumn.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/topratedproductitemlowercolumn.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
@@ -101,6 +101,8 @@ class CustomerHomeScreen extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: .84,
                         child: ProductItem(
+                          cardmargin: 5,
+                          cardclipBehavior: .antiAlias,
                           imageflex: 3,
                           lowercolumnflex: 2,
                           lowercolumnpadding: 16,
@@ -127,7 +129,7 @@ class CustomerHomeScreen extends StatelessWidget {
               child: Container(
                 height: 320.h,
 
-                constraints: BoxConstraints(minHeight: 320.h),
+                constraints: BoxConstraints(minHeight: 300.h),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: productsListData.length,
@@ -137,6 +139,8 @@ class CustomerHomeScreen extends StatelessWidget {
                       child: AspectRatio(
                         aspectRatio: .64,
                         child: ProductItem(
+                          cardmargin: 5,
+                          cardclipBehavior: .antiAlias,
                           imageflex: 3,
                           lowercolumnflex: 2,
                           lowercolumnpadding: 12,
