@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productimage.dart';
+
+import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customsellerlisttile.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productdetailslowercolumn.dart';
 
 class ProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -37,42 +41,12 @@ class ProductDetailsScreen extends StatelessWidget {
           ),
         ),
       ),
-      body: PageView.builder(
-        controller: PageController(initialPage: 0),
-        scrollDirection: Axis.horizontal,
-        itemCount: product.images.length,
-        itemBuilder: (context, index) {
-          return Stack(
-            children: [
-              ProductImage(productimage: product.images[index]),
-              Positioned(
-                bottom: 24.h,
-                right: 0.w,
-                left: 0.w,
-                child: SizedBox(
-                  height: 12.h,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    spacing: 8.w,
-                    children: List.generate(product.images.length, (dotIndex) {
-                      return index == dotIndex
-                          ? CircleAvatar(
-                              radius: 6.r,
-                              backgroundColor: Colors.white,
-                            )
-                          : CircleAvatar(
-                              radius: 6.r,
-                              backgroundColor: Colors.white.withValues(
-                                alpha: .4,
-                              ),
-                            );
-                    }),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+      body: ProductItem(
+        product: product,
+        imageflex: 6,
+        lowercolumnflex: 4,
+        cardclipBehavior: Clip.antiAlias,
+        lowercolumn: ProductDetailsLowerColumn(product: product),
       ),
     );
   }
