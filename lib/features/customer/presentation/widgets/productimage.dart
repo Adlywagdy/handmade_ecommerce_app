@@ -5,16 +5,16 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 
 class ProductImage extends StatelessWidget {
-  const ProductImage({super.key, required this.product});
+  const ProductImage({super.key, required this.productimage});
 
-  final ProductModel product;
+  final String productimage;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       fit: StackFit.expand,
       children: [
-        Image.asset(product.image, fit: BoxFit.fill),
+        Image.asset(productimage, fit: BoxFit.fill),
 
         Positioned(
           right: 8.w,

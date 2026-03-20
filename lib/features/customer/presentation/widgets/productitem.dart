@@ -43,7 +43,7 @@ class ProductItem extends StatelessWidget {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(12),
               ),
-              child: ProductImage(product: product),
+              child: ProductImage(productimage: product.images[0]),
             ),
           ),
           Expanded(

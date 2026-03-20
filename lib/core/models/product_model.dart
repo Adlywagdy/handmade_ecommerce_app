@@ -7,7 +7,8 @@ class ProductModel {
   double price;
   double? rate;
   int? quantity;
-  String image;
+  List<String> images;
+
   CategoryModel? category;
 
   ProductModel({
@@ -16,7 +17,8 @@ class ProductModel {
     required this.description,
     required this.price,
     this.rate,
-    required this.image,
+
+    required this.images,
     this.category,
     this.quantity,
   });

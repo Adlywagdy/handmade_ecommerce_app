@@ -10,7 +10,11 @@ List<ProductModel> productsListData = [
     price: 49.99,
     rate: 4.5,
     quantity: 50,
-    image: "assets/images/splash.jpeg",
+    images: [
+      "assets/images/splash.jpeg",
+      "assets/images/test.png",
+      "assets/images/test2.png",
+    ],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -20,7 +24,11 @@ List<ProductModel> productsListData = [
     price: 29.99,
     rate: 4.0,
     quantity: 30,
-    image: "assets/images/splash.jpeg",
+    images: [
+      "assets/images/splash.jpeg",
+      "assets/images/test.png",
+      "assets/images/test2.png",
+    ],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -30,7 +38,11 @@ List<ProductModel> productsListData = [
     price: 19.99,
     rate: 4.8,
     quantity: 20,
-    image: "assets/images/splash.jpeg",
+    images: [
+      "assets/images/splash.jpeg",
+      "assets/images/test.png",
+      "assets/images/test2.png",
+    ],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -39,7 +51,11 @@ List<ProductModel> productsListData = [
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
     price: 19.99,
     rate: 4.8,
-    image: "assets/images/splash.jpeg",
+    images: [
+      "assets/images/splash.jpeg",
+      "assets/images/test.png",
+      "assets/images/test2.png",
+    ],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -48,7 +64,11 @@ List<ProductModel> productsListData = [
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
     rate: 4.0,
-    image: "assets/images/splash.jpeg",
+    images: [
+      "assets/images/splash.jpeg",
+      "assets/images/test.png",
+      "assets/images/test2.png",
+    ],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -57,7 +77,7 @@ List<ProductModel> productsListData = [
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
     rate: 4.0,
-    image: "assets/images/splash.jpeg",
+    images: ["assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -66,7 +86,7 @@ List<ProductModel> productsListData = [
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
     rate: 4.0,
-    image: "assets/images/splash.jpeg",
+    images: ["assets/images/test2.png", "assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -75,7 +95,7 @@ List<ProductModel> productsListData = [
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
     rate: 4.0,
-    image: "assets/images/splash.jpeg",
+    images: ["assets/images/test2.png", "assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
   ProductModel(
@@ -84,7 +104,7 @@ List<ProductModel> productsListData = [
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
     price: 19.99,
     rate: 4.8,
-    image: "assets/images/splash.jpeg",
+    images: ["assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
   ),
 ];
