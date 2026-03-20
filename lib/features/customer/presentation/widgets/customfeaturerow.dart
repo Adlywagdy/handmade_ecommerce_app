@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/widgets/customtextbutton.dart';
 
 class CustomFeatureRow extends StatelessWidget {
   final String title;
@@ -28,19 +29,7 @@ class CustomFeatureRow extends StatelessWidget {
             ),
           ),
 
-          TextButton(
-            onPressed: () {},
-            child: Text(
-              buttontext,
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                color: commonColor,
-                fontSize: 14,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ),
+          CustomTextButton(buttontext: buttontext),
         ],
       ),
     );
