@@ -26,6 +26,7 @@ List<ProductModel> productsListData = [
       badge: "Verified",
       location: "Tunisia",
     ),
+    tags: ["Handmade", "Ceramic", "Decorative"],
   ),
   ProductModel(
     name: 'Woven Basket',
@@ -49,6 +50,7 @@ List<ProductModel> productsListData = [
       badge: "Top Seller",
       location: "Tunisia",
     ),
+    tags: ["Handmade", "Wooden", "Decorative"],
   ),
   ProductModel(
     name: 'Hand-Painted Wooden Sign',
@@ -72,6 +74,7 @@ List<ProductModel> productsListData = [
       badge: "Top Seller",
       location: "Tunisia",
     ),
+    tags: ["Handmade", "Wooden", "Decorative"],
   ),
   ProductModel(
     name: 'Hand-Painted Wooden Sign',
@@ -94,6 +97,7 @@ List<ProductModel> productsListData = [
       badge: "Top Seller",
       location: "Tunisia",
     ),
+    tags: ["Handmade", "Wooden", "Decorative"],
   ),
   ProductModel(
     name: 'Woven Basket',

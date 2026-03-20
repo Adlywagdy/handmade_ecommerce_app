@@ -13,7 +13,10 @@ class ProductItem extends StatelessWidget {
   final double? elevation;
   final Clip imageclipBehavior;
   final Clip cardclipBehavior;
-  final double lowercolumnpadding;
+  final double lowercolumnleftpadding;
+  final double lowercolumnrightpadding;
+  final double lowercolumnbottompadding;
+  final double lowercolumntoppadding;
   final double cardmargin;
   const ProductItem({
     super.key,
@@ -23,7 +26,10 @@ class ProductItem extends StatelessWidget {
     required this.lowercolumnflex,
     this.elevation = 1,
     this.imageclipBehavior = Clip.none,
-    this.lowercolumnpadding = 14.0,
+    this.lowercolumnleftpadding = 14.0,
+    this.lowercolumnrightpadding = 14.0,
+    this.lowercolumnbottompadding = 14.0,
+    this.lowercolumntoppadding = 14.0,
     this.cardmargin = 0,
     required this.cardclipBehavior,
   });
@@ -54,7 +60,12 @@ class ProductItem extends StatelessWidget {
           Expanded(
             flex: lowercolumnflex,
             child: Padding(
-              padding: EdgeInsets.all(lowercolumnpadding).h,
+              padding: EdgeInsets.only(
+                left: lowercolumnleftpadding.w,
+                right: lowercolumnrightpadding.w,
+                bottom: lowercolumnbottompadding.h,
+                top: lowercolumntoppadding.h,
+              ),
               child: lowercolumn,
             ),
           ),

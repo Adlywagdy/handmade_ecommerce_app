@@ -9,6 +9,7 @@ class ProductModel {
   final double? rate;
   final int? quantity;
   final List<String> images;
+  final List<String>? tags;
   final SellerModel seller;
 
   CategoryModel? category;
@@ -24,5 +25,6 @@ class ProductModel {
     this.category,
     this.quantity,
     required this.seller,
+    this.tags,
   });
 }

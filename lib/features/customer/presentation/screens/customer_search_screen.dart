@@ -81,7 +81,10 @@ class CustomerSearchScreen extends StatelessWidget {
                   lowercolumnflex: 1,
                   elevation: 0,
                   imageclipBehavior: Clip.antiAlias,
-                  lowercolumnpadding: 8,
+                  lowercolumnbottompadding: 8.h,
+                  lowercolumntoppadding: 8.h,
+                  lowercolumnleftpadding: 8.w,
+                  lowercolumnrightpadding: 8.w,
                   lowercolumn: SearchedProductItemLowerColumn(
                     product: productsListData[index],
                   ),

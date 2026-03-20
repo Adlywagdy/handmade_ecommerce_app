@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customtextbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 
 class CustomFeatureRow extends StatelessWidget {
   final String title;
@@ -29,7 +29,10 @@ class CustomFeatureRow extends StatelessWidget {
             ),
           ),
 
-          CustomTextButton(buttontext: buttontext),
+          InkWell(
+            child: CustomTextContainer(buttontext: buttontext),
+            onTap: () {},
+          ),
         ],
       ),
     );

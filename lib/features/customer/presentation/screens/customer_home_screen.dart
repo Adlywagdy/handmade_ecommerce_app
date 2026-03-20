@@ -105,7 +105,10 @@ class CustomerHomeScreen extends StatelessWidget {
                           cardclipBehavior: .antiAlias,
                           imageflex: 3,
                           lowercolumnflex: 2,
-                          lowercolumnpadding: 16,
+                          lowercolumntoppadding: 16.h,
+                          lowercolumnbottompadding: 16.h,
+                          lowercolumnleftpadding: 16.w,
+                          lowercolumnrightpadding: 16.w,
                           product: productsListData[index],
                           lowercolumn: FeaturedProductItemLowerColumn(
                             product: productsListData[index],
@@ -143,7 +146,10 @@ class CustomerHomeScreen extends StatelessWidget {
                           cardclipBehavior: .antiAlias,
                           imageflex: 3,
                           lowercolumnflex: 2,
-                          lowercolumnpadding: 12,
+                          lowercolumnleftpadding: 12.w,
+                          lowercolumnrightpadding: 12.w,
+                          lowercolumntoppadding: 12.h,
+                          lowercolumnbottompadding: 12.h,
                           product: productsListData[index],
                           lowercolumn: TopRatedProductItemLowerColumn(
                             product: productsListData[index],
