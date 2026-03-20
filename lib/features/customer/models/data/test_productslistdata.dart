@@ -1,5 +1,6 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 
 // Sample product data , in a real app this would come from an API or database
 List<ProductModel> productsListData = [
@@ -16,6 +17,15 @@ List<ProductModel> productsListData = [
       "assets/images/test2.png",
     ],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Artisan ",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Verified",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Woven Basket',
@@ -30,6 +40,15 @@ List<ProductModel> productsListData = [
       "assets/images/test2.png",
     ],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Hand-Painted Wooden Sign',
@@ -44,6 +63,15 @@ List<ProductModel> productsListData = [
       "assets/images/test2.png",
     ],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Hand-Painted Wooden Sign',
@@ -57,6 +85,15 @@ List<ProductModel> productsListData = [
       "assets/images/test2.png",
     ],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Woven Basket',
@@ -70,6 +107,15 @@ List<ProductModel> productsListData = [
       "assets/images/test2.png",
     ],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Woven Basket',
@@ -79,6 +125,15 @@ List<ProductModel> productsListData = [
     rate: 4.0,
     images: ["assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Woven Basket',
@@ -88,6 +143,15 @@ List<ProductModel> productsListData = [
     rate: 4.0,
     images: ["assets/images/test2.png", "assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Woven Basket',
@@ -97,6 +161,15 @@ List<ProductModel> productsListData = [
     rate: 4.0,
     images: ["assets/images/test2.png", "assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
   ProductModel(
     name: 'Hand-Painted Wooden Sign',
@@ -106,5 +179,14 @@ List<ProductModel> productsListData = [
     rate: 4.8,
     images: ["assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
+    seller: SellerModel(
+      name: "John Doe",
+      email: "john.doe@example.com",
+      specialty: "Ceramics",
+      submittedDate: "2023-01-01",
+      image: "assets/images/profile.svg",
+      badge: "Top Seller",
+      location: "Tunisia",
+    ),
   ),
 ];

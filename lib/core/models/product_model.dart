@@ -1,13 +1,15 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
+import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 
 class ProductModel {
-  String? id;
-  String name;
-  String description;
-  double price;
-  double? rate;
-  int? quantity;
-  List<String> images;
+  final String? id;
+  final String name;
+  final String description;
+  final double price;
+  final double? rate;
+  final int? quantity;
+  final List<String> images;
+  final SellerModel seller;
 
   CategoryModel? category;
 
@@ -21,5 +23,6 @@ class ProductModel {
     required this.images,
     this.category,
     this.quantity,
+    required this.seller,
   });
 }
