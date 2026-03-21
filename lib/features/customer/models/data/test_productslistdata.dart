@@ -1,16 +1,30 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/review_model.dart';
 
 // Sample product data , in a real app this would come from an API or database
 List<ProductModel> productsListData = [
   ProductModel(
     name: 'Handmade Ceramic Vase',
     description:
-        'A beautifully crafted ceramic vase, perfect for adding a touch of elegance to your home decor.',
+        'This exquisite Terra Vase is hand-thrown by master artisans using traditional Mediterranean techniques.\nEach piece is unique, featuring a natural matte finish and subtle variations in texture that celebrate the organic beauty of locally sourced clay. \nPerfect for dried botanicals or as a standalone sculptural piece.',
     price: 49.99,
-    rate: 4.5,
+    totalrate: 4.5,
     quantity: 50,
+    reviews: [
+      ReviewModel(
+        reviewer: CustomerModel(
+          name: "Alice Smith",
+          email: "alice.smith@example.com",
+        ),
+        rating: 3,
+        reviewText:
+            "Absolutely stunning quality. You can feel the craftsmanship in the texture of the clay.",
+        reviewDate: DateTime.now(),
+      ),
+    ],
     images: [
       "assets/images/splash.jpeg",
       "assets/images/test.png",
@@ -33,7 +47,7 @@ List<ProductModel> productsListData = [
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
-    rate: 4.0,
+    totalrate: 4.0,
     quantity: 30,
     images: [
       "assets/images/splash.jpeg",
@@ -57,7 +71,7 @@ List<ProductModel> productsListData = [
     description:
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
     price: 19.99,
-    rate: 4.8,
+    totalrate: 4.8,
     quantity: 20,
     images: [
       "assets/images/splash.jpeg",
@@ -81,7 +95,7 @@ List<ProductModel> productsListData = [
     description:
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
     price: 19.99,
-    rate: 4.8,
+    totalrate: 4.8,
     images: [
       "assets/images/splash.jpeg",
       "assets/images/test.png",
@@ -104,7 +118,7 @@ List<ProductModel> productsListData = [
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
-    rate: 4.0,
+    totalrate: 4.0,
     images: [
       "assets/images/splash.jpeg",
       "assets/images/test.png",
@@ -126,7 +140,7 @@ List<ProductModel> productsListData = [
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
-    rate: 4.0,
+    totalrate: 4.0,
     images: ["assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
     seller: SellerModel(
@@ -144,7 +158,7 @@ List<ProductModel> productsListData = [
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
-    rate: 4.0,
+    totalrate: 4.0,
     images: ["assets/images/test2.png", "assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
     seller: SellerModel(
@@ -162,7 +176,7 @@ List<ProductModel> productsListData = [
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
-    rate: 4.0,
+    totalrate: 4.0,
     images: ["assets/images/test2.png", "assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
     seller: SellerModel(
@@ -180,7 +194,7 @@ List<ProductModel> productsListData = [
     description:
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
     price: 19.99,
-    rate: 4.8,
+    totalrate: 4.8,
     images: ["assets/images/splash.jpeg"],
     category: CategoryModel(categorytitle: "WOODWORK"),
     seller: SellerModel(
