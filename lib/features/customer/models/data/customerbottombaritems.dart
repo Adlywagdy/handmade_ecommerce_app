@@ -19,7 +19,7 @@ List<BottomNavItem> customerBottomBarItems = [
   BottomNavItem(
     iconPath: 'assets/images/orders.svg',
     label: 'Cart',
-    page: CustomerCartScreen(),
+    page: CustomerCartScreen(cartItems: []),
   ),
   BottomNavItem(
     iconPath: 'assets/images/total_orders_icon.svg',

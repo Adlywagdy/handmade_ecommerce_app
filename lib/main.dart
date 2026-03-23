@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/dashboard/dashboard_screen.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/sellers/sellers_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/product_details_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -27,7 +28,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           // home: const CustomerHomeScreen(),
-          home: ProductDetailsScreen(product: productsListData[0]),
+          home: CustomerCartScreen(cartItems: productsListData),
         );
       },
     );
