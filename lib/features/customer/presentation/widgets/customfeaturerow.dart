@@ -6,35 +6,38 @@ import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 class CustomFeatureRow extends StatelessWidget {
   final String title;
   final String buttontext;
+  final FontWeight? buttontextfontWeight;
+
   const CustomFeatureRow({
     super.key,
     required this.title,
     required this.buttontext,
+    this.buttontextfontWeight = FontWeight.bold,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 16.0.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: blackDegree,
-              fontSize: 18,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-            ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          title,
+          style: TextStyle(
+            color: blackDegree,
+            fontSize: 18.sp,
+            fontFamily: 'Plus Jakarta Sans',
+            fontWeight: FontWeight.w700,
           ),
+        ),
 
-          InkWell(
-            child: CustomTextContainer(buttontext: buttontext),
-            onTap: () {},
+        InkWell(
+          child: CustomTextContainer(
+            buttontext: buttontext,
+            fontWeight: buttontextfontWeight,
           ),
-        ],
-      ),
+          onTap: () {},
+        ),
+      ],
     );
   }
 }

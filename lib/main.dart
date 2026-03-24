@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/dashboard/dashboard_screen.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/sellers/sellers_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
+
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/product_details_screen.dart';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -27,8 +28,20 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          // home: const CustomerHomeScreen(),
-          home: CustomerCartScreen(cartItems: productsListData),
+
+          home: CustomerCartScreen(
+            order: OrderModel(
+              customer: CustomerModel(name: "Adly"),
+              products: productsListData,
+              orderid: "123",
+              payment: PaymentDetailsModel(
+                subtotalPrice: 500,
+                totalPrice: 520,
+                deliveryFee: 20,
+                discount: 0,
+              ),
+            ),
+          ),
         );
       },
     );
