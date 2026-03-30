@@ -14,3 +14,4 @@ const customerbackGroundColor = Color(0xffF8F7F6);
 const goldColor = Color(0xffF59E0B);
 const darkbrownColor = Color(0x668B4513);
 const darkgreen = Color(0xFF16A34A);
+const orangedegree = Color(0xffC05A3D);

@@ -5,7 +5,7 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 class CustomTextContainer extends StatelessWidget {
   const CustomTextContainer({
     super.key,
-    required this.buttontext,
+    required this.text,
     this.bordercolor = customerbackGroundColor,
     this.fontSize = 14,
     this.backGroundColor = customerbackGroundColor,
@@ -20,7 +20,7 @@ class CustomTextContainer extends StatelessWidget {
   final double? horizontalpadding;
   final Color backGroundColor;
   final Color bordercolor;
-  final String buttontext;
+  final String text;
   final Color? textcolor;
   final double? fontSize;
   final double? borderRadius;
@@ -40,7 +40,7 @@ class CustomTextContainer extends StatelessWidget {
       ),
 
       child: Text(
-        buttontext,
+        text,
         style: TextStyle(
           color: textcolor,
           fontSize: fontSize?.sp,

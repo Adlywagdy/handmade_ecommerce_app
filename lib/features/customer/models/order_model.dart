@@ -4,10 +4,8 @@ import 'package:handmade_ecommerce_app/features/customer/models/payment_model.da
 
 class OrderModel {
   final CustomerModel customer;
-
   final String? orderid;
   final List<ProductModel> products;
-
   final OrderStatus? status;
   final DateTime? orderDate;
   final PaymentDetailsModel? payment;
@@ -22,4 +20,11 @@ class OrderModel {
   });
 }
 
-enum OrderStatus { pending, preparing, shipped, delivered, cancelled }
+enum OrderStatus {
+  pending,
+  confirmed,
+  preparing,
+  shipped,
+  delivered,
+  cancelled,
+}
