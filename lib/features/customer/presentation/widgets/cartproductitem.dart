@@ -7,9 +7,9 @@ import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/amountcontainerbutton.dart';
 
 class CartProductItem extends StatelessWidget {
-  const CartProductItem({super.key, required this.cartItems});
+  const CartProductItem({super.key, required this.product});
 
-  final List<ProductModel> cartItems;
+  final ProductModel product;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +36,7 @@ class CartProductItem extends StatelessWidget {
             child: Card(
               clipBehavior: Clip.antiAlias,
               child: Image.asset(
-                cartItems[0].images[0],
+                product.images[0],
                 height: 100.h,
                 width: 100.w,
                 fit: BoxFit.fill,
@@ -54,8 +54,7 @@ class CartProductItem extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        cartItems[0].name,
-
+                        product.name,
                         style: TextStyle(
                           color: blackDegree,
                           fontSize: 16.sp,
@@ -79,7 +78,7 @@ class CartProductItem extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  "By ${cartItems[0].seller.specialty}${cartItems[0].seller.name}",
+                  "By ${product.seller.specialty}${product.seller.name}",
                   style: TextStyle(
                     color: commonColor,
                     fontSize: 12.sp,
@@ -93,7 +92,7 @@ class CartProductItem extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${cartItems[0].price.toString()}',
+                      '\$${product.price.toString()}',
                       style: TextStyle(
                         color: blackDegree,
                         fontSize: 18.sp,

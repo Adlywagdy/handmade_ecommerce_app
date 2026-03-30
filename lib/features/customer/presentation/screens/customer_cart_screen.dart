@@ -31,7 +31,7 @@ class CustomerCartScreen extends StatelessWidget {
 
               title: Text(
                 'Your Cart',
-                textAlign: TextAlign.center,
+
                 style: TextStyle(
                   color: blackDegree,
                   fontSize: 18.sp,
@@ -49,7 +49,7 @@ class CustomerCartScreen extends StatelessWidget {
             ),
             SliverList.builder(
               itemBuilder: (context, index) {
-                return CartProductItem(cartItems: [order.products[index]]);
+                return CartProductItem(product: order.products[index]);
               },
               itemCount: order.products.length,
             ),
