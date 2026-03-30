@@ -32,7 +32,7 @@ class CustomFeatureRow extends StatelessWidget {
 
         InkWell(
           child: CustomTextContainer(
-            buttontext: buttontext,
+            text: buttontext,
             fontWeight: buttontextfontWeight,
           ),
           onTap: () {},

@@ -57,7 +57,7 @@ class CopounRow extends StatelessWidget {
         Expanded(
           flex: 1.w.toInt(),
           child: CustomTextContainer(
-            buttontext: "Apply",
+            text: "Apply",
             fontSize: 16.sp,
             fontWeight: FontWeight.w700,
             horizontalpadding: 24.w,

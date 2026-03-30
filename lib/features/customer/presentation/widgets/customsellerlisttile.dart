@@ -52,7 +52,7 @@ class CustomSellerListTile extends StatelessWidget {
         child: CustomTextContainer(
           verticalpadding: 8,
           horizontalpadding: 16,
-          buttontext: 'View Shop',
+          text: 'View Shop',
           backGroundColor: commonColor.withValues(alpha: 0.10),
         ),
       ),

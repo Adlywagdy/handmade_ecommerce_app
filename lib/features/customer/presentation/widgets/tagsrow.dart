@@ -17,7 +17,7 @@ class TagsRow extends StatelessWidget {
         spacing: 8.w,
         children: [
           CustomTextContainer(
-            buttontext: product.tags![0],
+            text: product.tags![0],
 
             backGroundColor: customerbackGroundColor,
             bordercolor: commonColor.withValues(alpha: 0.1),
@@ -29,7 +29,7 @@ class TagsRow extends StatelessWidget {
             borderRadius: 200,
           ),
           CustomTextContainer(
-            buttontext: product.tags![1],
+            text: product.tags![1],
 
             backGroundColor: customerbackGroundColor,
             bordercolor: commonColor.withValues(alpha: 0.1),
@@ -41,7 +41,7 @@ class TagsRow extends StatelessWidget {
             borderRadius: 200,
           ),
           CustomTextContainer(
-            buttontext: product.tags![2],
+            text: product.tags![2],
 
             backGroundColor: customerbackGroundColor,
             bordercolor: commonColor.withValues(alpha: 0.1),

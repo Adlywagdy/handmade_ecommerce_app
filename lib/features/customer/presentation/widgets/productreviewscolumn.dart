@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ReviewCard.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/reviewcard.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ratingrow.dart';
 
 class ProductReviewsColumn extends StatelessWidget {
@@ -53,7 +53,7 @@ class ProductReviewsColumn extends StatelessWidget {
         InkWell(
           onTap: () {},
           child: CustomTextContainer(
-            buttontext: 'View all ${product.reviews!.length} reviews',
+            text: 'View all ${product.reviews!.length} reviews',
           ),
         ),
       ],
