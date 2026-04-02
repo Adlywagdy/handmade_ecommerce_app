@@ -13,3 +13,8 @@ const darkblue = Color(0xff334155);
 const customerbackGroundColor = Color(0xffF8F7F6);
 const goldColor = Color(0xffF59E0B);
 const darkbrownColor = Color(0x668B4513);
+
+// const primaryColor=Color.fromARGB(241, 250, 169, 19);
+const primaryColor = Color(0xffD2691E);
+final SecodaryColor = Color(0xffD2691E).withValues(alpha: 0.6);
+//color: Color.fromARGB(240, 255, 178, 63),
