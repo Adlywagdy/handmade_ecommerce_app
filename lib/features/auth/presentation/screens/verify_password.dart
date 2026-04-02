@@ -37,27 +37,7 @@ class VerifytPassword extends StatelessWidget {
                   'We have send a verifiction code to your email please enter the code below.',
             ),
 
-            // PinCodeTextField(
-            //    appContext: context,
-            //     length: 6, // عدد أرقام aOTP
-            //      onChanged: (value) {
-            //     print("OTP current: $value");
-            //     },
-            //  onCompleted: (value) {
-            //   print("OTP completed: $value");
-            //   // هنا تبعتيه للسيرفر للتحقق
-            //   },
-            // keyboardType: TextInputType.number,
-            //    pinTheme: PinTheme(
-            //     shape: PinCodeFieldShape.box,
-            //     borderRadius: BorderRadius.circular(5),
-            //     fieldHeight: 50,
-            //      fieldWidth: 40,
-            //       activeColor: Colors.orange,
-            //      selectedColor: Colors.blue,
-            //   inactiveColor: Colors.grey,
-            //    ),
-            //      ),
+            
             PinInput(
               keyboardType: TextInputType.number,
 
