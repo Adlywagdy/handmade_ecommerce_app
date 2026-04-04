@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../../../../core/theme/colors.dart';
-import '../../../../models/admin_model.dart';
+import '../../../../models/sellers_model.dart';
+import '../../../widgets/custom_action_button.dart';
 
 class SellerCard extends StatelessWidget {
   final SellerData seller;
@@ -86,55 +87,20 @@ class SellerCard extends StatelessWidget {
             SizedBox(height: 14.h),
             Row(
               children: [
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      decoration: BoxDecoration(
-                        color: greenDegree,
-                        borderRadius: BorderRadius.circular(10.r),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Approve',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                ActionButton(
+                  label: 'Approve',
+                  color: greenDegree,
+                  onTap: () {},
                 ),
                 SizedBox(width: 12.w),
-                Expanded(
-                  child: GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.symmetric(vertical: 12.h),
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(10.r),
-                        border: Border.all(
-                          color: redDegree,
-                          width: 1.5,
-                        ),
-                      ),
-                      alignment: Alignment.center,
-                      child: Text(
-                        'Reject',
-                        style: TextStyle(
-                          color: redDegree,
-                          fontSize: 14.sp,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
+                ActionButton(
+                  label: 'Reject',
+                  color: redDegree,
+                  style: ActionButtonStyle.outlined,
+                  onTap: () {},
                 ),
               ],
-            ),
+            )
           ],
         ],
       ),
