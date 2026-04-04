@@ -23,8 +23,8 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
-          // home:SplashScreen()
-          home: AdminBottomBarScreen(),
+          home:SplashScreen()
+          // home: AdminBottomBarScreen(),
         );
       },
     );
