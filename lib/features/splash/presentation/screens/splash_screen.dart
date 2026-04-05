@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -17,9 +18,9 @@ class SplashScreen extends StatelessWidget {
     });
 
     return Scaffold(
-      backgroundColor: Color(0xffEEDFC8),
+      backgroundColor: logobackgroundcolor,
       body: Column(
-        mainAxisAlignment: .center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(flex: 120, child: SizedBox()),
           Image.asset('assets/images/splash.jpeg'),
@@ -28,11 +29,11 @@ class SplashScreen extends StatelessWidget {
             'Handmade with Love',
             style: TextStyle(
               color: commonColor,
-              fontSize: 16,
+              fontSize: 16.sp,
               fontWeight: FontWeight.w600,
             ),
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 40.h),
         ],
       ),
     );
