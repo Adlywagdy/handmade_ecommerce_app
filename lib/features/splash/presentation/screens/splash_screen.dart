@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 
@@ -13,7 +14,7 @@ class SplashScreen extends StatelessWidget {
       Get.off(
         const OnboardingScreen(),
         transition: Transition.fadeIn,
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
       );
     });
 
@@ -27,11 +28,13 @@ class SplashScreen extends StatelessWidget {
           Expanded(flex: 100, child: SizedBox()),
           Text(
             'Handmade with Love',
-            style: TextStyle(
-              color: commonColor,
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyles.black16w600.copyWith(color: commonColor),
+
+            //  TextStyle(
+            //   color: commonColor,
+            //   fontSize: 16.sp,
+            //   fontWeight: FontWeight.w600,
+            // ),
           ),
           SizedBox(height: 40.h),
         ],

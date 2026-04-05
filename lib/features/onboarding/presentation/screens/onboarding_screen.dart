@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/models/onboarding_model.dart';
@@ -19,6 +20,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         actions: [
           TextButton(
             onPressed: () {
@@ -26,11 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             child: Text(
               'Skip',
-              style: TextStyle(
-                color: subtitlesplash,
-                fontWeight: FontWeight.w500,
-                fontSize: 16.sp,
-              ),
+              style: AppTextStyles.black16w500.copyWith(color: subtitlesplash),
             ),
           ),
         ],
@@ -50,7 +48,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(
                 textAlign: TextAlign.center,
                 OnboardingTitleDescription.titles[count - 1],
-                style: TextStyle(fontSize: 24.sp, fontWeight: FontWeight.w500),
+                style: AppTextStyles.black24w500.copyWith(
+                  color: subtitlesplash,
+                ),
               ),
             ),
             SizedBox(height: 10.h),
@@ -59,7 +59,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(
                 textAlign: TextAlign.center,
                 OnboardingTitleDescription.subTitle[count - 1],
-                style: TextStyle(fontSize: 16.sp, color: subtitlesplash),
+                style: AppTextStyles.black16w500.copyWith(
+                  color: subtitlesplash,
+                ),
               ),
             ),
             Spacer(),
@@ -81,11 +83,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   Text(
                     count < 3 ? 'Next' : 'Get Started',
-                    style: TextStyle(
-                      fontSize: 16.sp,
-                      fontWeight: FontWeight.bold,
+                    style: AppTextStyles.black16w600.copyWith(
                       color: Colors.white,
-                      fontFamily: 'Plus Jakarta Sans',
                     ),
                   ),
                   if (count < 3) Icon(Icons.navigate_next, color: Colors.white),
