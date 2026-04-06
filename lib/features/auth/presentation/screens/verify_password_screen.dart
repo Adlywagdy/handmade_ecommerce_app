@@ -8,8 +8,8 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
-class VerifytPassword extends StatelessWidget {
-  const VerifytPassword({super.key});
+class VerifytPasswordScreen extends StatelessWidget {
+  const VerifytPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

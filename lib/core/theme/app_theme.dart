@@ -81,7 +81,7 @@ abstract class AppTextStyles {
   static final t_14w600 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textMuted,
+    color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
   static final t_14w400 = TextStyle(

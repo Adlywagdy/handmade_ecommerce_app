@@ -9,8 +9,13 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
 import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
@@ -33,33 +38,58 @@ class HandcraftedEcommerceApp extends StatelessWidget {
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (BuildContext context) => AuthCubit()),
+            BlocProvider(
+              create: (BuildContext context) => SellerCubit()..loadDashboard(),
+            ),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: AppRoutes.splash,
             getPages: [
+              // splash and onboarding
               GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
               GetPage(
                 name: AppRoutes.onboarding,
                 page: () => const OnboardingScreen(),
               ),
+              // auth
+              GetPage(name: AppRoutes.login, page: () => const LoginScreen()),
               GetPage(
-                name: AppRoutes.customerHome,
-                page: () => const CustomerHomeScreen(),
+                name: AppRoutes.register,
+                page: () => const RegisterScreen(),
               ),
-              GetPage(name: AppRoutes.login, page: () => LoginScreen()),
-              GetPage(name: AppRoutes.register, page: () => RegisterScreen()),
               GetPage(
                 name: AppRoutes.forgotPassword,
-                page: () => ForgotPasswordScreen(),
+                page: () => const ForgotPasswordScreen(),
               ),
               GetPage(
                 name: AppRoutes.verifyPassword,
-                page: () => VerifytPassword(),
+                page: () => const VerifytPasswordScreen(),
               ),
               GetPage(
                 name: AppRoutes.resetPassword,
-                page: () => ResetPasswordScreen(),
+                page: () => const ResetPasswordScreen(),
+              ),
+              // seller
+              GetPage(
+                name: AppRoutes.sellerdashboard,
+                page: () => const SellerDashboardScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.selleraddoreditproduct,
+                page: () => const SellerAddEditProductScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.sellerorders,
+                page: () => const SellerOrdersScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.sellermanageproducts,
+                page: () => const SellerManageProductsScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.sellerregisteation,
+                page: () => const SellerRegistrationScreen(),
               ),
             ],
 

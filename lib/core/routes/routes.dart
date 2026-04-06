@@ -17,7 +17,12 @@ abstract class AppRoutes {
   static const String customerSearch = '/customer/search';
   static const String customerCart = '/customer/cart';
 
-  static const String seller = '/seller';
+  static const String sellerdashboard = '/sellerdashboard';
+  static const String selleraddoreditproduct = '/seller/add-or-edit-product';
+  static const String sellerorders = '/seller/orders';
+  static const String sellermanageproducts = '/seller/manage-products';
+  static const String sellerregisteation = '/seller/registeration';
+
   static const String adminDashboard = '/admin/dashboard';
   static const String adminSellers = '/admin/sellers';
 }
