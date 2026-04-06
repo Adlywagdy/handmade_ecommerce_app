@@ -57,7 +57,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   controller: widget._emailController,
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
-                  prefixIcon: Icon(Icons.email, color: SecodaryColor),
+                  prefixIcon: Icon(
+                    Icons.email,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Email is required";

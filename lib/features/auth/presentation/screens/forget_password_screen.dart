@@ -39,7 +39,10 @@ class ForgotPasswordScreen extends StatelessWidget {
             Customtextfield(
               label: 'EMAIL ADDRESS',
               hintText: 'example@mail.com',
-              prefixIcon: Icon(Icons.email, color: SecodaryColor),
+              prefixIcon: Icon(
+                Icons.email,
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
             ),
           ],
         ),

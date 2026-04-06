@@ -40,8 +40,14 @@ class Password extends StatelessWidget {
             Customtextfield(
               label: 'Password',
 
-              prefixIcon: Icon(Icons.lock, color: SecodaryColor),
-              suffixIcon: Icon(Icons.remove_red_eye, color: SecodaryColor),
+              prefixIcon: Icon(
+                Icons.lock,
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
+              suffixIcon: Icon(
+                Icons.remove_red_eye,
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
             ),
 
             SizedBox(height: 10),
@@ -49,8 +55,14 @@ class Password extends StatelessWidget {
             Customtextfield(
               label: 'Re-type Password',
 
-              prefixIcon: Icon(Icons.lock, color: SecodaryColor),
-              suffixIcon: Icon(Icons.remove_red_eye, color: SecodaryColor),
+              prefixIcon: Icon(
+                Icons.lock,
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
+              suffixIcon: Icon(
+                Icons.remove_red_eye,
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
             ),
           ],
         ),

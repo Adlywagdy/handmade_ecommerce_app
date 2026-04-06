@@ -64,7 +64,10 @@ class LoginScreen extends StatelessWidget {
                   controller: _emailController,
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
-                  prefixIcon: Icon(Icons.email, color: SecodaryColor),
+                  prefixIcon: Icon(
+                    Icons.email,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   validator: (value) {
                     if (!value!.emailValid()) {
                       return "email isn't valid";

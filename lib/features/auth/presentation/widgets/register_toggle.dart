@@ -35,7 +35,9 @@ class RegisterToggle extends StatelessWidget {
                   child: Text(
                     'Customer',
                     style: TextStyle(
-                      color: selectedIndex == 0 ? primaryColor : SecodaryColor,
+                      color: selectedIndex == 0
+                          ? primaryColor
+                          : primaryColor.withValues(alpha: 0.6),
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                     ),
@@ -59,7 +61,9 @@ class RegisterToggle extends StatelessWidget {
                   child: Text(
                     'Seller',
                     style: TextStyle(
-                      color: selectedIndex == 1 ? primaryColor : SecodaryColor,
+                      color: selectedIndex == 1
+                          ? primaryColor
+                          : primaryColor.withValues(alpha: 0.6),
                       fontWeight: FontWeight.w700,
                       fontSize: 14,
                     ),

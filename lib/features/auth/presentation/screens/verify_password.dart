@@ -75,7 +75,7 @@ class VerifytPassword extends StatelessWidget {
                         shape: BoxShape.rectangle,
                         borderRadius: BorderRadius.circular(5),
                         color: cell.isFocused
-                            ? SecodaryColor
+                            ? primaryColor.withValues(alpha: 0.6)
                             : Colors.grey[200],
                       ),
                       child: Center(

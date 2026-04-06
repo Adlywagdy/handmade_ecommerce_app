@@ -12,7 +12,7 @@ class Text2 extends StatelessWidget {
       style: TextStyle(
         fontSize: 16,
         fontWeight: FontWeight.w400,
-        color: SecodaryColor,
+        color: primaryColor.withValues(alpha: 0.6),
       ),
     );
   }
