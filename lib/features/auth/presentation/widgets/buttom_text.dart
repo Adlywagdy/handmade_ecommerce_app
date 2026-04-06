@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class ButtomText extends StatelessWidget {
   final String text;
-  final String value;
+
   final VoidCallback? onTap;
   final bool? isLoading;
   const ButtomText({
     super.key,
     required this.text,
-    required this.value,
+
     this.onTap,
     this.isLoading = false,
   });
@@ -20,14 +21,14 @@ class ButtomText extends StatelessWidget {
       mainAxisAlignment: MainAxisAlignment.end,
       children: [
         GestureDetector(
-          onTap:
-              onTap ??
-              () {
-                print("$value");
-              },
+          onTap: onTap,
           child: Text(
             text,
-            style: TextStyle(fontWeight: FontWeight.w600, color: primaryColor),
+            style: TextStyle(
+              fontWeight: FontWeight.w600,
+              color: primaryColor,
+              fontSize: 12.sp,
+            ),
           ),
         ),
       ],

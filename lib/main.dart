@@ -4,11 +4,11 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password3.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
@@ -47,6 +47,20 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                 name: AppRoutes.customerHome,
                 page: () => const CustomerHomeScreen(),
               ),
+              GetPage(name: AppRoutes.login, page: () => LoginScreen()),
+              GetPage(name: AppRoutes.register, page: () => RegisterScreen()),
+              GetPage(
+                name: AppRoutes.forgotPassword,
+                page: () => ForgotPasswordScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.verifyPassword,
+                page: () => VerifytPassword(),
+              ),
+              GetPage(
+                name: AppRoutes.resetPassword,
+                page: () => ResetPasswordScreen(),
+              ),
             ],
 
             home: const SplashScreen(),
@@ -56,32 +70,3 @@ class HandcraftedEcommerceApp extends StatelessWidget {
     );
   }
 }
-
-
-/*
-  return MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (BuildContext context) => AuthCubit()),
-          ],
-          child: GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            initialRoute: '/login',
-            getPages: [
-              GetPage(name: '/login', page: () => LoginScreen()),
-              GetPage(name: '/register', page: () => RegisterScreen()),
-              GetPage(name: '/forgot', page: () => ForgotPasswordScreen()),
-              GetPage(name: '/verify', page: () => VerifytPassword()),
-              GetPage(name: '/password', page: () => Password()),
-            ],
-          ),
-
-          // home: RegisterScreen(),
-          // home: ForgotPasswordScreen(),
-          // home: VerifytPassword(),
-          //  home: Password(),
-        );
-      },
-    );
-  }
-}
- */

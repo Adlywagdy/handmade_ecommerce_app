@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
-
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_button.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/text1.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/text2.dart';
+import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 
 class VerifytPassword extends StatelessWidget {
-  VerifytPassword({super.key});
+  const VerifytPassword({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -31,10 +31,15 @@ class VerifytPassword extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text1(text1: 'Verify it’s you'),
-            Text2(
-              text2:
-                  'We have send a verifiction code to your email please enter the code below.',
+            Text(
+              'Verify it’s you',
+              style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
+            ),
+            Text(
+              'We have send a verifiction code to your email please enter the code below.',
+              style: AppTextStyles.t_12w500.copyWith(
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
             ),
 
             // PinCodeTextField(
@@ -67,13 +72,13 @@ class VerifytPassword extends StatelessWidget {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: cells.map((cell) {
                     return Container(
-                      width: 50,
-                      height: 50,
-                      margin: EdgeInsets.symmetric(horizontal: 8),
+                      width: 45.r,
+                      height: 45.r,
+                      margin: const EdgeInsets.symmetric(horizontal: 8).w,
 
                       decoration: BoxDecoration(
                         shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(5),
+                        borderRadius: BorderRadius.circular(5.r),
                         color: cell.isFocused
                             ? primaryColor.withValues(alpha: 0.6)
                             : Colors.grey[200],
@@ -90,24 +95,28 @@ class VerifytPassword extends StatelessWidget {
               },
               onCompleted: (pin) => print('PIN: $pin'),
             ),
-
-            Text2(text2: "You can resend the code after 1 minute ( 00:56 )"),
+            SizedBox(height: 20.h),
+            Text(
+              "You can resend the code after 1 minute ( 00:56 )", // counter logic
+              style: AppTextStyles.t_12w500.copyWith(
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
+            ),
           ],
         ),
       ),
 
       bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(
-          left: 16,
-          right: 16,
-          bottom: MediaQuery.of(context).viewInsets.bottom + 16,
-        ),
-        child: CustomButton(
-          onTap: () {
-            Get.toNamed('/password');
+        padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+        child: CustomElevatedButton(
+          onPressed: () {
+            Get.toNamed(AppRoutes.resetPassword);
           },
-          text: 'Confirm',
-          value: 'Confirm',
+          buttoncolor: primaryColor,
+          child: Text(
+            'Confirm',
+            style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
+          ),
         ),
       ),
     );

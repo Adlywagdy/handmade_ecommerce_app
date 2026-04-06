@@ -2,78 +2,116 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 abstract class AppTextStyles {
-  static final black30w800 = TextStyle(
+  static final t_36w700 = TextStyle(
+    fontSize: 36.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_30w800 = TextStyle(
     fontSize: 30.sp,
     fontWeight: FontWeight.w800,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
-
-  static final cinnamon36w700 = TextStyle(
-    fontSize: 36.sp,
-    fontWeight: FontWeight.w700,
-    color: AppColors.cinnamonHandmade,
-    fontFamily: 'Plus Jakarta Sans',
-  );
-  static final black24w500 = TextStyle(
-    fontSize: 24.sp,
-    fontWeight: FontWeight.w500,
-    color: AppColors.textHeadline,
-    fontFamily: 'Plus Jakarta Sans',
-  );
-  static final black30w700 = TextStyle(
+  static final t_30w700 = TextStyle(
     fontSize: 30.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
-
-  static final black20w700 = TextStyle(
+  static final t_24w500 = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_20w700 = TextStyle(
     fontSize: 20.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
 
-  static final black18w700 = TextStyle(
+  static final t_18w700 = TextStyle(
     fontSize: 18.sp,
     fontWeight: FontWeight.w700,
     fontFamily: 'Plus Jakarta Sans',
     color: AppColors.textHeadline,
   );
 
-  static final black16w700 = TextStyle(
+  static final t_16w700 = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w700,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
 
-  static final black14w700 = TextStyle(
-    fontSize: 14.sp,
-    fontWeight: FontWeight.w700,
-    color: AppColors.textHeadline,
-    fontFamily: 'Plus Jakarta Sans',
-  );
-
-  static final black16w600 = TextStyle(
+  static final t_16w600 = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w600,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
 
-  static final black16w500 = TextStyle(
+  static final t_16w500 = TextStyle(
     fontSize: 16.sp,
     fontWeight: FontWeight.w500,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
-
-  static final grey14w400 = TextStyle(
+  static final t_16w400 = TextStyle(
+    fontSize: 16.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_14w700 = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_14w500 = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_14w600 = TextStyle(
+    fontSize: 14.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textMuted,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_14w400 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w400,
-    color: AppColors.textMuted,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_12w700 = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_12w500 = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_12w600 = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_12w400 = TextStyle(
+    fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
 }

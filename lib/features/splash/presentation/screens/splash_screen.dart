@@ -28,13 +28,7 @@ class SplashScreen extends StatelessWidget {
           Expanded(flex: 100, child: SizedBox()),
           Text(
             'Handmade with Love',
-            style: AppTextStyles.black16w600.copyWith(color: commonColor),
-
-            //  TextStyle(
-            //   color: commonColor,
-            //   fontSize: 16.sp,
-            //   fontWeight: FontWeight.w600,
-            // ),
+            style: AppTextStyles.t_16w600.copyWith(color: commonColor),
           ),
           SizedBox(height: 40.h),
         ],
