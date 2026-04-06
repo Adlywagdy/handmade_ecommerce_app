@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/dashboard/dashboard_screen.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/sellers/sellers_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/product_details_screen.dart';
+import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
@@ -24,10 +30,41 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-        return GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          // home: const CustomerHomeScreen(),
-          home: ProductDetailsScreen(product: productsListData[0]),
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (BuildContext context) => AuthCubit()),
+          ],
+          child: GetMaterialApp(
+            debugShowCheckedModeBanner: false,
+            initialRoute: AppRoutes.splash,
+            getPages: [
+              GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
+              GetPage(
+                name: AppRoutes.onboarding,
+                page: () => const OnboardingScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.customerHome,
+                page: () => const CustomerHomeScreen(),
+              ),
+              GetPage(name: AppRoutes.login, page: () => LoginScreen()),
+              GetPage(name: AppRoutes.register, page: () => RegisterScreen()),
+              GetPage(
+                name: AppRoutes.forgotPassword,
+                page: () => ForgotPasswordScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.verifyPassword,
+                page: () => VerifytPassword(),
+              ),
+              GetPage(
+                name: AppRoutes.resetPassword,
+                page: () => ResetPasswordScreen(),
+              ),
+            ],
+
+            home: const SplashScreen(),
+          ),
         );
       },
     );
