@@ -7,13 +7,13 @@ class CustomTextContainer extends StatelessWidget {
     super.key,
     required this.text,
     this.bordercolor = customerbackGroundColor,
-    this.fontSize = 14,
+
     this.backGroundColor = customerbackGroundColor,
-    this.textcolor = commonColor,
+
     this.verticalpadding = 0,
     this.horizontalpadding = 0,
     this.borderRadius = 10,
-    this.fontWeight = FontWeight.bold,
+    this.textstyle,
   });
 
   final double? verticalpadding;
@@ -21,10 +21,10 @@ class CustomTextContainer extends StatelessWidget {
   final Color backGroundColor;
   final Color bordercolor;
   final String text;
-  final Color? textcolor;
-  final double? fontSize;
+
   final double? borderRadius;
-  final FontWeight? fontWeight;
+
+  final TextStyle? textstyle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,15 +39,7 @@ class CustomTextContainer extends StatelessWidget {
         border: Border.all(color: bordercolor, width: 1.5),
       ),
 
-      child: Text(
-        text,
-        style: TextStyle(
-          color: textcolor,
-          fontSize: fontSize?.sp,
-          fontWeight: fontWeight,
-          fontFamily: 'Plus Jakarta Sans',
-        ),
-      ),
+      child: Text(text, style: textstyle),
     );
   }
 }

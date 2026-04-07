@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
@@ -50,10 +51,12 @@ class OrderItem extends StatelessWidget {
             ),
             CustomTextContainer(
               text: order.status.toString().split('.').last.toUpperCase(),
-              textcolor: _getStatusColor(order.status!),
+
               horizontalpadding: 8.w,
               verticalpadding: 2.h,
-              fontSize: 10.sp,
+              textstyle: AppTextStyles.t_12w400.copyWith(
+                color: _getStatusColor(order.status!),
+              ),
               backGroundColor: _getStatusColor(
                 order.status!,
               ).withValues(alpha: .1),

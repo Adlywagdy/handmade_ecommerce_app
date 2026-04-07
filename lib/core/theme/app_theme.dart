@@ -114,6 +114,30 @@ abstract class AppTextStyles {
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
+  static final t_10w700 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w500 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w600 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w400 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
 }
 //-------------------------------------------------------------------
 

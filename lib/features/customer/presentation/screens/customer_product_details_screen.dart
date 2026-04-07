@@ -8,9 +8,9 @@ import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/amountcontainerbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productdetailslowercolumn.dart';
 
-class ProductDetailsScreen extends StatelessWidget {
+class CustomerProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
-  const ProductDetailsScreen({super.key, required this.product});
+  const CustomerProductDetailsScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {

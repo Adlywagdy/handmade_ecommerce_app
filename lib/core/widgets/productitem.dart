@@ -39,7 +39,7 @@ class ProductItem extends StatelessWidget {
     return Card(
       color: customerbackGroundColor,
       margin: EdgeInsets.all(cardmargin),
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12).r),
       clipBehavior: cardclipBehavior,
 
       elevation: elevation,
@@ -52,19 +52,19 @@ class ProductItem extends StatelessWidget {
               clipBehavior: imageclipBehavior,
 
               decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: BorderRadius.circular(12).r,
               ),
-              child: ProductImagesScroll(list: product.images),
+              child: ProductImagesScroll(product: product),
             ),
           ),
           Expanded(
             flex: lowercolumnflex,
             child: Padding(
               padding: EdgeInsets.only(
-                left: lowercolumnleftpadding.w,
-                right: lowercolumnrightpadding.w,
-                bottom: lowercolumnbottompadding.h,
-                top: lowercolumntoppadding.h,
+                left: lowercolumnleftpadding,
+                right: lowercolumnrightpadding,
+                bottom: lowercolumnbottompadding,
+                top: lowercolumntoppadding,
               ),
               child: lowercolumn,
             ),

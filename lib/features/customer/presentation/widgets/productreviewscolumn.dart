@@ -30,11 +30,7 @@ class ProductReviewsColumn extends StatelessWidget {
             ),
             Row(
               children: [
-                RatingRow(
-                  product: product,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.sp,
-                ),
+                RatingRow(product: product),
                 Text(
                   ' (${product.reviews!.length})',
                   style: TextStyle(

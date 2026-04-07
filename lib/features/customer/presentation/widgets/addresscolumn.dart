@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customfeaturerow.dart';
@@ -17,7 +18,7 @@ class AddressColumn extends StatelessWidget {
         CustomFeatureRow(
           title: 'Delivery Address',
           buttontext: 'Change',
-          buttontextfontWeight: .w600,
+          buttontextstyle: AppTextStyles.t_16w600.copyWith(color: commonColor),
         ),
         Card(
           color: commonColor.withValues(alpha: .05),

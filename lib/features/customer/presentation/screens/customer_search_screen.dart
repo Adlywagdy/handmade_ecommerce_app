@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
@@ -18,21 +21,30 @@ class CustomerSearchScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            toolbarHeight: 70.h,
             backgroundColor: customerbackGroundColor,
             actionsPadding: const EdgeInsets.only(right: 8.0).w,
-            pinned: true,
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icon(Icons.arrow_back, color: commonColor),
+            ),
             scrolledUnderElevation: 0,
             centerTitle: true,
             title: SearchField(
+              autofocus: true,
               hintText: 'Handmade ceramics',
-              fontSize: 16,
-              hintColor: blackDegree,
+              textstyle: AppTextStyles.t_14w500.copyWith(color: blackDegree),
             ),
             actions: [
               CustomIconButton(
                 backgroundColor: commonColor.withValues(alpha: .03),
                 icon: Icons.tune_outlined,
                 iconcolor: commonColor,
+                onPressed: () {
+                  // filter & sort actions
+                },
               ),
             ],
           ),

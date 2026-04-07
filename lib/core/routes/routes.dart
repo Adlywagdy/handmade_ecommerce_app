@@ -13,9 +13,12 @@ abstract class AppRoutes {
   static const String customerwishlist = '/customer/wishlist';
   static const String customerHome = '/customer/home';
   static const String customerOrders = '/customer/orders';
-  static const String customerProfiles = '/customer/profiles';
+  static const String customerProfile = '/customer/profile';
   static const String customerSearch = '/customer/search';
   static const String customerCart = '/customer/cart';
+  static const String customerProductDetails = '/customer/product-details';
+  static const String customerOrderDetails = '/customer/order-details';
+  static const String customerWriteReview = '/customer/write-review';
 
   static const String sellerdashboard = '/sellerdashboard';
   static const String selleraddoreditproduct = '/seller/add-or-edit-product';

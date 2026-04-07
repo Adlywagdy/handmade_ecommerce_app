@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 
@@ -58,8 +59,7 @@ class CopounRow extends StatelessWidget {
           flex: 1.w.toInt(),
           child: CustomTextContainer(
             text: "Apply",
-            fontSize: 16.sp,
-            fontWeight: FontWeight.w700,
+            textstyle: AppTextStyles.t_16w700.copyWith(color: Colors.white),
             horizontalpadding: 24.w,
             verticalpadding: 12.h,
             backGroundColor: commonColor.withValues(alpha: .1),

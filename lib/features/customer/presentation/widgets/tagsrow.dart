@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 
@@ -23,9 +24,7 @@ class TagsRow extends StatelessWidget {
             bordercolor: commonColor.withValues(alpha: 0.1),
             verticalpadding: 4.h,
             horizontalpadding: 12.w,
-            textcolor: subTitleColor,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
+            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             borderRadius: 200,
           ),
           CustomTextContainer(
@@ -35,11 +34,10 @@ class TagsRow extends StatelessWidget {
             bordercolor: commonColor.withValues(alpha: 0.1),
             verticalpadding: 4.h,
             horizontalpadding: 12.w,
-            textcolor: subTitleColor,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
+            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             borderRadius: 200,
           ),
+
           CustomTextContainer(
             text: product.tags![2],
 
@@ -47,9 +45,7 @@ class TagsRow extends StatelessWidget {
             bordercolor: commonColor.withValues(alpha: 0.1),
             verticalpadding: 4.h,
             horizontalpadding: 12.w,
-            textcolor: subTitleColor,
-            fontSize: 14.sp,
-            fontWeight: FontWeight.w400,
+            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             borderRadius: 200,
           ),
         ],
