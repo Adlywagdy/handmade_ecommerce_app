@@ -12,43 +12,26 @@ class TagsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16.0).h,
-      child: Row(
-        spacing: 8.w,
-        children: [
-          CustomTextContainer(
-            text: product.tags![0],
+    return SizedBox(
+      height: 33.h,
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(right: 8.0),
+            child: CustomTextContainer(
+              text: product.tags![index],
 
-            backGroundColor: customerbackGroundColor,
-            bordercolor: commonColor.withValues(alpha: 0.1),
-            verticalpadding: 4.h,
-            horizontalpadding: 12.w,
-            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
-            borderRadius: 200,
-          ),
-          CustomTextContainer(
-            text: product.tags![1],
-
-            backGroundColor: customerbackGroundColor,
-            bordercolor: commonColor.withValues(alpha: 0.1),
-            verticalpadding: 4.h,
-            horizontalpadding: 12.w,
-            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
-            borderRadius: 200,
-          ),
-
-          CustomTextContainer(
-            text: product.tags![2],
-
-            backGroundColor: customerbackGroundColor,
-            bordercolor: commonColor.withValues(alpha: 0.1),
-            verticalpadding: 4.h,
-            horizontalpadding: 12.w,
-            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
-            borderRadius: 200,
-          ),
-        ],
+              backGroundColor: customerbackGroundColor,
+              bordercolor: commonColor.withValues(alpha: 0.1),
+              verticalpadding: 4.h,
+              horizontalpadding: 12,
+              textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
+              borderRadius: 200.r,
+            ),
+          );
+        },
+        itemCount: product.tags!.length,
+        scrollDirection: Axis.horizontal,
       ),
     );
   }

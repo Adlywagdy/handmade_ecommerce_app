@@ -3,13 +3,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addresscolumn.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cartproductitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderstatusslider.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitemoforder.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/reviewedproduct.dart';
 
 class CustomerOrderDetailsScreen extends StatelessWidget {
   final OrderModel order;

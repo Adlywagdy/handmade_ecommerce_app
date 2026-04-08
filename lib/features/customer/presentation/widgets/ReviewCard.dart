@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customstarsratingrow.dart';
 
@@ -26,36 +27,18 @@ class ReviewCard extends StatelessWidget {
               children: [
                 Text(
                   product.reviews![0].reviewer.name,
-                  style: TextStyle(
-                    color: blackDegree,
-                    fontSize: 14.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w700,
-                    height: 1.43,
-                  ),
+                  style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
                 ),
                 Text(
                   "${product.reviews![0].reviewDate.year.toString()}-${product.reviews![0].reviewDate.month.toString().padLeft(2, '0')}-${product.reviews![0].reviewDate.day.toString().padLeft(2, '0')}",
-                  style: TextStyle(
-                    color: subTitleColor,
-                    fontSize: 12.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w400,
-                    height: 1.33,
-                  ),
+                  style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
                 ),
               ],
             ),
             CustomStarsRatingRow(product: product),
             Text(
               '"${product.reviews![0].reviewText}"',
-              style: TextStyle(
-                color: subTitleColor,
-                fontSize: 14,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w400,
-                height: 1.43,
-              ),
+              style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             ),
           ],
         ),

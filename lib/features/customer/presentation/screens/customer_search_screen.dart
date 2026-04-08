@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchcategorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchedproductitemlowercolumn.dart';
 
@@ -21,7 +22,6 @@ class CustomerSearchScreen extends StatelessWidget {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
-            toolbarHeight: 70.h,
             backgroundColor: customerbackGroundColor,
             actionsPadding: const EdgeInsets.only(right: 8.0).w,
             leading: IconButton(
@@ -49,34 +49,30 @@ class CustomerSearchScreen extends StatelessWidget {
             ],
           ),
           SliverToBoxAdapter(
-            child: SizedBox(
-              height: 60.h,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 16.0).w,
-                child: Searchcategorieslist(),
-              ),
+            child: Container(
+              height: 67.h,
+              constraints: BoxConstraints(minHeight: 65.h, maxHeight: 68.h),
+              child: Searchcategorieslist(),
             ),
           ),
 
           SliverToBoxAdapter(
             child: Divider(color: commonColor.withValues(alpha: .1)),
           ),
+          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(left: 16.0, bottom: 8, top: 8).w,
+              padding: const EdgeInsets.only(left: 16.0),
               child: Text(
                 '124 RESULTS FOUND',
-                style: TextStyle(
-                  color: const Color(0x998B4513),
-                  fontSize: 14,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w500,
-                  height: 1.43,
-                  letterSpacing: 0.70,
+                style: AppTextStyles.t_14w500.copyWith(
+                  color: commonColor.withValues(alpha: .6),
                 ),
               ),
             ),
           ),
+          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
           SliverGrid.builder(
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
@@ -85,7 +81,7 @@ class CustomerSearchScreen extends StatelessWidget {
             itemCount: productsListData.length,
             itemBuilder: (context, index) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
+                padding: const EdgeInsets.only(left: 8.0, right: 8.0).w,
                 child: ProductItem(
                   cardclipBehavior: .antiAlias,
                   product: productsListData[index],
@@ -95,8 +91,8 @@ class CustomerSearchScreen extends StatelessWidget {
                   imageclipBehavior: Clip.antiAlias,
                   lowercolumnbottompadding: 8.h,
                   lowercolumntoppadding: 8.h,
-                  lowercolumnleftpadding: 8.w,
-                  lowercolumnrightpadding: 8.w,
+                  lowercolumnleftpadding: 8,
+                  lowercolumnrightpadding: 8,
                   lowercolumn: SearchedProductItemLowerColumn(
                     product: productsListData[index],
                   ),
@@ -105,13 +101,9 @@ class CustomerSearchScreen extends StatelessWidget {
             },
           ),
           SliverToBoxAdapter(child: SizedBox(height: 50.h)),
-
-          // SliverFillRemaining(
-          //   hasScrollBody: false,
-          //   child: CustomBottomBar(items: customerBottomBarItems),
-          // ),
         ],
       ),
+      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

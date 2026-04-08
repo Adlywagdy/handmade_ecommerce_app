@@ -97,6 +97,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                     customer: CustomerModel(name: "adly"),
                     products: productsListData,
                     orderid: '#AY-9402',
+                    payment: PaymentDetailsModel(
+                      totalPrice: 500.00,
+                      discount: 50.00,
+                      deliveryFee: 0,
+                      subtotalPrice: 50,
+                    ),
                   ),
                 ),
               ),

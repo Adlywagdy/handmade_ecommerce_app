@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 
@@ -33,12 +34,15 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
                 color: commonColor,
                 size: 24.r,
               ),
-              Text(_paymentListdata[index].paymentMethod!),
+              Text(
+                _paymentListdata[index].paymentMethod!,
+                style: AppTextStyles.t_14w500,
+              ),
               Image.asset(
                 _paymentListdata[index].image!,
                 fit: BoxFit.fill,
-                height: 30.h,
-                width: 30.w,
+                height: 30.r,
+                width: 30.r,
               ),
             ],
           ),

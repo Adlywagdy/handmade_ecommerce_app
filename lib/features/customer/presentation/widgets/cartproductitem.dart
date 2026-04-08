@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/amountcontainerbutton.dart';
@@ -55,13 +56,8 @@ class CartProductItem extends StatelessWidget {
                       flex: 3,
                       child: Text(
                         product.name,
-                        style: TextStyle(
+                        style: AppTextStyles.t_16w600.copyWith(
                           color: blackDegree,
-                          fontSize: 16.sp,
-
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w600,
-                          height: 1.25,
                         ),
                       ),
                     ),
@@ -71,7 +67,7 @@ class CartProductItem extends StatelessWidget {
                         backgroundColor: Colors.white,
                         icon: CupertinoIcons.delete,
                         iconcolor: subTitleColor,
-                        iconsize: 20.sp,
+                        iconsize: 20.r,
                       ),
                     ),
                   ],
@@ -79,13 +75,7 @@ class CartProductItem extends StatelessWidget {
                 SizedBox(height: 4.h),
                 Text(
                   "By ${product.seller.specialty}${product.seller.name}",
-                  style: TextStyle(
-                    color: commonColor,
-                    fontSize: 12.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w500,
-                    height: 1.33,
-                  ),
+                  style: AppTextStyles.t_12w500.copyWith(color: commonColor),
                 ),
                 SizedBox(height: 8.h),
                 Row(
@@ -93,13 +83,7 @@ class CartProductItem extends StatelessWidget {
                   children: [
                     Text(
                       '\$${product.price.toString()}',
-                      style: TextStyle(
-                        color: blackDegree,
-                        fontSize: 18.sp,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w700,
-                        height: 1.56,
-                      ),
+                      style: AppTextStyles.t_18w700,
                     ),
 
                     AmountContainerButton(

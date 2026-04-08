@@ -5,6 +5,7 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/becomesellercard.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customerdetailsitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/userpofiledetails.dart';
 
@@ -93,6 +94,7 @@ class CustomerProfilesScreen extends StatelessWidget {
           ),
         ),
       ),
+      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

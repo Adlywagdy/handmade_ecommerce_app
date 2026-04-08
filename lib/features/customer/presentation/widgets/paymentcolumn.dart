@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/paymentsmethodslist.dart';
 
@@ -26,16 +27,7 @@ class PaymentColumn extends StatelessWidget {
         spacing: 12.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Payment Method',
-            style: TextStyle(
-              color: blackDegree,
-              fontSize: 18.sp,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              height: 1.56,
-            ),
-          ),
+          Text('Payment Method', style: AppTextStyles.t_18w700),
           PaymentsMethodsList(),
         ],
       ),

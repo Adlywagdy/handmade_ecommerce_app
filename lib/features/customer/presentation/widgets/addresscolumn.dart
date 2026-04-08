@@ -38,7 +38,12 @@ class AddressColumn extends StatelessWidget {
                 borderRadius: BorderRadiusGeometry.circular(24.r),
               ),
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: EdgeInsets.only(
+                  bottom: 12.h,
+                  right: 12,
+                  left: 12,
+                  top: 4.h,
+                ),
                 child: Icon(
                   Icons.location_on_outlined,
                   color: commonColor,
@@ -48,23 +53,13 @@ class AddressColumn extends StatelessWidget {
             ),
             title: Text(
               order.customer.address?.addresstitle ?? "Home",
-              style: TextStyle(
-                color: blackDegree,
-                fontSize: 16.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-                height: 1.50,
-              ),
+              style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
             ),
             subtitle: Text(
               order.customer.address?.addressdescription ??
                   "123 Main St, City, Country",
-              style: TextStyle(
+              style: AppTextStyles.t_14w400.copyWith(
                 color: blackDegree.withValues(alpha: .7),
-                fontSize: 14.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w400,
-                height: 1.43,
               ),
             ),
           ),

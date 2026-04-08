@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
@@ -23,25 +27,24 @@ class CustomerProductDetailsScreen extends StatelessWidget {
             pinned: true,
             backgroundColor: customerbackGroundColor,
             scrolledUnderElevation: 0,
+            leading: IconButton(
+              onPressed: () {
+                Get.back();
+              },
+              icon: Icon(Icons.arrow_back, color: commonColor),
+            ),
             centerTitle: true,
             actions: [
               CustomIconButton(
                 backgroundColor: customerbackGroundColor,
                 icon: Icons.share_outlined,
-                iconcolor: darkblue,
+                iconcolor: commonColor,
               ),
             ],
             title: Text(
               'Product Details',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: blackDegree,
-                fontSize: 18.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w700,
-                height: 1.25,
-                letterSpacing: -0.45,
-              ),
+              style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
           ),
           SliverToBoxAdapter(
@@ -62,23 +65,15 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   children: [
                     Text(
                       product.name,
-                      style: TextStyle(
+
+                      style: AppTextStyles.t_30w700.copyWith(
                         color: blackDegree,
-                        fontSize: 30.sp,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w700,
-                        height: 1.25,
-                        letterSpacing: -0.75,
                       ),
                     ),
                     Text(
                       '\$${product.price}',
-                      style: TextStyle(
+                      style: AppTextStyles.t_24w700.copyWith(
                         color: commonColor,
-                        fontSize: 24.sp,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w700,
-                        height: 1.33,
                       ),
                     ),
                     Divider(
@@ -90,14 +85,17 @@ class CustomerProductDetailsScreen extends StatelessWidget {
               ),
             ),
           ),
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: ProductDetailsLowerColumn(product: product),
+            ),
+          ),
+
           SliverFillRemaining(
             hasScrollBody: false,
             child: Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-                  child: ProductDetailsLowerColumn(product: product),
-                ),
                 Container(
                   color: Colors.white,
                   padding: EdgeInsets.symmetric(
@@ -112,24 +110,26 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                         flex: 2,
                         child: CustomElevatedButton(
                           buttoncolor: commonColor,
-                          onPressed: () {},
+                          onPressed: () {
+                            Get.toNamed(
+                              // handle add to cart action
+                              AppRoutes.customerCart,
+                            );
+                          },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Icon(
                                 Icons.shopping_bag_outlined,
                                 color: Colors.white,
+                                size: 16.r,
                               ),
                               SizedBox(width: 8.w),
                               Text(
                                 'Add to Cart',
                                 textAlign: TextAlign.center,
-                                style: TextStyle(
+                                style: AppTextStyles.t_16w600.copyWith(
                                   color: Colors.white,
-                                  fontSize: 16.sp,
-                                  fontFamily: 'Plus Jakarta Sans',
-                                  fontWeight: FontWeight.w700,
-                                  height: 1.50,
                                 ),
                               ),
                             ],

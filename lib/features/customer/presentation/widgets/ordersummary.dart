@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderdetailsrow.dart';
 
 class OrderSummary extends StatelessWidget {
   final OrderModel order;
@@ -27,16 +29,7 @@ class OrderSummary extends StatelessWidget {
         spacing: 12.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Order Summary',
-            style: TextStyle(
-              color: blackDegree,
-              fontSize: 18.sp,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              height: 1.56,
-            ),
-          ),
+          Text('Order Summary', style: AppTextStyles.t_18w700),
 
           OrderDetailsRow(
             title: 'Subtotal',
@@ -48,72 +41,17 @@ class OrderSummary extends StatelessWidget {
           ),
           OrderDetailsRow(
             title: 'Discount',
-            value: '\$${order.payment?.discount?.toStringAsFixed(2)}',
+            valuecolor: greenDegree,
+            value: '- \$${order.payment?.discount?.toStringAsFixed(2)}',
           ),
-          Divider(color: commonColor.withValues(alpha: .05)),
+          Divider(color: commonColor.withValues(alpha: .1)),
           OrderDetailsRow(
             title: 'Total Amount',
-            titlefontSize: 16,
-            titlecolor: blackDegree,
-            valuecolor: commonColor,
-            titlefontWeight: FontWeight.w700,
-            valuefontWeight: FontWeight.w800,
-            valuefontSize: 20,
+
             value: '\$${order.payment?.totalPrice?.toStringAsFixed(2)}',
           ),
         ],
       ),
-    );
-  }
-}
-
-class OrderDetailsRow extends StatelessWidget {
-  final String title;
-  final String value;
-  final Color? titlecolor;
-  final Color? valuecolor;
-  final double? titlefontSize;
-  final FontWeight? titlefontWeight;
-  final FontWeight? valuefontWeight;
-  final double? valuefontSize;
-  const OrderDetailsRow({
-    super.key,
-    required this.title,
-    required this.value,
-    this.titlecolor = darkblue,
-    this.valuecolor = blackDegree,
-    this.titlefontSize = 14,
-    this.titlefontWeight = FontWeight.w400,
-    this.valuefontWeight = FontWeight.w500,
-    this.valuefontSize = 16,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          title,
-          style: TextStyle(
-            color: titlecolor,
-            fontSize: titlefontSize!.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: titlefontWeight,
-            height: 1.43,
-          ),
-        ),
-        Text(
-          value,
-          style: TextStyle(
-            color: valuecolor,
-            fontSize: valuefontSize!.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: valuefontWeight,
-            height: 1.43,
-          ),
-        ),
-      ],
     );
   }
 }

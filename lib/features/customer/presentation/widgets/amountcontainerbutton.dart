@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class AmountContainerButton extends StatelessWidget {
-  final double? fontSize;
   final Color? iconscolor;
-  final Color? textcolor;
+
   final double circularradius;
   final double verticalpadding;
   final double horizontalpadding;
   final double? spacingwidth;
   const AmountContainerButton({
     super.key,
-    this.fontSize = 16,
+
     this.iconscolor = commonColor,
-    this.textcolor = blackDegree,
+
     this.circularradius = 12,
     this.verticalpadding = 12,
     this.horizontalpadding = 12,
@@ -43,24 +43,20 @@ class AmountContainerButton extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {},
-            child: Icon(Icons.remove, color: iconscolor),
+            child: Icon(Icons.remove, color: iconscolor, size: 16.r),
           ),
 
           Text(
             '1', // This should be a variable that holds the current amount selected by the user
             textAlign: TextAlign.center,
-            style: TextStyle(
-              color: textcolor,
-              fontSize: fontSize!.sp,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              height: 1.50,
+            style: AppTextStyles.t_14w600.copyWith(
+              color: AppColors.textPrimary,
             ),
           ),
 
           InkWell(
             onTap: () {},
-            child: Icon(Icons.add, color: iconscolor),
+            child: Icon(Icons.add, color: iconscolor, size: 16.r),
           ),
         ],
       ),

@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addresscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cartproductitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/copounrow.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/paymentcolumn.dart';
 
@@ -28,23 +32,22 @@ class CustomerCartScreen extends StatelessWidget {
               backgroundColor: customerbackGroundColor,
               scrolledUnderElevation: 0,
               centerTitle: true,
-
+              leading: IconButton(
+                onPressed: () {
+                  Get.back();
+                },
+                icon: Icon(Icons.arrow_back_ios, color: darkblue),
+              ),
               title: Text(
                 'Your Cart',
 
-                style: TextStyle(
-                  color: blackDegree,
-                  fontSize: 18.sp,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                  height: 1.56,
-                ),
+                style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0).h,
-                child: Divider(color: commonColor.withValues(alpha: .05)),
+                child: Divider(color: commonColor.withValues(alpha: .2)),
               ),
             ),
             SliverList.builder(
@@ -66,24 +69,28 @@ class CustomerCartScreen extends StatelessWidget {
             SliverFillRemaining(
               hasScrollBody: false,
               child: Padding(
-                padding: const EdgeInsets.only(top: 80, bottom: 30).h,
+                padding: const EdgeInsets.only(top: 50, bottom: 15).h,
                 child: Column(
                   children: [
-                    Divider(color: commonColor.withValues(alpha: .05)),
-
+                    Divider(color: commonColor.withValues(alpha: .2)),
+                    SizedBox(height: 16.h),
                     CustomElevatedButton(
                       buttoncolor: commonColor,
                       onPressed: () {},
                       child: Text(
                         'Proceed to Checkout',
                         textAlign: TextAlign.center,
-                        style: TextStyle(
+                        style: AppTextStyles.t_16w700.copyWith(
                           color: Colors.white,
-                          fontSize: 16.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w700,
-                          height: 1.50,
                         ),
+                      ),
+                    ),
+                    SizedBox(height: 16.h),
+                    Text(
+                      'By clicking confirm, you agree to our Terms of\nService and Privacy Policy.',
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.t_12w400.copyWith(
+                        color: subTitleColor,
                       ),
                     ),
                   ],
@@ -93,6 +100,7 @@ class CustomerCartScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

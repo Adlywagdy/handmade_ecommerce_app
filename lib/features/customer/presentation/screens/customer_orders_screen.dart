@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderitem.dart';
 
 class CustomerOrdersScreen extends StatelessWidget {
@@ -49,13 +50,9 @@ class CustomerOrdersScreen extends StatelessWidget {
               },
             ),
           ),
-          // Card(
-          //   color: Colors.white,
-          //   margin: EdgeInsets.zero,
-          //      child: CustomBottomBar(items: customerBottomBarItems),
-          // ),
         ],
       ),
+      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

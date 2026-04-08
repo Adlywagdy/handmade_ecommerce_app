@@ -22,7 +22,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
       itemCount: categorieslistdata.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(right: 13.0).w,
+          padding: const EdgeInsets.only(right: 13.0),
           child: InkWell(
             onTap: () {
               setState(() {

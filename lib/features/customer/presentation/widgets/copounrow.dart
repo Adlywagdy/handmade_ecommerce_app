@@ -4,8 +4,28 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 
-class CopounRow extends StatelessWidget {
+class CopounRow extends StatefulWidget {
   const CopounRow({super.key});
+
+  @override
+  State<CopounRow> createState() => _CopounRowState();
+}
+
+late TextEditingController? controller;
+
+class _CopounRowState extends State<CopounRow> {
+  @override
+  void initState() {
+    controller = TextEditingController();
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    controller?.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -13,8 +33,9 @@ class CopounRow extends StatelessWidget {
       spacing: 8.w,
       children: [
         Expanded(
-          flex: 3.w.toInt(),
+          flex: 3,
           child: TextFormField(
+            controller: controller,
             cursorColor: commonColor,
 
             onTapOutside: (event) {
@@ -26,12 +47,7 @@ class CopounRow extends StatelessWidget {
               filled: true,
               hint: Text(
                 'Promo code',
-                style: TextStyle(
-                  color: subTitleColor,
-                  fontSize: 14.sp,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w400,
-                ),
+                style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               ),
               focusedBorder: OutlineInputBorder(
                 gapPadding: 16.w,
@@ -56,13 +72,19 @@ class CopounRow extends StatelessWidget {
           ),
         ),
         Expanded(
-          flex: 1.w.toInt(),
-          child: CustomTextContainer(
-            text: "Apply",
-            textstyle: AppTextStyles.t_16w700.copyWith(color: Colors.white),
-            horizontalpadding: 24.w,
-            verticalpadding: 12.h,
-            backGroundColor: commonColor.withValues(alpha: .1),
+          flex: 1,
+          child: InkWell(
+            onTap: () {
+              // apply copoun logic
+              // String copounCode = controller.text;
+            },
+            child: CustomTextContainer(
+              text: "Apply",
+              textstyle: AppTextStyles.t_16w700.copyWith(color: commonColor),
+              horizontalpadding: 4.w,
+              verticalpadding: 8.h,
+              backGroundColor: commonColor.withValues(alpha: .1),
+            ),
           ),
         ),
       ],
