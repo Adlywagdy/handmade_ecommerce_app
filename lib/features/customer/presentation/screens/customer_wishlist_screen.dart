@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
@@ -21,6 +22,7 @@ class CustomerWishlistScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
         child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               pinned: true,
@@ -33,6 +35,27 @@ class CustomerWishlistScreen extends StatelessWidget {
 
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
+            ),
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 2));
+              },
+              builder:
+                  (
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  ) {
+                    return CupertinoSliverRefreshControl.buildRefreshIndicator(
+                      context,
+                      refreshState,
+                      pulledExtent,
+                      refreshTriggerPullDistance,
+                      refreshIndicatorExtent,
+                    );
+                  },
             ),
             SliverToBoxAdapter(
               child: Container(
@@ -107,8 +130,8 @@ class CustomerWishlistScreen extends StatelessWidget {
                     lowercolumnflex: 1,
                     elevation: 0,
                     imageclipBehavior: Clip.antiAlias,
-                    lowercolumnbottompadding: 8.h,
-                    lowercolumntoppadding: 8.h,
+                    lowercolumnbottompadding: 7.h,
+                    lowercolumntoppadding: 7.h,
                     lowercolumnleftpadding: 8,
                     lowercolumnrightpadding: 8,
                     lowercolumn: SearchedProductItemLowerColumn(

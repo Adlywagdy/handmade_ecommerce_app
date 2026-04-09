@@ -6,7 +6,7 @@ class SearchField extends StatelessWidget {
   final Color? fillColor;
   final Color? iconColor;
   final bool autofocus;
-
+  final bool readOnly;
   final Color? cursorColor;
   final String hintText;
 
@@ -24,16 +24,18 @@ class SearchField extends StatelessWidget {
     this.onTap,
     this.onChanged,
     this.textstyle,
+    required this.readOnly,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
       autofocus: autofocus,
+
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
-
+      readOnly: readOnly,
       onTap: onTap,
       onChanged: onChanged,
       autocorrect: true,

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
@@ -14,7 +13,7 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.white,
-      margin: EdgeInsets.only(bottom: 12.h),
+      margin: EdgeInsets.only(top: 12.h),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(
           horizontal: 10.0.w,
@@ -31,7 +30,7 @@ class OrderItem extends StatelessWidget {
               bottom: 12.h,
               right: 12,
               left: 12,
-              top: 4.h,
+              top: 12.h,
             ),
             child: Icon(
               getStatusIcon(order.status!),
@@ -59,11 +58,10 @@ class OrderItem extends StatelessWidget {
             ),
           ],
         ),
-        trailing: CustomIconButton(
-          backgroundColor: Colors.white,
-          iconsize: 20.r,
-          icon: Icons.arrow_forward_ios,
-          iconcolor: subTitleColor.withValues(alpha: 0.5),
+        trailing: Icon(
+          Icons.arrow_forward_ios,
+          size: 20.r,
+          color: subTitleColor.withValues(alpha: 0.5),
         ),
         subtitle: Column(
           spacing: 5.h,

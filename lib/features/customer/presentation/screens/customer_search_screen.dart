@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -19,6 +20,7 @@ class CustomerSearchScreen extends StatelessWidget {
     return Scaffold(
       backgroundColor: customerbackGroundColor,
       body: CustomScrollView(
+        physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             backgroundColor: customerbackGroundColor,
@@ -33,6 +35,7 @@ class CustomerSearchScreen extends StatelessWidget {
             centerTitle: true,
             title: SearchField(
               autofocus: true,
+              readOnly: false,
               hintText: 'Handmade ceramics',
               textstyle: AppTextStyles.t_14w500.copyWith(color: blackDegree),
             ),
@@ -46,6 +49,27 @@ class CustomerSearchScreen extends StatelessWidget {
                 },
               ),
             ],
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await Future.delayed(Duration(seconds: 2));
+            },
+            builder:
+                (
+                  context,
+                  refreshState,
+                  pulledExtent,
+                  refreshTriggerPullDistance,
+                  refreshIndicatorExtent,
+                ) {
+                  return CupertinoSliverRefreshControl.buildRefreshIndicator(
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  );
+                },
           ),
           SliverToBoxAdapter(
             child: Container(

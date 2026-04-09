@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
@@ -22,6 +23,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
       backgroundColor: customerbackGroundColor,
 
       body: CustomScrollView(
+        physics: BouncingScrollPhysics(),
         slivers: [
           SliverAppBar(
             pinned: true,
@@ -46,6 +48,27 @@ class CustomerProductDetailsScreen extends StatelessWidget {
               textAlign: TextAlign.center,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
+          ),
+          CupertinoSliverRefreshControl(
+            onRefresh: () async {
+              await Future.delayed(Duration(seconds: 2));
+            },
+            builder:
+                (
+                  context,
+                  refreshState,
+                  pulledExtent,
+                  refreshTriggerPullDistance,
+                  refreshIndicatorExtent,
+                ) {
+                  return CupertinoSliverRefreshControl.buildRefreshIndicator(
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  );
+                },
           ),
           SliverToBoxAdapter(
             child: Container(

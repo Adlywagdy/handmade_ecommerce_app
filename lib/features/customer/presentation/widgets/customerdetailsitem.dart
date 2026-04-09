@@ -26,7 +26,7 @@ class CustomerDetailsItem extends StatelessWidget {
               bottom: 12.h,
               right: 12,
               left: 12,
-              top: 4.h,
+              top: 12.h,
             ),
             child: Icon(item!['icon'], color: commonColor, size: 26.r),
           ),

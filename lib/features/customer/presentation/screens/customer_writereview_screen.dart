@@ -62,7 +62,10 @@ class CustomerWriteReviewScreen extends StatelessWidget {
             SizedBox(height: 20.h),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-              child: AddReviewedPhotos(),
+              child: GestureDetector(
+                onTap: () {}, // should open image picker in real app
+                child: AddReviewedPhotos(),
+              ),
             ),
             SizedBox(height: 32.h),
             Divider(color: commonColor.withValues(alpha: .2)),

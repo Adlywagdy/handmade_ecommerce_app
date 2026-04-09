@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -24,6 +25,7 @@ class CustomerCartScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
         child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               pinned: true,
@@ -37,12 +39,34 @@ class CustomerCartScreen extends StatelessWidget {
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 2));
+              },
+              builder:
+                  (
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  ) {
+                    return CupertinoSliverRefreshControl.buildRefreshIndicator(
+                      context,
+                      refreshState,
+                      pulledExtent,
+                      refreshTriggerPullDistance,
+                      refreshIndicatorExtent,
+                    );
+                  },
+            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 8.0).h,
                 child: Divider(color: commonColor.withValues(alpha: .2)),
               ),
             ),
+
             SliverList.builder(
               itemBuilder: (context, index) {
                 return CartProductItem(product: order.products[index]);

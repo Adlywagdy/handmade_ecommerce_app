@@ -1,9 +1,9 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
-
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
@@ -24,6 +24,7 @@ class CustomerHomeScreen extends StatelessWidget {
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0).w,
         child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
           primary: true,
           slivers: [
             SliverAppBar(
@@ -44,14 +45,37 @@ class CustomerHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 2));
+              },
+              builder:
+                  (
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  ) {
+                    return CupertinoSliverRefreshControl.buildRefreshIndicator(
+                      context,
+                      refreshState,
+                      pulledExtent,
+                      refreshTriggerPullDistance,
+                      refreshIndicatorExtent,
+                    );
+                  },
+            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0).w,
                 child: SearchField(
+                  autofocus: false,
                   hintText: "Search unique handmade crafts",
                   textstyle: AppTextStyles.t_12w500.copyWith(
                     color: commonColor.withValues(alpha: .6),
                   ),
+                  readOnly: true,
                   onTap: () {
                     Get.toNamed(AppRoutes.customerSearch);
                   },

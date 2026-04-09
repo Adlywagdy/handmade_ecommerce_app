@@ -12,6 +12,7 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_layout.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orderdetails_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
@@ -92,6 +93,16 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                     customer: CustomerModel(name: "adly"),
                     products: productsListData,
                     orderid: '#AY-9402',
+                  ),
+                ),
+              ),
+              GetPage(
+                name: AppRoutes.customerCart,
+                page: () => CustomerCartScreen(
+                  order: OrderModel(
+                    customer: CustomerModel(name: "name"),
+                    products: productsListData,
+                    orderid: "orderid",
                   ),
                 ),
               ),
