@@ -8,6 +8,8 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/screens/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/product_details_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_bottom_nav.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
@@ -27,7 +29,8 @@ class HandcraftedEcommerceApp extends StatelessWidget {
         return GetMaterialApp(
           debugShowCheckedModeBanner: false,
           // home: const CustomerHomeScreen(),
-          home: ProductDetailsScreen(product: productsListData[0]),
+          // home: ProductDetailsScreen(product: productsListData[0]),
+          home: const SellerBottomNav(),
         );
       },
     );
