@@ -24,7 +24,7 @@ class SearchField extends StatelessWidget {
     this.onTap,
     this.onChanged,
     this.textstyle,
-    required this.readOnly,
+    this.readOnly = false,
   });
 
   @override

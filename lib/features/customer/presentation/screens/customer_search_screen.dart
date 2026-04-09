@@ -35,7 +35,7 @@ class CustomerSearchScreen extends StatelessWidget {
             centerTitle: true,
             title: SearchField(
               autofocus: true,
-              readOnly: false,
+
               hintText: 'Handmade ceramics',
               textstyle: AppTextStyles.t_14w500.copyWith(color: blackDegree),
             ),
