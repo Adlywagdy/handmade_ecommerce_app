@@ -27,10 +27,13 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
 import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const HandcraftedEcommerceApp());
 }
 
