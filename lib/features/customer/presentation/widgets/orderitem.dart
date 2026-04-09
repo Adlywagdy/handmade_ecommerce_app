@@ -21,14 +21,18 @@ class OrderItem extends StatelessWidget {
           vertical: 12.0.h,
         ),
         leading: Card(
-          elevation: 0,
           color: _getStatusColor(order.status!).withValues(alpha: .1),
-
+          elevation: 0,
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(24.r),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(10.0).w,
+            padding: EdgeInsets.only(
+              bottom: 12.h,
+              right: 12,
+              left: 12,
+              top: 4.h,
+            ),
             child: Icon(
               getStatusIcon(order.status!),
               color: _getStatusColor(order.status!),
@@ -39,16 +43,7 @@ class OrderItem extends StatelessWidget {
         title: Row(
           spacing: 8.w,
           children: [
-            Text(
-              '${order.orderid}',
-              style: TextStyle(
-                color: blackDegree,
-                fontSize: 16.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w700,
-                height: 1.50,
-              ),
-            ),
+            Text('${order.orderid}', style: AppTextStyles.t_16w700),
             CustomTextContainer(
               text: order.status.toString().split('.').last.toUpperCase(),
 
@@ -60,13 +55,13 @@ class OrderItem extends StatelessWidget {
               backGroundColor: _getStatusColor(
                 order.status!,
               ).withValues(alpha: .1),
-              borderRadius: 200,
+              borderRadius: 200.r,
             ),
           ],
         ),
         trailing: CustomIconButton(
           backgroundColor: Colors.white,
-          iconsize: 20.sp,
+          iconsize: 20.r,
           icon: Icons.arrow_forward_ios,
           iconcolor: subTitleColor.withValues(alpha: 0.5),
         ),
@@ -77,23 +72,11 @@ class OrderItem extends StatelessWidget {
           children: [
             Text(
               '${order.orderDate!.toLocal().toString().split(' ')[0]} • ${order.products.length} Items',
-              style: TextStyle(
-                color: subTitleColor,
-                fontSize: 12.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w400,
-                height: 1.33,
-              ),
+              style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
             Text(
               '\$${order.payment!.totalPrice!.toStringAsFixed(2)}',
-              style: TextStyle(
-                color: commonColor,
-                fontSize: 14.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-                height: 1.43,
-              ),
+              style: AppTextStyles.t_14w600.copyWith(color: commonColor),
             ),
           ],
         ),

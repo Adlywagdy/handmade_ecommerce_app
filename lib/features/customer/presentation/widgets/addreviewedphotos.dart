@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class AddReviewedPhotos extends StatelessWidget {
@@ -14,16 +15,7 @@ class AddReviewedPhotos extends StatelessWidget {
       child: Column(
         spacing: 12.h,
         children: [
-          Text(
-            'Add Photos',
-            style: TextStyle(
-              color: blackDegree,
-              fontSize: 14.sp,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w600,
-              height: 1.43,
-            ),
-          ),
+          Text('Add Photos', style: AppTextStyles.t_14w600),
           CustomPaint(
             painter: DashedBorderPainter(
               color: commonColor.withValues(alpha: .2),
@@ -40,7 +32,7 @@ class AddReviewedPhotos extends StatelessWidget {
                 child: Icon(
                   Icons.add_a_photo_outlined,
                   color: commonColor.withValues(alpha: .4),
-                  size: 24.sp,
+                  size: 24.r,
                 ),
               ),
             ),

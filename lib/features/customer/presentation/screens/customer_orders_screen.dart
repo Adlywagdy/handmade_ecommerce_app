@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderitem.dart';
 
 class CustomerOrdersScreen extends StatelessWidget {
@@ -26,17 +29,7 @@ class CustomerOrdersScreen extends StatelessWidget {
           ),
         ],
 
-        title: Text(
-          'My Orders',
-          style: TextStyle(
-            color: blackDegree,
-            fontSize: 18.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.56,
-            letterSpacing: -0.45,
-          ),
-        ),
+        title: Text('My Orders', style: AppTextStyles.t_18w700),
       ),
       // tab bar should be here to filter orders by status (all, delivered, canceled, etc.)
       body: Column(
@@ -46,13 +39,20 @@ class CustomerOrdersScreen extends StatelessWidget {
               itemCount: customerorderslist.length,
               padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
               itemBuilder: (context, index) {
-                return OrderItem(order: customerorderslist[index]);
+                return GestureDetector(
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoutes.customerOrderDetails,
+                      arguments: customerorderslist[index],
+                    );
+                  },
+                  child: OrderItem(order: customerorderslist[index]),
+                );
               },
             ),
           ),
         ],
       ),
-      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

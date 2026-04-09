@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addreviewedphotos.dart';
@@ -24,14 +25,7 @@ class CustomerWriteReviewScreen extends StatelessWidget {
         title: Text(
           'Write Review',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: blackDegree,
-            fontSize: 18.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.25,
-            letterSpacing: -0.45,
-          ),
+          style: AppTextStyles.t_18w700,
         ),
       ),
       body: SingleChildScrollView(
@@ -46,24 +40,14 @@ class CustomerWriteReviewScreen extends StatelessWidget {
                   Text(
                     'How was your experience?',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: blackDegree,
-                      fontSize: 24.sp,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w800,
-                      height: 1.25,
-                    ),
+                    style: AppTextStyles.t_24w800,
                   ),
                   SizedBox(height: 8.h),
                   Text(
                     'Your feedback helps our artisan community grow.',
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: AppTextStyles.t_14w400.copyWith(
                       color: subTitleColor,
-                      fontSize: 14.sp,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w400,
-                      height: 1.43,
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -97,18 +81,14 @@ class CustomerWriteReviewScreen extends StatelessWidget {
                         Icon(
                           Icons.send_outlined,
                           color: Colors.white,
-                          size: 16.sp,
+                          size: 16.r,
                         ),
                         SizedBox(width: 4.w),
                         Text(
                           'Submit Review',
                           textAlign: TextAlign.center,
-                          style: TextStyle(
+                          style: AppTextStyles.t_16w700.copyWith(
                             color: Colors.white,
-                            fontSize: 16.sp,
-                            fontFamily: 'Plus Jakarta Sans',
-                            fontWeight: FontWeight.w700,
-                            height: 1.50,
                           ),
                         ),
                       ],
@@ -117,12 +97,8 @@ class CustomerWriteReviewScreen extends StatelessWidget {
                   Text(
                     "By submitting, you agree to Ayady's Terms of Service and Privacy Policy.",
                     textAlign: TextAlign.center,
-                    style: TextStyle(
+                    style: AppTextStyles.t_10w400.copyWith(
                       color: subTitleColor,
-                      fontSize: 10.sp,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w400,
-                      height: 1.25,
                     ),
                   ),
                 ],

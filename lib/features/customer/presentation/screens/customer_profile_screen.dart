@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/becomesellercard.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customerdetailsitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/userpofiledetails.dart';
 
@@ -32,14 +32,7 @@ class CustomerProfilesScreen extends StatelessWidget {
         title: Text(
           'Profile',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: blackDegree,
-            fontSize: 18.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.25,
-            letterSpacing: -0.45,
-          ),
+          style: AppTextStyles.t_18w700,
         ),
       ),
       body: SingleChildScrollView(
@@ -78,13 +71,7 @@ class CustomerProfilesScreen extends StatelessWidget {
                     SizedBox(width: 8.w),
                     Text(
                       'Logout',
-                      style: TextStyle(
-                        color: redDegree,
-                        fontSize: 16.sp,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w600,
-                        height: 1.50,
-                      ),
+                      style: AppTextStyles.t_16w600.copyWith(color: redDegree),
                     ),
                   ],
                 ),
@@ -94,7 +81,6 @@ class CustomerProfilesScreen extends StatelessWidget {
           ),
         ),
       ),
-      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

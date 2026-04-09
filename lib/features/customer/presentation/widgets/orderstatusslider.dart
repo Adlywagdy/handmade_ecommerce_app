@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderitem.dart';
@@ -50,7 +51,7 @@ class OrderStatusSlider extends StatelessWidget {
                         .split('.')
                         .last
                         .toUpperCase(),
-                    style: TextStyle(
+                    style: AppTextStyles.t_10w700.copyWith(
                       color:
                           orderstatus != _steps[progressindex] &&
                               _steps.indexWhere(
@@ -59,11 +60,6 @@ class OrderStatusSlider extends StatelessWidget {
                                   progressindex
                           ? commonColor.withValues(alpha: .2)
                           : commonColor,
-                      fontSize: 10.sp,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w700,
-                      height: 1.50,
-                      letterSpacing: 0.50,
                     ),
                   ),
                 ],

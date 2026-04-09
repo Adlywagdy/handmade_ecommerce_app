@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class CustomStarsRatingReview extends StatefulWidget {
@@ -13,9 +14,9 @@ class CustomStarsRatingReview extends StatefulWidget {
       _CustomStarsRatingReviewState();
 }
 
-int? index;
-
 class _CustomStarsRatingReviewState extends State<CustomStarsRatingReview> {
+  int? selectedRatingIndex;
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -24,39 +25,41 @@ class _CustomStarsRatingReviewState extends State<CustomStarsRatingReview> {
           mainAxisAlignment: .center,
 
           children: List.generate(5, (rateindex) {
+            final isSelected =
+                selectedRatingIndex != null &&
+                selectedRatingIndex! >= rateindex;
+
             return InkWell(
+              borderRadius: BorderRadius.circular(999.r),
               onTap: () {
                 setState(() {
-                  index = rateindex;
+                  selectedRatingIndex = rateindex;
                 });
               },
 
-              child: index != null && index! >= rateindex
-                  ? Icon(
-                      Icons.star_border,
-                      size: 50.w,
-                      fill: 0,
-                      color: orangedegree,
-                    )
-                  : Icon(
-                      Icons.star_border,
-                      size: 50.w,
-                      color: orangedegree.withValues(alpha: .2),
-                    ),
+              child: Padding(
+                padding: EdgeInsets.all(2.r),
+                child: Icon(
+                  isSelected ? Icons.star_rounded : Icons.star_border_rounded,
+                  size: 50.r,
+                  color: isSelected
+                      ? orangedegree
+                      : orangedegree.withValues(alpha: .25),
+                ),
+              ),
             );
           }),
         ),
         SizedBox(height: 10.h),
         Text(
-          index != null ? getReviewLabel(index!).name.toUpperCase() : "",
+          selectedRatingIndex != null
+              ? getReviewLabel(selectedRatingIndex!).name.toUpperCase()
+              : 'TAP TO RATE',
           textAlign: TextAlign.center,
-          style: TextStyle(
-            color: orangedegree.withValues(alpha: .9),
-            fontSize: 18.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.56,
-            letterSpacing: 1.80,
+          style: AppTextStyles.t_18w700.copyWith(
+            color: selectedRatingIndex != null
+                ? orangedegree.withValues(alpha: .9)
+                : subTitleColor,
           ),
         ),
       ],

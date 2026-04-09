@@ -10,6 +10,8 @@ abstract class AppRoutes {
   static const String verifyPassword = '/verifyPassword';
   static const String resetPassword = '/resetPassword';
 
+
+static const String customerlayout = '/customer/layout';
   static const String customerwishlist = '/customer/wishlist';
   static const String customerHome = '/customer/home';
   static const String customerOrders = '/customer/orders';

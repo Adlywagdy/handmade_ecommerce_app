@@ -26,6 +26,12 @@ abstract class AppTextStyles {
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
+  static final t_24w800 = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w800,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
   static final t_24w700 = TextStyle(
     fontSize: 24.sp,
     fontWeight: FontWeight.w700,

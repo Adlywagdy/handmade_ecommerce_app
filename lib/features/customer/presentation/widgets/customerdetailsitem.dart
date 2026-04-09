@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 
@@ -21,29 +22,19 @@ class CustomerDetailsItem extends StatelessWidget {
             borderRadius: BorderRadiusGeometry.circular(24.r),
           ),
           child: Padding(
-            padding: const EdgeInsets.all(8.0).h,
+            padding: EdgeInsets.only(
+              bottom: 12.h,
+              right: 12,
+              left: 12,
+              top: 4.h,
+            ),
             child: Icon(item!['icon'], color: commonColor, size: 26.r),
           ),
         ),
-        title: Text(
-          item!['title'],
-          style: TextStyle(
-            color: blackDegree,
-            fontSize: 16.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w600,
-            height: 1.50,
-          ),
-        ),
+        title: Text(item!['title'], style: AppTextStyles.t_16w600),
         subtitle: Text(
           item!['subtitle'],
-          style: TextStyle(
-            color: subTitleColor,
-            fontSize: 12.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w400,
-            height: 1.33,
-          ),
+          style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
         ),
         trailing: CustomIconButton(
           backgroundColor: Colors.white,

@@ -14,7 +14,9 @@ class SocialButton extends StatelessWidget {
     return Expanded(
       child: InkWell(
         onTap: () {
-          print("$text");
+          print(
+            "$text",
+          ); // handle social login logic here based on the text or icon
         },
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 12).h,

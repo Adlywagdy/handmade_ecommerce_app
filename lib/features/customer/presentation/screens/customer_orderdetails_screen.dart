@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
@@ -18,27 +21,19 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         scrolledUnderElevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back, color: blackDegree),
+        ),
         title: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Text(order.orderid!, style: AppTextStyles.t_18w700),
             Text(
-              'Order #AY-9402',
-              style: TextStyle(
-                color: blackDegree,
-                fontSize: 18.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w700,
-                height: 1.25,
-              ),
-            ),
-            Text(
-              'Placed on Oct 24, 2023',
-              style: TextStyle(
-                color: subTitleColor,
-                fontSize: 12.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w400,
-                height: 1.33,
-              ),
+              'Placed on ${order.orderDate}',
+              style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
           ],
         ),
@@ -59,19 +54,12 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0).h,
                     child: OrderStatusSlider(
-                      orderstatus: OrderStatus.confirmed,
+                      orderstatus: order.status ?? OrderStatus.preparing,
                     ),
                   ),
                   Text(
                     'ORDER ITEMS (${order.products.length})',
-                    style: TextStyle(
-                      color: blackDegree,
-                      fontSize: 16.sp,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w700,
-                      height: 1.43,
-                      letterSpacing: 1.40,
-                    ),
+                    style: AppTextStyles.t_16w700,
                   ),
                   SizedBox(height: 12.h),
                 ],
@@ -82,7 +70,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0).h,
-                  child: ProductItemOfOrder(order: order),
+                  child: ProductItemOfOrder(product: order.products[index]),
                 );
               },
               itemCount: order.products.length,
@@ -114,57 +102,29 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                           ),
                           Text(
                             'DELIVERY ADDRESS',
-                            style: TextStyle(
-                              color: blackDegree,
-                              fontSize: 14.sp,
-                              fontFamily: 'Plus Jakarta Sans',
-                              fontWeight: FontWeight.w700,
-                              height: 1.43,
-                              letterSpacing: 1.40,
-                            ),
+                            style: AppTextStyles.t_14w700,
                           ),
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(
-                        order.customer.name,
-                        style: TextStyle(
-                          color: blackDegree,
-                          fontSize: 14.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w700,
-                          height: 1.43,
-                        ),
-                      ),
+                      Text(order.customer.name, style: AppTextStyles.t_14w700),
                       Text(
                         order.customer.address?.addressdescription ??
                             "123 Main St, City, Country",
-                        style: TextStyle(
+                        style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
-                          fontSize: 14.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w400,
-                          height: 1.43,
                         ),
                       ),
                       Text(
                         order.customer.address?.city ?? "Cairo, Egypt",
-                        style: TextStyle(
+                        style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
-                          fontSize: 14.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w400,
-                          height: 1.43,
                         ),
                       ),
                       Text(
                         order.customer.phone ?? "+20 123 456 7890",
-                        style: TextStyle(
+                        style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
-                          fontSize: 14.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w400,
-                          height: 1.43,
                         ),
                       ),
                     ],
@@ -186,13 +146,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                     Text(
                       'Cancel Order',
                       textAlign: TextAlign.center,
-                      style: TextStyle(
-                        color: redDegree,
-                        fontSize: 16.sp,
-                        fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w700,
-                        height: 1.50,
-                      ),
+                      style: AppTextStyles.t_16w700.copyWith(color: redDegree),
                     ),
                   ],
                 ),
@@ -203,13 +157,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
               child: Text(
                 "Orders can only be cancelled while in 'Pending' status.",
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  color: subTitleColor,
-                  fontSize: 10.sp,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w400,
-                  height: 1.50,
-                ),
+                style: AppTextStyles.t_10w400.copyWith(color: subTitleColor),
               ),
             ),
             SliverToBoxAdapter(child: SizedBox(height: 25.h)),

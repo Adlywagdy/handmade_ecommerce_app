@@ -3,13 +3,13 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/categorieslist.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customfeaturerow.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
@@ -17,12 +17,10 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/to
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: customerbackGroundColor,
-
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0).w,
         child: CustomScrollView(
@@ -183,7 +181,6 @@ class CustomerHomeScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

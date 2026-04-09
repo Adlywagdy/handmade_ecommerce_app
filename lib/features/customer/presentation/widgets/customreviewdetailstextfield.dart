@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class CustomReviewDetailsTextField extends StatefulWidget {
@@ -35,16 +36,7 @@ class _CustomReviewDetailsTextFieldState
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              'Review Details',
-              style: TextStyle(
-                color: blackDegree,
-                fontSize: 16.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-                height: 1.50,
-              ),
-            ),
+            Text('Review Details', style: AppTextStyles.t_16w600),
             Card(
               elevation: 0,
 
@@ -56,13 +48,7 @@ class _CustomReviewDetailsTextFieldState
                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                 child: Text(
                   '${textfieldcontroller?.text.length ?? 0} / 500',
-                  style: TextStyle(
-                    color: subTitleColor,
-                    fontSize: 12.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w500,
-                    height: 1.33,
-                  ),
+                  style: AppTextStyles.t_12w500.copyWith(color: subTitleColor),
                 ),
               ),
             ),
@@ -90,13 +76,7 @@ class _CustomReviewDetailsTextFieldState
             hint: Text(
               'Share your experience with the \ncraftsmanship, delivery, and overall \nquality...',
 
-              style: TextStyle(
-                color: subTitleColor,
-                fontSize: 16.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w400,
-                height: 1.63,
-              ),
+              style: AppTextStyles.t_16w400.copyWith(color: subTitleColor),
             ),
             focusedBorder: OutlineInputBorder(
               gapPadding: 16.w,

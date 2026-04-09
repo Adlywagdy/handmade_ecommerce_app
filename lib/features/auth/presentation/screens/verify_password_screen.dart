@@ -93,7 +93,8 @@ class VerifytPasswordScreen extends StatelessWidget {
                   }).toList(),
                 );
               },
-              onCompleted: (pin) => print('PIN: $pin'),
+              onCompleted: (pin) =>
+                  print('PIN: $pin'), // handle completed pin input
             ),
             SizedBox(height: 20.h),
             Text(

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -9,7 +7,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addresscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cartproductitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/copounrow.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
+
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/paymentcolumn.dart';
 
@@ -32,12 +30,7 @@ class CustomerCartScreen extends StatelessWidget {
               backgroundColor: customerbackGroundColor,
               scrolledUnderElevation: 0,
               centerTitle: true,
-              leading: IconButton(
-                onPressed: () {
-                  Get.back();
-                },
-                icon: Icon(Icons.arrow_back_ios, color: darkblue),
-              ),
+
               title: Text(
                 'Your Cart',
 
@@ -100,7 +93,6 @@ class CustomerCartScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }

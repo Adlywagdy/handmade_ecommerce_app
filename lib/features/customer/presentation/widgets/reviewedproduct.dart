@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class ReviewedProduct extends StatelessWidget {
@@ -45,13 +46,7 @@ class ReviewedProduct extends StatelessWidget {
                         product.name,
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: blackDegree,
-                          fontSize: 16.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w700,
-                          height: 1.25,
-                        ),
+                        style: AppTextStyles.t_16w700,
                       ),
                     ),
                   ],
@@ -61,13 +56,7 @@ class ReviewedProduct extends StatelessWidget {
                   'Sold by ${product.seller.name}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
-                  style: TextStyle(
-                    color: commonColor,
-                    fontSize: 14.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w500,
-                    height: 1.43,
-                  ),
+                  style: AppTextStyles.t_14w500.copyWith(color: commonColor),
                 ),
               ],
             ),

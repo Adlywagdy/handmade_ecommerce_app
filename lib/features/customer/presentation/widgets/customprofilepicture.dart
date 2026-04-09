@@ -28,13 +28,13 @@ class CustomProfilePicture extends StatelessWidget {
           bottom: 0.h,
           right: 0.h,
           child: CircleAvatar(
-            radius: 25.r,
+            radius: 22.r,
             backgroundColor: Colors.white,
             child: CustomIconButton(
               backgroundColor: commonColor,
               icon: Icons.camera_alt_outlined,
               iconcolor: Colors.white,
-              iconsize: 22.r,
+              iconsize: 20.r,
             ),
           ),
         ),

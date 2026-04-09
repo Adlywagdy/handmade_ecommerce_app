@@ -12,15 +12,10 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_layout.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orderdetails_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_profile_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_wishlist_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
@@ -57,7 +52,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.customerHome, // AppRoutes.splash,
+            initialRoute: AppRoutes.customerlayout, // AppRoutes.splash,
             getPages: [
               // splash and onboarding
               GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
@@ -87,24 +82,8 @@ class HandcraftedEcommerceApp extends StatelessWidget {
 
               // customer
               GetPage(
-                name: AppRoutes.customerHome,
-                page: () => const CustomerHomeScreen(),
-              ),
-              GetPage(
-                name: AppRoutes.customerCart,
-                page: () => CustomerCartScreen(
-                  order: OrderModel(
-                    customer: CustomerModel(name: "adly"),
-                    products: productsListData,
-                    orderid: '#AY-9402',
-                    payment: PaymentDetailsModel(
-                      totalPrice: 500.00,
-                      discount: 50.00,
-                      deliveryFee: 0,
-                      subtotalPrice: 50,
-                    ),
-                  ),
-                ),
+                name: AppRoutes.customerlayout,
+                page: () => const CustomerLayout(),
               ),
               GetPage(
                 name: AppRoutes.customerOrderDetails,
@@ -117,56 +96,9 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                 ),
               ),
               GetPage(
-                name: AppRoutes.customerOrders,
-                page: () => CustomerOrdersScreen(
-                  customerorderslist: [
-                    OrderModel(
-                      customer: CustomerModel(name: "adly"),
-                      orderid: '#AY-84920',
-                      products: productsListData,
-
-                      payment: PaymentDetailsModel(
-                        paymentMethod: 'Credit Card',
-                        totalPrice: 500.00,
-                        discount: 50.00,
-                      ),
-                      orderDate: DateTime.now().subtract(
-                        const Duration(days: 2),
-                      ),
-                      status: .delivered,
-                    ),
-                    OrderModel(
-                      customer: CustomerModel(name: "adly"),
-                      orderid: '#AY-84920',
-                      products: productsListData,
-
-                      payment: PaymentDetailsModel(
-                        paymentMethod: 'Credit Card',
-                        totalPrice: 500.00,
-                        discount: 50.00,
-                      ),
-                      orderDate: DateTime.now().subtract(
-                        const Duration(days: 2),
-                      ),
-                      status: .confirmed,
-                    ),
-                  ],
-                ),
-              ),
-              GetPage(
                 name: AppRoutes.customerProductDetails,
                 page: () =>
                     CustomerProductDetailsScreen(product: productsListData[0]),
-              ),
-              GetPage(
-                name: AppRoutes.customerProfile,
-                page: () => CustomerProfilesScreen(
-                  customer: CustomerModel(
-                    name: "Adly Wagdy",
-                    email: "adly.wagdy@ayady.com",
-                    image: "assets/images/splash.jpeg",
-                  ),
-                ),
               ),
               GetPage(
                 name: AppRoutes.customerSearch,
@@ -176,10 +108,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                 name: AppRoutes.customerWriteReview,
                 page: () =>
                     CustomerWriteReviewScreen(product: productsListData[0]),
-              ),
-              GetPage(
-                name: AppRoutes.customerwishlist,
-                page: () => const CustomerWishlistScreen(),
               ),
 
               // seller

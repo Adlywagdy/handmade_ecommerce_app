@@ -8,7 +8,6 @@ import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customer_button_navbar.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchcategorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchedproductitemlowercolumn.dart';
 
@@ -103,7 +102,6 @@ class CustomerSearchScreen extends StatelessWidget {
           SliverToBoxAdapter(child: SizedBox(height: 50.h)),
         ],
       ),
-      bottomNavigationBar: CustomerButtonNavBar(),
     );
   }
 }
