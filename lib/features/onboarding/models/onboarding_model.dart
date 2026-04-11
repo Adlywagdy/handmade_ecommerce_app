@@ -1,4 +1,4 @@
-abstract class OnboardingTitle_Subtitle {
+abstract class OnboardingTitleDescription {
   static List<String> titles = [
     'Discover Unique Handmade Items',
     'Support Local Artisans',
