@@ -5,7 +5,6 @@ import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productimagesscroll.dart';
 
 class ProductItem extends StatelessWidget {
@@ -41,10 +40,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(
-          AppRoutes.customerProductDetails,
-          arguments: product.id.toString(),
-        );
+        Get.toNamed(AppRoutes.customerProductDetails, arguments: product);
       },
       child: Card(
         color: customerbackGroundColor,

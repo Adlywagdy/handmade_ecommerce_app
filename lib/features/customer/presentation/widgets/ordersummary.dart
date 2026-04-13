@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderdetailsrow.dart';
 
 class OrderSummary extends StatelessWidget {
-  final OrderModel order;
-  const OrderSummary({super.key, required this.order});
+  final PaymentDetailsModel orderPaymentDetails;
+  const OrderSummary({super.key, required this.orderPaymentDetails});
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +33,34 @@ class OrderSummary extends StatelessWidget {
 
           OrderDetailsRow(
             title: 'Subtotal',
-            value: '\$${order.payment?.subtotalPrice?.toStringAsFixed(2)}',
+            valuestyle: AppTextStyles.t_14w500,
+            titlestyle: AppTextStyles.t_14w400.copyWith(
+              color: darkblue.withValues(alpha: .9),
+            ),
+            value: '\$${orderPaymentDetails.subtotalPrice?.toStringAsFixed(2)}',
           ),
           OrderDetailsRow(
             title: 'Delivery Fee',
-            value: '\$${order.payment?.deliveryFee?.toStringAsFixed(2)}',
+            valuestyle: AppTextStyles.t_14w500,
+            titlestyle: AppTextStyles.t_14w400.copyWith(
+              color: darkblue.withValues(alpha: .9),
+            ),
+            value: '\$${orderPaymentDetails.deliveryFee?.toStringAsFixed(2)}',
           ),
           OrderDetailsRow(
             title: 'Discount',
-            valuecolor: greenDegree,
-            value: '- \$${order.payment?.discount?.toStringAsFixed(2)}',
+            valuestyle: AppTextStyles.t_14w500.copyWith(color: greenDegree),
+            titlestyle: AppTextStyles.t_14w400.copyWith(
+              color: darkblue.withValues(alpha: .9),
+            ),
+            value: '- \$${orderPaymentDetails.discount?.toStringAsFixed(2)}',
           ),
           Divider(color: commonColor.withValues(alpha: .1)),
           OrderDetailsRow(
             title: 'Total Amount',
-
-            value: '\$${order.payment?.totalPrice?.toStringAsFixed(2)}',
+            titlestyle: AppTextStyles.t_18w700,
+            valuestyle: AppTextStyles.t_20w700.copyWith(color: commonColor),
+            value: '\$${orderPaymentDetails.totalPrice?.toStringAsFixed(2)}',
           ),
         ],
       ),

@@ -20,7 +20,7 @@ class OrderItem extends StatelessWidget {
           vertical: 12.0.h,
         ),
         leading: Card(
-          color: _getStatusColor(order.status!).withValues(alpha: .1),
+          color: _getStatusColor(order.status).withValues(alpha: .1),
           elevation: 0,
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(24.r),
@@ -33,8 +33,8 @@ class OrderItem extends StatelessWidget {
               top: 12.h,
             ),
             child: Icon(
-              getStatusIcon(order.status!),
-              color: _getStatusColor(order.status!),
+              getStatusIcon(order.status),
+              color: _getStatusColor(order.status),
               size: 26.r,
             ),
           ),
@@ -49,10 +49,10 @@ class OrderItem extends StatelessWidget {
               horizontalpadding: 8.w,
               verticalpadding: 2.h,
               textstyle: AppTextStyles.t_12w400.copyWith(
-                color: _getStatusColor(order.status!),
+                color: _getStatusColor(order.status),
               ),
               backGroundColor: _getStatusColor(
-                order.status!,
+                order.status,
               ).withValues(alpha: .1),
               borderRadius: 200.r,
             ),

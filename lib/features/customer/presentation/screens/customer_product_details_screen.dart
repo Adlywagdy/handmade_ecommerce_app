@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -10,8 +11,10 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/amountcontainerbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productdetailslowercolumn.dart';
+import 'package:share_plus/share_plus.dart';
 
 class CustomerProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -41,6 +44,14 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                 backgroundColor: customerbackGroundColor,
                 icon: Icons.share_outlined,
                 iconcolor: commonColor,
+                onPressed: () {
+                  SharePlus.instance.share(
+                    ShareParams(
+                      text:
+                          'check out this product: ${product.name} for \$${product.price} at our store!',
+                    ),
+                  );
+                },
               ),
             ],
             title: Text(
@@ -134,10 +145,10 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                         child: CustomElevatedButton(
                           buttoncolor: commonColor,
                           onPressed: () {
-                            Get.toNamed(
-                              // handle add to cart action
-                              AppRoutes.customerCart,
-                            );
+                            BlocProvider.of<CartCubit>(
+                              context,
+                            ).addCartProducts(product);
+                            Get.toNamed(AppRoutes.customerCart);
                           },
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,

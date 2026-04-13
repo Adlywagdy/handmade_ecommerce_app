@@ -53,9 +53,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0).h,
-                    child: OrderStatusSlider(
-                      orderstatus: order.status ?? OrderStatus.preparing,
-                    ),
+                    child: OrderStatusSlider(orderstatus: order.status),
                   ),
                   Text(
                     'ORDER ITEMS (${order.products.length})',
@@ -107,7 +105,10 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(order.customer.name, style: AppTextStyles.t_14w700),
+                      Text(
+                        order.customer.name ?? "adaw",
+                        style: AppTextStyles.t_14w700,
+                      ),
                       Text(
                         order.customer.address?.addressdescription ??
                             "123 Main St, City, Country",
@@ -132,7 +133,9 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: OrderSummary(order: order)),
+            SliverToBoxAdapter(
+              child: OrderSummary(orderPaymentDetails: order.payment!),
+            ),
             SliverToBoxAdapter(
               child: CustomElevatedButton(
                 onPressed: () {},

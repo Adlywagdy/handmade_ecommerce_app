@@ -17,7 +17,7 @@ class UserProfileDetails extends StatelessWidget {
         CustomProfilePicture(customer: customer),
         SizedBox(height: 16.h),
         Text(
-          customer.name,
+          customer.name ?? "asdads",
           textAlign: TextAlign.center,
           style: AppTextStyles.t_24w700,
         ),

@@ -26,7 +26,7 @@ class ReviewCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  product.reviews![0].reviewer.name,
+                  product.reviews![0].reviewer.name ?? "asas",
                   style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
                 ),
                 Text(

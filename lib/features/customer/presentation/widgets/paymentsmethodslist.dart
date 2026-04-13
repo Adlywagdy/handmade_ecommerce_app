@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 
 class PaymentsMethodsList extends StatefulWidget {
   const PaymentsMethodsList({super.key});
@@ -10,9 +9,8 @@ class PaymentsMethodsList extends StatefulWidget {
   State<PaymentsMethodsList> createState() => _PaymentsMethodsListState();
 }
 
-int selectedindex = 0;
-
 class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
+  int selectedindex = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -35,11 +33,11 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
                 size: 24.r,
               ),
               Text(
-                _paymentListdata[index].paymentMethod!,
+                _paymentListdata[index]["paymentMethod"]!,
                 style: AppTextStyles.t_14w500,
               ),
               Image.asset(
-                _paymentListdata[index].image!,
+                _paymentListdata[index]["image"]!,
                 fit: BoxFit.fill,
                 height: 30.r,
                 width: 30.r,
@@ -52,18 +50,11 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
   }
 }
 
-List<PaymentDetailsModel> _paymentListdata = [
-  PaymentDetailsModel(
-    paymentMethod: "Credit Card",
-    image: "assets/images/visa.png",
-  ),
-  PaymentDetailsModel(
-    paymentMethod: "PayPal",
-    image: "assets/images/paypal.png",
-  ),
-  PaymentDetailsModel(
-    paymentMethod: "Mobile Wallets",
-    image: "assets/images/mobile_wallet.png",
-  ),
-  PaymentDetailsModel(paymentMethod: "COD", image: "assets/images/COD.png"),
+List<Map<String, String>> _paymentListdata = [
+  {"paymentMethod": "Credit Card", "image": "assets/images/visa.png"},
+  {"paymentMethod": "PayPal", "image": "assets/images/paypal.png"},
+  {
+    "paymentMethod": "Mobile Wallets",
+    "image": "assets/images/mobile_wallet.png",
+  },
 ];
