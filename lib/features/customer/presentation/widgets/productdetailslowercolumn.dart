@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customsellerlisttile.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productreviewscolumn.dart';
@@ -19,41 +20,22 @@ class ProductDetailsLowerColumn extends StatelessWidget {
         CustomSellerListTile(product: product),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 14.0),
-          child: Text(
-            'Description',
-            style: TextStyle(
-              color: blackDegree,
-              fontSize: 18.sp,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              height: 1.56,
-            ),
-          ),
+          child: Text('Description', style: AppTextStyles.t_18w700),
         ),
         Text(
           product.description,
-          style: TextStyle(
-            color: subTitleColor,
-            fontSize: 14.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w400,
-            height: 1.63,
-          ),
+          style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
         ),
+        SizedBox(height: 12.h),
         product.tags != null && product.tags!.isNotEmpty
             ? TagsRow(product: product)
             : SizedBox(height: 16.h),
+        SizedBox(height: 12.h),
         product.reviews != null && product.reviews!.isNotEmpty
             ? ProductReviewsColumn(product: product)
             : Text(
                 "No reviews yet for this product. Be the first to share your thoughts!",
-                style: TextStyle(
-                  color: subTitleColor,
-                  fontSize: 14.sp,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w400,
-                  height: 1.43,
-                ),
+                style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               ),
 
         SizedBox(height: 24.h),

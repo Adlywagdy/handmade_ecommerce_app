@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ratingrow.dart';
 
@@ -18,48 +19,24 @@ class SearchedProductItemLowerColumn extends StatelessWidget {
         Text(
           product.name,
           overflow: TextOverflow.ellipsis,
-          style: TextStyle(
-            color: blackDegree,
-            fontSize: 14.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.43,
-          ),
+          style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
         ),
         Text(
           'by Studio Zahra',
-          style: TextStyle(
-            color: darkbrownColor,
-            fontSize: 12.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w400,
-            height: 1.33,
-          ),
+          style: AppTextStyles.t_12w400.copyWith(color: darkbrownColor),
         ),
         Row(
           children: [
             RatingRow(product: product, iconsize: 15),
             Text(
-              ' ${product.quantity ?? '0'}',
-              style: TextStyle(
-                color: darkbrownColor,
-                fontSize: 10.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w400,
-                height: 1.50,
-              ),
+              ' (${product.quantity ?? '0'})',
+              style: AppTextStyles.t_10w400.copyWith(color: darkbrownColor),
             ),
           ],
         ),
         Text(
           "\$${product.price}",
-          style: TextStyle(
-            color: commonColor,
-            fontSize: 14.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.43,
-          ),
+          style: AppTextStyles.t_14w700.copyWith(color: commonColor),
         ),
       ],
     );

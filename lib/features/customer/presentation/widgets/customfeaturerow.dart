@@ -1,40 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 
 class CustomFeatureRow extends StatelessWidget {
   final String title;
   final String buttontext;
+
+  final TextStyle? buttontextstyle;
+  final void Function()? onTap;
   const CustomFeatureRow({
     super.key,
     required this.title,
     required this.buttontext,
+
+    this.buttontextstyle,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.only(right: 16.0.w),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            title,
-            style: TextStyle(
-              color: blackDegree,
-              fontSize: 18,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-            ),
-          ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(title, style: AppTextStyles.t_18w700.copyWith(color: blackDegree)),
 
-          InkWell(
-            child: CustomTextContainer(buttontext: buttontext),
-            onTap: () {},
+        InkWell(
+          onTap: onTap,
+          child: CustomTextContainer(
+            text: buttontext,
+            textstyle: buttontextstyle,
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 }

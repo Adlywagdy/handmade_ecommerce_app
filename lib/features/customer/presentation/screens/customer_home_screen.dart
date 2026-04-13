@@ -1,5 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
@@ -12,15 +17,14 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/to
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: customerbackGroundColor,
-
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0).w,
         child: CustomScrollView(
+          physics: BouncingScrollPhysics(),
           primary: true,
           slivers: [
             SliverAppBar(
@@ -31,12 +35,7 @@ class CustomerHomeScreen extends StatelessWidget {
               centerTitle: true,
               title: Text(
                 'Ayady',
-                style: TextStyle(
-                  color: commonColor,
-                  fontSize: 20,
-                  fontFamily: 'Plus Jakarta Sans',
-                  fontWeight: FontWeight.w700,
-                ),
+                style: AppTextStyles.t_20w700.copyWith(color: commonColor),
               ),
               actions: [
                 CustomIconButton(
@@ -46,42 +45,77 @@ class CustomerHomeScreen extends StatelessWidget {
                 ),
               ],
             ),
+            CupertinoSliverRefreshControl(
+              onRefresh: () async {
+                await Future.delayed(Duration(seconds: 2));
+              },
+              builder:
+                  (
+                    context,
+                    refreshState,
+                    pulledExtent,
+                    refreshTriggerPullDistance,
+                    refreshIndicatorExtent,
+                  ) {
+                    return CupertinoSliverRefreshControl.buildRefreshIndicator(
+                      context,
+                      refreshState,
+                      pulledExtent,
+                      refreshTriggerPullDistance,
+                      refreshIndicatorExtent,
+                    );
+                  },
+            ),
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0).w,
-                child: SearchField(hintText: "Search unique handmade crafts"),
+                child: SearchField(
+                  autofocus: false,
+                  hintText: "Search unique handmade crafts",
+                  textstyle: AppTextStyles.t_12w500.copyWith(
+                    color: commonColor.withValues(alpha: .6),
+                  ),
+                  readOnly: true,
+                  onTap: () {
+                    Get.toNamed(AppRoutes.customerSearch);
+                  },
+                ),
               ),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 16.h)),
             SliverToBoxAdapter(
-              child: CustomFeatureRow(
-                title: "Categories",
-                buttontext: "See All",
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16).w,
+                child: CustomFeatureRow(
+                  title: "Categories",
+                  buttontext: "See All",
+                  buttontextstyle: AppTextStyles.t_14w600.copyWith(
+                    color: commonColor,
+                  ),
+                ),
               ),
             ),
+            SliverToBoxAdapter(child: SizedBox(height: 12.h)),
             SliverToBoxAdapter(
-              child: SizedBox(height: 100.h, child: HomeCategoriesList()),
+              child: Container(
+                height: 107.h,
+                constraints: BoxConstraints(minHeight: 105.h, maxHeight: 110.h),
+                child: HomeCategoriesList(),
+              ),
             ),
             SliverToBoxAdapter(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  SizedBox(height: 32.h),
+                  SizedBox(height: 14.h),
                   Text(
                     'Featured Products',
-                    style: TextStyle(
-                      color: blackDegree,
-                      fontSize: 20,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: AppTextStyles.t_20w700.copyWith(color: blackDegree),
                   ),
                   Text(
                     'Handpicked for your style',
-                    style: TextStyle(
-                      color: darkblue,
-                      fontSize: 14,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w400,
+                    style: AppTextStyles.t_14w400.copyWith(
+                      color: darkblue.withValues(alpha: .75),
                     ),
                   ),
                   SizedBox(height: 16.h),
@@ -90,16 +124,16 @@ class CustomerHomeScreen extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: Container(
-                height: 330.h,
-                constraints: BoxConstraints(minHeight: 315.h),
+                height: 397.h,
+                constraints: BoxConstraints(minHeight: 395.h, maxHeight: 400.h),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: productsListData.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(right: 16.0).w,
+                      padding: const EdgeInsets.only(right: 16.0),
                       child: AspectRatio(
-                        aspectRatio: .84,
+                        aspectRatio: .83,
                         child: ProductItem(
                           cardmargin: 5,
                           cardclipBehavior: .antiAlias,
@@ -107,8 +141,8 @@ class CustomerHomeScreen extends StatelessWidget {
                           lowercolumnflex: 2,
                           lowercolumntoppadding: 16.h,
                           lowercolumnbottompadding: 16.h,
-                          lowercolumnleftpadding: 16.w,
-                          lowercolumnrightpadding: 16.w,
+                          lowercolumnleftpadding: 16,
+                          lowercolumnrightpadding: 16,
                           product: productsListData[index],
                           lowercolumn: FeaturedProductItemLowerColumn(
                             product: productsListData[index],
@@ -122,23 +156,29 @@ class CustomerHomeScreen extends StatelessWidget {
             ),
             SliverToBoxAdapter(child: SizedBox(height: 24.h)),
             SliverToBoxAdapter(
-              child: CustomFeatureRow(
-                title: "Top Rated",
-                buttontext: 'Explore All',
+              child: Padding(
+                padding: const EdgeInsets.only(right: 16.0).w,
+                child: CustomFeatureRow(
+                  title: "Top Rated",
+                  buttontext: 'Explore All',
+                  buttontextstyle: AppTextStyles.t_14w600.copyWith(
+                    color: commonColor,
+                  ),
+                ),
               ),
             ),
 
             SliverToBoxAdapter(
               child: Container(
-                height: 320.h,
+                height: 340.h,
 
-                constraints: BoxConstraints(minHeight: 300.h),
+                constraints: BoxConstraints(minHeight: 337.h, maxHeight: 343.h),
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   itemCount: productsListData.length,
                   itemBuilder: (context, index) {
                     return Padding(
-                      padding: const EdgeInsets.only(right: 16.0).w,
+                      padding: const EdgeInsets.only(right: 16.0),
                       child: AspectRatio(
                         aspectRatio: .64,
                         child: ProductItem(
@@ -146,8 +186,8 @@ class CustomerHomeScreen extends StatelessWidget {
                           cardclipBehavior: .antiAlias,
                           imageflex: 3,
                           lowercolumnflex: 2,
-                          lowercolumnleftpadding: 12.w,
-                          lowercolumnrightpadding: 12.w,
+                          lowercolumnleftpadding: 12,
+                          lowercolumnrightpadding: 12,
                           lowercolumntoppadding: 12.h,
                           lowercolumnbottompadding: 12.h,
                           product: productsListData[index],
@@ -162,11 +202,6 @@ class CustomerHomeScreen extends StatelessWidget {
               ),
             ),
             SliverToBoxAdapter(child: SizedBox(height: 50.h)),
-
-            // SliverFillRemaining(
-            //   hasScrollBody: false,
-            //   child: CustomBottomBar(items: customerBottomBarItems),
-            // ),
           ],
         ),
       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_categorieslistdata.dart';
 
@@ -21,7 +22,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
       itemCount: categorieslistdata.length,
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(right: 13.0).w,
+          padding: const EdgeInsets.only(right: 13.0),
           child: InkWell(
             onTap: () {
               setState(() {
@@ -46,12 +47,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
                 ),
                 Text(
                   categorieslistdata[index].categorytitle,
-                  style: TextStyle(
-                    color: darkblue,
-                    fontSize: 12,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w500,
-                  ),
+                  style: AppTextStyles.t_12w500.copyWith(color: darkblue),
                 ),
               ],
             ),
