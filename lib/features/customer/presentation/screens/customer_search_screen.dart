@@ -1,19 +1,51 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/functions/filter_sheet.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchcategorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchedproductitemlowercolumn.dart';
 
-class CustomerSearchScreen extends StatelessWidget {
+class CustomerSearchScreen extends StatefulWidget {
   const CustomerSearchScreen({super.key});
+
+  @override
+  State<CustomerSearchScreen> createState() => _CustomerSearchScreenState();
+}
+
+class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
+  late final TextEditingController controller;
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController();
+    if (BlocProvider.of<SearchCubit>(context).selectedCategory != null) {
+      controller.text = BlocProvider.of<SearchCubit>(
+        context,
+      ).selectedCategory!.categorytitle;
+      BlocProvider.of<SearchCubit>(context).filterproducts(
+        categoryname: BlocProvider.of<SearchCubit>(
+          context,
+        ).selectedCategory!.categorytitle,
+      );
+    }
+  }
+
+  @override
+  void dispose() {
+    controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -34,10 +66,18 @@ class CustomerSearchScreen extends StatelessWidget {
             scrolledUnderElevation: 0,
             centerTitle: true,
             title: SearchField(
+              controller: controller,
               autofocus: true,
+              hintText: 'Search for products',
+              textstyle: AppTextStyles.t_14w500.copyWith(
+                color: commonColor.withValues(alpha: .6),
+              ),
 
-              hintText: 'Handmade ceramics',
-              textstyle: AppTextStyles.t_14w500.copyWith(color: blackDegree),
+              onChanged: (value) {
+                BlocProvider.of<SearchCubit>(
+                  context,
+                ).searchproducts(productname: value);
+              },
             ),
             actions: [
               CustomIconButton(
@@ -45,7 +85,17 @@ class CustomerSearchScreen extends StatelessWidget {
                 icon: Icons.tune_outlined,
                 iconcolor: commonColor,
                 onPressed: () {
-                  // filter & sort actions
+                  if (controller.text.trim().isNotEmpty ||
+                      BlocProvider.of<SearchCubit>(context).selectedCategory !=
+                          null) {
+                    openFilterSheet(context);
+                  } else {
+                    showSnack(
+                      title: "No filters",
+                      message:
+                          "Please enter a search query or select a category to filter.",
+                    );
+                  }
                 },
               ),
             ],
@@ -53,6 +103,18 @@ class CustomerSearchScreen extends StatelessWidget {
           CupertinoSliverRefreshControl(
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2));
+              if (BlocProvider.of<SearchCubit>(context).selectedCategory !=
+                  null) {
+                BlocProvider.of<SearchCubit>(context).filterproducts(
+                  categoryname: BlocProvider.of<SearchCubit>(
+                    context,
+                  ).selectedCategory!.categorytitle,
+                );
+              } else if (controller.text.isNotEmpty) {
+                BlocProvider.of<SearchCubit>(
+                  context,
+                ).searchproducts(productname: controller.text);
+              }
             },
             builder:
                 (
@@ -83,44 +145,132 @@ class CustomerSearchScreen extends StatelessWidget {
             child: Divider(color: commonColor.withValues(alpha: .1)),
           ),
           SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+          BlocBuilder<SearchCubit, SearchState>(
+            buildWhen: (previous, current) {
+              return current is SearchInitial ||
+                  current is SearchProductsSuccessedstate ||
+                  current is FilterProductsSuccessedstate ||
+                  current is SearchProductsLoadingstate ||
+                  current is FilterProductsLoadingstate ||
+                  current is SearchProductsFailedstate ||
+                  current is FilterProductsFailedstate;
+            },
+            builder: (context, state) {
+              if (state is SearchProductsSuccessedstate ||
+                  state is FilterProductsSuccessedstate) {
+                int listlength;
+                listlength = state is SearchProductsSuccessedstate
+                    ? listlength = BlocProvider.of<SearchCubit>(
+                        context,
+                      ).searchedproductsList.length
+                    : listlength = BlocProvider.of<SearchCubit>(
+                        context,
+                      ).filteredproductsList.length;
 
-          SliverToBoxAdapter(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: Text(
-                '124 RESULTS FOUND',
-                style: AppTextStyles.t_14w500.copyWith(
-                  color: commonColor.withValues(alpha: .6),
-                ),
-              ),
-            ),
-          ),
-          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
-          SliverGrid.builder(
-            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              childAspectRatio: 1 / 1.8,
-            ),
-            itemCount: productsListData.length,
-            itemBuilder: (context, index) {
-              return Padding(
-                padding: const EdgeInsets.only(left: 8.0, right: 8.0).w,
-                child: ProductItem(
-                  cardclipBehavior: .antiAlias,
-                  product: productsListData[index],
-                  imageflex: 2,
-                  lowercolumnflex: 1,
-                  elevation: 0,
-                  imageclipBehavior: Clip.antiAlias,
-                  lowercolumnbottompadding: 8.h,
-                  lowercolumntoppadding: 8.h,
-                  lowercolumnleftpadding: 8,
-                  lowercolumnrightpadding: 8,
-                  lowercolumn: SearchedProductItemLowerColumn(
-                    product: productsListData[index],
+                return SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
+                    child: Text(
+                      '${listlength.toString()} RESULTS FOUND',
+                      style: AppTextStyles.t_14w500.copyWith(
+                        color: commonColor.withValues(alpha: .6),
+                      ),
+                    ),
                   ),
-                ),
-              );
+                );
+              } else {
+                return SliverToBoxAdapter(child: SizedBox());
+              }
+            },
+          ),
+
+          SliverToBoxAdapter(child: SizedBox(height: 16.h)),
+
+          BlocBuilder<SearchCubit, SearchState>(
+            buildWhen: (previous, current) {
+              return current is SearchInitial ||
+                  current is SearchProductsSuccessedstate ||
+                  current is FilterProductsSuccessedstate ||
+                  current is SearchProductsLoadingstate ||
+                  current is FilterProductsLoadingstate ||
+                  current is SearchProductsFailedstate ||
+                  current is FilterProductsFailedstate;
+            },
+            builder: (context, state) {
+              if (state is SearchInitial) {
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 220.h,
+                    child: Center(
+                      child: Text(
+                        'Start typing to see matching products',
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: commonColor.withValues(alpha: .6),
+                        ),
+                      ),
+                    ),
+                  ),
+                );
+              } else if (state is SearchProductsSuccessedstate ||
+                  state is FilterProductsSuccessedstate) {
+                List list;
+                list = state is SearchProductsSuccessedstate
+                    ? list = BlocProvider.of<SearchCubit>(
+                        context,
+                      ).searchedproductsList
+                    : list = BlocProvider.of<SearchCubit>(
+                        context,
+                      ).filteredproductsList;
+
+                return SliverGrid.builder(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.8,
+                  ),
+                  itemCount: list.length,
+                  itemBuilder: (context, index) {
+                    return Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
+                      child: ProductItem(
+                        cardclipBehavior: .antiAlias,
+                        product: list[index],
+                        imageflex: 2,
+                        lowercolumnflex: 1,
+                        elevation: 0,
+                        imageclipBehavior: Clip.antiAlias,
+                        lowercolumnbottompadding: 8.h,
+                        lowercolumntoppadding: 8.h,
+                        lowercolumnleftpadding: 8,
+                        lowercolumnrightpadding: 8,
+                        lowercolumn: SearchedProductItemLowerColumn(
+                          product: list[index],
+                        ),
+                      ),
+                    );
+                  },
+                );
+              } else if (state is SearchProductsFailedstate ||
+                  state is FilterProductsFailedstate) {
+                String errorMessage = state is SearchProductsFailedstate
+                    ? state.errorMessage
+                    : (state as FilterProductsFailedstate).errorMessage;
+                showSnack(title: "Error", message: errorMessage);
+                return SliverToBoxAdapter(child: SizedBox(height: 200.h));
+              } else {
+                return SliverGrid(
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 2,
+                    childAspectRatio: 1 / 1.8,
+                  ),
+                  delegate: SliverChildBuilderDelegate(
+                    childCount: 4,
+                    (context, index) => Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
+                      child: SvgPicture.asset("assets/images/loadingCard.svg"),
+                    ),
+                  ),
+                );
+              }
             },
           ),
           SliverToBoxAdapter(child: SizedBox(height: 50.h)),

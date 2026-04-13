@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orders_screen.dart';
@@ -31,42 +33,10 @@ class _CustomerLayoutState extends State<CustomerLayout> {
   void initState() {
     pages = [
       CustomerHomeScreen(),
+
       CustomerWishlistScreen(),
-      CustomerCartScreen(
-        order: OrderModel(
-          customer: CustomerModel(name: "a"),
-          products: productsListData,
-          orderid: 'sadasdsda',
-        ),
-      ),
-      CustomerOrdersScreen(
-        customerorderslist: [
-          OrderModel(
-            customer: CustomerModel(name: "adly"),
-            orderid: '#AY-84920',
-            products: productsListData,
-            payment: PaymentDetailsModel(
-              paymentMethod: 'Credit Card',
-              totalPrice: 500.00,
-              discount: 50.00,
-            ),
-            orderDate: DateTime.now().subtract(const Duration(days: 2)),
-            status: .delivered,
-          ),
-          OrderModel(
-            customer: CustomerModel(name: "adly"),
-            orderid: '#AY-84920',
-            products: productsListData,
-            payment: PaymentDetailsModel(
-              paymentMethod: 'Credit Card',
-              totalPrice: 500.00,
-              discount: 50.00,
-            ),
-            orderDate: DateTime.now().subtract(const Duration(days: 2)),
-            status: .confirmed,
-          ),
-        ],
-      ),
+      CustomerCartScreen(),
+      CustomerOrdersScreen(customerorderslist: ordersListdata),
       CustomerProfilesScreen(
         customer: CustomerModel(
           name: "Adly Wagdy",
@@ -85,6 +55,21 @@ class _CustomerLayoutState extends State<CustomerLayout> {
       body: IndexedStack(index: currentIndex, children: pages),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
+          switch (value) {
+            case 0:
+              break;
+            case 1:
+              BlocProvider.of<WishListCubit>(context).getWishlistProducts();
+              break;
+            case 2:
+              BlocProvider.of<CartCubit>(context).getcartProducts();
+
+              break;
+            case 3:
+              BlocProvider.of<OrderCubit>(context).getAllOrders();
+              break;
+          }
+
           setState(() {
             currentIndex = value;
           });
@@ -102,23 +87,29 @@ class _CustomerLayoutState extends State<CustomerLayout> {
             activeIcon: const Icon(Icons.favorite, fontWeight: FontWeight.w700),
           ),
           BottomNavigationBarItem(
-            icon: Stack(
-              children: [
-                const Icon(Icons.shopping_cart_outlined),
-                Positioned(
-                  right: 0,
-                  child: CircleAvatar(
-                    radius: 6.r,
-                    backgroundColor: commonColor,
-                    child: Text(
-                      '3', // This should be dynamic based on the cart items count
-                      style: AppTextStyles.t_8w400.copyWith(
-                        color: Colors.white,
+            icon: BlocBuilder<CartCubit, CartState>(
+              builder: (context, state) {
+                return Stack(
+                  children: [
+                    const Icon(Icons.shopping_cart_outlined),
+                    Positioned(
+                      right: 0,
+                      child: CircleAvatar(
+                        radius: 6.r,
+                        backgroundColor: commonColor,
+                        child: Text(
+                          BlocProvider.of<CartCubit>(
+                            context,
+                          ).cartProductsList.length.toString(),
+                          style: AppTextStyles.t_8w400.copyWith(
+                            color: Colors.white,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
-              ],
+                  ],
+                );
+              },
             ),
             label: 'Cart',
             activeIcon: const Icon(Icons.shopping_cart),

@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 
 class TopRatedProductItemLowerColumn extends StatelessWidget {
   final ProductModel product;
@@ -37,6 +39,9 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
               icon: Icons.add_shopping_cart,
               iconsize: 20.r,
               iconcolor: customerbackGroundColor,
+              onPressed: () {
+                BlocProvider.of<CartCubit>(context).addCartProducts(product);
+              },
             ),
           ],
         ),

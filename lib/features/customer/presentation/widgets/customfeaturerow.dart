@@ -25,7 +25,7 @@ class CustomFeatureRow extends StatelessWidget {
       children: [
         Text(title, style: AppTextStyles.t_18w700.copyWith(color: blackDegree)),
 
-        InkWell(
+        GestureDetector(
           onTap: onTap,
           child: CustomTextContainer(
             text: buttontext,
