@@ -1,21 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_product_card.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/product_details_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
-  const SellerManageProductsScreen({super.key});
+  final VoidCallback? onBackPressed;
+
+  const SellerManageProductsScreen({super.key, this.onBackPressed});
 
   @override
   State<SellerManageProductsScreen> createState() =>
       _SellerManageProductsScreenState();
 }
 
-class _SellerManageProductsScreenState
-    extends State<SellerManageProductsScreen> with SingleTickerProviderStateMixin {
+class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
+    with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
   // Mock product data
@@ -73,9 +76,7 @@ class _SellerManageProductsScreenState
   List<Map<String, dynamic>> _getFilteredProducts(int tabIndex) {
     switch (tabIndex) {
       case 1: // Active
-        return _allProducts
-            .where((p) => p['status'] == 'Active')
-            .toList();
+        return _allProducts.where((p) => p['status'] == 'Active').toList();
       case 2: // Pending
         return _allProducts
             .where((p) => p['status'] == 'Pending Review')
@@ -94,12 +95,14 @@ class _SellerManageProductsScreenState
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          onPressed: () => Navigator.pop(context),
-          icon: Icon(
-            Icons.arrow_back,
-            color: commonColor,
-            size: 24.w,
-          ),
+          onPressed: () {
+            if (widget.onBackPressed != null) {
+              widget.onBackPressed!();
+              return;
+            }
+            Get.back();
+          },
+          icon: Icon(Icons.arrow_back, color: commonColor, size: 24.w),
         ),
         title: Text(
           'Manage Products',
@@ -148,21 +151,12 @@ class _SellerManageProductsScreenState
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => const SellerAddProductScreen(),
-            ),
-          );
+          Get.toNamed(AppRoutes.selleraddproduct);
         },
         backgroundColor: commonColor,
         elevation: 4,
         shape: const CircleBorder(),
-        child: Icon(
-          Icons.add,
-          color: Colors.white,
-          size: 28.w,
-        ),
+        child: Icon(Icons.add, color: Colors.white, size: 28.w),
       ),
     );
   }
@@ -188,14 +182,8 @@ class _SellerManageProductsScreenState
       dividerColor: const Color(0xFFE2E8F0),
       tabs: [
         Tab(text: 'All (${_allProducts.length})'),
-        Tab(
-          text:
-              'Active',
-        ),
-        Tab(
-          text:
-              'Pending',
-        ),
+        Tab(text: 'Active'),
+        Tab(text: 'Pending'),
       ],
     );
   }
@@ -290,18 +278,15 @@ class _SellerManageProductsScreenState
                     ),
                   ),
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => const SellerAddProductScreen(),
-                      ),
-                    );
+                    Get.back();
+                    Get.toNamed(AppRoutes.selleraddproduct);
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.visibility_outlined,
-                      color: const Color(0xFF334155)),
+                  leading: Icon(
+                    Icons.visibility_outlined,
+                    color: const Color(0xFF334155),
+                  ),
                   title: Text(
                     'View Details',
                     style: TextStyle(
@@ -311,20 +296,19 @@ class _SellerManageProductsScreenState
                     ),
                   ),
                   onTap: () {
-                    Navigator.pop(context);
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ProductDetailsScreen(
-                          product: productsListData[0], // Using mock data
-                        ),
+                    Get.back();
+                    Get.to(
+                      () => CustomerProductDetailsScreen(
+                        product: productsListData[0], // Using mock data
                       ),
                     );
                   },
                 ),
                 ListTile(
-                  leading: Icon(Icons.delete_outlined,
-                      color: const Color(0xFFD32F2F)),
+                  leading: Icon(
+                    Icons.delete_outlined,
+                    color: const Color(0xFFD32F2F),
+                  ),
                   title: Text(
                     'Delete Product',
                     style: TextStyle(
@@ -335,7 +319,7 @@ class _SellerManageProductsScreenState
                     ),
                   ),
                   onTap: () {
-                    Navigator.pop(context);
+                    Get.back();
                     // TODO: Delete product
                   },
                 ),

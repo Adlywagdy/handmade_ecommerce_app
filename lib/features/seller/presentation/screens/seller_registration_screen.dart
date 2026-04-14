@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class SellerRegistrationScreen extends StatefulWidget {
-  const SellerRegistrationScreen({super.key});
+  final VoidCallback? onBackPressed;
+
+  const SellerRegistrationScreen({super.key, this.onBackPressed});
 
   @override
   State<SellerRegistrationScreen> createState() =>
@@ -24,8 +27,12 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: commonColor, size: 24.w),
           onPressed: () {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
+            if (widget.onBackPressed != null) {
+              widget.onBackPressed!();
+              return;
+            }
+            if (Get.key.currentState?.canPop() ?? false) {
+              Get.back();
             }
           },
         ),

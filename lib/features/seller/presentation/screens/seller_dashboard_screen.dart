@@ -1,16 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_stat_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_best_selling_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_quick_action.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_order_card.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 
 class SellerDashboardScreen extends StatelessWidget {
-  const SellerDashboardScreen({super.key});
+  final VoidCallback? onAddProduct;
+  final VoidCallback? onViewProducts;
+  final VoidCallback? onViewOrders;
+
+  const SellerDashboardScreen({
+    super.key,
+    this.onAddProduct,
+    this.onViewProducts,
+    this.onViewOrders,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -107,12 +115,11 @@ class SellerDashboardScreen extends StatelessWidget {
                     icon: Icons.add_box_outlined,
                     label: 'Add Product',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SellerAddProductScreen(),
-                        ),
-                      );
+                      if (onAddProduct != null) {
+                        onAddProduct!();
+                        return;
+                      }
+                      Get.toNamed(AppRoutes.selleraddproduct);
                     },
                   ),
                   SizedBox(width: 12.w),
@@ -120,12 +127,11 @@ class SellerDashboardScreen extends StatelessWidget {
                     icon: Icons.inventory_2_outlined,
                     label: 'View Products',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SellerManageProductsScreen(),
-                        ),
-                      );
+                      if (onViewProducts != null) {
+                        onViewProducts!();
+                        return;
+                      }
+                      Get.toNamed(AppRoutes.sellermanageproducts);
                     },
                   ),
                   SizedBox(width: 12.w),
@@ -133,12 +139,11 @@ class SellerDashboardScreen extends StatelessWidget {
                     icon: Icons.receipt_long_outlined,
                     label: 'View Orders',
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SellerOrdersScreen(),
-                        ),
-                      );
+                      if (onViewOrders != null) {
+                        onViewOrders!();
+                        return;
+                      }
+                      Get.toNamed(AppRoutes.sellerorders);
                     },
                   ),
                 ],
@@ -161,12 +166,11 @@ class SellerDashboardScreen extends StatelessWidget {
                   ),
                   TextButton(
                     onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => const SellerOrdersScreen(),
-                        ),
-                      );
+                      if (onViewOrders != null) {
+                        onViewOrders!();
+                        return;
+                      }
+                      Get.toNamed(AppRoutes.sellerorders);
                     },
                     child: Text(
                       'See All',

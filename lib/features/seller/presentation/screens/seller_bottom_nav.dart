@@ -2,11 +2,14 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
 
 class SellerBottomNav extends StatefulWidget {
   const SellerBottomNav({super.key});
@@ -18,14 +21,6 @@ class SellerBottomNav extends StatefulWidget {
 class _SellerBottomNavState extends State<SellerBottomNav> {
   int _activeScreenIndex = 0; // Default to Dashboard
 
-  final List<Widget> _screens = [
-    const SellerDashboardScreen(),           // 0: Dashboard/Home
-    const SellerManageProductsScreen(),      // 1: Products
-    const SellerOrdersScreen(),              // 2: Orders
-    const _PlaceholderScreen(title: 'Profile'),  // 3: Profile
-    const _PlaceholderScreen(title: 'Earnings'), // 4: Earnings
-  ];
-
   void _switchTab(int index) {
     FocusManagementTips.clearFocusBeforeNavigation(null);
     setState(() {
@@ -35,9 +30,6 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    // Dynamic Bottom Nav based on active screen!
-    final bool show5ItemNav = _activeScreenIndex == 2;
-
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
@@ -48,10 +40,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
         SystemNavigator.pop();
       },
       child: Scaffold(
-        body: IndexedStack(
-          index: _activeScreenIndex,
-          children: _screens,
-        ),
+        body: IndexedStack(index: _activeScreenIndex, children: _screens),
         bottomNavigationBar: ClipRect(
           child: BackdropFilter(
             filter: ImageFilter.blur(sigmaX: 60, sigmaY: 5),
@@ -59,10 +48,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
               decoration: BoxDecoration(
                 color: Colors.white,
                 border: const Border(
-                  top: BorderSide(
-                    color: Color(0xFFE2E8F0),
-                    width: 0.8,
-                  ),
+                  top: BorderSide(color: Color(0xFFE2E8F0), width: 0.8),
                 ),
                 boxShadow: [
                   BoxShadow(
@@ -73,10 +59,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
                 ],
               ),
               padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-              child: SafeArea(
-                top: false,
-                child: show5ItemNav ? _build5ItemNav() : _build4ItemNav(),
-              ),
+              child: SafeArea(top: false, child: _buildBottomNav()),
             ),
           ),
         ),
@@ -84,33 +67,80 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
     );
   }
 
-  Widget _build4ItemNav() {
+  List<Widget> get _screens => [
+    SellerDashboardScreen(
+      onAddProduct: () => Get.toNamed(AppRoutes.selleraddproduct),
+      onViewProducts: () => _switchTab(1),
+      onViewOrders: () => _switchTab(2),
+    ),
+    SellerManageProductsScreen(onBackPressed: () => _switchTab(0)),
+    SellerOrdersScreen(onBackPressed: () => _switchTab(0)),
+    SellerRegistrationScreen(onBackPressed: () => _switchTab(0)),
+    const _PlaceholderScreen(title: 'Earnings'),
+  ];
+
+  Widget _buildBottomNav() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
       children: [
-        _buildNavIcon(Icons.dashboard_outlined, Icons.dashboard_rounded, 'Dashboard', _activeScreenIndex == 0, () => _switchTab(0), false, false),
-        _buildNavIcon(Icons.inventory_2_outlined, Icons.inventory_2_rounded, 'Products', _activeScreenIndex == 1, () => _switchTab(1), false, false),
-        _buildNavIcon(Icons.shopping_bag_outlined, Icons.shopping_bag_rounded, 'Orders', _activeScreenIndex == 2, () => _switchTab(2), false, false),
-        _buildNavIcon(Icons.person_outline_rounded, Icons.person_rounded, 'Profile', _activeScreenIndex == 3, () => _switchTab(3), false, false),
+        _buildNavIcon(
+          Icons.dashboard_outlined,
+          Icons.dashboard_rounded,
+          'Home',
+          _activeScreenIndex == 0,
+          () => _switchTab(0),
+          false,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.inventory_2_outlined,
+          Icons.inventory_2_rounded,
+          'Products',
+          _activeScreenIndex == 1,
+          () => _switchTab(1),
+          false,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.shopping_bag_outlined,
+          Icons.shopping_bag_rounded,
+          'Orders',
+          _activeScreenIndex == 2,
+          () => _switchTab(2),
+          true,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.payments_outlined,
+          Icons.payments_rounded,
+          'Earnings',
+          _activeScreenIndex == 4,
+          () => _switchTab(4),
+          false,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.person_outline_rounded,
+          Icons.person_rounded,
+          'Profile',
+          _activeScreenIndex == 3,
+          () => _switchTab(3),
+          false,
+          false,
+        ),
       ],
     );
   }
 
-  Widget _build5ItemNav() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        // Note the logical index mapping perfectly tracks the global views
-        _buildNavIcon(Icons.dashboard_outlined, Icons.dashboard_rounded, 'HOME', _activeScreenIndex == 0, () => _switchTab(0), false, true),
-        _buildNavIcon(Icons.inventory_2_outlined, Icons.inventory_2_rounded, 'ORDERS', _activeScreenIndex == 2, () => _switchTab(2), true, true),
-        _buildNavIcon(Icons.category_outlined, Icons.category_rounded, 'PRODUCTS', _activeScreenIndex == 1, () => _switchTab(1), false, true),
-        _buildNavIcon(Icons.payments_outlined, Icons.payments_rounded, 'EARNINGS', _activeScreenIndex == 4, () => _switchTab(4), false, true),
-        _buildNavIcon(Icons.person_outline_rounded, Icons.person_rounded, 'PROFILE', _activeScreenIndex == 3, () => _switchTab(3), false, true),
-      ],
-    );
-  }
-
-  Widget _buildNavIcon(IconData inactiveIcon, IconData activeIcon, String label, bool isSelected, VoidCallback onTap, bool hasBadge, bool isSmallText) {
+  Widget _buildNavIcon(
+    IconData inactiveIcon,
+    IconData activeIcon,
+    String label,
+    bool isSelected,
+    VoidCallback onTap,
+    bool hasBadge,
+    bool isSmallText,
+  ) {
     Widget iconWidget = Icon(
       isSelected ? activeIcon : inactiveIcon,
       color: isSelected ? commonColor : const Color(0xFF94A3B8),

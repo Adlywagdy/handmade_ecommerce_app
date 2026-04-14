@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import '../../cubit/seller_cubit.dart';
 import '../../models/seller_model.dart';
 import '../../models/data/seller_mock_data.dart';
@@ -87,8 +88,6 @@ class _SellerAddEditProductScreenState
       cubit.addProduct(product);
     }
 
-    Navigator.of(context).pop();
-
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
@@ -101,6 +100,8 @@ class _SellerAddEditProductScreenState
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
       ),
     );
+
+    Get.back();
   }
 
   void _mockImageUpload() {
@@ -126,7 +127,7 @@ class _SellerAddEditProductScreenState
         scrolledUnderElevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
-          onPressed: () => Navigator.of(context).pop(),
+          onPressed: () => Get.back(),
         ),
         title: Text(
           _isEditing ? 'Edit Product' : 'Add Product',
@@ -343,7 +344,7 @@ class _SellerAddEditProductScreenState
                       child: SizedBox(
                         height: 48.h,
                         child: OutlinedButton(
-                          onPressed: () => Navigator.of(context).pop(),
+                          onPressed: () => Get.back(),
                           style: OutlinedButton.styleFrom(
                             side: BorderSide(
                               color: Colors.white.withValues(alpha: 0.2),

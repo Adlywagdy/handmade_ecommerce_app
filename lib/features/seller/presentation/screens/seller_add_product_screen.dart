@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class SellerAddProductScreen extends StatefulWidget {
@@ -23,8 +24,8 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
         leading: IconButton(
           icon: Icon(Icons.arrow_back, color: commonColor, size: 24.w),
           onPressed: () {
-            if (Navigator.canPop(context)) {
-              Navigator.pop(context);
+            if (Get.key.currentState?.canPop() ?? false) {
+              Get.back();
             }
           },
         ),

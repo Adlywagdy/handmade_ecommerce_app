@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_manage_order_card.dart';
 
 class SellerOrdersScreen extends StatefulWidget {
-  const SellerOrdersScreen({super.key});
+  final VoidCallback? onBackPressed;
+
+  const SellerOrdersScreen({super.key, this.onBackPressed});
 
   @override
   State<SellerOrdersScreen> createState() => _SellerOrdersScreenState();
@@ -96,8 +99,12 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
             child: IconButton(
               icon: Icon(Icons.arrow_back, color: commonColor, size: 20.w),
               onPressed: () {
-                if (Navigator.canPop(context)) {
-                  Navigator.pop(context);
+                if (widget.onBackPressed != null) {
+                  widget.onBackPressed!();
+                  return;
+                }
+                if (Get.key.currentState?.canPop() ?? false) {
+                  Get.back();
                 }
               },
             ),
