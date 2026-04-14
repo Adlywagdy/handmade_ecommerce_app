@@ -134,17 +134,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(
-              child: OrderSummary(
-                orderPaymentDetails:
-                    order.payment ??
-                    PaymentDetailsModel(
-                      subtotalPrice: 200,
-                      discount: 0,
-                      totalPrice: 200,
-                    ),
-              ),
-            ),
+            SliverToBoxAdapter(child: OrderSummary(order: order)),
             SliverToBoxAdapter(
               child: CustomElevatedButton(
                 onPressed: () {},
