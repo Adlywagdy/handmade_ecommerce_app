@@ -22,7 +22,6 @@ class ProductModel {
     required this.description,
     required this.price,
     this.totalrate,
-
     required this.images,
     this.category,
     this.quantity,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
@@ -9,11 +10,18 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/home_cubit/home_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_layout.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orderdetails_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
@@ -54,6 +62,18 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(
               create: (BuildContext context) => SellerCubit()..loadDashboard(),
             ),
+            BlocProvider(create: (BuildContext context) => CustomerCubit()),
+            BlocProvider(
+              create: (BuildContext context) => HomeCubit()
+                ..getFeaturedProducts()
+                ..getTopRatedProducts(),
+            ),
+            BlocProvider(
+              create: (BuildContext context) => SearchCubit()..getCategories(),
+            ),
+            BlocProvider(create: (context) => WishListCubit()),
+            BlocProvider(create: (context) => CartCubit()..getcartProducts()),
+            BlocProvider(create: (context) => OrderCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
@@ -97,32 +117,33 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                     customer: CustomerModel(name: "adly"),
                     products: productsListData,
                     orderid: '#AY-9402',
+                    status: .delivered,
                   ),
                 ),
               ),
               GetPage(
                 name: AppRoutes.customerCart,
-                page: () => CustomerCartScreen(
-                  order: OrderModel(
-                    customer: CustomerModel(name: "name"),
-                    products: productsListData,
-                    orderid: "orderid",
-                  ),
-                ),
+                page: () => CustomerCartScreen(),
               ),
               GetPage(
                 name: AppRoutes.customerProductDetails,
-                page: () =>
-                    CustomerProductDetailsScreen(product: productsListData[0]),
+                page: () => CustomerProductDetailsScreen(
+                  product: Get.arguments as ProductModel,
+                ),
               ),
               GetPage(
                 name: AppRoutes.customerSearch,
-                page: () => const CustomerSearchScreen(),
+                page: () => CustomerSearchScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.customerNotifications,
+                page: () => const CustomerNotificationsScreen(),
               ),
               GetPage(
                 name: AppRoutes.customerWriteReview,
-                page: () =>
-                    CustomerWriteReviewScreen(product: productsListData[0]),
+                page: () => CustomerWriteReviewScreen(
+                  product: Get.arguments as ProductModel,
+                ),
               ),
 
               // seller

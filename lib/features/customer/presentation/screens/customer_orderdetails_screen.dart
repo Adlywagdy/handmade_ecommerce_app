@@ -6,6 +6,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderstatusslider.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitemoforder.dart';
@@ -53,9 +54,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0).h,
-                    child: OrderStatusSlider(
-                      orderstatus: order.status ?? OrderStatus.preparing,
-                    ),
+                    child: OrderStatusSlider(orderstatus: order.status),
                   ),
                   Text(
                     'ORDER ITEMS (${order.products.length})',
@@ -107,7 +106,10 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(order.customer.name, style: AppTextStyles.t_14w700),
+                      Text(
+                        order.customer.name ?? "adaw",
+                        style: AppTextStyles.t_14w700,
+                      ),
                       Text(
                         order.customer.address?.addressdescription ??
                             "123 Main St, City, Country",

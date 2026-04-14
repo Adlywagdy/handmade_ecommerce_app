@@ -9,9 +9,10 @@ class SearchField extends StatelessWidget {
   final bool readOnly;
   final Color? cursorColor;
   final String hintText;
-
+  final String? initialValue;
   final TextStyle? textstyle;
   final void Function()? onTap;
+  final TextEditingController? controller;
   final void Function(String)? onChanged;
   const SearchField({
     super.key,
@@ -25,16 +26,20 @@ class SearchField extends StatelessWidget {
     this.onChanged,
     this.textstyle,
     this.readOnly = false,
+    this.initialValue,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       autofocus: autofocus,
-
+      initialValue: initialValue,
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
+      focusNode: FocusNode(canRequestFocus: false),
       readOnly: readOnly,
       onTap: onTap,
       onChanged: onChanged,

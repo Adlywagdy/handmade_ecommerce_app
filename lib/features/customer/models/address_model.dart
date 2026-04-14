@@ -1,7 +1,7 @@
 class AddressModel {
   final String? addresstitle;
   final String addressdescription;
-  final String zipCode;
+  final int zipCode;
   final String? city;
   final String? country;
   AddressModel({
