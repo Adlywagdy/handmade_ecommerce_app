@@ -1,143 +1,200 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../models/seller_model.dart';
-import 'seller_status_badge.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class SellerProductCard extends StatelessWidget {
-  final SellerProductModel product;
-  final VoidCallback? onEdit;
-  final VoidCallback? onDelete;
-  final ValueChanged<bool>? onToggleActive;
+  final String productName;
+  final String price;
+  final String stock;
+  final String status;
+  final String? imageUrl;
+  final bool isActive;
+  final ValueChanged<bool>? onToggle;
+  final VoidCallback? onMenuTap;
 
   const SellerProductCard({
     super.key,
-    required this.product,
-    this.onEdit,
-    this.onDelete,
-    this.onToggleActive,
+    required this.productName,
+    required this.price,
+    required this.stock,
+    required this.status,
+    this.imageUrl,
+    this.isActive = true,
+    this.onToggle,
+    this.onMenuTap,
   });
+
+  Color _getStatusColor() {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return const Color(0xFF07880E);
+      case 'pending review':
+        return const Color(0xFFD97706);
+      case 'inactive':
+        return const Color(0xFFD32F2F);
+      default:
+        return const Color(0xFF64748B);
+    }
+  }
+
+  Color _getStatusBackgroundColor() {
+    switch (status.toLowerCase()) {
+      case 'active':
+        return const Color(0xFFE8F5E9);
+      case 'pending review':
+        return const Color(0xFFFFF3E0);
+      case 'inactive':
+        return const Color(0xFFFFEBEE);
+      default:
+        return const Color(0xFFF1F5F9);
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.only(bottom: 12.h),
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
       decoration: BoxDecoration(
-        color: const Color(0xFF16213E),
-        borderRadius: BorderRadius.circular(14.r),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.06),
+        color: Colors.white,
+        border: Border(
+          bottom: BorderSide(
+            color: const Color(0xFFF1F5F9),
+            width: 1,
+          ),
         ),
       ),
-      child: Padding(
-        padding: EdgeInsets.all(12.w),
-        child: Row(
-          children: [
-            // Product image
-            ClipRRect(
-              borderRadius: BorderRadius.circular(10.r),
-              child: Image.asset(
-                product.images.isNotEmpty
-                    ? product.images[0]
-                    : 'assets/images/splash.jpeg',
-                width: 72.w,
-                height: 72.h,
-                fit: BoxFit.cover,
-                errorBuilder: (context, error, stackTrace) => Container(
-                  width: 72.w,
-                  height: 72.h,
-                  color: const Color(0xFF0F3460),
-                  child: Icon(
-                    Icons.image_outlined,
-                    color: Colors.white.withValues(alpha: 0.3),
-                    size: 28.sp,
-                  ),
-                ),
-              ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Product Image
+          Container(
+            width: 72.w,
+            height: 72.w,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(12.r),
+              color: const Color(0xFFF8F7F6),
             ),
-            SizedBox(width: 12.w),
-            // Product info
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    product.name,
-                    style: TextStyle(
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w600,
-                      color: Colors.white,
-                      fontFamily: 'Plus Jakarta Sans',
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(12.r),
+              child: imageUrl != null
+                  ? Image.network(
+                      imageUrl!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          Icons.image_outlined,
+                          color: const Color(0xFF94A3B8),
+                          size: 28.w,
+                        );
+                      },
+                    )
+                  : Icon(
+                      Icons.image_outlined,
+                      color: const Color(0xFF94A3B8),
+                      size: 28.w,
                     ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  SizedBox(height: 4.h),
-                  Text(
-                    '\$${product.price.toStringAsFixed(2)}',
-                    style: TextStyle(
-                      fontSize: 15.sp,
-                      fontWeight: FontWeight.w700,
-                      color: const Color(0xff8B4513),
-                      fontFamily: 'Plus Jakarta Sans',
-                    ),
-                  ),
-                  SizedBox(height: 6.h),
-                  SellerStatusBadge(status: product.status),
-                ],
-              ),
             ),
-            // Actions column
-            Column(
+          ),
+          SizedBox(width: 12.w),
+
+          // Product Info (middle)
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Active toggle
-                Transform.scale(
-                  scale: 0.75,
-                  child: Switch(
-                    value: product.isActive,
-                    onChanged: (val) => onToggleActive?.call(val),
-                    activeThumbColor: const Color(0xff8B4513),
-                    activeTrackColor:
-                        const Color(0xff8B4513).withValues(alpha: 0.3),
-                    inactiveThumbColor: Colors.grey,
-                    inactiveTrackColor:
-                        Colors.grey.withValues(alpha: 0.3),
+                // Status Badge
+                Container(
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 8.w,
+                    vertical: 3.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: _getStatusBackgroundColor(),
+                    borderRadius: BorderRadius.circular(6.r),
+                  ),
+                  child: Text(
+                    status,
+                    style: TextStyle(
+                      color: _getStatusColor(),
+                      fontSize: 10.sp,
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
                 ),
-                Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _actionButton(
-                      Icons.edit_outlined,
-                      const Color(0xff8B4513),
-                      onEdit,
-                    ),
-                    SizedBox(width: 4.w),
-                    _actionButton(
-                      Icons.delete_outline,
-                      const Color(0xffD32F2F),
-                      onDelete,
-                    ),
-                  ],
+                SizedBox(height: 4.h),
+
+                // Product Name
+                Text(
+                  productName,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: TextStyle(
+                    color: const Color(0xFF0F172A),
+                    fontSize: 15.sp,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+
+                // Price
+                Text(
+                  price,
+                  style: TextStyle(
+                    color: commonColor,
+                    fontSize: 14.sp,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w600,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+
+                // Stock
+                Text(
+                  stock,
+                  style: TextStyle(
+                    color: const Color(0xFF94A3B8),
+                    fontSize: 12.sp,
+                    fontFamily: 'Plus Jakarta Sans',
+                    fontWeight: FontWeight.w400,
+                  ),
                 ),
               ],
             ),
-          ],
-        ),
-      ),
-    );
-  }
+          ),
 
-  Widget _actionButton(IconData icon, Color color, VoidCallback? onTap) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8.r),
-      child: Container(
-        padding: EdgeInsets.all(6.w),
-        decoration: BoxDecoration(
-          color: color.withValues(alpha: 0.1),
-          borderRadius: BorderRadius.circular(8.r),
-        ),
-        child: Icon(icon, color: color, size: 18.sp),
+          // Right side: Toggle + Menu
+          Column(
+            children: [
+              SizedBox(height: 4.h),
+              // Toggle Switch
+              SizedBox(
+                height: 28.h,
+                child: Switch(
+                  value: isActive,
+                  onChanged: onToggle,
+                  activeThumbColor: Colors.white,
+                  activeTrackColor: commonColor,
+                  inactiveThumbColor: Colors.white,
+                  inactiveTrackColor: const Color(0xFFE2E8F0),
+                  trackOutlineColor: WidgetStateProperty.all(Colors.transparent),
+                  materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                ),
+              ),
+              SizedBox(height: 8.h),
+              // Menu icon
+              InkWell(
+                onTap: onMenuTap,
+                child: Icon(
+                  Icons.format_list_bulleted,
+                  color: const Color(0xFF94A3B8),
+                  size: 20.w,
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

@@ -1,283 +1,333 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../cubit/seller_cubit.dart';
-import '../../cubit/seller_state.dart';
-import '../widgets/seller_product_card.dart';
-import 'seller_add_edit_product_screen.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_product_card.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 
-class SellerManageProductsScreen extends StatelessWidget {
-  const SellerManageProductsScreen({super.key});
+class SellerManageProductsScreen extends StatefulWidget {
+  final VoidCallback? onBackPressed;
+
+  const SellerManageProductsScreen({super.key, this.onBackPressed});
+
+  @override
+  State<SellerManageProductsScreen> createState() =>
+      _SellerManageProductsScreenState();
+}
+
+class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
+    with SingleTickerProviderStateMixin {
+  late TabController _tabController;
+
+  // Mock product data
+  final List<Map<String, dynamic>> _allProducts = [
+    {
+      'name': 'Handmade Terracotta V...',
+      'price': 'EGP 450.00',
+      'stock': 'Stock: 12 units',
+      'status': 'Active',
+      'isActive': true,
+      'image':
+          'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=200&h=200&fit=crop',
+    },
+    {
+      'name': 'Woven Palm Leaf Basket',
+      'price': 'EGP 250.00',
+      'stock': 'Stock: 5 units',
+      'status': 'Active',
+      'isActive': true,
+      'image':
+          'https://images.unsplash.com/photo-1622205313162-be1d5712a43f?w=200&h=200&fit=crop',
+    },
+    {
+      'name': 'Embroidered Linen Cush...',
+      'price': 'EGP 380.00',
+      'stock': 'Stock: 0 units',
+      'status': 'Pending Review',
+      'isActive': false,
+      'image':
+          'https://images.unsplash.com/photo-1629949009765-40fc74c9ec21?w=200&h=200&fit=crop',
+    },
+    {
+      'name': 'Ceramic Decorative Plate',
+      'price': 'EGP 600.00',
+      'stock': 'Stock: 8 units',
+      'status': 'Active',
+      'isActive': true,
+      'image':
+          'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&h=200&fit=crop',
+    },
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    _tabController = TabController(length: 3, vsync: this);
+  }
+
+  @override
+  void dispose() {
+    _tabController.dispose();
+    super.dispose();
+  }
+
+  List<Map<String, dynamic>> _getFilteredProducts(int tabIndex) {
+    switch (tabIndex) {
+      case 1: // Active
+        return _allProducts.where((p) => p['status'] == 'Active').toList();
+      case 2: // Pending
+        return _allProducts
+            .where((p) => p['status'] == 'Pending Review')
+            .toList();
+      default: // All
+        return _allProducts;
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context).push(
-            MaterialPageRoute(
-              builder: (_) => BlocProvider.value(
-                value: context.read<SellerCubit>(),
-                child: const SellerAddEditProductScreen(),
-              ),
-            ),
-          );
-        },
-        backgroundColor: const Color(0xff8B4513),
-        child: const Icon(Icons.add, color: Colors.white),
-      ),
-      body: SafeArea(
-        child: BlocBuilder<SellerCubit, SellerState>(
-          builder: (context, state) {
-            if (state is! SellerLoaded) {
-              return const Center(
-                child: CircularProgressIndicator(
-                  color: Color(0xff8B4513),
-                ),
-              );
+      backgroundColor: customerbackGroundColor,
+      appBar: AppBar(
+        backgroundColor: customerbackGroundColor,
+        elevation: 0,
+        scrolledUnderElevation: 0,
+        leading: IconButton(
+          onPressed: () {
+            if (widget.onBackPressed != null) {
+              widget.onBackPressed!();
+              return;
             }
-
-            final cubit = context.read<SellerCubit>();
-            final products = cubit.filteredProducts;
-
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Header
-                Padding(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
-                  child: Text(
-                    'Manage Products',
-                    style: TextStyle(
-                      fontSize: 22.sp,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white,
-                      fontFamily: 'Plus Jakarta Sans',
-                    ),
-                  ),
-                ),
-
-                // Search bar + Filter
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: _buildSearchBar(context, state),
-                      ),
-                      SizedBox(width: 10.w),
-                      _buildFilterButton(),
-                    ],
-                  ),
-                ),
-                SizedBox(height: 8.h),
-
-                // Results count
-                Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 20.w),
-                  child: Text(
-                    '${products.length} product${products.length != 1 ? 's' : ''} found',
-                    style: TextStyle(
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      color: Colors.white.withValues(alpha: 0.4),
-                      fontFamily: 'Plus Jakarta Sans',
-                    ),
-                  ),
-                ),
-                SizedBox(height: 12.h),
-
-                // Product list
-                Expanded(
-                  child: products.isEmpty
-                      ? _buildEmptyState()
-                      : ListView.builder(
-                          padding: EdgeInsets.symmetric(horizontal: 20.w),
-                          itemCount: products.length,
-                          itemBuilder: (context, index) {
-                            final product = products[index];
-                            return SellerProductCard(
-                              product: product,
-                              onEdit: () {
-                                Navigator.of(context).push(
-                                  MaterialPageRoute(
-                                    builder: (_) => BlocProvider.value(
-                                      value: cubit,
-                                      child: SellerAddEditProductScreen(
-                                        product: product,
-                                      ),
-                                    ),
-                                  ),
-                                );
-                              },
-                              onDelete: () {
-                                _showDeleteConfirmation(
-                                    context, cubit, product.id);
-                              },
-                              onToggleActive: (_) {
-                                cubit.toggleProductActive(product.id);
-                              },
-                            );
-                          },
-                        ),
-                ),
-              ],
-            );
+            Get.back();
           },
+          icon: Icon(Icons.arrow_back, color: commonColor, size: 24.w),
         ),
-      ),
-    );
-  }
-
-  Widget _buildSearchBar(BuildContext context, SellerLoaded state) {
-    return Container(
-      height: 46.h,
-      decoration: BoxDecoration(
-        color: const Color(0xFF16213E),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: Colors.white.withValues(alpha: 0.08),
-        ),
-      ),
-      child: TextField(
-        onChanged: (value) {
-          context.read<SellerCubit>().searchProducts(value);
-        },
-        onTapOutside: (event) {
-          FocusScope.of(context).unfocus();
-        },
-        cursorColor: const Color(0xff8B4513),
-        style: TextStyle(
-          fontSize: 13.sp,
-          color: Colors.white,
-          fontFamily: 'Plus Jakarta Sans',
-        ),
-        decoration: InputDecoration(
-          hintText: 'Search products...',
-          hintStyle: TextStyle(
-            fontSize: 13.sp,
-            color: Colors.white.withValues(alpha: 0.3),
-            fontFamily: 'Plus Jakarta Sans',
-          ),
-          prefixIcon: Icon(
-            Icons.search,
-            color: Colors.white.withValues(alpha: 0.4),
-            size: 20.sp,
-          ),
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(vertical: 12.h),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildFilterButton() {
-    return Container(
-      width: 46.w,
-      height: 46.h,
-      decoration: BoxDecoration(
-        color: const Color(0xff8B4513).withValues(alpha: 0.15),
-        borderRadius: BorderRadius.circular(12.r),
-        border: Border.all(
-          color: const Color(0xff8B4513).withValues(alpha: 0.3),
-        ),
-      ),
-      child: Icon(
-        Icons.tune,
-        color: const Color(0xff8B4513),
-        size: 20.sp,
-      ),
-    );
-  }
-
-  Widget _buildEmptyState() {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 56.sp,
-            color: Colors.white.withValues(alpha: 0.2),
-          ),
-          SizedBox(height: 16.h),
-          Text(
-            'No products found',
-            style: TextStyle(
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w600,
-              color: Colors.white.withValues(alpha: 0.4),
-              fontFamily: 'Plus Jakarta Sans',
-            ),
-          ),
-          SizedBox(height: 6.h),
-          Text(
-            'Try adjusting your search or add a new product',
-            style: TextStyle(
-              fontSize: 12.sp,
-              color: Colors.white.withValues(alpha: 0.3),
-              fontFamily: 'Plus Jakarta Sans',
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _showDeleteConfirmation(
-      BuildContext context, SellerCubit cubit, String productId) {
-    showDialog(
-      context: context,
-      builder: (ctx) => AlertDialog(
-        backgroundColor: const Color(0xFF16213E),
-        shape:
-            RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
         title: Text(
-          'Delete Product',
+          'Manage Products',
           style: TextStyle(
-            color: Colors.white,
+            color: const Color(0xFF0F172A),
+            fontSize: 18.sp,
             fontFamily: 'Plus Jakarta Sans',
             fontWeight: FontWeight.w700,
-            fontSize: 17.sp,
           ),
         ),
-        content: Text(
-          'Are you sure you want to delete this product? This action cannot be undone.',
-          style: TextStyle(
-            color: Colors.white.withValues(alpha: 0.7),
-            fontFamily: 'Plus Jakarta Sans',
-            fontSize: 13.sp,
-          ),
-        ),
+        centerTitle: false,
         actions: [
-          TextButton(
-            onPressed: () => Navigator.of(ctx).pop(),
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                color: Colors.white.withValues(alpha: 0.5),
-                fontFamily: 'Plus Jakarta Sans',
-              ),
+          IconButton(
+            onPressed: () {
+              // TODO: Search functionality
+            },
+            icon: Icon(
+              Icons.search,
+              color: const Color(0xFF334155),
+              size: 24.w,
             ),
           ),
-          TextButton(
+          IconButton(
             onPressed: () {
-              cubit.deleteProduct(productId);
-              Navigator.of(ctx).pop();
+              // TODO: Filter functionality
             },
-            child: const Text(
-              'Delete',
-              style: TextStyle(
-                color: Color(0xffD32F2F),
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-              ),
+            icon: Icon(
+              Icons.filter_list,
+              color: const Color(0xFF334155),
+              size: 24.w,
             ),
           ),
         ],
+        bottom: PreferredSize(
+          preferredSize: Size.fromHeight(48.h),
+          child: _buildTabBar(),
+        ),
       ),
+      body: TabBarView(
+        controller: _tabController,
+        children: [
+          _buildProductList(0),
+          _buildProductList(1),
+          _buildProductList(2),
+        ],
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Get.toNamed(AppRoutes.selleraddproduct);
+        },
+        backgroundColor: commonColor,
+        elevation: 4,
+        shape: const CircleBorder(),
+        child: Icon(Icons.add, color: Colors.white, size: 28.w),
+      ),
+    );
+  }
+
+  Widget _buildTabBar() {
+    return TabBar(
+      controller: _tabController,
+      labelColor: const Color(0xFF0F172A),
+      unselectedLabelColor: const Color(0xFF94A3B8),
+      labelStyle: TextStyle(
+        fontSize: 14.sp,
+        fontFamily: 'Plus Jakarta Sans',
+        fontWeight: FontWeight.w600,
+      ),
+      unselectedLabelStyle: TextStyle(
+        fontSize: 14.sp,
+        fontFamily: 'Plus Jakarta Sans',
+        fontWeight: FontWeight.w500,
+      ),
+      indicatorColor: commonColor,
+      indicatorWeight: 2.5,
+      indicatorSize: TabBarIndicatorSize.tab,
+      dividerColor: const Color(0xFFE2E8F0),
+      tabs: [
+        Tab(text: 'All (${_allProducts.length})'),
+        Tab(text: 'Active'),
+        Tab(text: 'Pending'),
+      ],
+    );
+  }
+
+  Widget _buildProductList(int tabIndex) {
+    final products = _getFilteredProducts(tabIndex);
+
+    if (products.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.inventory_2_outlined,
+              color: const Color(0xFF94A3B8),
+              size: 48.w,
+            ),
+            SizedBox(height: 12.h),
+            Text(
+              'No products found',
+              style: TextStyle(
+                color: const Color(0xFF94A3B8),
+                fontSize: 16.sp,
+                fontFamily: 'Plus Jakarta Sans',
+                fontWeight: FontWeight.w500,
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
+    return ListView.builder(
+      padding: EdgeInsets.only(top: 4.h),
+      itemCount: products.length,
+      itemBuilder: (context, index) {
+        final product = products[index];
+        return SellerProductCard(
+          productName: product['name'],
+          price: product['price'],
+          stock: product['stock'],
+          status: product['status'],
+          imageUrl: product['image'],
+          isActive: product['isActive'],
+          onToggle: (value) {
+            setState(() {
+              final originalIndex = _allProducts.indexOf(product);
+              if (originalIndex != -1) {
+                _allProducts[originalIndex]['isActive'] = value;
+              }
+            });
+          },
+          onMenuTap: () {
+            _showProductMenu(context, product);
+          },
+        );
+      },
+    );
+  }
+
+  void _showProductMenu(BuildContext context, Map<String, dynamic> product) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
+      ),
+      builder: (context) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: 16.h),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 36.w,
+                  height: 4.h,
+                  margin: EdgeInsets.only(bottom: 16.h),
+                  decoration: BoxDecoration(
+                    color: const Color(0xFFE2E8F0),
+                    borderRadius: BorderRadius.circular(2.r),
+                  ),
+                ),
+                ListTile(
+                  leading: Icon(Icons.edit_outlined, color: commonColor),
+                  title: Text(
+                    'Edit Product',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    Get.toNamed(AppRoutes.selleraddproduct);
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.visibility_outlined,
+                    color: const Color(0xFF334155),
+                  ),
+                  title: Text(
+                    'View Details',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    Get.to(
+                      () => CustomerProductDetailsScreen(
+                        product: productsListData[0], // Using mock data
+                      ),
+                    );
+                  },
+                ),
+                ListTile(
+                  leading: Icon(
+                    Icons.delete_outlined,
+                    color: const Color(0xFFD32F2F),
+                  ),
+                  title: Text(
+                    'Delete Product',
+                    style: TextStyle(
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontSize: 14.sp,
+                      fontWeight: FontWeight.w500,
+                      color: const Color(0xFFD32F2F),
+                    ),
+                  ),
+                  onTap: () {
+                    Get.back();
+                    // TODO: Delete product
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

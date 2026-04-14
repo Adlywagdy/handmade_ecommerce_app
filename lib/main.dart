@@ -28,8 +28,9 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/screens/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_bottom_nav.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
@@ -77,7 +78,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.customerlayout, // AppRoutes.splash,
+            initialRoute: AppRoutes.sellerdashboard, // AppRoutes.splash,
             getPages: [
               // splash and onboarding
               GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
@@ -149,7 +150,11 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               // seller
               GetPage(
                 name: AppRoutes.sellerdashboard,
-                page: () => const SellerDashboardScreen(),
+                page: () => const SellerBottomNav(),
+              ),
+              GetPage(
+                name: AppRoutes.selleraddproduct,
+                page: () => const SellerAddProductScreen(),
               ),
               GetPage(
                 name: AppRoutes.selleraddoreditproduct,

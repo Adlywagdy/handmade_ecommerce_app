@@ -20,6 +20,7 @@ abstract class AppRoutes {
   static const String customerWriteReview = '/customer/write-review';
 
   static const String sellerdashboard = '/sellerdashboard';
+  static const String selleraddproduct = '/seller/add-product';
   static const String selleraddoreditproduct = '/seller/add-or-edit-product';
   static const String sellerorders = '/seller/orders';
   static const String sellermanageproducts = '/seller/manage-products';
