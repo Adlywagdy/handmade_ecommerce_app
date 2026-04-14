@@ -47,6 +47,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
+
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (BuildContext context) => AuthCubit()),
