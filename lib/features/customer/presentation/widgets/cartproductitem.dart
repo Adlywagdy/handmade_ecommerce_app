@@ -73,7 +73,7 @@ class CartProductItem extends StatelessWidget {
                         onPressed: () {
                           BlocProvider.of<CartCubit>(
                             context,
-                          ).deleteCartProducts(product);
+                          ).deleteCartProducts(product, context);
                         },
                       ),
                     ),
@@ -94,6 +94,7 @@ class CartProductItem extends StatelessWidget {
                     ),
 
                     AmountContainerButton(
+                      product: product,
                       circularradius: 50.r,
                       verticalpadding: 4.h,
                       horizontalpadding: 8.w,

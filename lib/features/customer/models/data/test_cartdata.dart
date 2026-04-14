@@ -9,11 +9,12 @@ import 'package:handmade_ecommerce_app/features/customer/models/review_model.dar
 List<ProductModel> carttProductsdata = [
   ProductModel(
     name: 'Handmade Ceramic Vase',
+    id: "1",
     description:
         'This exquisite Terra Vase is hand-thrown by master artisans using traditional Mediterranean techniques.\nEach piece is unique, featuring a natural matte finish and subtle variations in texture that celebrate the organic beauty of locally sourced clay. \nPerfect for dried botanicals or as a standalone sculptural piece.',
     price: 49.99,
     totalrate: 4.5,
-    quantity: 50,
+    quantity: 5,
     reviews: [
       ReviewModel(
         reviewer: CustomerModel(

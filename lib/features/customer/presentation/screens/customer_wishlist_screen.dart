@@ -30,7 +30,6 @@ class CustomerWishlistScreen extends StatelessWidget {
 
               title: Text(
                 'Your Wishlist',
-
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
@@ -155,7 +154,8 @@ class CustomerWishlistScreen extends StatelessWidget {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
-                        'Your wishlist is empty. Start adding your favorite products!',
+                        'Your wishlist is empty. \nStart adding your favorite products!',
+                        textAlign: .center,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: subTitleColor,
                         ),

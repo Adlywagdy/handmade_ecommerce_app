@@ -139,7 +139,10 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   child: Row(
                     spacing: 5.w,
                     children: [
-                      Expanded(flex: 1, child: AmountContainerButton()),
+                      Expanded(
+                        flex: 1,
+                        child: AmountContainerButton(product: product),
+                      ),
                       Expanded(
                         flex: 2,
                         child: CustomElevatedButton(
@@ -147,7 +150,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                           onPressed: () {
                             BlocProvider.of<CartCubit>(
                               context,
-                            ).addCartProducts(product);
+                            ).addCartProducts(product, context);
                             Get.toNamed(AppRoutes.customerCart);
                           },
                           child: Row(

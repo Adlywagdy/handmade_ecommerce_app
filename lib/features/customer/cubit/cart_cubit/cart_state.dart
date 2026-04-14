@@ -21,25 +21,25 @@ final class GetcartFailedstate extends CartState {
 }
 /* ------------------------------------------- */
 
-final class AddcartLoadingstate extends CartState {}
+final class AddcartproductLoadingstate extends CartState {}
 
-final class AddcartSuccessedstate extends CartState {}
+final class AddcartproductSuccessedstate extends CartState {}
 
-final class AddcartFailedstate extends CartState {
+final class AddcartproductFailedstate extends CartState {
   final String errorMessage;
 
-  AddcartFailedstate({required this.errorMessage});
+  AddcartproductFailedstate({required this.errorMessage});
 }
 /* ------------------------------------------- */
 
-final class DeletecartLoadingstate extends CartState {}
+final class DeletecartproductLoadingstate extends CartState {}
 
-final class DeletecartSuccessedstate extends CartState {}
+final class DeletecartproductSuccessedstate extends CartState {}
 
-final class DeletecartFailedstate extends CartState {
+final class DeletecartproductFailedstate extends CartState {
   final String errorMessage;
 
-  DeletecartFailedstate({required this.errorMessage});
+  DeletecartproductFailedstate({required this.errorMessage});
 }
 /*------------------------------------------- */
 

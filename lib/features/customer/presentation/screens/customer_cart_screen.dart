@@ -67,8 +67,8 @@ class CustomerCartScreen extends StatelessWidget {
                 return current is GetcartSuccessedstate ||
                     current is GetcartLoadingstate ||
                     current is GetcartFailedstate ||
-                    current is AddcartSuccessedstate ||
-                    current is DeletecartSuccessedstate;
+                    current is AddcartproductSuccessedstate ||
+                    current is DeletecartproductSuccessedstate;
               },
               builder: (context, state) {
                 if (state is GetcartFailedstate) {

@@ -19,54 +19,58 @@ class AddressColumn extends StatefulWidget {
 class _AddressColumnState extends State<AddressColumn> {
   @override
   Widget build(BuildContext context) {
-    return Column(
-      spacing: 8.h,
-      children: [
-        CustomFeatureRow(
-          title: 'Delivery Address',
-          buttontext:
-              BlocProvider.of<CustomerCubit>(context).customerData.address !=
-                  null
-              ? 'Change'
-              : 'Add',
-          onTap: () => _openAddressBottomSheet(context),
-          buttontextstyle: AppTextStyles.t_16w600.copyWith(color: commonColor),
-        ),
-        Card(
-          color: commonColor.withValues(alpha: .05),
-          elevation: 0,
-          shape: ContinuousRectangleBorder(
-            borderRadius: BorderRadius.circular(24.r),
-            side: BorderSide(
-              color: commonColor.withValues(alpha: .1),
-              width: 1.5,
+    return BlocBuilder<CustomerCubit, CustomerState>(
+      buildWhen: (previous, current) {
+        return current is GetCustomerdataSuccessedstate ||
+            current is GetCustomerdataLoadingstate ||
+            current is GetCustomerdataFailedstate ||
+            current is CustomerInitial ||
+            current is AddorUpdateCustomeraddressFailedstate ||
+            current is AddorUpdateCustomeraddressLoadingstate ||
+            current is AddorUpdateCustomeraddressSuccessedstate;
+      },
+      builder: (context, state) {
+        if (state is AddorUpdateCustomeraddressLoadingstate) {
+          return Padding(
+            padding: const EdgeInsets.all(16.0).h,
+            child: const Center(
+              child: CircularProgressIndicator(color: commonColor),
             ),
-          ),
-          child: BlocBuilder<CustomerCubit, CustomerState>(
-            buildWhen: (previous, current) {
-              return current is GetCustomerdataSuccessedstate ||
-                  current is GetCustomerdataLoadingstate ||
-                  current is GetCustomerdataFailedstate ||
-                  current is CustomerInitial ||
-                  current is AddorUpdateCustomeraddressFailedstate ||
-                  current is AddorUpdateCustomeraddressLoadingstate ||
-                  current is AddorUpdateCustomeraddressSuccessedstate;
-            },
-            builder: (context, state) {
-              if (state is AddorUpdateCustomeraddressLoadingstate) {
-                return Padding(
-                  padding: const EdgeInsets.all(16.0).h,
-                  child: const Center(
-                    child: CircularProgressIndicator(color: commonColor),
-                  ),
-                );
-              }
+          );
+        }
 
-              if (state is AddorUpdateCustomeraddressFailedstate) {
-                return Center(child: Text(state.errorMessage));
-              }
+        if (state is AddorUpdateCustomeraddressFailedstate) {
+          return Center(child: Text(state.errorMessage));
+        }
 
-              return ListTile(
+        return Column(
+          spacing: 8.h,
+          children: [
+            CustomFeatureRow(
+              title: 'Delivery Address',
+              buttontext:
+                  BlocProvider.of<CustomerCubit>(
+                        context,
+                      ).customerData.address !=
+                      null
+                  ? 'Change'
+                  : 'Add',
+              onTap: () => _openAddressBottomSheet(context),
+              buttontextstyle: AppTextStyles.t_16w600.copyWith(
+                color: commonColor,
+              ),
+            ),
+            Card(
+              color: commonColor.withValues(alpha: .05),
+              elevation: 0,
+              shape: ContinuousRectangleBorder(
+                borderRadius: BorderRadius.circular(24.r),
+                side: BorderSide(
+                  color: commonColor.withValues(alpha: .1),
+                  width: 1.5,
+                ),
+              ),
+              child: ListTile(
                 leading: Card(
                   color: Colors.white,
 
@@ -98,16 +102,16 @@ class _AddressColumnState extends State<AddressColumn> {
                   BlocProvider.of<CustomerCubit>(
                         context,
                       ).customerData.address?.addressdescription ??
-                      "123 Main St, City, Country",
+                      "No address added yet",
                   style: AppTextStyles.t_14w400.copyWith(
                     color: blackDegree.withValues(alpha: .7),
                   ),
                 ),
-              );
-            },
-          ),
-        ),
-      ],
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

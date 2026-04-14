@@ -56,7 +56,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (BuildContext context) => AuthCubit()),
@@ -78,7 +77,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.sellerdashboard, // AppRoutes.splash,
+            initialRoute: AppRoutes.customerlayout, // AppRoutes.splash,
             getPages: [
               // splash and onboarding
               GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),

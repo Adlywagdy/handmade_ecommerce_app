@@ -62,8 +62,6 @@ class _CustomerLayoutState extends State<CustomerLayout> {
               BlocProvider.of<WishListCubit>(context).getWishlistProducts();
               break;
             case 2:
-              BlocProvider.of<CartCubit>(context).getcartProducts();
-
               break;
             case 3:
               BlocProvider.of<OrderCubit>(context).getAllOrders();

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar.dart';
+import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -29,46 +30,88 @@ class CartCubit extends Cubit<CartState> {
   }
 
   /* ------------------------------------------- */
-  Future<void> addCartProducts(ProductModel product) async {
-    emit(AddcartLoadingstate());
+  Future<void> addCartProducts(
+    ProductModel product,
+    BuildContext context,
+  ) async {
+    emit(AddcartproductLoadingstate());
     try {
       // Simulate a delay for loading wishlist products
       await Future.delayed(const Duration(seconds: 2), () {});
-      cartProductsList.add(
-        product,
-      ); // Replace with actual logic to add product to wishlist in Firestore
-      emit(AddcartSuccessedstate());
-      showSnack(
-        title: "Success",
-        message: "${product.name} has been added to your cart.",
-        bgColor: Colors.green,
-        icon: Icons.check_circle_outline,
-      );
-      getcartProducts();
+      if (isItemExictedFun(
+        productslist: cartProductsList,
+        productID: product.id,
+      )) {
+        BlocProvider.of<CartCubit>(context).cartProductsList
+                .firstWhere((item) => item.id == product.id)
+                .quantity =
+            BlocProvider.of<CartCubit>(context).cartProductsList
+                .firstWhere((item) => item.id == product.id)
+                .quantity +
+            1;
+      } else {
+        cartProductsList.add(
+          ProductModel.copywith(product),
+        ); // Replace with actual logic to add product to wishlist in Firestore
+
+        showSnack(
+          title: "Success",
+          message: "${product.name} has been added to your cart.",
+          bgColor: Colors.green,
+          icon: Icons.check_circle_outline,
+        );
+      }
+      emit(AddcartproductSuccessedstate());
+      emit(GetcartSuccessedstate(cartproducts: cartProductsList));
+      getOrderSummary(products: cartProductsList);
     } catch (e) {
-      emit(AddcartFailedstate(errorMessage: e.toString()));
+      emit(AddcartproductFailedstate(errorMessage: e.toString()));
     }
   }
 
   /* ------------------------------------------- */
-  Future<void> deleteCartProducts(ProductModel product) async {
-    emit(DeletecartLoadingstate());
+  Future<void> deleteCartProducts(
+    ProductModel product,
+    BuildContext context,
+  ) async {
+    emit(DeletecartproductLoadingstate());
     try {
       // Simulate a delay for loading wishlist products
       await Future.delayed(const Duration(seconds: 2), () {});
-      cartProductsList.remove(
-        product,
-      ); // Replace with actual logic to add product to wishlist in Firestore
-      emit(DeletecartSuccessedstate());
-      showSnack(
-        title: "Product Deleted",
-        message: "${product.name} has been removed from your cart.",
-        bgColor: redDegree,
-        icon: CupertinoIcons.delete,
-      );
-      getcartProducts();
+      if (isItemExictedFun(
+        productslist: cartProductsList,
+        productID: product.id,
+      )) {
+        BlocProvider.of<CartCubit>(context).cartProductsList
+                .firstWhere((item) => item.id == product.id)
+                .quantity =
+            BlocProvider.of<CartCubit>(context).cartProductsList
+                .firstWhere((item) => item.id == product.id)
+                .quantity -
+            1;
+        if (BlocProvider.of<CartCubit>(context).cartProductsList
+                .firstWhere((item) => item.id == product.id)
+                .quantity ==
+            0) {
+          cartProductsList.remove(
+            BlocProvider.of<CartCubit>(
+              context,
+            ).cartProductsList.firstWhere((item) => item.id == product.id),
+          );
+          showSnack(
+            title: "Product Deleted",
+            message: "${product.name} has been removed from your cart.",
+            bgColor: redDegree,
+            icon: CupertinoIcons.delete,
+          );
+        }
+        emit(DeletecartproductSuccessedstate());
+
+        emit(GetcartSuccessedstate(cartproducts: cartProductsList));
+        getOrderSummary(products: cartProductsList);
+      }
     } catch (e) {
-      emit(DeletecartFailedstate(errorMessage: e.toString()));
+      emit(DeletecartproductFailedstate(errorMessage: e.toString()));
     }
   } /*------------------------------------------- */
 
