@@ -28,37 +28,8 @@ class WishListCubit extends Cubit<WishListState> {
   }
 
   /* ------------------------------------------- */
-  Future<void> addWishlistProducts(ProductModel product) async {
-    emit(AddWishlistLoadingstate());
-    try {
-      // Simulate a delay for loading wishlist products
-      await Future.delayed(const Duration(seconds: 2), () {});
-      if (isItemExictedFun(
-        productslist: wishlistProductsList,
-        productID: product.id,
-      )) {
-      } else {
-        wishlistProductsList.add(
-          product,
-        ); // Replace with actual logic to add product to wishlist in Firestore
-        showSnack(
-          title: "Success",
-          message: "${product.name} has been added to your wishlist.",
-          bgColor: Colors.green,
-          icon: Icons.check_circle_outline,
-        );
-      }
-
-      emit(AddWishlistSuccessedstate());
-      emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
-    } catch (e) {
-      emit(AddWishlistFailedstate(errorMessage: e.toString()));
-    }
-  }
-
-  /* ------------------------------------------- */
-  Future<void> deleteWishlistProducts(ProductModel product) async {
-    emit(DeleteWishlistLoadingstate());
+  Future<void> addordeleteWishlistProducts(ProductModel product) async {
+    emit(AddOrDeleteWishlistLoadingstate());
     try {
       // Simulate a delay for loading wishlist products
       await Future.delayed(const Duration(seconds: 2), () {});
@@ -71,15 +42,26 @@ class WishListCubit extends Cubit<WishListState> {
         ); // Replace with actual logic to add product to wishlist in Firestore
         showSnack(
           title: "product removed",
-          message: "${product.name} has been removed to your wishlist.",
+          message: "${product.name} has been removed from your wishlist.",
+          bgColor: Colors.red,
+          icon: Icons.check_circle_outline,
+        );
+      } else {
+        wishlistProductsList.add(
+          product,
+        ); // Replace with actual logic to add product to wishlist in Firestore
+        showSnack(
+          title: "Success",
+          message: "${product.name} has been added to your wishlist.",
           bgColor: Colors.green,
           icon: Icons.check_circle_outline,
         );
-      } else {}
-      emit(DeleteWishlistSuccessedstate());
+      }
+
+      emit(AddOrDeleteWishlistSuccessedstate());
       emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
     } catch (e) {
-      emit(DeleteWishlistFailedstate(errorMessage: e.toString()));
+      emit(AddOrDeleteWishlistFailedstate(errorMessage: e.toString()));
     }
   }
 }

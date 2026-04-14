@@ -20,23 +20,14 @@ final class GetWishlistFailedstate extends WishListState {
 }
 /* ------------------------------------------- */
 
-final class AddWishlistLoadingstate extends WishListState {}
+final class AddOrDeleteWishlistLoadingstate extends WishListState {}
 
-final class AddWishlistSuccessedstate extends WishListState {}
+final class AddOrDeleteWishlistSuccessedstate extends WishListState {}
 
-final class AddWishlistFailedstate extends WishListState {
+final class AddOrDeleteWishlistFailedstate extends WishListState {
   final String errorMessage;
 
-  AddWishlistFailedstate({required this.errorMessage});
+  AddOrDeleteWishlistFailedstate({required this.errorMessage});
 }
+
 /* ------------------------------------------- */
-
-final class DeleteWishlistLoadingstate extends WishListState {}
-
-final class DeleteWishlistSuccessedstate extends WishListState {}
-
-final class DeleteWishlistFailedstate extends WishListState {
-  final String errorMessage;
-
-  DeleteWishlistFailedstate({required this.errorMessage});
-}

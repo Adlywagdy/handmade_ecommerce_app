@@ -134,8 +134,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                 return current is GetWishlistLoadingstate ||
                     current is GetWishlistFailedstate ||
                     current is GetWishlistSuccessedstate ||
-                    current is AddWishlistSuccessedstate ||
-                    current is DeleteWishlistSuccessedstate;
+                    current is AddOrDeleteWishlistSuccessedstate;
               },
               builder: (context, state) {
                 if (state is GetWishlistFailedstate) {
