@@ -63,7 +63,7 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
                   onPressed: () {
                     BlocProvider.of<CartCubit>(
                       context,
-                    ).addCartProducts(product, context);
+                    ).addCartProducts(product);
                   },
                 );
               },

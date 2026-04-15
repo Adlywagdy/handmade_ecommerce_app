@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -47,9 +48,7 @@ class AmountContainerButton extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              BlocProvider.of<CartCubit>(
-                context,
-              ).deleteCartProducts(product, context);
+              BlocProvider.of<CartCubit>(context).deleteCartProducts(product);
             },
             child: Icon(Icons.remove, color: iconscolor, size: 22.r),
           ),
@@ -61,11 +60,20 @@ class AmountContainerButton extends StatelessWidget {
                   current is DeletecartproductSuccessedstate;
             },
             builder: (context, state) {
+              final quantity =
+                  isItemExictedFun(
+                    productslist: BlocProvider.of<CartCubit>(
+                      context,
+                    ).cartProductsList,
+                    productID: product.id,
+                  )
+                  ? BlocProvider.of<CartCubit>(context).cartProductsList
+                        .firstWhere((item) => item.id == product.id)
+                        .quantity
+                  : 0;
+
               return Text(
-                BlocProvider.of<CartCubit>(context).cartProductsList
-                    .firstWhere((item) => item.id == product.id)
-                    .quantity
-                    .toString(),
+                quantity.toString(),
                 textAlign: TextAlign.center,
                 style: AppTextStyles.t_14w600.copyWith(
                   color: AppColors.textPrimary,
@@ -75,9 +83,7 @@ class AmountContainerButton extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-              BlocProvider.of<CartCubit>(
-                context,
-              ).addCartProducts(product, context);
+              BlocProvider.of<CartCubit>(context).addCartProducts(product);
             },
             child: Icon(Icons.add, color: iconscolor, size: 22.r),
           ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:handmade_ecommerce_app/core/functions/get_snackbar.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 

@@ -1,19 +1,23 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handmade_ecommerce_app/core/functions/get_snackbar.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_cartdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
-
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
   List<ProductModel> cartProductsList = [];
+  AddressModel? selectedOrderAddress;
+  String selectedPaymentMethod = 'Credit Card';
+  PaymentDetailsModel? currentOrderSummary;
   /* ------------------------------------------- */
   Future<void> getcartProducts() async {
     emit(GetcartLoadingstate());
@@ -30,10 +34,7 @@ class CartCubit extends Cubit<CartState> {
   }
 
   /* ------------------------------------------- */
-  Future<void> addCartProducts(
-    ProductModel product,
-    BuildContext context,
-  ) async {
+  Future<void> addCartProducts(ProductModel product) async {
     emit(AddcartproductLoadingstate());
     try {
       // Simulate a delay for loading wishlist products
@@ -42,10 +43,8 @@ class CartCubit extends Cubit<CartState> {
         productslist: cartProductsList,
         productID: product.id,
       )) {
-        BlocProvider.of<CartCubit>(context).cartProductsList
-                .firstWhere((item) => item.id == product.id)
-                .quantity =
-            BlocProvider.of<CartCubit>(context).cartProductsList
+        cartProductsList.firstWhere((item) => item.id == product.id).quantity =
+            cartProductsList
                 .firstWhere((item) => item.id == product.id)
                 .quantity +
             1;
@@ -53,7 +52,6 @@ class CartCubit extends Cubit<CartState> {
         cartProductsList.add(
           ProductModel.copywith(product),
         ); // Replace with actual logic to add product to wishlist in Firestore
-
         showSnack(
           title: "Success",
           message: "${product.name} has been added to your cart.",
@@ -70,10 +68,7 @@ class CartCubit extends Cubit<CartState> {
   }
 
   /* ------------------------------------------- */
-  Future<void> deleteCartProducts(
-    ProductModel product,
-    BuildContext context,
-  ) async {
+  Future<void> deleteCartProducts(ProductModel product) async {
     emit(DeletecartproductLoadingstate());
     try {
       // Simulate a delay for loading wishlist products
@@ -82,21 +77,17 @@ class CartCubit extends Cubit<CartState> {
         productslist: cartProductsList,
         productID: product.id,
       )) {
-        BlocProvider.of<CartCubit>(context).cartProductsList
-                .firstWhere((item) => item.id == product.id)
-                .quantity =
-            BlocProvider.of<CartCubit>(context).cartProductsList
+        cartProductsList.firstWhere((item) => item.id == product.id).quantity =
+            cartProductsList
                 .firstWhere((item) => item.id == product.id)
                 .quantity -
             1;
-        if (BlocProvider.of<CartCubit>(context).cartProductsList
+        if (cartProductsList
                 .firstWhere((item) => item.id == product.id)
                 .quantity ==
             0) {
           cartProductsList.remove(
-            BlocProvider.of<CartCubit>(
-              context,
-            ).cartProductsList.firstWhere((item) => item.id == product.id),
+            cartProductsList.firstWhere((item) => item.id == product.id),
           );
           showSnack(
             title: "Product Deleted",
@@ -106,7 +97,6 @@ class CartCubit extends Cubit<CartState> {
           );
         }
         emit(DeletecartproductSuccessedstate());
-
         emit(GetcartSuccessedstate(cartproducts: cartProductsList));
         getOrderSummary(products: cartProductsList);
       }
@@ -118,7 +108,8 @@ class CartCubit extends Cubit<CartState> {
   Future<void> getOrderSummary({
     required List<ProductModel> products,
     String? coupon = "",
-    double deliveryFee = 20,
+    double deliveryFee = 0,
+    String? currency,
   }) async {
     emit(GetOrderSummaryLoadingState());
     try {
@@ -128,18 +119,36 @@ class CartCubit extends Cubit<CartState> {
         cartproducts: products,
       );
       final double discount = applycoupon(coupon!);
-      emit(
-        GetOrderSummarySuccessState(
-          orderSummary: PaymentDetailsModel(
-            totalPrice: ordersubtotalPrice + deliveryFee - discount,
-            subtotalPrice: ordersubtotalPrice,
-            discount: discount,
-            deliveryFee: deliveryFee,
-          ),
-        ),
+      currentOrderSummary = PaymentDetailsModel(
+        totalPrice: ordersubtotalPrice + deliveryFee - discount,
+        subtotalPrice: ordersubtotalPrice,
+        discount: discount,
+        deliveryFee: deliveryFee,
+        currency: currency ?? "USD",
+        paymentMethod: selectedPaymentMethod,
       );
+      emit(GetOrderSummarySuccessState(orderSummary: currentOrderSummary));
     } catch (e) {
       emit(GetOrderSummaryFailedState(errorMessage: e.toString()));
+    }
+  }
+
+  void getOrderaddress({
+    required AddressModel address,
+    bool issetdefault = false,
+    required BuildContext context,
+  }) async {
+    emit(GetOrderaddressLoadingState());
+    try {
+      if (issetdefault) {
+        BlocProvider.of<CustomerCubit>(context).customerData.address = address;
+      }
+      // Simulate a delay for loading featured products
+      await Future.delayed(const Duration(seconds: 2), () {});
+      selectedOrderAddress = address;
+      emit(GetOrderaddressSuccessState(orderAddress: selectedOrderAddress!));
+    } catch (e) {
+      emit(GetOrderaddressFailedState(errorMessage: e.toString()));
     }
   }
 }

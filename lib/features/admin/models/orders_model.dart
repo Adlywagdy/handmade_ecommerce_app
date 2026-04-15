@@ -16,6 +16,6 @@ class OrderModel {
     required this.date,
     required this.price,
     required this.status,
-    this.currency = '\$',
+    this.currency = 'USD',
   });
 }

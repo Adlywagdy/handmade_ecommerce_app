@@ -1,13 +1,17 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 
 part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
   CustomerCubit() : super(CustomerInitial());
-  CustomerModel customerData =
-      CustomerModel(); /* ------------------------------------------- */
+  CustomerModel customerData = CustomerModel(
+    name: "Adly",
+    email: "adly.wagdy@ayady.com",
+    image: "assets/images/splash.jpeg",
+    password: "561651",
+    phone: "0651616161681",
+  ); /* ------------------------------------------- */
 
   void getCustomerdata() async {
     emit(GetCustomerdataLoadingstate());
@@ -20,26 +24,14 @@ class CustomerCubit extends Cubit<CustomerState> {
         name: "Adly",
         email: "adly.wagdy@ayady.com",
         image: "assets/images/splash.jpeg",
+        password: "561651",
+        phone: "0651616161681",
       );
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
-  } /* ------------------------------------------- */
-
-  void addorupdateCustomeraddress(AddressModel address) async {
-    emit(AddorUpdateCustomeraddressLoadingstate());
-    try {
-      // Simulate a delay for loading featured products
-      await Future.delayed(const Duration(seconds: 2), () {});
-
-      customerData.address = address;
-      emit(AddorUpdateCustomeraddressSuccessedstate(customer: customerData));
-    } catch (e) {
-      emit(AddorUpdateCustomeraddressFailedstate(errorMessage: e.toString()));
-    }
   }
-
   /* ------------------------------------------- */
 
   void getNotifications() async {

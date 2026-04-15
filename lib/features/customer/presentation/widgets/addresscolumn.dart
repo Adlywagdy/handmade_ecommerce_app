@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customfeaturerow.dart';
@@ -19,18 +20,14 @@ class AddressColumn extends StatefulWidget {
 class _AddressColumnState extends State<AddressColumn> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CustomerCubit, CustomerState>(
+    return BlocBuilder<CartCubit, CartState>(
       buildWhen: (previous, current) {
-        return current is GetCustomerdataSuccessedstate ||
-            current is GetCustomerdataLoadingstate ||
-            current is GetCustomerdataFailedstate ||
-            current is CustomerInitial ||
-            current is AddorUpdateCustomeraddressFailedstate ||
-            current is AddorUpdateCustomeraddressLoadingstate ||
-            current is AddorUpdateCustomeraddressSuccessedstate;
+        return current is GetOrderaddressLoadingState ||
+            current is GetOrderaddressSuccessState ||
+            current is GetOrderaddressFailedState;
       },
       builder: (context, state) {
-        if (state is AddorUpdateCustomeraddressLoadingstate) {
+        if (state is GetOrderaddressLoadingState) {
           return Padding(
             padding: const EdgeInsets.all(16.0).h,
             child: const Center(
@@ -39,7 +36,7 @@ class _AddressColumnState extends State<AddressColumn> {
           );
         }
 
-        if (state is AddorUpdateCustomeraddressFailedstate) {
+        if (state is GetOrderaddressFailedState) {
           return Center(child: Text(state.errorMessage));
         }
 
@@ -289,9 +286,11 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                               : _country.text.trim(),
                           zipCode: int.tryParse(_zip.text.trim()) ?? 0,
                         );
-                        BlocProvider.of<CustomerCubit>(
-                          context,
-                        ).addorupdateCustomeraddress(addressData);
+                        BlocProvider.of<CartCubit>(context).getOrderaddress(
+                          address: addressData,
+                          context: context,
+                          issetdefault: true,
+                        );
                         Get.close(1);
                       },
                       child: Text(

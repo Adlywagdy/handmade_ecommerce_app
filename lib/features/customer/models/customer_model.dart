@@ -2,21 +2,21 @@ import 'package:handmade_ecommerce_app/features/customer/models/address_model.da
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 class CustomerModel {
-  final String? name;
-  final String? email;
-  final String? phone;
+  final String name;
+  final String email;
+  final String phone;
   AddressModel? address;
-  final String? password;
+  final String password;
   final String? image;
   final List<OrderModel>? orderslist;
 
   CustomerModel({
-    this.name,
-    this.email,
-    this.phone,
+    required this.name,
+    required this.email,
+    required this.phone,
     this.address,
-    this.password,
-    this.image,
+    required this.password,
+    this.image = "assets/images/splash.jpeg",
     this.orderslist,
   });
 }

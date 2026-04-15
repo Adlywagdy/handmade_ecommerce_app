@@ -14,12 +14,15 @@ List<ProductModel> carttProductsdata = [
         'This exquisite Terra Vase is hand-thrown by master artisans using traditional Mediterranean techniques.\nEach piece is unique, featuring a natural matte finish and subtle variations in texture that celebrate the organic beauty of locally sourced clay. \nPerfect for dried botanicals or as a standalone sculptural piece.',
     price: 49.99,
     totalrate: 4.5,
-    quantity: 5,
+    quantity: 1,
     reviews: [
       ReviewModel(
         reviewer: CustomerModel(
           name: "Alice Smith",
           email: "alice.smith@example.com",
+          password: "456789",
+          phone: "0651616161681",
+          image: "assets/images/splash.jpeg",
         ),
         rating: 3,
         reviewText:

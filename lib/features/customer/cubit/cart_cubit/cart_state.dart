@@ -46,11 +46,24 @@ final class DeletecartproductFailedstate extends CartState {
 final class GetOrderSummaryLoadingState extends CartState {}
 
 final class GetOrderSummarySuccessState extends CartState {
-  final PaymentDetailsModel orderSummary;
+  final PaymentDetailsModel? orderSummary;
   GetOrderSummarySuccessState({required this.orderSummary});
 }
 
 final class GetOrderSummaryFailedState extends CartState {
   final String errorMessage;
   GetOrderSummaryFailedState({required this.errorMessage});
+}
+
+/*------------------------------------------- */
+final class GetOrderaddressLoadingState extends CartState {}
+
+final class GetOrderaddressSuccessState extends CartState {
+  final AddressModel orderAddress;
+  GetOrderaddressSuccessState({required this.orderAddress});
+}
+
+final class GetOrderaddressFailedState extends CartState {
+  final String errorMessage;
+  GetOrderaddressFailedState({required this.errorMessage});
 }

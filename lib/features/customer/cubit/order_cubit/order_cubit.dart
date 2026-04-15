@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/payment_cubit/payment_cubit.dart';
 
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
@@ -50,17 +52,20 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
-  void generateNewOrder(OrderModel newOrder) async {
-    emit(GenerateNewOrderLoadingState());
+  Future<void> placeNewOrder(OrderModel newOrder, BuildContext context) async {
+    emit(PlaceOrderLoadingState());
     try {
       // Simulate a delay
       await Future.delayed(const Duration(seconds: 2), () {});
+      await BlocProvider.of<PaymentCubit>(
+        context,
+      ).makePayment(newOrder.payment, context);
       allordersList.add(
         newOrder,
       ); // Replace with actual logic to add order to orderslist in Firestore
-      emit(GenerateNewOrderSuccessState());
+      emit(PlaceOrderSuccessState());
     } catch (e) {
-      emit(GenerateNewOrderFailedState(errorMessage: e.toString()));
+      emit(PlaceOrderFailedState(errorMessage: e.toString()));
     }
   }
 

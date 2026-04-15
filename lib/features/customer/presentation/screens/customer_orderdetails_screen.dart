@@ -31,7 +31,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(order.orderid!, style: AppTextStyles.t_18w700),
+            Text(order.orderid, style: AppTextStyles.t_18w700),
             Text(
               'Placed on ${order.orderDate}',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
@@ -106,10 +106,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(
-                        order.customer.name ?? "adaw",
-                        style: AppTextStyles.t_14w700,
-                      ),
+                      Text(order.customer.name, style: AppTextStyles.t_14w700),
                       Text(
                         order.customer.address?.addressdescription ??
                             "123 Main St, City, Country",
@@ -124,7 +121,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        order.customer.phone ?? "+20 123 456 7890",
+                        order.customer.phone,
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),

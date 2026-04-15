@@ -19,20 +19,6 @@ final class GetCustomerdataFailedstate extends CustomerState {
 }
 
 /* ------------------------------------------- */
-final class AddorUpdateCustomeraddressLoadingstate extends CustomerState {}
-
-final class AddorUpdateCustomeraddressSuccessedstate extends CustomerState {
-  final CustomerModel customer;
-  AddorUpdateCustomeraddressSuccessedstate({required this.customer});
-}
-
-final class AddorUpdateCustomeraddressFailedstate extends CustomerState {
-  final String errorMessage;
-
-  AddorUpdateCustomeraddressFailedstate({required this.errorMessage});
-}
-
-/* ------------------------------------------- */
 final class NotificationsLoadingstate extends CustomerState {}
 
 final class NotificationsSuccessedstate extends CustomerState {

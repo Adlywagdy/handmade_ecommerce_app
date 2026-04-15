@@ -4,9 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
@@ -38,11 +36,7 @@ class _CustomerLayoutState extends State<CustomerLayout> {
       CustomerCartScreen(),
       CustomerOrdersScreen(customerorderslist: ordersListdata),
       CustomerProfilesScreen(
-        customer: CustomerModel(
-          name: "Adly Wagdy",
-          email: "adly.wagdy@ayady.com",
-          image: "assets/images/splash.jpeg",
-        ),
+        customer: BlocProvider.of<CustomerCubit>(context).customerData,
       ),
     ];
     super.initState();
@@ -55,19 +49,6 @@ class _CustomerLayoutState extends State<CustomerLayout> {
       body: IndexedStack(index: currentIndex, children: pages),
       bottomNavigationBar: BottomNavigationBar(
         onTap: (value) {
-          switch (value) {
-            case 0:
-              break;
-            case 1:
-              BlocProvider.of<WishListCubit>(context).getWishlistProducts();
-              break;
-            case 2:
-              break;
-            case 3:
-              BlocProvider.of<OrderCubit>(context).getAllOrders();
-              break;
-          }
-
           setState(() {
             currentIndex = value;
           });

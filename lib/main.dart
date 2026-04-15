@@ -13,11 +13,10 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify
 import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/home_cubit/home_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/payment_cubit/payment_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_layout.dart';
@@ -62,6 +61,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(
               create: (BuildContext context) => SellerCubit()..loadDashboard(),
             ),
+
             BlocProvider(create: (BuildContext context) => CustomerCubit()),
             BlocProvider(
               create: (BuildContext context) => HomeCubit()
@@ -71,9 +71,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(
               create: (BuildContext context) => SearchCubit()..getCategories(),
             ),
-            BlocProvider(create: (context) => WishListCubit()),
+            BlocProvider(
+              create: (context) => WishListCubit()..getWishlistProducts(),
+            ),
             BlocProvider(create: (context) => CartCubit()..getcartProducts()),
             BlocProvider(create: (context) => OrderCubit()),
+            BlocProvider(create: (context) => PaymentCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
@@ -113,12 +116,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               GetPage(
                 name: AppRoutes.customerOrderDetails,
                 page: () => CustomerOrderDetailsScreen(
-                  order: OrderModel(
-                    customer: CustomerModel(name: "adly"),
-                    products: productsListData,
-                    orderid: '#AY-9402',
-                    status: .delivered,
-                  ),
+                  order: Get.arguments as OrderModel,
                 ),
               ),
               GetPage(

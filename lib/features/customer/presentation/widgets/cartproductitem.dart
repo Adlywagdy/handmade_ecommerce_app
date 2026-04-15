@@ -73,7 +73,7 @@ class CartProductItem extends StatelessWidget {
                         onPressed: () {
                           BlocProvider.of<CartCubit>(
                             context,
-                          ).deleteCartProducts(product, context);
+                          ).deleteCartProducts(product);
                         },
                       ),
                     ),

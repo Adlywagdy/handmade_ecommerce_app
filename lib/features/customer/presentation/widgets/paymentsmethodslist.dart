@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 
 class PaymentsMethodsList extends StatefulWidget {
   const PaymentsMethodsList({super.key});
@@ -20,6 +22,8 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
           onTap: () {
             setState(() {
               selectedindex = index;
+              BlocProvider.of<CartCubit>(context).selectedPaymentMethod =
+                  _paymentListdata[index]["paymentMethod"]!;
             });
           },
           child: Row(
