@@ -12,7 +12,6 @@ class PaymentsMethodsList extends StatefulWidget {
 }
 
 class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
-  int selectedindex = 0;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -21,7 +20,6 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
         return InkWell(
           onTap: () {
             setState(() {
-              selectedindex = index;
               BlocProvider.of<CartCubit>(context).selectedPaymentMethod =
                   _paymentListdata[index]["paymentMethod"]!;
             });
@@ -30,7 +28,8 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
             spacing: 12.w,
             children: [
               Icon(
-                index == selectedindex
+                BlocProvider.of<CartCubit>(context).selectedPaymentMethod ==
+                        _paymentListdata[index]["paymentMethod"]
                     ? Icons.check_circle
                     : Icons.radio_button_unchecked,
                 color: commonColor,

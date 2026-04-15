@@ -12,7 +12,7 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderModel> allordersList = [];
   List<OrderModel> filteredordersList = [];
   /*------------------------------------------- */
-  void getAllOrders() async {
+  Future<void> getAllOrders() async {
     emit(GetAllOrdersLoadingState());
     try {
       // Simulate a delay for loading orders
@@ -24,11 +24,11 @@ class OrderCubit extends Cubit<OrderState> {
     }
   } /*------------------------------------------- */
 
-  void getFilteredOrders({required OrderStatus status}) {
+  Future<void> getFilteredOrders({required OrderStatus status}) async {
     emit(GetFilteredOrdersLoadingState());
     try {
       // Simulate a delay for loading orders
-      Future.delayed(const Duration(seconds: 2), () {});
+      await Future.delayed(const Duration(seconds: 2), () {});
       filteredordersList = allordersList.where((order) {
         return order.status == status;
       }).toList();
@@ -39,7 +39,7 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
-  void getOrderDetails(String orderId) async {
+  Future<void> getOrderDetails(String orderId) async {
     emit(GetOrderDetailsLoadingState());
     try {
       // Simulate a delay for loading order details
@@ -70,7 +70,7 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
-  void cancelOrder(String orderId) async {
+  Future<void> cancelOrder(String orderId) async {
     emit(CancelOrderLoadingState());
     try {
       // Simulate a delay

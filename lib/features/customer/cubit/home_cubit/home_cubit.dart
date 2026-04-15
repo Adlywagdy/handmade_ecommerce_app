@@ -8,7 +8,7 @@ class HomeCubit extends Cubit<HomeState> {
   HomeCubit() : super(HomeInitial());
 
   /* ------------------------------------------- */
-  void getFeaturedProducts() async {
+  Future<void> getFeaturedProducts() async {
     emit(GetFeaturedLoadingstate());
     try {
       // Simulate a delay for loading featured products
@@ -25,7 +25,7 @@ class HomeCubit extends Cubit<HomeState> {
   }
 
   /* ------------------------------------------- */
-  void getTopRatedProducts() async {
+  Future<void> getTopRatedProducts() async {
     emit(GetTopRatedLoadingstate());
     try {
       // Simulate a delay for loading top-rated products

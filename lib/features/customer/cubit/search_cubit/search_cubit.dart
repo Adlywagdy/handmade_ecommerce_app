@@ -12,7 +12,7 @@ class SearchCubit extends Cubit<SearchState> {
   CategoryModel? selectedCategory;
   /* ------------------------------------------- */
 
-  void resetSearchState(BuildContext context) {
+  Future<void> resetSearchState(BuildContext context) async {
     searchedproductsList = [];
     filteredproductsList = [];
     BlocProvider.of<SearchCubit>(context).selectedCategory = null;
@@ -20,7 +20,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   List<CategoryModel> categoriesList = [];
-  void getCategories() async {
+  Future<void> getCategories() async {
     emit(GetCategoriesLoadingstate());
     try {
       // Simulate a delay for loading categories
@@ -36,7 +36,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   /* ------------------------------------------- */
   List<ProductModel> searchedproductsList = [];
-  void searchproducts({required String productname}) async {
+  Future<void> searchproducts({required String productname}) async {
     emit(SearchProductsLoadingstate());
     try {
       // Simulate a delay for loading categories
@@ -52,7 +52,7 @@ class SearchCubit extends Cubit<SearchState> {
 
   /* ------------------------------------------- */
   List<ProductModel> filteredproductsList = [];
-  void filterproducts({
+  Future<void> filterproducts({
     String? categoryname,
     double? minprice,
     double? maxprice,

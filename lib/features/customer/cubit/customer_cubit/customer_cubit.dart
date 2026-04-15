@@ -13,7 +13,7 @@ class CustomerCubit extends Cubit<CustomerState> {
     phone: "0651616161681",
   ); /* ------------------------------------------- */
 
-  void getCustomerdata() async {
+  Future<void> getCustomerdata() async {
     emit(GetCustomerdataLoadingstate());
     try {
       // Simulate a delay for loading featured products
@@ -34,7 +34,7 @@ class CustomerCubit extends Cubit<CustomerState> {
   }
   /* ------------------------------------------- */
 
-  void getNotifications() async {
+  Future<void> getNotifications() async {
     emit(NotificationsLoadingstate());
     try {
       // Simulate a delay for loading top-rated products

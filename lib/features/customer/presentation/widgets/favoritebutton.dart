@@ -12,28 +12,28 @@ class FavoriteButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<WishListCubit, WishListState>(
-      buildWhen: (previous, current) {
-        return current is GetWishlistSuccessedstate ||
-            current is AddOrDeleteWishlistSuccessedstate ||
-            current is AddOrDeleteWishlistFailedstate;
+    return IconButton.filled(
+      onPressed: () {
+        BlocProvider.of<WishListCubit>(
+          context,
+        ).addordeleteWishlistProducts(product);
       },
-      builder: (context, state) {
-        return IconButton.filled(
-          onPressed: () {
-            BlocProvider.of<WishListCubit>(
-              context,
-            ).addordeleteWishlistProducts(product);
-          },
-          padding: EdgeInsets.zero,
+      padding: EdgeInsets.zero,
 
-          style: ButtonStyle(
-            backgroundColor: WidgetStatePropertyAll(
-              Colors.white.withValues(alpha: 0.7),
-            ),
-            iconSize: WidgetStatePropertyAll(20.r),
-          ),
-          icon: Icon(
+      style: ButtonStyle(
+        backgroundColor: WidgetStatePropertyAll(
+          Colors.white.withValues(alpha: 0.7),
+        ),
+        iconSize: WidgetStatePropertyAll(20.r),
+      ),
+      icon: BlocBuilder<WishListCubit, WishListState>(
+        buildWhen: (previous, current) {
+          return current is GetWishlistSuccessedstate ||
+              current is AddOrDeleteWishlistSuccessedstate ||
+              current is AddOrDeleteWishlistFailedstate;
+        },
+        builder: (context, state) {
+          return Icon(
             isItemExictedFun(
                   productslist: BlocProvider.of<WishListCubit>(
                     context,
@@ -43,9 +43,9 @@ class FavoriteButton extends StatelessWidget {
                 ? Icons.favorite
                 : Icons.favorite_border,
             color: commonColor,
-          ),
-        );
-      },
+          );
+        },
+      ),
     );
   }
 }

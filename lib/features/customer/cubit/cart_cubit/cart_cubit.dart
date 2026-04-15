@@ -16,7 +16,7 @@ class CartCubit extends Cubit<CartState> {
   CartCubit() : super(CartInitial());
   List<ProductModel> cartProductsList = [];
   AddressModel? selectedOrderAddress;
-  String selectedPaymentMethod = 'Credit Card';
+  String selectedPaymentMethod = "Credit Card";
   PaymentDetailsModel? currentOrderSummary;
   /* ------------------------------------------- */
   Future<void> getcartProducts() async {
@@ -133,7 +133,7 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  void getOrderaddress({
+  Future<void> getOrderaddress({
     required AddressModel address,
     bool issetdefault = false,
     required BuildContext context,
