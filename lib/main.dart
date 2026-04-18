@@ -13,7 +13,6 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify
 import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/home_cubit/home_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/payment_cubit/payment_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
@@ -76,7 +75,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             ),
             BlocProvider(create: (context) => CartCubit()..getcartProducts()),
             BlocProvider(create: (context) => OrderCubit()),
-            BlocProvider(create: (context) => PaymentCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

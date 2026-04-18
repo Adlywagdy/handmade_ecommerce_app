@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/payment_cubit/payment_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
@@ -57,7 +57,7 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       // Simulate a delay
       await Future.delayed(const Duration(seconds: 2), () {});
-      await BlocProvider.of<PaymentCubit>(
+      await BlocProvider.of<CartCubit>(
         context,
       ).makePayment(newOrder.payment, context);
       allordersList.add(

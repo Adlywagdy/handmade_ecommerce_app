@@ -15,8 +15,7 @@ class PayPAlService {
           sandboxMode: true, //testingmode
           clientId:
               "AeV7F4kmJMM5jGe7eEXzxwOm74Fd6Rbq6lmhqHH8dAZDwmlqhncdUKu2ALrfgnY3owDvnVkvJTlwSSjl",
-          secretKey:
-              "EAp_Ir8B5vsuZQ3vxF2YosC3t45j9t9b7fL2Qw07-AxaIl2eZpqkkWhf8m-awnLWUZVuspV-E4ZZCIMM",
+          secretKey: "",
           transactions: [
             {
               "amount": amount.toJson(),

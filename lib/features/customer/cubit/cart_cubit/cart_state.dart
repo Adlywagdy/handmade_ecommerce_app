@@ -67,3 +67,13 @@ final class GetOrderaddressFailedState extends CartState {
   final String errorMessage;
   GetOrderaddressFailedState({required this.errorMessage});
 }
+
+/*------------------------------------------- */
+final class MakePaymentLoadingState extends CartState {}
+
+final class MakePaymentSuccessState extends CartState {}
+
+final class MakePaymentFailedState extends CartState {
+  final String error;
+  MakePaymentFailedState(this.error);
+}
