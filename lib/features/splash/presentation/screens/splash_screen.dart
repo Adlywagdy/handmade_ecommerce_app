@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 
@@ -12,27 +14,23 @@ class SplashScreen extends StatelessWidget {
       Get.off(
         const OnboardingScreen(),
         transition: Transition.fadeIn,
-        duration: Duration(seconds: 1),
+        duration: const Duration(seconds: 1),
       );
     });
 
     return Scaffold(
-      backgroundColor: Color(0xffEEDFC8),
+      backgroundColor: logobackgroundcolor,
       body: Column(
-        mainAxisAlignment: .center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Expanded(flex: 120, child: SizedBox()),
           Image.asset('assets/images/splash.jpeg'),
           Expanded(flex: 100, child: SizedBox()),
           Text(
             'Handmade with Love',
-            style: TextStyle(
-              color: commonColor,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+            style: AppTextStyles.t_16w600.copyWith(color: commonColor),
           ),
-          SizedBox(height: 40),
+          SizedBox(height: 40.h),
         ],
       ),
     );

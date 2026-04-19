@@ -1,22 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
-class RegisterToggle extends StatelessWidget {
-  final int selectedIndex;
-  final Function(int) onChanged;
+class RegisterToggle extends StatefulWidget {
+  const RegisterToggle({super.key});
 
-  const RegisterToggle({
-    super.key,
-    required this.selectedIndex,
-    required this.onChanged,
-  });
+  @override
+  State<RegisterToggle> createState() => _RegisterToggleState();
+}
 
+int selectedIndex = 0;
+
+class _RegisterToggleState extends State<RegisterToggle> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(4),
+      padding: const EdgeInsets.all(4).r,
       decoration: BoxDecoration(
-        color: backGroundColor,
+        color: Colors.brown.withValues(alpha: 0.2),
         borderRadius: BorderRadius.circular(8),
       ),
       child: Row(
@@ -24,9 +26,13 @@ class RegisterToggle extends StatelessWidget {
           // Customer
           Expanded(
             child: GestureDetector(
-              onTap: () => onChanged(0),
+              onTap: () {
+                setState(() {
+                  selectedIndex = 0;
+                });
+              },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 10).r,
                 decoration: BoxDecoration(
                   color: selectedIndex == 0 ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(6),
@@ -34,10 +40,10 @@ class RegisterToggle extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'Customer',
-                    style: TextStyle(
-                      color: selectedIndex == 0 ? primaryColor : SecodaryColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
+                    style: AppTextStyles.t_14w700.copyWith(
+                      color: selectedIndex == 0
+                          ? primaryColor
+                          : primaryColor.withValues(alpha: 0.6),
                     ),
                   ),
                 ),
@@ -48,9 +54,13 @@ class RegisterToggle extends StatelessWidget {
           // Seller
           Expanded(
             child: GestureDetector(
-              onTap: () => onChanged(1),
+              onTap: () {
+                setState(() {
+                  selectedIndex = 1;
+                });
+              },
               child: Container(
-                padding: EdgeInsets.symmetric(vertical: 10),
+                padding: EdgeInsets.symmetric(vertical: 10).r,
                 decoration: BoxDecoration(
                   color: selectedIndex == 1 ? Colors.white : Colors.transparent,
                   borderRadius: BorderRadius.circular(6),
@@ -58,10 +68,10 @@ class RegisterToggle extends StatelessWidget {
                 child: Center(
                   child: Text(
                     'Seller',
-                    style: TextStyle(
-                      color: selectedIndex == 1 ? primaryColor : SecodaryColor,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 14,
+                    style: AppTextStyles.t_14w700.copyWith(
+                      color: selectedIndex == 1
+                          ? primaryColor
+                          : primaryColor.withValues(alpha: 0.6),
                     ),
                   ),
                 ),

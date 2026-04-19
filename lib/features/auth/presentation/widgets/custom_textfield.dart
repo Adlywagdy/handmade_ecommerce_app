@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class Customtextfield extends StatefulWidget {
@@ -33,10 +34,10 @@ class _CustomtextfieldState extends State<Customtextfield> {
       controller: widget.controller,
       obscureText: widget.isPassword && isObscure,
       validator: widget.validator,
-
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         labelText: widget.label,
-        labelStyle: TextStyle(color: SecodaryColor),
+        labelStyle: TextStyle(color: primaryColor.withValues(alpha: 0.6)),
         hintText: widget.hintText,
         prefixIcon: (widget.prefixIcon),
         suffixIcon: widget.isPassword
@@ -52,23 +53,29 @@ class _CustomtextfieldState extends State<Customtextfield> {
             : null,
 
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(color: Colors.grey),
         ),
 
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: SecodaryColor, width: 2),
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide(
+            color: primaryColor.withValues(alpha: 0.6),
+            width: 2.w,
+          ),
         ),
 
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(color: Colors.grey),
         ),
 
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: SecodaryColor, width: 2),
+          borderRadius: BorderRadius.circular(12.r),
+          borderSide: BorderSide(
+            color: primaryColor.withValues(alpha: 0.6),
+            width: 2.w,
+          ),
         ),
       ),
     );
