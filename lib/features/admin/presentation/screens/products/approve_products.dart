@@ -112,129 +112,129 @@ class ProductsGrid extends StatelessWidget {
 
 final _pendingProducts = [
   const ProductsModel(
-    productId: 3,
+    id: '3',
     name: 'Silver Filigree Ring',
     price: 850,
     currency: 'EGP',
     vendorName: 'Laila Jewelry',
-    productImage:
-        'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400'],
     status: 'pending',
   ),
   const ProductsModel(
-    productId: 4,
+    id: '4',
     name: 'Genuine Leather Bag',
     price: 1200,
     currency: 'EGP',
     vendorName: 'Omar Leather Goods',
-    productImage:
-        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'],
     status: 'pending',
   ),
   const ProductsModel(
-    productId: 5,
+    id: '5',
     name: 'Handwoven Wool Rug',
     price: 2400,
     currency: 'EGP',
     vendorName: 'Sinai Weaves',
-    productImage:
-        'https://images.unsplash.com/photo-1600166898405-da9535204843?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1600166898405-da9535204843?w=400'],
     status: 'pending',
   ),
   const ProductsModel(
-    productId: 6,
+    id: '6',
     name: 'Carved Wall Mirror',
     price: 1150,
     currency: 'EGP',
     vendorName: 'Artisan Woodworks',
-    productImage:
-        'https://images.unsplash.com/photo-1618220179428-22790b461013?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1618220179428-22790b461013?w=400'],
     status: 'pending',
   ),
   const ProductsModel(
-    productId: 1,
+    id: '1',
     name: 'Ceramic Turquoise Vase',
     price: 450,
     currency: 'EGP',
     vendorName: 'Fatima Handcrafts',
-    productImage:
-    'https://images.unsplash.com/photo-1612196808214-b7e239e5f6b7?w=400',
+    images: [
+    'https://images.unsplash.com/photo-1612196808214-b7e239e5f6b7?w=400'],
     status: 'pending',
   ),
   const ProductsModel(
-    productId: 2,
+    id: '2',
     name: 'Woven Wicker Basket',
     price: 300,
     currency: 'EGP',
     vendorName: 'Ahmed Reed Works',
-    productImage:
-    'https://images.unsplash.com/photo-1595351475754-8a9d45a97ea5?w=400',
+    images: [
+    'https://images.unsplash.com/photo-1595351475754-8a9d45a97ea5?w=400'],
     status: 'pending',
   ),
 ];
 
 final _approvedProducts = [
   const ProductsModel(
-    productId: 7,
+    id: '7',
     name: 'Hand-painted Tajine',
     price: 680,
     currency: 'EGP',
     vendorName: 'Nour Ceramics',
-    productImage:
-        'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400'],
     status: 'approved',
   ),
   const ProductsModel(
-    productId: 8,
+    id: '8',
     name: 'Macramé Wall Hanging',
     price: 520,
     currency: 'EGP',
     vendorName: 'Dina Fiber Arts',
-    productImage:
-        'https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=400'],
     status: 'approved',
   ),
   const ProductsModel(
-    productId: 9,
+    id: '9',
     name: 'Copper Coffee Set',
     price: 1800,
     currency: 'EGP',
     vendorName: 'Al-Qahira Metalworks',
-    productImage:
-        'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400'],
     status: 'approved',
   ),
   const ProductsModel(
-    productId: 10,
+    id: '10',
     name: 'Embroidered Silk Scarf',
     price: 390,
     currency: 'EGP',
     vendorName: 'Hana Textiles',
-    productImage:
-        'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400'],
     status: 'approved',
   ),
 ];
 
 final _rejectedProducts = [
   const ProductsModel(
-    productId: 11,
+    id: '11',
     name: 'Plastic Souvenir Set',
     price: 150,
     currency: 'EGP',
     vendorName: 'QuickMade Co.',
-    productImage:
-        'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400'],
     status: 'rejected',
   ),
   const ProductsModel(
-    productId: 12,
+    id: '12',
     name: 'Machine-print Carpet',
     price: 900,
     currency: 'EGP',
     vendorName: 'Factory Floors',
-    productImage:
-        'https://images.unsplash.com/photo-1575377222312-dd1a63a51638?w=400',
+    images: [
+        'https://images.unsplash.com/photo-1575377222312-dd1a63a51638?w=400'],
     status: 'rejected',
   ),
 ];

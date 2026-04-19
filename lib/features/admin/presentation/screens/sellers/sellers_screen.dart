@@ -97,54 +97,54 @@ class SellersList extends StatelessWidget {
 }
 
 final _sellers = [
-  const SellerData(
-    sellerId: 1,
+  SellerData(
+    id: '1',
     name: 'Fatima Ahmed',
     email: 'fatima.a@ayady.com',
     specialty: 'Pottery & Ceramics Specialist',
-    submittedDate: 'Oct 12, 2023',
+    submittedAt: DateTime(2023, 10, 12),
     status: SellerStatus.pending,
     badge: 'NEW',
   ),
-  const SellerData(
-    sellerId: 44,
+  SellerData(
+    id: '44',
     name: 'Youssef Mansour',
     email: 'youssef.m@ayady.com',
     specialty: 'Handwoven Carpets',
-    submittedDate: 'Oct 14, 2023',
+    submittedAt: DateTime(2023, 10, 14),
     status: SellerStatus.pending,
     badge: 'URGENT',
   ),
-  const SellerData(
-    sellerId: 6,
+  SellerData(
+    id: '6',
     name: 'Layla Hassan',
     email: 'layla.h@ayady.com',
     specialty: 'Traditional Jewelry',
-    submittedDate: 'Oct 15, 2023',
+    submittedAt: DateTime(2023, 10, 15),
     status: SellerStatus.pending,
   ),
-  const SellerData(
-    sellerId: 5,
+  SellerData(
+    id: '5',
     name: 'Omar El-Sayed',
     email: 'omar.e@ayady.com',
     specialty: 'Leather Crafts',
-    submittedDate: 'Sep 20, 2023',
+    submittedAt: DateTime(2023, 9, 20),
     status: SellerStatus.approved,
   ),
-  const SellerData(
-    sellerId: 4,
+  SellerData(
+    id: '4',
     name: 'Nour Khalil',
     email: 'nour.k@ayady.com',
     specialty: 'Handmade Textiles',
-    submittedDate: 'Sep 18, 2023',
+    submittedAt: DateTime(2023, 9, 18),
     status: SellerStatus.approved,
   ),
-  const SellerData(
-    sellerId: 22,
+  SellerData(
+    id: '22',
     name: 'Ahmed Farid',
     email: 'ahmed.f@ayady.com',
     specialty: 'Mass-produced Goods',
-    submittedDate: 'Oct 10, 2023',
+    submittedAt: DateTime(2023, 10, 10),
     status: SellerStatus.rejected,
   ),
 ];

@@ -24,6 +24,7 @@ abstract class AppRoutes {
   static const String sellermanageproducts = '/seller/manage-products';
   static const String sellerregisteation = '/seller/registeration';
 
+  static const String adminBottomBar = '/admin';
   static const String adminDashboard = '/admin/dashboard';
   static const String adminSellers = '/admin/sellers';
 }

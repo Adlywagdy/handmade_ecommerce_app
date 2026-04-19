@@ -28,6 +28,7 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'features/admin/presentation/screens/admin_bottom_bar/admin_bottom_bar.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -47,7 +48,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       minTextAdapt: true,
       splitScreenMode: true,
       builder: (context, child) {
-
         return MultiBlocProvider(
           providers: [
             BlocProvider(create: (BuildContext context) => AuthCubit()),
@@ -145,6 +145,10 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               GetPage(
                 name: AppRoutes.sellerregisteation,
                 page: () => const SellerRegistrationScreen(),
+              ),
+              GetPage(
+                name: AppRoutes.adminBottomBar,
+                page: () => const AdminBottomBarScreen(),
               ),
             ],
           ),
