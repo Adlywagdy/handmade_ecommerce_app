@@ -46,8 +46,8 @@ dependencies:
   flutter_paypal_payment: ^1.0.8
   firebase_core: ^4.6.0
   share_plus: ^12.0.2
-  webview_flutter: ^4.13.1
-
+  image_picker: ^1.2.1
+webview_flutter: ^4.13.1
 
 dev_dependencies:
   flutter_test:

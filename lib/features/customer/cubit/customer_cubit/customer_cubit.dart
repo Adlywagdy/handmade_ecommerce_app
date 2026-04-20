@@ -6,10 +6,15 @@ part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
   CustomerCubit() : super(CustomerInitial());
-  CustomerModel customerData =
-      CustomerModel(); /* ------------------------------------------- */
+  CustomerModel customerData = CustomerModel(
+    name: "Adly",
+    email: "adly.wagdy@ayady.com",
+    image: "assets/images/splash.jpeg",
+    password: "561651",
+    phone: "0651616161681",
+  ); /* ------------------------------------------- */
 
-  void getCustomerdata() async {
+  Future<void> getCustomerdata() async {
     emit(GetCustomerdataLoadingstate());
     try {
       // Simulate a delay for loading featured products
@@ -20,29 +25,17 @@ class CustomerCubit extends Cubit<CustomerState> {
         name: "Adly",
         email: "adly.wagdy@ayady.com",
         image: "assets/images/splash.jpeg",
+        password: "561651",
+        phone: "0651616161681",
       );
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
-  } /* ------------------------------------------- */
-
-  void addorupdateCustomeraddress(AddressModel address) async {
-    emit(AddorUpdateCustomeraddressLoadingstate());
-    try {
-      // Simulate a delay for loading featured products
-      await Future.delayed(const Duration(seconds: 2), () {});
-
-      customerData.address = address;
-      emit(AddorUpdateCustomeraddressSuccessedstate(customer: customerData));
-    } catch (e) {
-      emit(AddorUpdateCustomeraddressFailedstate(errorMessage: e.toString()));
-    }
   }
-
   /* ------------------------------------------- */
 
-  void getNotifications() async {
+  Future<void> getNotifications() async {
     emit(NotificationsLoadingstate());
     try {
       // Simulate a delay for loading top-rated products
@@ -59,6 +52,17 @@ class CustomerCubit extends Cubit<CustomerState> {
       ); // replace with actual data
     } catch (e) {
       emit(NotificationsFailedstate(errorMessage: e.toString()));
+    }
+  }
+
+  /* ------------------------------------------- */
+  Future<void> setDefaultAddress(AddressModel address) async {
+    try {
+      // TODO: Replace this local assignment with Firestore update.
+      customerData.address = address;
+      emit(GetCustomerdataSuccessedstate(customer: customerData));
+    } catch (e) {
+      emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
   }
 

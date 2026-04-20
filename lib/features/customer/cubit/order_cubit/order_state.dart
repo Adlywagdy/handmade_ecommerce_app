@@ -41,13 +41,13 @@ final class GetOrderDetailsFailedState extends OrderState {
 }
 
 /*------------------------------------------- */
-final class GenerateNewOrderLoadingState extends OrderState {}
+final class PlaceOrderLoadingState extends OrderState {}
 
-final class GenerateNewOrderSuccessState extends OrderState {}
+final class PlaceOrderSuccessState extends OrderState {}
 
-final class GenerateNewOrderFailedState extends OrderState {
+final class PlaceOrderFailedState extends OrderState {
   final String errorMessage;
-  GenerateNewOrderFailedState({required this.errorMessage});
+  PlaceOrderFailedState({required this.errorMessage});
 }
 
 /*------------------------------------------- */

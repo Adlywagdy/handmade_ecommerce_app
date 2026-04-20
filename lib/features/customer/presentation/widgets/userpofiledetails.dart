@@ -17,12 +17,12 @@ class UserProfileDetails extends StatelessWidget {
         CustomProfilePicture(customer: customer),
         SizedBox(height: 16.h),
         Text(
-          customer.name ?? "asdads",
+          customer.name,
           textAlign: TextAlign.center,
           style: AppTextStyles.t_24w700,
         ),
         Text(
-          customer.email!,
+          customer.email,
           textAlign: TextAlign.center,
           style: AppTextStyles.t_16w500.copyWith(color: subTitleColor),
         ),

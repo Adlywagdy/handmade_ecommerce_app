@@ -1,11 +1,10 @@
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
 import 'package:handmade_ecommerce_app/features/payment/paypal/paypal_models.dart';
 
 class PayPAlService {
-  void makePayPalpayment(
+  static void makePayPalpayment(
     BuildContext context,
     AmountPaymentModel amount,
     ItemListModel orderItems,
@@ -14,7 +13,8 @@ class PayPAlService {
       MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
           sandboxMode: true, //testingmode
-          clientId: "",
+          clientId:
+              "AeV7F4kmJMM5jGe7eEXzxwOm74Fd6Rbq6lmhqHH8dAZDwmlqhncdUKu2ALrfgnY3owDvnVkvJTlwSSjl",
           secretKey: "",
           transactions: [
             {

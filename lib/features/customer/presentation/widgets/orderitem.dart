@@ -42,7 +42,7 @@ class OrderItem extends StatelessWidget {
         title: Row(
           spacing: 8.w,
           children: [
-            Text('${order.orderid}', style: AppTextStyles.t_16w700),
+            Text(order.orderid, style: AppTextStyles.t_16w700),
             CustomTextContainer(
               text: order.status.toString().split('.').last.toUpperCase(),
 
@@ -69,11 +69,11 @@ class OrderItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${order.orderDate!.toLocal().toString().split(' ')[0]} • ${order.products.length} Items',
+              '${order.orderDate.toLocal().toString().split(' ')[0]} • ${order.products.length} Items',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
             Text(
-              '\$${order.payment!.totalPrice!.toStringAsFixed(2)}',
+              '\$${order.payment.totalPrice!.toStringAsFixed(2)}',
               style: AppTextStyles.t_14w600.copyWith(color: commonColor),
             ),
           ],

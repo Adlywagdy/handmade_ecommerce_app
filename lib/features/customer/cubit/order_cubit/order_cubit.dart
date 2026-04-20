@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
@@ -10,7 +12,7 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderModel> allordersList = [];
   List<OrderModel> filteredordersList = [];
   /*------------------------------------------- */
-  void getAllOrders() async {
+  Future<void> getAllOrders() async {
     emit(GetAllOrdersLoadingState());
     try {
       // Simulate a delay for loading orders
@@ -22,11 +24,11 @@ class OrderCubit extends Cubit<OrderState> {
     }
   } /*------------------------------------------- */
 
-  void getFilteredOrders({required OrderStatus status}) {
+  Future<void> getFilteredOrders({required OrderStatus status}) async {
     emit(GetFilteredOrdersLoadingState());
     try {
       // Simulate a delay for loading orders
-      Future.delayed(const Duration(seconds: 2), () {});
+      await Future.delayed(const Duration(seconds: 2), () {});
       filteredordersList = allordersList.where((order) {
         return order.status == status;
       }).toList();
@@ -37,7 +39,7 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
-  void getOrderDetails(String orderId) async {
+  Future<void> getOrderDetails(String orderId) async {
     emit(GetOrderDetailsLoadingState());
     try {
       // Simulate a delay for loading order details
@@ -50,22 +52,25 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
-  void generateNewOrder(OrderModel newOrder) async {
-    emit(GenerateNewOrderLoadingState());
+  Future<void> placeNewOrder(OrderModel newOrder, BuildContext context) async {
+    emit(PlaceOrderLoadingState());
     try {
       // Simulate a delay
       await Future.delayed(const Duration(seconds: 2), () {});
+      await BlocProvider.of<CartCubit>(
+        context,
+      ).makePayment(newOrder.payment, context);
       allordersList.add(
         newOrder,
       ); // Replace with actual logic to add order to orderslist in Firestore
-      emit(GenerateNewOrderSuccessState());
+      emit(PlaceOrderSuccessState());
     } catch (e) {
-      emit(GenerateNewOrderFailedState(errorMessage: e.toString()));
+      emit(PlaceOrderFailedState(errorMessage: e.toString()));
     }
   }
 
   /*------------------------------------------- */
-  void cancelOrder(String orderId) async {
+  Future<void> cancelOrder(String orderId) async {
     emit(CancelOrderLoadingState());
     try {
       // Simulate a delay

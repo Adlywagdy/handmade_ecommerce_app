@@ -20,7 +20,9 @@ class CustomProfilePicture extends StatelessWidget {
             child: CircleAvatar(
               radius: 75.r,
               backgroundColor: Colors.white,
-              backgroundImage: AssetImage(customer.image!),
+              backgroundImage: customer.image == null
+                  ? AssetImage("assets/images/splash.jpeg")
+                  : NetworkImage(customer.image!),
             ),
           ),
         ),
@@ -28,7 +30,7 @@ class CustomProfilePicture extends StatelessWidget {
           bottom: 0.h,
           right: 0.h,
           child: CircleAvatar(
-            radius: 22.r,
+            radius: 25.r,
             backgroundColor: Colors.white,
             child: CustomIconButton(
               backgroundColor: commonColor,

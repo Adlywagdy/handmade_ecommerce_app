@@ -94,6 +94,7 @@ class CartProductItem extends StatelessWidget {
                     ),
 
                     AmountContainerButton(
+                      product: product,
                       circularradius: 50.r,
                       verticalpadding: 4.h,
                       horizontalpadding: 8.w,
