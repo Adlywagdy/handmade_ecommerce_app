@@ -28,7 +28,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             },
             child: Text(
               'Skip',
-              style: AppTextStyles.black16w500.copyWith(color: subtitlesplash),
+              style: AppTextStyles.t_16w500.copyWith(color: subtitlesplash),
             ),
           ),
         ],
@@ -48,9 +48,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(
                 textAlign: TextAlign.center,
                 OnboardingTitleDescription.titles[count - 1],
-                style: AppTextStyles.black24w500.copyWith(
-                  color: subtitlesplash,
-                ),
+                style: AppTextStyles.t_24w500.copyWith(color: subtitlesplash),
               ),
             ),
             SizedBox(height: 10.h),
@@ -59,9 +57,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: Text(
                 textAlign: TextAlign.center,
                 OnboardingTitleDescription.subTitle[count - 1],
-                style: AppTextStyles.black16w500.copyWith(
-                  color: subtitlesplash,
-                ),
+                style: AppTextStyles.t_16w500.copyWith(color: subtitlesplash),
               ),
             ),
             Spacer(),
@@ -75,7 +71,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             CustomElevatedButton(
               buttoncolor: commonColor,
               onPressed: () {
-                if (count < 3) count++;
+                if (count < 3) {
+                  count++;
+                } else {
+                  Get.offAllNamed(AppRoutes.login);
+                }
                 setState(() {});
               },
               child: Row(
@@ -83,9 +83,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 children: [
                   Text(
                     count < 3 ? 'Next' : 'Get Started',
-                    style: AppTextStyles.black16w600.copyWith(
-                      color: Colors.white,
-                    ),
+                    style: AppTextStyles.t_16w600.copyWith(color: Colors.white),
                   ),
                   if (count < 3) Icon(Icons.navigate_next, color: Colors.white),
                 ],

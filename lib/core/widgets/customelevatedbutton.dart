@@ -5,15 +5,17 @@ class CustomElevatedButton extends StatelessWidget {
   final void Function()? onPressed;
 
   final Color? buttoncolor;
-
+  final Color? bordercolor;
   final Widget? child;
+  final double buttonheight;
   const CustomElevatedButton({
     super.key,
 
     required this.onPressed,
     required this.buttoncolor,
-
+    this.bordercolor,
     required this.child,
+    this.buttonheight = 50,
   });
 
   @override
@@ -21,10 +23,15 @@ class CustomElevatedButton extends StatelessWidget {
     return ElevatedButton(
       style: ButtonStyle(
         backgroundColor: WidgetStateProperty.all(buttoncolor),
-
-        fixedSize: WidgetStateProperty.all(Size(double.maxFinite, 50.h)),
+        elevation: WidgetStateProperty.all(0),
+        fixedSize: WidgetStateProperty.all(
+          Size(double.maxFinite, buttonheight.h),
+        ),
         shape: WidgetStateProperty.all<RoundedRectangleBorder>(
-          RoundedRectangleBorder(borderRadius: BorderRadius.circular(12.r)),
+          RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12).r,
+            side: BorderSide(color: bordercolor ?? buttoncolor!),
+          ),
         ),
       ),
 

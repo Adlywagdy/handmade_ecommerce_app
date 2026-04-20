@@ -5,26 +5,26 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 class CustomTextContainer extends StatelessWidget {
   const CustomTextContainer({
     super.key,
-    required this.buttontext,
+    required this.text,
     this.bordercolor = customerbackGroundColor,
-    this.fontSize = 14,
+
     this.backGroundColor = customerbackGroundColor,
-    this.textcolor = commonColor,
+
     this.verticalpadding = 0,
     this.horizontalpadding = 0,
     this.borderRadius = 10,
-    this.fontWeight = FontWeight.bold,
+    this.textstyle,
   });
 
   final double? verticalpadding;
   final double? horizontalpadding;
   final Color backGroundColor;
   final Color bordercolor;
-  final String buttontext;
-  final Color? textcolor;
-  final double? fontSize;
+  final String text;
+
   final double? borderRadius;
-  final FontWeight? fontWeight;
+
+  final TextStyle? textstyle;
 
   @override
   Widget build(BuildContext context) {
@@ -39,15 +39,7 @@ class CustomTextContainer extends StatelessWidget {
         border: Border.all(color: bordercolor, width: 1.5),
       ),
 
-      child: Text(
-        buttontext,
-        style: TextStyle(
-          color: textcolor,
-          fontSize: fontSize?.sp,
-          fontWeight: fontWeight,
-          fontFamily: 'Plus Jakarta Sans',
-        ),
-      ),
+      child: Text(text, style: textstyle, textAlign: TextAlign.center),
     );
   }
 }

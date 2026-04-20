@@ -1,41 +1,52 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class SearchField extends StatelessWidget {
   final Color? fillColor;
   final Color? iconColor;
-  final Color? hintColor;
+  final bool autofocus;
+  final bool readOnly;
   final Color? cursorColor;
   final String hintText;
-  final double? fontSize;
+  final String? initialValue;
+  final TextStyle? textstyle;
+  final void Function()? onTap;
+  final TextEditingController? controller;
+  final void Function(String)? onChanged;
   const SearchField({
     super.key,
     this.fillColor,
     required this.hintText,
     this.iconColor,
-    this.hintColor,
+    this.autofocus = false,
+
     this.cursorColor,
-    this.fontSize,
+    this.onTap,
+    this.onChanged,
+    this.textstyle,
+    this.readOnly = false,
+    this.initialValue,
+    this.controller,
   });
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
+      autofocus: autofocus,
+      initialValue: initialValue,
       onTapOutside: (event) {
         FocusScope.of(context).unfocus();
       },
+      focusNode: FocusNode(canRequestFocus: false),
+      readOnly: readOnly,
+      onTap: onTap,
+      onChanged: onChanged,
       autocorrect: true,
       cursorColor: cursorColor ?? commonColor,
       decoration: InputDecoration(
-        hint: Text(
-          hintText,
-          style: TextStyle(
-            color: hintColor ?? commonColor.withValues(alpha: .4),
-            fontSize: fontSize ?? 14,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w500,
-          ),
-        ),
+        hint: Text(hintText, style: textstyle),
         fillColor: fillColor ?? commonColor.withValues(alpha: .1),
         filled: true,
         prefixIcon: Icon(
@@ -45,7 +56,7 @@ class SearchField extends StatelessWidget {
 
         border: OutlineInputBorder(
           borderSide: .none,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(12).r,
         ),
       ),
     );

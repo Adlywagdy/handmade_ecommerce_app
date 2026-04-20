@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 
@@ -16,27 +17,15 @@ class CustomSellerListTile extends StatelessWidget {
       contentPadding: EdgeInsets.zero,
       title: Text(
         product.seller.name,
-        style: TextStyle(
-          color: blackDegree,
-          fontSize: 16.sp,
-          fontFamily: 'Plus Jakarta Sans',
-          fontWeight: FontWeight.w600,
-          height: 1,
-        ),
+        style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
       ),
       subtitle: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(Icons.verified_outlined, color: commonColor, size: 16.sp),
+          Icon(Icons.verified_outlined, color: commonColor, size: 16.r),
           Text(
             ' ${product.seller.badge} • ${product.seller.location}',
-            style: TextStyle(
-              color: const Color(0xFF64748B),
-              fontSize: 12.sp,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w500,
-              height: 1.33,
-            ),
+            style: AppTextStyles.t_12w500.copyWith(color: subTitleColor),
           ),
         ],
       ),
@@ -45,14 +34,15 @@ class CustomSellerListTile extends StatelessWidget {
         backgroundColor: commonColor.withValues(alpha: 0.10),
         child: SvgPicture.asset('assets/images/unknown_user_icon.svg'),
       ),
-      trailing: InkWell(
+      trailing: GestureDetector(
         onTap: () {
           // Handle view shop action
         },
         child: CustomTextContainer(
           verticalpadding: 8,
           horizontalpadding: 16,
-          buttontext: 'View Shop',
+          text: 'View Shop',
+          textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
           backGroundColor: commonColor.withValues(alpha: 0.10),
         ),
       ),
