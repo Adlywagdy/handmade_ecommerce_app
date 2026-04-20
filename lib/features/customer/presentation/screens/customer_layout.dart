@@ -31,7 +31,6 @@ class _CustomerLayoutState extends State<CustomerLayout> {
   void initState() {
     pages = [
       CustomerHomeScreen(),
-
       CustomerWishlistScreen(),
       CustomerCartScreen(),
       CustomerOrdersScreen(customerorderslist: ordersListdata),

@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 
 part 'customer_state.dart';
@@ -51,6 +52,17 @@ class CustomerCubit extends Cubit<CustomerState> {
       ); // replace with actual data
     } catch (e) {
       emit(NotificationsFailedstate(errorMessage: e.toString()));
+    }
+  }
+
+  /* ------------------------------------------- */
+  Future<void> setDefaultAddress(AddressModel address) async {
+    try {
+      // TODO: Replace this local assignment with Firestore update.
+      customerData.address = address;
+      emit(GetCustomerdataSuccessedstate(customer: customerData));
+    } catch (e) {
+      emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
   }
 

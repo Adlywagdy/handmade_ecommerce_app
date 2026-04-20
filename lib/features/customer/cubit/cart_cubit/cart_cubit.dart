@@ -6,7 +6,6 @@ import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dar
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/data/test_cartdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
@@ -138,16 +137,9 @@ class CartCubit extends Cubit<CartState> {
   /*------------------------------------------- */
   Future<void> getOrderaddress({
     required AddressModel address,
-    bool issetdefault = false,
-    required BuildContext context,
   }) async {
     emit(GetOrderaddressLoadingState());
     try {
-      if (issetdefault) {
-        BlocProvider.of<CustomerCubit>(context).customerData.address = address;
-      }
-      // Simulate a delay for loading featured products
-      await Future.delayed(const Duration(seconds: 2), () {});
       selectedOrderAddress = address;
       emit(GetOrderaddressSuccessState(orderAddress: selectedOrderAddress!));
     } catch (e) {
@@ -182,7 +174,7 @@ class CartCubit extends Cubit<CartState> {
               ),
             ),
             ItemListModel(
-              orderslist: BlocProvider.of<CartCubit>(context).cartProductsList
+              orderslist:cartProductsList
                   .map(
                     (e) => OrderItemModel(
                       name: e.name,

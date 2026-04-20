@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -27,6 +26,12 @@ class _AddressColumnState extends State<AddressColumn> {
             current is GetOrderaddressFailedState;
       },
       builder: (context, state) {
+        final cartCubit = BlocProvider.of<CartCubit>(context);
+        final customerCubit = BlocProvider.of<CustomerCubit>(context);
+        final displayAddress =
+            cartCubit.selectedOrderAddress ??
+            customerCubit.customerData.address;
+
         if (state is GetOrderaddressLoadingState) {
           return Padding(
             padding: const EdgeInsets.all(16.0).h,
@@ -45,13 +50,7 @@ class _AddressColumnState extends State<AddressColumn> {
           children: [
             CustomFeatureRow(
               title: 'Delivery Address',
-              buttontext:
-                  BlocProvider.of<CustomerCubit>(
-                        context,
-                      ).customerData.address !=
-                      null
-                  ? 'Change'
-                  : 'Add',
+              buttontext: displayAddress != null ? 'Change' : 'Add',
               onTap: () => _openAddressBottomSheet(context),
               buttontextstyle: AppTextStyles.t_16w600.copyWith(
                 color: commonColor,
@@ -89,17 +88,11 @@ class _AddressColumnState extends State<AddressColumn> {
                   ),
                 ),
                 title: Text(
-                  BlocProvider.of<CustomerCubit>(
-                        context,
-                      ).customerData.address?.addresstitle ??
-                      "Home",
+                  displayAddress?.addresstitle ?? "Home",
                   style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
                 ),
                 subtitle: Text(
-                  BlocProvider.of<CustomerCubit>(
-                        context,
-                      ).customerData.address?.addressdescription ??
-                      "No address added yet",
+                  displayAddress?.addressdescription ?? "No address added yet",
                   style: AppTextStyles.t_14w400.copyWith(
                     color: blackDegree.withValues(alpha: .7),
                   ),
@@ -114,15 +107,17 @@ class _AddressColumnState extends State<AddressColumn> {
 }
 
 void _openAddressBottomSheet(BuildContext context) {
+  final cartCubit = BlocProvider.of<CartCubit>(context);
+  final customerCubit = BlocProvider.of<CustomerCubit>(context);
   showModalBottomSheet(
     context: context,
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (_) {
       return _AddressInputBottomSheet(
-        initialAddress: BlocProvider.of<CustomerCubit>(
-          context,
-        ).customerData.address,
+        initialAddress:
+            cartCubit.selectedOrderAddress ??
+            customerCubit.customerData.address,
       );
     },
   );
@@ -144,6 +139,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
   late final TextEditingController _city;
   late final TextEditingController _country;
   late final TextEditingController _zip;
+  bool _setAsDefault = false;
 
   @override
   void initState() {
@@ -261,6 +257,86 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                     required: true,
                   ),
                   SizedBox(height: 20.h),
+                  GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        _setAsDefault = !_setAsDefault;
+                      });
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 14.w,
+                        vertical: 12.h,
+                      ),
+                      decoration: BoxDecoration(
+                        color: _setAsDefault
+                            ? commonColor.withValues(alpha: .10)
+                            : const Color(0xffF9F8F7),
+                        borderRadius: BorderRadius.circular(14.r),
+                        border: Border.all(
+                          color: _setAsDefault
+                              ? commonColor.withValues(alpha: .35)
+                              : commonColor.withValues(alpha: .10),
+                          width: 1.2,
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            width: 22.w,
+                            height: 22.w,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: _setAsDefault ? commonColor : Colors.white,
+                              border: Border.all(
+                                color: _setAsDefault
+                                    ? commonColor
+                                    : commonColor.withValues(alpha: .25),
+                                width: 1.4,
+                              ),
+                            ),
+                            child: Icon(
+                              Icons.check,
+                              size: 14.r,
+                              color: _setAsDefault
+                                  ? Colors.white
+                                  : Colors.transparent,
+                            ),
+                          ),
+                          SizedBox(width: 12.w),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Set as default address',
+                                  style: AppTextStyles.t_16w600.copyWith(
+                                    color: blackDegree,
+                                  ),
+                                ),
+                                SizedBox(height: 2.h),
+                                Text(
+                                  'Tap to use this address for future orders.',
+                                  style: AppTextStyles.t_12w400.copyWith(
+                                    color: blackDegree.withValues(alpha: .65),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Text(
+                            _setAsDefault ? 'On' : 'Off',
+                            style: AppTextStyles.t_12w700.copyWith(
+                              color: _setAsDefault
+                                  ? commonColor
+                                  : blackDegree.withValues(alpha: .45),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 14.h),
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
@@ -271,7 +347,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                           borderRadius: BorderRadius.circular(12.r),
                         ),
                       ),
-                      onPressed: () {
+                      onPressed: () async {
                         if (_formKey.currentState?.validate() != true) return;
                         final addressData = AddressModel(
                           addresstitle: _title.text.trim().isEmpty
@@ -286,12 +362,19 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                               : _country.text.trim(),
                           zipCode: int.tryParse(_zip.text.trim()) ?? 0,
                         );
-                        BlocProvider.of<CartCubit>(context).getOrderaddress(
-                          address: addressData,
-                          context: context,
-                          issetdefault: true,
-                        );
-                        Get.close(1);
+                        await BlocProvider.of<CartCubit>(
+                          context,
+                        ).getOrderaddress(address: addressData);
+
+                        if (_setAsDefault) {
+                          await BlocProvider.of<CustomerCubit>(
+                            context,
+                          ).setDefaultAddress(addressData);
+                        }
+
+                        if (context.mounted) {
+                          Navigator.of(context).pop();
+                        }
                       },
                       child: Text(
                         'Save Address',
