@@ -50,6 +50,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "825459601482-57loutd7bnt82t2edisut4hh1vr5rj08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.handmade_ecommerce_app",
+            "certificate_hash": "a885d3b68334c3313719471f2c32a8b9b18ea1d8"
+          }
+        },
+        {
           "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
           "client_type": 3
         }

@@ -10,7 +10,9 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/buttom_text.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_textfield.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/divider.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/register_toggle.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/social_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -161,7 +163,28 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                 ),
 
-                SizedBox(height: 30.h),
+                SizedBox(height: 20.h),
+
+                Row(
+                  children: [
+                    OrDivider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8).w,
+                      child: Text(
+                        'Or continue with',
+                        style: AppTextStyles.t_14w400.copyWith(color: darkblue),
+                      ),
+                    ),
+                    OrDivider(),
+                  ],
+                ),
+                SizedBox(height: 10.h),
+                Row(
+                  children: [
+                    SocialButton(text: 'Google', icon: Icons.g_mobiledata),
+                    SizedBox(width: 10.h),
+                  ],
+                ),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
