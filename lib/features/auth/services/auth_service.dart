@@ -8,12 +8,15 @@ class AuthService {
   bool _googleInitialized = false;
 
   Future<void> _initGoogleSignIn() async {
-    if (_googleInitialized) return;
+  if (_googleInitialized) return;
 
-    await _googleSignIn.initialize();
-    _googleInitialized = true;
-  }
+  await _googleSignIn.initialize(
+    serverClientId:
+        '825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com',
+  );
 
+  _googleInitialized = true;
+}
   Future<void> login({
     required String email,
     required String password,
