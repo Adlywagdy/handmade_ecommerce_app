@@ -10,6 +10,7 @@ import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_c
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addresscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cartproductitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/copounrow.dart';
@@ -198,7 +199,12 @@ class CustomerCartScreen extends StatelessWidget {
                   return SliverToBoxAdapter(
                     child: Column(
                       children: [
-                        OrderSummary(orderPaymentDetails: state.orderSummary!),
+                        OrderSummary(
+                          subtotalPrice: state.subtotalPrice,
+                          totalPrice: state.totalPrice,
+                          deliveryFee: state.deliveryFee,
+                          discount: state.discount,
+                        ),
                         SizedBox(height: 8.h),
                         CopounRow(),
                         SizedBox(height: 16.h),
@@ -258,71 +264,110 @@ class CheckoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(top: 20, bottom: 15).h,
-      child: CustomElevatedButton(
-        buttoncolor: commonColor,
-        onPressed: () async {
-          if (BlocProvider.of<CartCubit>(context).selectedOrderAddress ==
-              null) {
-            showSnack(
-              title: "Address required",
-              message: "Please add an address to proceed to checkout.",
-              bgColor: redDegree,
-            );
-          } else {
-            await BlocProvider.of<OrderCubit>(context).placeNewOrder(
-              OrderModel(
-                customer: BlocProvider.of<CustomerCubit>(context).customerData,
-                products: BlocProvider.of<CartCubit>(context).cartProductsList,
-                status: .pending,
-                address: BlocProvider.of<CartCubit>(
-                  context,
-                ).selectedOrderAddress!,
-                orderid: "1",
-                payment: BlocProvider.of<CartCubit>(
-                  context,
-                ).currentOrderSummary!,
-                orderDate: DateTime.now(),
-              ),
-              context,
-            );
-          }
-          print(
-            "${BlocProvider.of<CustomerCubit>(context).customerData}\n${BlocProvider.of<CartCubit>(context).cartProductsList}\n${BlocProvider.of<CartCubit>(context).selectedOrderAddress}\n${BlocProvider.of<CartCubit>(context).currentOrderSummary}\n${BlocProvider.of<CartCubit>(context).selectedPaymentMethod}",
-          );
-        },
-        child: BlocBuilder<OrderCubit, OrderState>(
-          buildWhen: (previous, current) {
-            return current is PlaceOrderSuccessState ||
-                current is PlaceOrderLoadingState ||
-                current is PlaceOrderFailedState;
-          },
-          builder: (context, state) {
-            if (state is PlaceOrderLoadingState) {
-              return CircularProgressIndicator(color: Colors.white);
-            } else if (state is PlaceOrderFailedState) {
-              return Text(
-                'Checkout Failed. Try Again.',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
-              );
-            } else if (state is PlaceOrderSuccessState) {
-              return Text(
-                'Checkout Successful!',
-                textAlign: TextAlign.center,
-                style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
-              );
-            }
+    return BlocConsumer<OrderCubit, OrderState>(
+      listenWhen: (previous, current) => current is PlaceOrderFailedState,
+      listener: (context, state) {
+        if (state is PlaceOrderFailedState) {
+          final error = state.errorMessage.toLowerCase();
+          final isCancelled =
+              error.contains('not completed') ||
+              error.contains('cancel') ||
+              error.contains('closed');
 
-            return Text(
-              'Proceed to Checkout',
-              textAlign: TextAlign.center,
-              style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
-            );
-          },
-        ),
-      ),
+          showSnack(
+            title: isCancelled ? "Payment cancelled" : "Checkout failed",
+            message: isCancelled
+                ? "Payment was cancelled. Complete payment to place the order."
+                : state.errorMessage,
+            bgColor: redDegree,
+            icon: Icons.error_outline,
+          );
+        }
+      },
+      buildWhen: (previous, current) {
+        return current is PlaceOrderSuccessState ||
+            current is PlaceOrderLoadingState ||
+            current is PlaceOrderFailedState;
+      },
+      builder: (context, state) {
+        final isLoading = state is PlaceOrderLoadingState;
+
+        return Padding(
+          padding: const EdgeInsets.only(top: 20, bottom: 15).h,
+          child: CustomElevatedButton(
+            buttoncolor: commonColor,
+            onPressed: isLoading
+                ? null
+                : () async {
+                    final cartCubit = context.read<CartCubit>();
+                    final orderCubit = context.read<OrderCubit>();
+                    final customerCubit = context.read<CustomerCubit>();
+
+                    if (cartCubit.selectedOrderAddress == null) {
+                      showSnack(
+                        title: "Address required",
+                        message:
+                            "Please add an address to proceed to checkout.",
+                        bgColor: redDegree,
+                      );
+                      return;
+                    }
+
+                    if (cartCubit.currentOrderSummary == null) {
+                      showSnack(
+                        title: "Payment details missing",
+                        message: "Please wait for order summary to load.",
+                        bgColor: redDegree,
+                      );
+                      return;
+                    }
+
+                    final orderPayment = PaymentDetailsModel.copywith(
+                      cartCubit.currentOrderSummary!,
+                      paymentMethod: cartCubit.selectedPaymentMethod,
+                    );
+
+                    await orderCubit.placeNewOrder(
+                      OrderModel(
+                        customer: customerCubit.customerData,
+                        products: cartCubit.cartProductsList,
+                        status: .pending,
+                        address: cartCubit.selectedOrderAddress!,
+                        orderid: "1",
+                        payment: orderPayment,
+                        orderDate: DateTime.now(),
+                      ),
+                      context,
+                    );
+                  },
+            child: Builder(
+              builder: (context) {
+                if (state is PlaceOrderLoadingState) {
+                  return CircularProgressIndicator(color: Colors.white);
+                } else if (state is PlaceOrderFailedState) {
+                  return Text(
+                    'Checkout Failed. Try Again.',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
+                  );
+                } else if (state is PlaceOrderSuccessState) {
+                  return Text(
+                    'Checkout Successful!',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
+                  );
+                }
+
+                return Text(
+                  'Proceed to Checkout',
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
+                );
+              },
+            ),
+          ),
+        );
+      },
     );
   }
 }

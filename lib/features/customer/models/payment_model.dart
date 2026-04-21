@@ -15,4 +15,19 @@ class PaymentDetailsModel {
     this.imagePath,
     this.currency = "USD",
   });
+
+  factory PaymentDetailsModel.copywith(
+    PaymentDetailsModel product, {
+    String? paymentMethod,
+  }) {
+    return PaymentDetailsModel(
+      paymentMethod: paymentMethod ?? product.paymentMethod,
+      subtotalPrice: product.subtotalPrice,
+      totalPrice: product.totalPrice,
+      deliveryFee: product.deliveryFee,
+      discount: product.discount,
+      imagePath: product.imagePath,
+      currency: product.currency,
+    );
+  }
 }

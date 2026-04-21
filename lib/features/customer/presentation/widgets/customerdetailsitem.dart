@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 
 class CustomerDetailsItem extends StatelessWidget {
   final Map<String, dynamic>? item;
-  const CustomerDetailsItem({super.key, this.item});
+  final VoidCallback? onTap;
+  const CustomerDetailsItem({super.key, this.item, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +15,7 @@ class CustomerDetailsItem extends StatelessWidget {
       elevation: 0,
 
       child: ListTile(
+        onTap: onTap,
         leading: Card(
           color: commonColor.withValues(alpha: .1),
           elevation: 0,
@@ -36,11 +37,10 @@ class CustomerDetailsItem extends StatelessWidget {
           item!['subtitle'],
           style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
         ),
-        trailing: CustomIconButton(
-          backgroundColor: Colors.white,
-          icon: Icons.arrow_forward_ios_outlined,
-          iconsize: 20.r,
-          iconcolor: subTitleColor.withValues(alpha: .6),
+        trailing: Icon(
+          Icons.arrow_forward_ios_outlined,
+          size: 16.r,
+          color: subTitleColor.withValues(alpha: .6),
         ),
       ),
     );

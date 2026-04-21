@@ -6,7 +6,6 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderstatusslider.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitemoforder.dart';
@@ -33,7 +32,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
           children: [
             Text(order.orderid, style: AppTextStyles.t_18w700),
             Text(
-              'Placed on ${order.orderDate}',
+              'Placed on ${order.orderDate.toLocal().toString().split(' ').first}',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
           ],
@@ -108,14 +107,13 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                       SizedBox(height: 4.h),
                       Text(order.customer.name, style: AppTextStyles.t_14w700),
                       Text(
-                        order.customer.address?.addressdescription ??
-                            "123 Main St, City, Country",
+                        order.customer.address?.addressdescription ?? '',
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
                       ),
                       Text(
-                        order.customer.address?.city ?? "Cairo, Egypt",
+                        order.customer.address?.city ?? '',
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
@@ -132,7 +130,12 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
               ),
             ),
             SliverToBoxAdapter(
-              child: OrderSummary(orderPaymentDetails: PaymentDetailsModel()),
+              child: OrderSummary(
+                subtotalPrice: order.payment.subtotalPrice,
+                totalPrice: order.payment.totalPrice,
+                deliveryFee: order.payment.deliveryFee,
+                discount: order.payment.discount,
+              ),
             ),
             SliverToBoxAdapter(
               child: CustomElevatedButton(

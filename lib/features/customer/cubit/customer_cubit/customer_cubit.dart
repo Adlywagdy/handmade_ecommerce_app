@@ -9,7 +9,7 @@ class CustomerCubit extends Cubit<CustomerState> {
   CustomerModel customerData = CustomerModel(
     name: "Adly",
     email: "adly.wagdy@ayady.com",
-    image: "assets/images/splash.jpeg",
+    image: "assets/images/unknown_user_icon.svg",
     password: "561651",
     phone: "0651616161681",
   ); /* ------------------------------------------- */
@@ -24,7 +24,7 @@ class CustomerCubit extends Cubit<CustomerState> {
       customerData = CustomerModel(
         name: "Adly",
         email: "adly.wagdy@ayady.com",
-        image: "assets/images/splash.jpeg",
+        image: "assets/images/unknown_user_icon.svg",
         password: "561651",
         phone: "0651616161681",
       );

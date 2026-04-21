@@ -1,7 +1,5 @@
 class Constants {
-
-  static const String apiKey =
-      "";
+  static const String apiKey = "";
 
   static const int integrationIdCard = 5612956;
   static const int integrationIdWallet = 5613099;

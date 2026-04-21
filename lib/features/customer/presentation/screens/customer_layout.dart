@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orders_screen.dart';
@@ -29,13 +29,19 @@ class _CustomerLayoutState extends State<CustomerLayout> {
   late final List<Widget> pages;
   @override
   void initState() {
+    final dynamic arg = Get.arguments;
+    if (arg is int) {
+      currentIndex = arg.clamp(0, 4);
+    }
+
     pages = [
       CustomerHomeScreen(),
       CustomerWishlistScreen(),
       CustomerCartScreen(),
-      CustomerOrdersScreen(customerorderslist: ordersListdata),
+      CustomerOrdersScreen(),
       CustomerProfilesScreen(
         customer: BlocProvider.of<CustomerCubit>(context).customerData,
+        onNavigateToTab: setTab,
       ),
     ];
     super.initState();

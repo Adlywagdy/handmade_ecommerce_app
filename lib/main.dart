@@ -74,7 +74,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (context) => WishListCubit()..getWishlistProducts(),
             ),
             BlocProvider(create: (context) => CartCubit()..getcartProducts()),
-            BlocProvider(create: (context) => OrderCubit()),
+            BlocProvider(create: (context) => OrderCubit()..getAllOrders()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

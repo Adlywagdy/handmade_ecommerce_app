@@ -25,7 +25,6 @@ class ProductItemOfOrder extends StatelessWidget {
         children: [
           Row(
             spacing: 16.w,
-
             children: [
               Expanded(
                 flex: 1,
