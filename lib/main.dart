@@ -17,14 +17,10 @@ import 'package:handmade_ecommerce_app/features/splash/presentation/screens/spla
 import 'package:handmade_ecommerce_app/firebase_options.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-
-Future<void> main() async {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  
- await Firebase.initializeApp(
-  options: DefaultFirebaseOptions.currentPlatform,
- );
- 
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
   await Hive.initFlutter();
   runApp(const HandcraftedEcommerceApp());
 }
@@ -41,7 +37,9 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (BuildContext context) => AuthCubit(AuthService())),
+            BlocProvider(
+              create: (BuildContext context) => AuthCubit(AuthService()),
+            ),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

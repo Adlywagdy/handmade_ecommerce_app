@@ -14,18 +14,17 @@ class SocialButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
+      child: GestureDetector(
         onTap: () {
-
-          final state =context.read<AuthCubit>().state;
-           if (state is! AuthLoading) {
+          final state = context.read<AuthCubit>().state;
+          if (state is! AuthLoading) {
             context.read<AuthCubit>().signInWithGoogle();
-             print("$text");
-               }
+            print("$text");
+          }
         },
         child: CircleAvatar(
           radius: 40.r,
-          backgroundColor:backGroundColor ,
+          backgroundColor: backGroundColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
