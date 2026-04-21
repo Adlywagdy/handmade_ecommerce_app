@@ -75,25 +75,33 @@ class ProductsModel {
 
   factory ProductsModel.fromJson(Map<String, dynamic> json, {String? id}) {
     return ProductsModel(
-      id: id ?? json['id'] ?? '',
-      name: json['name'] ?? '',
-      description: json['description'] ?? '',
+      id: id ?? json['id']?.toString() ?? '',
+      name: json['name']?.toString() ?? '',
+      description: json['description']?.toString() ?? '',
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
       discountedPrice: (json['discountedPrice'] as num?)?.toDouble(),
-      currency: json['currency'] ?? 'EGP',
-      images: (json['images'] as List?)?.whereType<String>().toList() ?? const [],
-      categoryId: json['categoryId'] ?? '',
-      sellerId: json['sellerId'] ?? '',
-      stock: json['stock'] ?? 0,
-      isActive: json['isActive'] ?? true,
-      status: json['status'] ?? 'pending',
+      currency: json['currency']?.toString() ?? 'EGP',
+      images: (json['images'] as List?)
+              ?.map((e) => e?.toString() ?? '')
+              .where((s) => s.isNotEmpty)
+              .toList() ??
+          const [],
+      categoryId: json['categoryId']?.toString() ?? '',
+      sellerId: json['sellerId']?.toString() ?? '',
+      stock: (json['stock'] as num?)?.toInt() ?? 0,
+      isActive: json['isActive'] is bool ? json['isActive'] as bool : true,
+      status: json['status']?.toString() ?? 'pending',
       rating: (json['rating'] as num?)?.toDouble() ?? 0.0,
-      reviewsCount: json['reviewsCount'] ?? 0,
-      salesCount: json['salesCount'] ?? 0,
-      tags: (json['tags'] as List?)?.whereType<String>().toList() ?? const [],
+      reviewsCount: (json['reviewsCount'] as num?)?.toInt() ?? 0,
+      salesCount: (json['salesCount'] as num?)?.toInt() ?? 0,
+      tags: (json['tags'] as List?)
+              ?.map((e) => e?.toString() ?? '')
+              .where((s) => s.isNotEmpty)
+              .toList() ??
+          const [],
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
-      vendorName: json['vendorName'],
+      vendorName: json['vendorName']?.toString(),
     );
   }
 }

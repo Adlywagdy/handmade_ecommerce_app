@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/products/widgets/product_card.dart';
+import 'package:get/get.dart';
+
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
+import '../../../cubit/admin_cubit.dart';
 import '../../../models/products_model.dart';
+import 'product_details_screen.dart';
+import 'widgets/product_card.dart';
 
 class ApproveProductsScreen extends StatelessWidget {
   const ApproveProductsScreen({super.key});
@@ -31,14 +36,11 @@ class ApproveProductsScreen extends StatelessWidget {
             unselectedLabelColor: subTitleColor,
             indicatorColor: commonColor,
             overlayColor: WidgetStateProperty.all(
-              Colors.grey.withValues(alpha: 0.15),
-            ),
+                Colors.grey.withValues(alpha: 0.15)),
             indicatorWeight: 3,
             labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
-            unselectedLabelStyle: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w500,
-            ),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
             tabs: const [
               Tab(text: 'Pending'),
               Tab(text: 'Approved'),
@@ -50,15 +52,34 @@ class ApproveProductsScreen extends StatelessWidget {
           children: [
             CustomSearchBar(
               hintText: 'Search products...',
-              onChanged: (value) {},
+              onChanged: (v) => context.read<AdminCubit>().setProductsQuery(v),
             ),
             Expanded(
-              child: TabBarView(
-                children: [
-                  ProductsGrid(products: _pendingProducts),
-                  ProductsGrid(products: _approvedProducts, showActions: false),
-                  ProductsGrid(products: _rejectedProducts, showActions: false),
-                ],
+              child: BlocBuilder<AdminCubit, AdminState>(
+                builder: (context, state) {
+                  final cubit = context.read<AdminCubit>();
+                  if (cubit.productsList.isEmpty && state is GetProductsLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (cubit.productsList.isEmpty && state is GetProductsError) {
+                    return Center(child: Text(state.error));
+                  }
+                  return TabBarView(
+                    children: [
+                      _ProductsGrid(
+                        products: cubit.productsByStatus('pending'),
+                      ),
+                      _ProductsGrid(
+                        products: cubit.productsByStatus('approved'),
+                        showActions: false,
+                      ),
+                      _ProductsGrid(
+                        products: cubit.productsByStatus('rejected'),
+                        showActions: false,
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -68,15 +89,11 @@ class ApproveProductsScreen extends StatelessWidget {
   }
 }
 
-class ProductsGrid extends StatelessWidget {
+class _ProductsGrid extends StatelessWidget {
   final List<ProductsModel> products;
   final bool showActions;
 
-  const ProductsGrid({
-    super.key,
-    required this.products,
-    this.showActions = true,
-  });
+  const _ProductsGrid({required this.products, this.showActions = true});
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +105,7 @@ class ProductsGrid extends StatelessWidget {
         ),
       );
     }
+    final cubit = context.read<AdminCubit>();
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -101,140 +119,17 @@ class ProductsGrid extends StatelessWidget {
         final product = products[index];
         return ProductCard(
           product: product,
+          vendorName: cubit.vendorNameFor(product),
           showActions: showActions,
-          onApprove: () {},
-          onReject: () {},
+          isProcessing: cubit.isProcessing(product.id),
+          onApprove: () => cubit.approveProduct(product.id),
+          onReject: () => cubit.rejectProduct(product.id),
+          onPreview: () => Get.to(() => BlocProvider.value(
+                value: cubit,
+                child: ProductDetailsScreen(productId: product.id),
+              )),
         );
       },
     );
   }
 }
-
-final _pendingProducts = [
-  const ProductsModel(
-    id: '3',
-    name: 'Silver Filigree Ring',
-    price: 850,
-    currency: 'EGP',
-    vendorName: 'Laila Jewelry',
-    images: [
-        'https://images.unsplash.com/photo-1605100804763-247f67b3557e?w=400'],
-    status: 'pending',
-  ),
-  const ProductsModel(
-    id: '4',
-    name: 'Genuine Leather Bag',
-    price: 1200,
-    currency: 'EGP',
-    vendorName: 'Omar Leather Goods',
-    images: [
-        'https://images.unsplash.com/photo-1548036328-c9fa89d128fa?w=400'],
-    status: 'pending',
-  ),
-  const ProductsModel(
-    id: '5',
-    name: 'Handwoven Wool Rug',
-    price: 2400,
-    currency: 'EGP',
-    vendorName: 'Sinai Weaves',
-    images: [
-        'https://images.unsplash.com/photo-1600166898405-da9535204843?w=400'],
-    status: 'pending',
-  ),
-  const ProductsModel(
-    id: '6',
-    name: 'Carved Wall Mirror',
-    price: 1150,
-    currency: 'EGP',
-    vendorName: 'Artisan Woodworks',
-    images: [
-        'https://images.unsplash.com/photo-1618220179428-22790b461013?w=400'],
-    status: 'pending',
-  ),
-  const ProductsModel(
-    id: '1',
-    name: 'Ceramic Turquoise Vase',
-    price: 450,
-    currency: 'EGP',
-    vendorName: 'Fatima Handcrafts',
-    images: [
-    'https://images.unsplash.com/photo-1612196808214-b7e239e5f6b7?w=400'],
-    status: 'pending',
-  ),
-  const ProductsModel(
-    id: '2',
-    name: 'Woven Wicker Basket',
-    price: 300,
-    currency: 'EGP',
-    vendorName: 'Ahmed Reed Works',
-    images: [
-    'https://images.unsplash.com/photo-1595351475754-8a9d45a97ea5?w=400'],
-    status: 'pending',
-  ),
-];
-
-final _approvedProducts = [
-  const ProductsModel(
-    id: '7',
-    name: 'Hand-painted Tajine',
-    price: 680,
-    currency: 'EGP',
-    vendorName: 'Nour Ceramics',
-    images: [
-        'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=400'],
-    status: 'approved',
-  ),
-  const ProductsModel(
-    id: '8',
-    name: 'Macramé Wall Hanging',
-    price: 520,
-    currency: 'EGP',
-    vendorName: 'Dina Fiber Arts',
-    images: [
-        'https://images.unsplash.com/photo-1622398925373-3f91b1e275f5?w=400'],
-    status: 'approved',
-  ),
-  const ProductsModel(
-    id: '9',
-    name: 'Copper Coffee Set',
-    price: 1800,
-    currency: 'EGP',
-    vendorName: 'Al-Qahira Metalworks',
-    images: [
-        'https://images.unsplash.com/photo-1514228742587-6b1558fcca3d?w=400'],
-    status: 'approved',
-  ),
-  const ProductsModel(
-    id: '10',
-    name: 'Embroidered Silk Scarf',
-    price: 390,
-    currency: 'EGP',
-    vendorName: 'Hana Textiles',
-    images: [
-        'https://images.unsplash.com/photo-1601924994987-69e26d50dc26?w=400'],
-    status: 'approved',
-  ),
-];
-
-final _rejectedProducts = [
-  const ProductsModel(
-    id: '11',
-    name: 'Plastic Souvenir Set',
-    price: 150,
-    currency: 'EGP',
-    vendorName: 'QuickMade Co.',
-    images: [
-        'https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=400'],
-    status: 'rejected',
-  ),
-  const ProductsModel(
-    id: '12',
-    name: 'Machine-print Carpet',
-    price: 900,
-    currency: 'EGP',
-    vendorName: 'Factory Floors',
-    images: [
-        'https://images.unsplash.com/photo-1575377222312-dd1a63a51638?w=400'],
-    status: 'rejected',
-  ),
-];

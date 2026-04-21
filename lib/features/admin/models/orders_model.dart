@@ -30,11 +30,11 @@ class OrderItemModel {
 
   factory OrderItemModel.fromJson(Map<String, dynamic> json) {
     return OrderItemModel(
-      productId: json['productId'] ?? '',
-      productName: json['productName'] ?? '',
-      sellerId: json['sellerId'],
+      productId: json['productId']?.toString() ?? '',
+      productName: json['productName']?.toString() ?? '',
+      sellerId: json['sellerId']?.toString(),
       price: (json['price'] as num?)?.toDouble() ?? 0.0,
-      quantity: json['quantity'] ?? 1,
+      quantity: (json['quantity'] as num?)?.toInt() ?? 1,
       subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
     );
   }
@@ -65,11 +65,11 @@ class ShippingAddressModel {
 
   factory ShippingAddressModel.fromJson(Map<String, dynamic> json) {
     return ShippingAddressModel(
-      street: json['street'] ?? '',
-      city: json['city'] ?? '',
-      governorate: json['governorate'] ?? '',
-      country: json['country'] ?? '',
-      zipCode: json['zipCode'] ?? '',
+      street: json['street']?.toString() ?? '',
+      city: json['city']?.toString() ?? '',
+      governorate: json['governorate']?.toString() ?? '',
+      country: json['country']?.toString() ?? '',
+      zipCode: json['zipCode']?.toString() ?? '',
     );
   }
 
@@ -160,10 +160,10 @@ class OrderModel {
   factory OrderModel.fromJson(Map<String, dynamic> json, {String? id}) {
     final rawItems = json['items'] as List<dynamic>? ?? [];
     return OrderModel(
-      id: id ?? json['id'] ?? '',
-      orderNumber: json['orderNumber'] ?? '',
-      customerId: json['customerId'] ?? '',
-      sellerId: json['sellerId'] ?? '',
+      id: id ?? json['id']?.toString() ?? '',
+      orderNumber: json['orderNumber']?.toString() ?? '',
+      customerId: json['customerId']?.toString() ?? '',
+      sellerId: json['sellerId']?.toString() ?? '',
       items: rawItems
           .whereType<Map<String, dynamic>>()
           .map(OrderItemModel.fromJson)
@@ -174,20 +174,20 @@ class OrderModel {
       commissionRate: (json['commissionRate'] as num?)?.toDouble() ?? 0.10,
       commission: (json['commission'] as num?)?.toDouble() ?? 0.0,
       sellerEarning: (json['sellerEarning'] as num?)?.toDouble() ?? 0.0,
-      currency: json['currency'] ?? 'EGP',
+      currency: json['currency']?.toString() ?? 'EGP',
       status: OrderStatus.values.firstWhere(
         (e) => e.name == json['status'],
         orElse: () => OrderStatus.pending,
       ),
-      paymentMethod: json['paymentMethod'] ?? 'cash_on_delivery',
-      paymentStatus: json['paymentStatus'] ?? 'pending',
+      paymentMethod: json['paymentMethod']?.toString() ?? 'cash_on_delivery',
+      paymentStatus: json['paymentStatus']?.toString() ?? 'pending',
       shippingAddress: json['shippingAddress'] is Map<String, dynamic>
           ? ShippingAddressModel.fromJson(json['shippingAddress'])
           : ShippingAddressModel.empty,
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
-      customerName: json['customerName'],
-      sellerName: json['sellerName'],
+      customerName: json['customerName']?.toString(),
+      sellerName: json['sellerName']?.toString(),
     );
   }
 

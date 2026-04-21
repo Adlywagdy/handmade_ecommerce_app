@@ -5,18 +5,21 @@ class ProductActionButton extends StatelessWidget {
   final String label;
   final Color color;
   final VoidCallback? onTap;
+  final bool isLoading;
 
   const ProductActionButton({
     super.key,
     required this.label,
     required this.color,
     this.onTap,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
+    final disabled = isLoading || onTap == null;
     return GestureDetector(
-      onTap: onTap,
+      onTap: disabled ? null : onTap,
       child: Container(
         padding: EdgeInsets.symmetric(vertical: 8.h),
         decoration: BoxDecoration(
@@ -24,15 +27,24 @@ class ProductActionButton extends StatelessWidget {
           borderRadius: BorderRadius.circular(6.r),
         ),
         alignment: Alignment.center,
-        child: Text(
-          label,
-          style: TextStyle(
-            fontSize: 11.sp,
-            fontWeight: FontWeight.w700,
-            color: Colors.white,
-            letterSpacing: 0.5,
-          ),
-        ),
+        child: isLoading
+            ? SizedBox(
+                width: 14.w,
+                height: 14.w,
+                child: const CircularProgressIndicator(
+                  strokeWidth: 2,
+                  valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                ),
+              )
+            : Text(
+                label,
+                style: TextStyle(
+                  fontSize: 11.sp,
+                  fontWeight: FontWeight.w700,
+                  color: Colors.white,
+                  letterSpacing: 0.5,
+                ),
+              ),
       ),
     );
   }

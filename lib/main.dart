@@ -57,7 +57,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.customerlayout, // AppRoutes.splash,
+            initialRoute: AppRoutes.adminBottomBar, // AppRoutes.splash,
             getPages: [
               // splash and onboarding
               GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),

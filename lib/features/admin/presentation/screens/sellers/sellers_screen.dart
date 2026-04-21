@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/sellers/widgets/seller_card_widget.dart';
+import 'package:get/get.dart';
+
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
+import '../../../cubit/admin_cubit.dart';
 import '../../../models/sellers_model.dart';
+import 'seller_details_screen.dart';
+import 'widgets/seller_card_widget.dart';
 
 class SellersScreen extends StatelessWidget {
   const SellersScreen({super.key});
@@ -30,13 +35,12 @@ class SellersScreen extends StatelessWidget {
             labelColor: commonColor,
             unselectedLabelColor: subTitleColor,
             indicatorColor: commonColor,
-            overlayColor: WidgetStateProperty.all(Colors.grey.withValues(alpha: 0.15)),
+            overlayColor:
+                WidgetStateProperty.all(Colors.grey.withValues(alpha: 0.15)),
             indicatorWeight: 3,
             labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
-            unselectedLabelStyle: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w500,
-            ),
+            unselectedLabelStyle:
+                TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
             tabs: const [
               Tab(text: 'Pending'),
               Tab(text: 'Approved'),
@@ -48,23 +52,34 @@ class SellersScreen extends StatelessWidget {
           children: [
             CustomSearchBar(
               hintText: 'Search sellers...',
-              onChanged: (value) {},
+              onChanged: (v) => context.read<AdminCubit>().setSellersQuery(v),
             ),
             Expanded(
-              child: TabBarView(
-                children: [
-                  SellersList(
-                    sellers: _sellers.where((s) => s.status == SellerStatus.pending).toList(),
-                  ),
-                  SellersList(
-                    sellers: _sellers.where((s) => s.status == SellerStatus.approved).toList(),
-                    showActions: false,
-                  ),
-                  SellersList(
-                    sellers: _sellers.where((s) => s.status == SellerStatus.rejected).toList(),
-                    showActions: false,
-                  ),
-                ],
+              child: BlocBuilder<AdminCubit, AdminState>(
+                builder: (context, state) {
+                  final cubit = context.read<AdminCubit>();
+                  if (cubit.sellersList.isEmpty && state is GetSellersLoading) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+                  if (cubit.sellersList.isEmpty && state is GetSellersError) {
+                    return Center(child: Text(state.error));
+                  }
+                  return TabBarView(
+                    children: [
+                      _SellersList(
+                        sellers: cubit.sellersByStatus(SellerStatus.pending),
+                      ),
+                      _SellersList(
+                        sellers: cubit.sellersByStatus(SellerStatus.approved),
+                        showActions: false,
+                      ),
+                      _SellersList(
+                        sellers: cubit.sellersByStatus(SellerStatus.rejected),
+                        showActions: false,
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
           ],
@@ -74,77 +89,40 @@ class SellersScreen extends StatelessWidget {
   }
 }
 
-class SellersList extends StatelessWidget {
+class _SellersList extends StatelessWidget {
   final List<SellerData> sellers;
   final bool showActions;
 
-  const SellersList({
-    super.key,
-    required this.sellers,
-    this.showActions = true,
-  });
+  const _SellersList({required this.sellers, this.showActions = true});
 
   @override
   Widget build(BuildContext context) {
+    if (sellers.isEmpty) {
+      return Center(
+        child: Text(
+          'No sellers found',
+          style: TextStyle(fontSize: 14.sp, color: subTitleColor),
+        ),
+      );
+    }
+    final cubit = context.read<AdminCubit>();
     return ListView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       itemCount: sellers.length,
       itemBuilder: (context, index) {
-        return SellerCard(seller: sellers[index], showActions: showActions);
+        final seller = sellers[index];
+        return SellerCard(
+          seller: seller,
+          showActions: showActions,
+          isProcessing: cubit.isProcessing(seller.id),
+          onApprove: () => cubit.approveSeller(seller.id),
+          onReject: () => cubit.rejectSeller(seller.id),
+          onPreview: () => Get.to(() => BlocProvider.value(
+                value: cubit,
+                child: SellerDetailsScreen(sellerId: seller.id),
+              )),
+        );
       },
     );
   }
 }
-
-final _sellers = [
-  SellerData(
-    id: '1',
-    name: 'Fatima Ahmed',
-    email: 'fatima.a@ayady.com',
-    specialty: 'Pottery & Ceramics Specialist',
-    submittedAt: DateTime(2023, 10, 12),
-    status: SellerStatus.pending,
-    badge: 'NEW',
-  ),
-  SellerData(
-    id: '44',
-    name: 'Youssef Mansour',
-    email: 'youssef.m@ayady.com',
-    specialty: 'Handwoven Carpets',
-    submittedAt: DateTime(2023, 10, 14),
-    status: SellerStatus.pending,
-    badge: 'URGENT',
-  ),
-  SellerData(
-    id: '6',
-    name: 'Layla Hassan',
-    email: 'layla.h@ayady.com',
-    specialty: 'Traditional Jewelry',
-    submittedAt: DateTime(2023, 10, 15),
-    status: SellerStatus.pending,
-  ),
-  SellerData(
-    id: '5',
-    name: 'Omar El-Sayed',
-    email: 'omar.e@ayady.com',
-    specialty: 'Leather Crafts',
-    submittedAt: DateTime(2023, 9, 20),
-    status: SellerStatus.approved,
-  ),
-  SellerData(
-    id: '4',
-    name: 'Nour Khalil',
-    email: 'nour.k@ayady.com',
-    specialty: 'Handmade Textiles',
-    submittedAt: DateTime(2023, 9, 18),
-    status: SellerStatus.approved,
-  ),
-  SellerData(
-    id: '22',
-    name: 'Ahmed Farid',
-    email: 'ahmed.f@ayady.com',
-    specialty: 'Mass-produced Goods',
-    submittedAt: DateTime(2023, 10, 10),
-    status: SellerStatus.rejected,
-  ),
-];
