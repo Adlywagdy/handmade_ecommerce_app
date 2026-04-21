@@ -1,0 +1,82 @@
+{
+  "project_info": {
+    "project_number": "825459601482",
+    "project_id": "ayady-b4737",
+    "storage_bucket": "ayady-b4737.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825459601482:android:063cfcd0d95596d417f6b3",
+        "android_client_info": {
+          "package_name": "com.example.handmade_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdPsObNEKqKDipyb4ji-xBnW_GjJ_jFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.handmadeEcommerceApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825459601482:android:fa70618ad2d0d04417f6b3",
+        "android_client_info": {
+          "package_name": "com.example.handmade_ecommerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdPsObNEKqKDipyb4ji-xBnW_GjJ_jFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.handmadeEcommerceApp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

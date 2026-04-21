@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -9,13 +10,21 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
+import 'package:handmade_ecommerce_app/firebase_options.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
-void main() async {
+
+Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+ await Firebase.initializeApp(
+  options: DefaultFirebaseOptions.currentPlatform,
+ );
+ 
   await Hive.initFlutter();
   runApp(const HandcraftedEcommerceApp());
 }
@@ -32,7 +41,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (BuildContext context) => AuthCubit()),
+            BlocProvider(create: (BuildContext context) => AuthCubit(AuthService())),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

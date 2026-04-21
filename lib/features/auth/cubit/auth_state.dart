@@ -4,11 +4,19 @@ abstract class AuthState {}
 
 final class AuthInitial extends AuthState {}
 
-final class LoadingSuccessState extends AuthState {}
+final class AuthLoading extends AuthState {}
 
-final class LoadingErrorState extends AuthState {
+final class LoginSuccessState extends AuthState {}
+
+final class LoginErrorState extends AuthState {
   final String message;
-  LoadingErrorState(this.message);
+  LoginErrorState(this.message);
+}
+final class GoogleLoginSuccessState extends AuthState {}
+
+final class GoogleLoginErrorState extends AuthState {
+  final String message;
+  GoogleLoginErrorState(this.message);
 }
 
 final class RegisterSuccessState extends AuthState {}
