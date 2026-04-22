@@ -26,7 +26,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
 
-  String _selectedRole = 'customer';
+  String? _selectedRole;
   bool _isChecked = false;
 
   @override
@@ -46,14 +46,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-  void _goToNextScreenByRole(String role) {
-    if (role == 'customer') {
-      Get.offAllNamed(AppRoutes.customerHome);
-    } else {
-      Get.offAllNamed(AppRoutes.seller);
-    }
+void _goToNextScreenByRole(String role) {
+  if (role == 'customer') {
+    Get.offAllNamed(AppRoutes.customerHome);
+  } else {
+    Get.offAllNamed(AppRoutes.seller);
   }
-
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -245,48 +244,56 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 30.h),
 
                 BlocConsumer<AuthCubit, AuthState>(
-                  listener: (context, state) {
-                    if (state is RegisterSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Account created successfully'),
-                        ),
-                      );
+                 listener: (context, state) {
+                  if (state is RegisterSuccessState) {
+                   ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                     content: Text('Account created successfully'),
+                  ),
+                    );
 
-                      _goToNextScreenByRole(state.role);
-                    } else if (state is RegisterErrorState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
-                    }
-                  },
+                    _goToNextScreenByRole(state.role);
+                 } else if (state is RegisterErrorState) {
+                 ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(state.message)),
+                  );
+                      }
+                    },                 
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 
                     return CustomElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              if (!_isChecked) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'You must agree to the terms first',
-                                    ),
-                                  ),
-                                );
-                                return;
-                              }
+                     onPressed: isLoading
+                    ? null
+                      : () {
+                      if (!_isChecked) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                         const SnackBar(
+                             content: Text('You must agree to the terms first'),
+                               ),
+                                 );
+                                 return;
+                           }
 
-                              if (_formKey.currentState!.validate()) {
-                                context.read<AuthCubit>().register(
-                                  fullName: _nameController.text.trim(),
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                  role: _selectedRole,
-                                );
-                              }
-                            },
+                      if (_selectedRole == null) {
+                       ScaffoldMessenger.of(context).showSnackBar(
+                         const SnackBar(
+                        content: Text('Please choose Customer or Seller first'),
+                        ),
+                           );
+                              return;
+                         }
+
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthCubit>().register(
+                         fullName: _nameController.text.trim(),
+                         email: _emailController.text.trim(),
+                         password: _passwordController.text,
+                         role: _selectedRole!,
+                           );
+                            }
+                             },
+                           
                       buttoncolor: primaryColor,
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
@@ -324,21 +331,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       text: 'Google',
                       icon: Icons.g_mobiledata,
                       onTap: () {
-                        if (!_isChecked) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'You must agree to the terms first',
-                              ),
-                            ),
-                          );
-                          return;
-                        }
+                        final state = context.read<AuthCubit>().state;
+                        if (state is AuthLoading) return;
 
-                        context.read<AuthCubit>().registerWithGoogle(
-                              selectedRole: _selectedRole,
-                            );
-                      },
+                       if (!_isChecked) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                           const SnackBar(
+                          content: Text('You must agree to the terms first'),
+                         ),
+                         );
+                            return;
+                          }
+
+                        if (_selectedRole == null) {
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             const SnackBar(
+                         content: Text('Please choose Customer or Seller first'),
+                        ),
+                         );
+                        return;
+                         }
+
+                          context.read<AuthCubit>().registerWithGoogle(
+                           selectedRole: _selectedRole!,
+                           );
+                         },
                     ),
                   ],
                 ),

@@ -47,12 +47,8 @@ class AuthService {
       final userCredential =
           await _firebaseAuth.signInWithCredential(credential);
 
-      print('GOOGLE LOGIN SUCCESS: ${userCredential.user?.email}');
       return userCredential;
     } on GoogleSignInException catch (e) {
-      print('GOOGLE SIGN IN ERROR CODE: ${e.code}');
-      print('GOOGLE SIGN IN ERROR DESC: ${e.description}');
-
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(
           code: 'google-sign-in-cancelled',

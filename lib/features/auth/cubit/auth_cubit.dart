@@ -21,14 +21,10 @@ class AuthCubit extends Cubit<AuthState> {
         password: password,
       );
 
-      print('LOGIN SUCCESS');
       emit(LoginSuccessState());
     } on FirebaseAuthException catch (e) {
-      print('FIREBASE CODE: ${e.code}');
-      print('FIREBASE MESSAGE: ${e.message}');
       emit(LoginErrorState(e.message ?? 'Login failed'));
     } catch (e) {
-      print('GENERAL ERROR: $e');
       emit(LoginErrorState('Something went wrong'));
     }
   }
@@ -40,9 +36,19 @@ class AuthCubit extends Cubit<AuthState> {
       await authService.signInWithGoogle();
       emit(GoogleLoginSuccessState());
     } on FirebaseAuthException catch (e) {
-      emit(GoogleLoginErrorState(e.message ?? 'Google sign in failed'));
+      if (e.code == 'network-request-failed') {
+        emit(
+          GoogleLoginErrorState(
+            'Please check your internet connection and try again',
+          ),
+        );
+      } else if (e.code == 'google-sign-in-cancelled') {
+        emit(GoogleLoginErrorState('Google sign-in was cancelled'));
+      } else {
+        emit(GoogleLoginErrorState(e.message ?? 'Google sign in failed'));
+      }
     } catch (e) {
-      emit(GoogleLoginErrorState(e.toString()));
+      emit(GoogleLoginErrorState('Something went wrong'));
     }
   }
 
@@ -68,6 +74,12 @@ class AuthCubit extends Cubit<AuthState> {
         emit(RegisterErrorState('Password is too weak'));
       } else if (e.code == 'email-already-in-use') {
         emit(RegisterErrorState('Email is already in use'));
+      } else if (e.code == 'network-request-failed') {
+        emit(
+          RegisterErrorState(
+            'Please check your internet connection and try again',
+          ),
+        );
       } else {
         emit(RegisterErrorState(e.message ?? 'Register failed'));
       }
@@ -88,7 +100,17 @@ class AuthCubit extends Cubit<AuthState> {
 
       emit(RegisterSuccessState(finalRole));
     } on FirebaseAuthException catch (e) {
-      emit(RegisterErrorState(e.message ?? 'Google register failed'));
+      if (e.code == 'network-request-failed') {
+        emit(
+          RegisterErrorState(
+            'Please check your internet connection and try again',
+          ),
+        );
+      } else if (e.code == 'google-sign-in-cancelled') {
+        emit(RegisterErrorState('Google sign-in was cancelled'));
+      } else {
+        emit(RegisterErrorState(e.message ?? 'Google register failed'));
+      }
     } catch (e) {
       emit(RegisterErrorState('Something went wrong'));
     }
