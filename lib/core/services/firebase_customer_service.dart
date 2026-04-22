@@ -38,11 +38,12 @@ class FirebaseCustomerService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      await _firestore.collection('customers').doc(user.uid).update({
+      await _firestore.collection('customers').doc(user.uid).set({
         'name': name,
         'phone': phone,
         if (image != null) 'image': image,
-      });
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       rethrow;
     }
@@ -54,9 +55,10 @@ class FirebaseCustomerService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      await _firestore.collection('customers').doc(user.uid).update({
+      await _firestore.collection('customers').doc(user.uid).set({
         'address': address.toMap(),
-      });
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       rethrow;
     }
@@ -98,7 +100,7 @@ class FirebaseCustomerService {
         'address': null,
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
-      });
+      }, SetOptions(merge: true));
     } catch (e) {
       rethrow;
     }

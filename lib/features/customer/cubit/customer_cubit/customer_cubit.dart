@@ -12,12 +12,12 @@ class CustomerCubit extends Cubit<CustomerState> {
 
   final FirebaseCustomerService _customerService;
   CustomerModel customerData = CustomerModel(
-    name: "Adly",
-    email: "adly.wagdy@ayady.com",
-    image: "assets/images/unknown_user_icon.svg",
-    password: "561651",
-    phone: "0651616161681",
-  ); /* ------------------------------------------- */
+    name: '',
+    email: '',
+    image: null,
+    password: '',
+    phone: '',
+  );
 
   Future<void> getCustomerdata() async {
     emit(GetCustomerdataLoadingstate());

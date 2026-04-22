@@ -5,6 +5,7 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderdetailsrow.dart';
 
 class OrderSummary extends StatelessWidget {
+  final String currency;
   final double? subtotalPrice;
   final double? totalPrice;
   final double? deliveryFee;
@@ -12,6 +13,7 @@ class OrderSummary extends StatelessWidget {
 
   const OrderSummary({
     super.key,
+    this.currency = 'EGP',
     required this.subtotalPrice,
     required this.totalPrice,
     required this.deliveryFee,
@@ -46,7 +48,7 @@ class OrderSummary extends StatelessWidget {
             titlestyle: AppTextStyles.t_14w400.copyWith(
               color: darkblue.withValues(alpha: .9),
             ),
-            value: '\$${subtotalPrice?.toStringAsFixed(2)}',
+            value: '$currency ${subtotalPrice?.toStringAsFixed(2) ?? '0.00'}',
           ),
           OrderDetailsRow(
             title: 'Delivery Fee',
@@ -54,7 +56,7 @@ class OrderSummary extends StatelessWidget {
             titlestyle: AppTextStyles.t_14w400.copyWith(
               color: darkblue.withValues(alpha: .9),
             ),
-            value: '\$${deliveryFee?.toStringAsFixed(2)}',
+            value: '$currency ${deliveryFee?.toStringAsFixed(2) ?? '0.00'}',
           ),
           OrderDetailsRow(
             title: 'Discount',
@@ -62,14 +64,14 @@ class OrderSummary extends StatelessWidget {
             titlestyle: AppTextStyles.t_14w400.copyWith(
               color: darkblue.withValues(alpha: .9),
             ),
-            value: '- \$${discount?.toStringAsFixed(2)}',
+            value: '- $currency ${discount?.toStringAsFixed(2) ?? '0.00'}',
           ),
           Divider(color: commonColor.withValues(alpha: .1)),
           OrderDetailsRow(
             title: 'Total Amount',
             titlestyle: AppTextStyles.t_18w700,
             valuestyle: AppTextStyles.t_20w700.copyWith(color: commonColor),
-            value: '\$${totalPrice?.toStringAsFixed(2)}',
+            value: '$currency ${totalPrice?.toStringAsFixed(2) ?? '0.00'}',
           ),
         ],
       ),

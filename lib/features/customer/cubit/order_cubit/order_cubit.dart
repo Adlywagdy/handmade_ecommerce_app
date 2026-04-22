@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/services/firebase_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
@@ -19,6 +20,7 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderModel> displayedordersList = [];
   OrderStatus? selectedStatus;
   String searchQuery = '';
+  int orderID = 10007;
   Timer? _searchDebounce;
 
   List<OrderModel> _applySearch(List<OrderModel> source, String query) {
@@ -114,6 +116,7 @@ class OrderCubit extends Cubit<OrderState> {
       await cartCubit.makePayment(newOrder.payment, context);
       await _orderService.placeOrder(newOrder);
       allordersList.add(newOrder);
+      showSnack(title: "Success", message: "Order placed successfully.");
       emit(PlaceOrderSuccessState());
       cartCubit.clearCart();
     } catch (e) {

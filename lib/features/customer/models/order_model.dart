@@ -25,11 +25,22 @@ class OrderModel {
   String get deliveryAddress => address.addressdescription;
   List<ProductModel> get items => products;
 
+  static Map<String, dynamic> _asStringKeyedMap(dynamic value) {
+    if (value is Map<String, dynamic>) {
+      return value;
+    }
+    if (value is Map) {
+      return value.map((key, val) => MapEntry(key.toString(), val));
+    }
+    return <String, dynamic>{};
+  }
+
   factory OrderModel.fromMap(Map<String, dynamic> map, {String? id}) {
     final productsData = map['products'] ?? map['items'];
     final products = productsData is List
         ? productsData
-              .whereType<Map<String, dynamic>>()
+              .map((item) => _asStringKeyedMap(item))
+              .where((item) => item.isNotEmpty)
               .map(ProductModel.fromMap)
               .toList()
         : <ProductModel>[];
@@ -49,6 +60,11 @@ class OrderModel {
           DateTime.tryParse(createdAt?.toString() ?? '') ?? DateTime.now();
     }
 
+    final addressMap = _asStringKeyedMap(
+      map['address'] ?? map['shippingAddress'],
+    );
+    final paymentMap = _asStringKeyedMap(map['payment']);
+
     return OrderModel(
       customer: CustomerModel.fromMap(
         map['customer'] is Map<String, dynamic>
@@ -66,15 +82,16 @@ class OrderModel {
           (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '')
               .toString(),
       orderDate: orderDate,
-      payment: map['payment'] is Map<String, dynamic>
-          ? PaymentDetailsModel.fromMap(map['payment'] as Map<String, dynamic>)
-          : PaymentDetailsModel.fromMap(map),
-      address:
-          (map['address'] ?? map['shippingAddress']) is Map<String, dynamic>
-          ? AddressModel.fromMap(
-              (map['address'] ?? map['shippingAddress'])
-                  as Map<String, dynamic>,
-            )
+      payment: PaymentDetailsModel.fromMap({
+        ...map,
+        ...paymentMap,
+        'subtotalPrice':
+            paymentMap['subtotalPrice'] ??
+            map['subtotalPrice'] ??
+            map['subtotal'],
+      }),
+      address: addressMap.isNotEmpty
+          ? AddressModel.fromMap(addressMap)
           : AddressModel(
               addressdescription: (map['deliveryAddress'] ?? '').toString(),
               zipCode: 0,
