@@ -45,14 +45,10 @@ dependencies:
   flutter_svg: ^2.2.4
   flutter_paypal_payment: ^1.0.8
   firebase_core: ^4.6.0
-<<<<<<< HEAD
   cloud_firestore: ^6.2.0
-
-=======
   share_plus: ^12.0.2
   image_picker: ^1.2.1
   webview_flutter: ^4.13.1
->>>>>>> main
 
 dev_dependencies:
   flutter_test:
