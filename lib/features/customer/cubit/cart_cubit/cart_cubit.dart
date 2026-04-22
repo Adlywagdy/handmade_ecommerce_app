@@ -5,12 +5,11 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_cart_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_cartdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/payment/paymob/constants.dart';
 import 'package:handmade_ecommerce_app/features/payment/paymob/payment_webview.dart';
 import 'package:handmade_ecommerce_app/features/payment/paymob/paymob_manager/paymob_manager.dart';
@@ -19,7 +18,11 @@ import 'package:handmade_ecommerce_app/features/payment/paypal/paypal_service.da
 part 'cart_state.dart';
 
 class CartCubit extends Cubit<CartState> {
-  CartCubit() : super(CartInitial());
+  CartCubit({FirebaseCartService? cartService})
+    : _cartService = cartService ?? FirebaseCartService(),
+      super(CartInitial());
+
+  final FirebaseCartService _cartService;
   List<ProductModel> cartProductsList = [];
   AddressModel? selectedOrderAddress;
   String selectedPaymentMethod = "Visa";
@@ -30,10 +33,7 @@ class CartCubit extends Cubit<CartState> {
   Future<void> getcartProducts() async {
     emit(GetcartLoadingstate());
     try {
-      // Simulate a delay for loading wishlist products
-      await Future.delayed(const Duration(seconds: 2), () {});
-      cartProductsList =
-          carttProductsdata; // Replace with actual data from Firestore
+      cartProductsList = await _cartService.getCartProducts();
       emit(GetcartSuccessedstate(cartproducts: cartProductsList));
       getOrderSummary(products: cartProductsList);
     } catch (e) {
@@ -45,21 +45,15 @@ class CartCubit extends Cubit<CartState> {
   Future<void> addCartProducts(ProductModel product) async {
     emit(AddcartproductLoadingstate());
     try {
-      // Simulate a delay for loading wishlist products
-      await Future.delayed(const Duration(seconds: 2), () {});
-      if (isItemExictedFun(
+      final alreadyExists = isItemExictedFun(
         productslist: cartProductsList,
         productID: product.id,
-      )) {
-        cartProductsList.firstWhere((item) => item.id == product.id).quantity =
-            cartProductsList
-                .firstWhere((item) => item.id == product.id)
-                .quantity +
-            1;
-      } else {
-        cartProductsList.add(
-          ProductModel.copywith(product),
-        ); // Replace with actual logic to add product to wishlist in Firestore
+      );
+
+      await _cartService.addToCart(product);
+      cartProductsList = await _cartService.getCartProducts();
+
+      if (!alreadyExists) {
         showSnack(
           title: "Success",
           message: "${product.name} has been added to your cart.",
@@ -79,24 +73,19 @@ class CartCubit extends Cubit<CartState> {
   Future<void> deleteCartProducts(ProductModel product) async {
     emit(DeletecartproductLoadingstate());
     try {
-      // Simulate a delay for loading wishlist products
-      await Future.delayed(const Duration(seconds: 2), () {});
       if (isItemExictedFun(
         productslist: cartProductsList,
         productID: product.id,
       )) {
-        cartProductsList.firstWhere((item) => item.id == product.id).quantity =
-            cartProductsList
-                .firstWhere((item) => item.id == product.id)
-                .quantity -
-            1;
-        if (cartProductsList
-                .firstWhere((item) => item.id == product.id)
-                .quantity ==
-            0) {
-          cartProductsList.remove(
-            cartProductsList.firstWhere((item) => item.id == product.id),
-          );
+        await _cartService.removeFromCart(product.id);
+        final previousLength = cartProductsList.length;
+        cartProductsList = await _cartService.getCartProducts();
+
+        if (cartProductsList.length < previousLength &&
+            !isItemExictedFun(
+              productslist: cartProductsList,
+              productID: product.id,
+            )) {
           showSnack(
             title: "Product Deleted",
             message: "${product.name} has been removed from your cart.",
@@ -287,6 +276,7 @@ class CartCubit extends Cubit<CartState> {
   }
 
   void clearCart() {
+    _cartService.clearCart();
     cartProductsList.clear();
     currentOrderSummary = null;
     selectedOrderAddress = null;

@@ -2,15 +2,18 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
-
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_orderslistdata.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 part 'order_state.dart';
 
 class OrderCubit extends Cubit<OrderState> {
-  OrderCubit() : super(OrderInitial());
+  OrderCubit({FirebaseOrderService? orderService})
+    : _orderService = orderService ?? FirebaseOrderService(),
+      super(OrderInitial());
+
+  final FirebaseOrderService _orderService;
   List<OrderModel> allordersList = [];
   List<OrderModel> filteredordersList = [];
   List<OrderModel> displayedordersList = [];
@@ -51,9 +54,7 @@ class OrderCubit extends Cubit<OrderState> {
     selectedStatus = null;
     emit(GetAllOrdersLoadingState());
     try {
-      // Simulate a delay for loading orders
-      await Future.delayed(const Duration(seconds: 2));
-      allordersList = ordersListdata; // Replace with actual data from Firestore
+      allordersList = await _orderService.getAllOrders();
       _syncDisplayedOrders(_applySearch(allordersList, searchQuery));
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {
@@ -65,9 +66,8 @@ class OrderCubit extends Cubit<OrderState> {
     selectedStatus = status;
     emit(GetFilteredOrdersLoadingState());
     try {
-      // Simulate a delay for loading orders
-      await Future.delayed(const Duration(seconds: 2), () {});
-      filteredordersList = _applySearch(_ordersForActiveTab(), searchQuery);
+      final fetchedOrders = await _orderService.getFilteredOrders(status);
+      filteredordersList = _applySearch(fetchedOrders, searchQuery);
       _syncDisplayedOrders(filteredordersList);
       emit(GetFilteredOrdersSuccessState(filteredorders: filteredordersList));
     } catch (e) {
@@ -99,9 +99,7 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> getOrderDetails(String orderId) async {
     emit(GetOrderDetailsLoadingState());
     try {
-      // Simulate a delay for loading order details
-      await Future.delayed(const Duration(seconds: 2));
-      // Replace with actual logic to fetch order details from Firestore
+      await _orderService.getOrderDetails(orderId);
       emit(GetOrderDetailsSuccessState());
     } catch (e) {
       emit(GetOrderDetailsFailedState(errorMessage: e.toString()));
@@ -114,6 +112,7 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       final cartCubit = context.read<CartCubit>();
       await cartCubit.makePayment(newOrder.payment, context);
+      await _orderService.placeOrder(newOrder);
       allordersList.add(newOrder);
       emit(PlaceOrderSuccessState());
       cartCubit.clearCart();
@@ -126,11 +125,10 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> cancelOrder(String orderId) async {
     emit(CancelOrderLoadingState());
     try {
-      // Simulate a delay
-      await Future.delayed(const Duration(seconds: 2), () {});
-      allordersList.removeWhere((order) => order.orderid == orderId);
-      filteredordersList.removeWhere((order) => order.orderid == orderId);
-      displayedordersList.removeWhere((order) => order.orderid == orderId);
+      await _orderService.cancelOrder(orderId);
+      allordersList = await _orderService.getAllOrders();
+      filteredordersList = _applySearch(_ordersForActiveTab(), searchQuery);
+      displayedordersList = _applySearch(_ordersForActiveTab(), searchQuery);
       emit(CancelOrderSuccessState());
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {

@@ -1,11 +1,16 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_customer_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 
 part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
-  CustomerCubit() : super(CustomerInitial());
+  CustomerCubit({FirebaseCustomerService? customerService})
+    : _customerService = customerService ?? FirebaseCustomerService(),
+      super(CustomerInitial());
+
+  final FirebaseCustomerService _customerService;
   CustomerModel customerData = CustomerModel(
     name: "Adly",
     email: "adly.wagdy@ayady.com",
@@ -17,17 +22,10 @@ class CustomerCubit extends Cubit<CustomerState> {
   Future<void> getCustomerdata() async {
     emit(GetCustomerdataLoadingstate());
     try {
-      // Simulate a delay for loading featured products
-      await Future.delayed(const Duration(seconds: 2), () {});
-
-      // should trigger to get customer data logic here
-      customerData = CustomerModel(
-        name: "Adly",
-        email: "adly.wagdy@ayady.com",
-        image: "assets/images/unknown_user_icon.svg",
-        password: "561651",
-        phone: "0651616161681",
-      );
+      final firebaseCustomer = await _customerService.getCustomerData();
+      if (firebaseCustomer != null) {
+        customerData = firebaseCustomer;
+      }
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
@@ -38,18 +36,8 @@ class CustomerCubit extends Cubit<CustomerState> {
   Future<void> getNotifications() async {
     emit(NotificationsLoadingstate());
     try {
-      // Simulate a delay for loading top-rated products
-      await Future.delayed(const Duration(seconds: 2), () {});
-
-      // should trigger get top-rated products logic here
-      List<String> notificationslist = [
-        "Your order #1234 has been shipped!",
-        "Your order #5678 has been delivered!",
-        "Your order #9012 has been cancelled.",
-      ]; // replace with actual data
-      emit(
-        NotificationsSuccessedstate(notifications: notificationslist),
-      ); // replace with actual data
+      final notificationslist = await _customerService.getNotifications();
+      emit(NotificationsSuccessedstate(notifications: notificationslist));
     } catch (e) {
       emit(NotificationsFailedstate(errorMessage: e.toString()));
     }
@@ -58,7 +46,7 @@ class CustomerCubit extends Cubit<CustomerState> {
   /* ------------------------------------------- */
   Future<void> setDefaultAddress(AddressModel address) async {
     try {
-      // TODO: Replace this local assignment with Firestore update.
+      await _customerService.setDefaultAddress(address);
       customerData.address = address;
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {

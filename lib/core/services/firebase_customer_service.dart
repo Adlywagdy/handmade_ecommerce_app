@@ -17,21 +17,12 @@ class FirebaseCustomerService {
 
       if (!doc.exists) return null;
 
-      return CustomerModel(
-        name: doc['name'] ?? '',
-        email: doc['email'] ?? user.email ?? '',
-        phone: doc['phone'] ?? '',
-        password: '', // Never retrieve password from Firestore
-        image: doc['image'],
-        address: doc['address'] != null
-            ? AddressModel(
-                street: doc['address']['street'] ?? '',
-                city: doc['address']['city'] ?? '',
-                postalCode: doc['address']['postalCode'] ?? '',
-                country: doc['address']['country'] ?? '',
-              )
-            : null,
-      );
+      final data = doc.data() ?? <String, dynamic>{};
+      return CustomerModel.fromMap({
+        ...data,
+        'email': data['email'] ?? user.email ?? '',
+        'password': '',
+      });
     } catch (e) {
       rethrow;
     }
@@ -64,12 +55,7 @@ class FirebaseCustomerService {
       if (user == null) throw Exception('User not authenticated');
 
       await _firestore.collection('customers').doc(user.uid).update({
-        'address': {
-          'street': address.street,
-          'city': address.city,
-          'postalCode': address.postalCode,
-          'country': address.country,
-        },
+        'address': address.toMap(),
       });
     } catch (e) {
       rethrow;

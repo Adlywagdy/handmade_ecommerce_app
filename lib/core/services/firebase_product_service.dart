@@ -38,19 +38,20 @@ class FirebaseProductService {
   /// Get all categories
   Future<List<CategoryModel>> getCategories() async {
     try {
-      final docs = await _firestore
-          .collection('categories')
-          .orderBy('name')
-          .get();
+      QuerySnapshot<Map<String, dynamic>> docs; // Initialize the docs variable
+
+      try {
+        docs = await _firestore
+            .collection('categories')
+            .where('isActive', isEqualTo: true)
+            .orderBy('sortOrder') // Change 'order' to 'sortOrder'
+            .get();
+      } catch (_) {
+        docs = await _firestore.collection('categories').orderBy('name').get();
+      }
 
       return docs.docs
-          .map(
-            (doc) => CategoryModel(
-              id: doc.id,
-              name: doc['name'] ?? '',
-              image: doc['image'],
-            ),
-          )
+          .map((doc) => CategoryModel.fromMap(doc.data(), id: doc.id))
           .toList();
     } catch (e) {
       rethrow;
@@ -125,17 +126,6 @@ class FirebaseProductService {
   /// Helper to convert Firestore document to ProductModel
   ProductModel _productFromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    return ProductModel(
-      id: doc.id,
-      name: data['name'] ?? '',
-      description: data['description'] ?? '',
-      price: (data['price'] ?? 0).toDouble(),
-      image: data['image'],
-      sellerId: data['sellerId'] ?? '',
-      rating: (data['rating'] ?? 0).toDouble(),
-      reviewsCount: data['reviewsCount'] ?? 0,
-      quantity: data['quantity'] ?? 0,
-      categoryId: data['categoryId'],
-    );
+    return ProductModel.fromMap(data, id: doc.id);
   }
 }

@@ -6,33 +6,53 @@ class FirebaseWishlistService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  DocumentReference<Map<String, dynamic>> _wishlistRootRef(String userId) {
+    return _firestore.collection('wishlists').doc(userId);
+  }
+
+  CollectionReference<Map<String, dynamic>> _wishlistItemsRef(String userId) {
+    // Exact path: /wishlists/{userId}/items/{productId}
+    return _wishlistRootRef(userId).collection('items');
+  }
+
+  Future<void> _ensureWishlistRootDoc(String userId) async {
+    await _wishlistRootRef(userId).set({
+      'userId': userId,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
   /// Get user's wishlist products
   Future<List<ProductModel>> getWishlistProducts() async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
 
-      final docs = await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('wishlist')
-          .get();
+      final wishlistItemsSnapshot = await _wishlistItemsRef(
+        user.uid,
+      ).orderBy('addedAt', descending: true).get();
+      if (wishlistItemsSnapshot.docs.isEmpty) return [];
 
-      return docs.docs.map((doc) {
-        final data = doc.data();
-        return ProductModel(
-          id: data['productId'] ?? '',
-          name: data['name'] ?? '',
-          description: data['description'] ?? '',
-          price: (data['price'] ?? 0).toDouble(),
-          image: data['image'],
-          sellerId: data['sellerId'] ?? '',
-          rating: (data['rating'] ?? 0).toDouble(),
-          reviewsCount: data['reviewsCount'] ?? 0,
-          quantity: data['quantity'] ?? 0,
-          categoryId: data['categoryId'],
-        );
-      }).toList();
+      final productIds = wishlistItemsSnapshot.docs
+          .map((doc) => (doc.data()['productId'] ?? doc.id).toString())
+          .where((id) => id.isNotEmpty)
+          .toSet()
+          .toList();
+
+      final products = <ProductModel>[];
+      for (final productId in productIds) {
+        final productDoc = await _firestore
+            .collection('products')
+            .doc(productId)
+            .get();
+        if (productDoc.exists && productDoc.data() != null) {
+          products.add(
+            ProductModel.fromMap(productDoc.data()!, id: productDoc.id),
+          );
+        }
+      }
+
+      return products;
     } catch (e) {
       rethrow;
     }
@@ -44,11 +64,9 @@ class FirebaseWishlistService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final wishlistRef = _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('wishlist')
-          .doc(product.id);
+      await _ensureWishlistRootDoc(user.uid);
+
+      final wishlistRef = _wishlistItemsRef(user.uid).doc(product.id);
 
       final doc = await wishlistRef.get();
 
@@ -59,18 +77,13 @@ class FirebaseWishlistService {
         // Add to wishlist
         await wishlistRef.set({
           'productId': product.id,
-          'name': product.name,
-          'price': product.price,
-          'image': product.image,
-          'description': product.description,
-          'sellerId': product.sellerId,
-          'rating': product.rating,
-          'reviewsCount': product.reviewsCount,
-          'categoryId': product.categoryId,
-          'quantity': product.quantity,
           'addedAt': FieldValue.serverTimestamp(),
         });
       }
+
+      await _wishlistRootRef(user.uid).set({
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       rethrow;
     }
@@ -82,12 +95,7 @@ class FirebaseWishlistService {
       final user = _auth.currentUser;
       if (user == null) return false;
 
-      final doc = await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('wishlist')
-          .doc(productId)
-          .get();
+      final doc = await _wishlistItemsRef(user.uid).doc(productId).get();
 
       return doc.exists;
     } catch (e) {
@@ -101,15 +109,15 @@ class FirebaseWishlistService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final docs = await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('wishlist')
-          .get();
+      final docs = await _wishlistItemsRef(user.uid).get();
 
       for (var doc in docs.docs) {
         await doc.reference.delete();
       }
+
+      await _wishlistRootRef(user.uid).set({
+        'updatedAt': FieldValue.serverTimestamp(),
+      }, SetOptions(merge: true));
     } catch (e) {
       rethrow;
     }

@@ -19,4 +19,27 @@ class CustomerModel {
     this.image = "assets/images/splash.jpeg",
     this.orderslist,
   });
+
+  factory CustomerModel.fromMap(Map<String, dynamic> map) {
+    return CustomerModel(
+      name: map['name']?.toString() ?? '',
+      email: map['email']?.toString() ?? '',
+      phone: map['phone']?.toString() ?? '',
+      password: map['password']?.toString() ?? '',
+      image: map['image']?.toString(),
+      address: map['address'] is Map<String, dynamic>
+          ? AddressModel.fromMap(map['address'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'image': image,
+      'address': address?.toMap(),
+    };
+  }
 }

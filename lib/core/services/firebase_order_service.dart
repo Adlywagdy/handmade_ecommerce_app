@@ -12,10 +12,22 @@ class FirebaseOrderService {
       final user = _auth.currentUser;
       if (user == null) return [];
 
-      final docs = await _firestore
+      final customerOrdersDocs = await _firestore
           .collection('customers')
           .doc(user.uid)
           .collection('orders')
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      if (customerOrdersDocs.docs.isNotEmpty) {
+        return customerOrdersDocs.docs
+            .map((doc) => _orderFromSnapshot(doc))
+            .toList();
+      }
+
+      final docs = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
           .orderBy('createdAt', descending: true)
           .get();
 
@@ -31,10 +43,23 @@ class FirebaseOrderService {
       final user = _auth.currentUser;
       if (user == null) return [];
 
-      final docs = await _firestore
+      final customerOrdersDocs = await _firestore
           .collection('customers')
           .doc(user.uid)
           .collection('orders')
+          .where('status', isEqualTo: _statusToString(status))
+          .orderBy('createdAt', descending: true)
+          .get();
+
+      if (customerOrdersDocs.docs.isNotEmpty) {
+        return customerOrdersDocs.docs
+            .map((doc) => _orderFromSnapshot(doc))
+            .toList();
+      }
+
+      final docs = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
           .where('status', isEqualTo: _statusToString(status))
           .orderBy('createdAt', descending: true)
           .get();
@@ -53,17 +78,27 @@ class FirebaseOrderService {
 
       final normalizedQuery = query.toLowerCase();
 
-      final docs = await _firestore
+      final customerOrdersDocs = await _firestore
           .collection('customers')
           .doc(user.uid)
           .collection('orders')
           .orderBy('createdAt', descending: true)
           .get();
 
+      final docs = customerOrdersDocs.docs.isNotEmpty
+          ? customerOrdersDocs
+          : await _firestore
+                .collection('orders')
+                .where('customerId', isEqualTo: user.uid)
+                .orderBy('createdAt', descending: true)
+                .get();
+
       return docs.docs
           .where((doc) {
             final data = doc.data();
-            final orderId = (data['orderId'] ?? '').toString().toLowerCase();
+            final orderId = (data['orderId'] ?? data['orderNumber'] ?? '')
+                .toString()
+                .toLowerCase();
             final customerName = (data['customerName'] ?? '')
                 .toString()
                 .toLowerCase();
@@ -92,16 +127,27 @@ class FirebaseOrderService {
       final user = _auth.currentUser;
       if (user == null) return null;
 
-      final doc = await _firestore
+      final customerDoc = await _firestore
           .collection('customers')
           .doc(user.uid)
           .collection('orders')
           .doc(orderId)
           .get();
 
-      if (!doc.exists) return null;
+      if (customerDoc.exists) {
+        return _orderFromSnapshot(customerDoc);
+      }
 
-      return _orderFromSnapshot(doc);
+      final docs = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderNumber', isEqualTo: orderId)
+          .limit(1)
+          .get();
+
+      if (docs.docs.isEmpty) return null;
+
+      return _orderFromSnapshot(docs.docs.first);
     } catch (e) {
       rethrow;
     }
@@ -118,16 +164,9 @@ class FirebaseOrderService {
           .doc(user.uid)
           .collection('orders')
           .add({
-            'orderId': order.orderid,
-            'customerName': order.customer.name,
-            'customerEmail': order.customer.email,
-            'customerPhone': order.customer.phone,
+            ...order.toMap(),
+            'customerId': user.uid,
             'status': _statusToString(order.status),
-            'totalAmount': order.totalAmount,
-            'deliveryAddress': order.deliveryAddress,
-            'paymentMethod': order.payment.paymentMethod,
-            'paymentStatus': 'completed',
-            'items': order.items.length,
             'createdAt': FieldValue.serverTimestamp(),
             'updatedAt': FieldValue.serverTimestamp(),
           });
@@ -161,45 +200,17 @@ class FirebaseOrderService {
   /// Helper to convert Firestore document to OrderModel
   OrderModel _orderFromSnapshot(DocumentSnapshot doc) {
     final data = doc.data() as Map<String, dynamic>;
-    final statusString = data['status'] as String?;
+    final createdAt = data['createdAt'];
 
-    OrderStatus status;
-    switch (statusString) {
-      case 'pending':
-        status = OrderStatus.pending;
-        break;
-      case 'confirmed':
-        status = OrderStatus.confirmed;
-        break;
-      case 'shipped':
-        status = OrderStatus.shipped;
-        break;
-      case 'delivered':
-        status = OrderStatus.delivered;
-        break;
-      case 'cancelled':
-        status = OrderStatus.cancelled;
-        break;
-      default:
-        status = OrderStatus.pending;
-    }
-
-    return OrderModel(
-      orderid: data['orderId'] ?? doc.id,
-      status: status,
-      totalAmount: (data['totalAmount'] ?? 0).toDouble(),
-      deliveryAddress: data['deliveryAddress'] ?? '',
-      items: [],
-      customer: CustomerData(
-        name: data['customerName'] ?? '',
-        email: data['customerEmail'] ?? '',
-        phone: data['customerPhone'] ?? '',
-      ),
-      payment: PaymentData(
-        paymentMethod: data['paymentMethod'] ?? 'Visa',
-        totalPrice: (data['totalAmount'] ?? 0).toDouble(),
-      ),
-    );
+    return OrderModel.fromMap({
+      ...data,
+      'orderId': data['orderId'] ?? data['orderNumber'] ?? doc.id,
+      'status': data['status'] ?? 'pending',
+      'orderDate': createdAt is Timestamp
+          ? createdAt.toDate().toIso8601String()
+          : data['orderDate']?.toString() ?? data['createdAt']?.toString(),
+      'updatedAt': DateTime.now().toIso8601String(),
+    }, id: doc.id);
   }
 
   String _statusToString(OrderStatus status) {
@@ -208,6 +219,8 @@ class FirebaseOrderService {
         return 'pending';
       case OrderStatus.confirmed:
         return 'confirmed';
+      case OrderStatus.preparing:
+        return 'preparing';
       case OrderStatus.shipped:
         return 'shipped';
       case OrderStatus.delivered:
@@ -216,20 +229,4 @@ class FirebaseOrderService {
         return 'cancelled';
     }
   }
-}
-
-// Helper classes for OrderModel compatibility
-class CustomerData {
-  final String name;
-  final String email;
-  final String phone;
-
-  CustomerData({required this.name, required this.email, required this.phone});
-}
-
-class PaymentData {
-  final String paymentMethod;
-  final double totalPrice;
-
-  PaymentData({required this.paymentMethod, required this.totalPrice});
 }
