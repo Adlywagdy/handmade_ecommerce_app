@@ -188,7 +188,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20.h),
                 Row(
                   children: [
-                    SocialButton(text: 'Google', icon: Icons.g_mobiledata),
+                    SocialButton(
+                        text: 'Google',
+                        icon: Icons.g_mobiledata,
+                        onTap: () {
+                        final state = context.read<AuthCubit>().state;
+                        if (state is! AuthLoading) {
+                          context.read<AuthCubit>().signInWithGoogle();
+                        }
+                       },
+                        ),
                     SizedBox(width: 10.h),
                   ],
                 ),

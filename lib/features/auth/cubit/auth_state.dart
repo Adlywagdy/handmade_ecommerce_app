@@ -12,6 +12,7 @@ final class LoginErrorState extends AuthState {
   final String message;
   LoginErrorState(this.message);
 }
+
 final class GoogleLoginSuccessState extends AuthState {}
 
 final class GoogleLoginErrorState extends AuthState {
@@ -19,16 +20,19 @@ final class GoogleLoginErrorState extends AuthState {
   GoogleLoginErrorState(this.message);
 }
 
-final class RegisterSuccessState extends AuthState {}
+final class RegisterSuccessState extends AuthState {
+  final String role;
+  RegisterSuccessState(this.role);
+}
 
 final class RegisterErrorState extends AuthState {
-  final String massege;
-  RegisterErrorState(this.massege);
+  final String message;
+  RegisterErrorState(this.message);
 }
 
 final class OtpSuccessState extends AuthState {}
 
-final class OtpErorrState extends AuthState {
-  final String massege;
-  OtpErorrState(this.massege);
+final class OtpErrorState extends AuthState {
+  final String message;
+  OtpErrorState(this.message);
 }
