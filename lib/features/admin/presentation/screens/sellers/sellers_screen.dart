@@ -7,8 +7,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/sellers_model.dart';
-import 'seller_details_screen.dart';
-import 'widgets/seller_card_widget.dart';
+import 'sellerdetails/seller_details_screen.dart';
+import 'widget/seller_card.dart';
 
 class SellersScreen extends StatelessWidget {
   const SellersScreen({super.key});
@@ -88,7 +88,7 @@ class SellersScreen extends StatelessWidget {
     );
   }
 }
-
+//////////////////////////////////////////////////////////////////
 class _SellersList extends StatelessWidget {
   final List<SellerData> sellers;
   final bool showActions;
@@ -117,10 +117,7 @@ class _SellersList extends StatelessWidget {
           isProcessing: cubit.isProcessing(seller.id),
           onApprove: () => cubit.approveSeller(seller.id),
           onReject: () => cubit.rejectSeller(seller.id),
-          onPreview: () => Get.to(() => BlocProvider.value(
-                value: cubit,
-                child: SellerDetailsScreen(sellerId: seller.id),
-              )),
+          onPreview: () => Get.to(() => BlocProvider.value(value: cubit, child: SellerDetailsScreen(sellerId: seller.id))),
         );
       },
     );

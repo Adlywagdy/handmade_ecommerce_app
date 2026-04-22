@@ -2,16 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/products_model.dart';
-import 'product_details_screen.dart';
-import 'widgets/product_card.dart';
+import 'productdetails/product_details_screen.dart';
+import 'widget/product_card.dart';
 
-class ApproveProductsScreen extends StatelessWidget {
-  const ApproveProductsScreen({super.key});
+class ProductsScreen extends StatelessWidget {
+  const ProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -36,11 +35,17 @@ class ApproveProductsScreen extends StatelessWidget {
             unselectedLabelColor: subTitleColor,
             indicatorColor: commonColor,
             overlayColor: WidgetStateProperty.all(
-                Colors.grey.withValues(alpha: 0.15)),
+              Colors.grey.withValues(alpha: 0.15),
+            ),
             indicatorWeight: 3,
-            labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
-            unselectedLabelStyle:
-                TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
+            labelStyle: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w700,
+            ),
+            unselectedLabelStyle: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w500,
+            ),
             tabs: const [
               Tab(text: 'Pending'),
               Tab(text: 'Approved'),
@@ -105,7 +110,9 @@ class _ProductsGrid extends StatelessWidget {
         ),
       );
     }
+
     final cubit = context.read<AdminCubit>();
+
     return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -124,10 +131,12 @@ class _ProductsGrid extends StatelessWidget {
           isProcessing: cubit.isProcessing(product.id),
           onApprove: () => cubit.approveProduct(product.id),
           onReject: () => cubit.rejectProduct(product.id),
-          onPreview: () => Get.to(() => BlocProvider.value(
-                value: cubit,
-                child: ProductDetailsScreen(productId: product.id),
-              )),
+          onPreview: () => Get.to(
+            () => BlocProvider.value(
+              value: cubit,
+              child: ProductDetailsScreen(productId: product.id),
+            ),
+          ),
         );
       },
     );

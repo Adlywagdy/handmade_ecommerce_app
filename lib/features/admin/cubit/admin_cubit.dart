@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import '../models/next_status_action.dart';
 import '../models/orders_model.dart';
 import '../models/products_model.dart';
 import '../models/sellers_model.dart';
@@ -46,16 +47,19 @@ class AdminCubit extends Cubit<AdminState> {
   }
 
   //////////////////////////// get sellers //////////////////////
+ 
   void getSellers() {
     if (sellersList.isEmpty) emit(GetSellersLoading());
     _sellersSub?.cancel();
     _sellersSub = _service.streamSellers().listen(
       (sellers) {
         sellersList = sellers;
-        sellersById = {for (final s in sellers) s.id: s};
+        for (var seller in sellers) {
+          sellersById[seller.id] = seller;
+        }
         emit(GetSellersSuccess());
       },
-      onError: (e) => emit(GetSellersError(e.toString())),
+      onError: (error) => emit(GetSellersError(error.toString())),
     );
   }
 
@@ -68,7 +72,7 @@ class AdminCubit extends Cubit<AdminState> {
         ordersList = orders;
         emit(GetOrdersSuccess());
       },
-      onError: (e) => emit(GetOrdersError(e.toString())),
+      onError: (error) => emit(GetOrdersError(error.toString())),
     );
   }
   //////////////////////////// get products //////////////////////
@@ -80,18 +84,18 @@ class AdminCubit extends Cubit<AdminState> {
         productsList = products;
         emit(GetProductsSuccess());
       },
-      onError: (e) => emit(GetProductsError(e.toString())),
+      onError: (error) => emit(GetProductsError(error.toString())),
     );
   }
 
   void getSettings() {
     _settingsSub?.cancel();
     _settingsSub = _service.streamSettings().listen(
-      (s) {
-        settings = s;
+      (settingsData) {
+        settings = settingsData;
         emit( GetSettingsSuccess());
       },
-      onError: (e) => emit(GetSettingsError(e.toString())),
+      onError: (error) => emit(GetSettingsError(error.toString())),
     );
   }
 
@@ -128,7 +132,7 @@ class AdminCubit extends Cubit<AdminState> {
 
   Future<void> updateOrderStatus(OrderModel order, OrderStatus next) async {
     if (_terminalOrderStatuses.contains(order.status) && next.index < order.status.index) {
-      emit(UpdateAdminFailure('Cannot roll back from ${order.status.name}'));
+      emit(UpdateSettingsFailure('Cannot roll back from ${order.status.name}'));
       return;
     }
     await _runUpdate(order.id, () => _service.updateOrderStatus(order.id, next));
@@ -136,27 +140,27 @@ class AdminCubit extends Cubit<AdminState> {
 
   Future<void> setCommissionRate(double rate) async {
     savingCommission = true;
-    emit(UpdateAdminLoading());
+    emit(UpdateSettingsLoading());
     try {
       await _service.setCommissionRate(rate);
       savingCommission = false;
-      emit(UpdateAdminSuccess());
+      emit(UpdateSettingsSuccess());
     } catch (e) {
       savingCommission = false;
-      emit(UpdateAdminError(e.toString()));
+      emit(UpdateSettingsError(e.toString()));
     }
   }
 
   Future<void> _runUpdate(String id, Future<void> Function() action) async {
     processingIds = {...processingIds, id};
-    emit(UpdateAdminLoading());
+    emit(UpdateSettingsLoading());
     try {
       await action();
       processingIds = {...processingIds}..remove(id);
-      emit(UpdateAdminSuccess());
+      emit(UpdateSettingsSuccess());
     } catch (e) {
       processingIds = {...processingIds}..remove(id);
-      emit(UpdateAdminError(e.toString()));
+      emit(UpdateSettingsError(e.toString()));
     }
   }
 
@@ -187,6 +191,7 @@ class AdminCubit extends Cubit<AdminState> {
     return 'Unknown vendor';
   }
 
+  // get specific seller
   SellerData? sellerById(String id) => sellersById[id];
 
   ProductsModel? productById(String id) {
@@ -203,12 +208,12 @@ class AdminCubit extends Cubit<AdminState> {
     return null;
   }
 
-  List<SellerData> sellersByStatus(SellerStatus status) => _applySellerSearch(sellersList).where((s) => s.status == status).toList();
+  List<SellerData> sellersByStatus(SellerStatus status) => _sellerSearch(sellersList).where((s) => s.status == status).toList();
 
-  List<SellerData> _applySellerSearch(List<SellerData> list) {
+  List<SellerData> _sellerSearch(List<SellerData> list) {
     if (sellersQuery.isEmpty) return list;
-    final q = sellersQuery.toLowerCase();
-    return list.where((s) => s.name.toLowerCase().contains(q) || s.email.toLowerCase().contains(q) || s.specialty.toLowerCase().contains(q)).toList();
+    final query = sellersQuery.toLowerCase();
+    return list.where((seller) => seller.name.toLowerCase().contains(query) || seller.email.toLowerCase().contains(query) || seller.specialty.toLowerCase().contains(query)).toList();
   }
 
   static const _activeOrderStatuses = {
@@ -223,13 +228,13 @@ class AdminCubit extends Cubit<AdminState> {
       case 0:
         return filtered;
       case 1:
-        return filtered.where((o) => o.status == OrderStatus.pending).toList();
+        return filtered.where((order) => order.status == OrderStatus.pending).toList();
       case 2:
-        return filtered.where((o) => _activeOrderStatuses.contains(o.status)).toList();
+        return filtered.where((order) => _activeOrderStatuses.contains(order.status)).toList();
       case 3:
-        return filtered.where((o) => o.status == OrderStatus.delivered).toList();
+        return filtered.where((order) => order.status == OrderStatus.delivered).toList();
       case 4:
-        return filtered.where((o) => o.status == OrderStatus.cancelled).toList();
+        return filtered.where((order) => order.status == OrderStatus.cancelled).toList();
       default:
         return filtered;
     }
@@ -238,10 +243,10 @@ class AdminCubit extends Cubit<AdminState> {
   List<OrderModel> _applyOrderSearch(List<OrderModel> list) {
     if (ordersQuery.isEmpty) return list;
     final q = ordersQuery.toLowerCase();
-    return list.where((o) {
-      final customer = o.customerName ?? '';
-      final seller = o.sellerName ?? '';
-      return o.displayId.toLowerCase().contains(q) || customer.toLowerCase().contains(q) || seller.toLowerCase().contains(q);
+    return list.where((order) {
+      final customer = order.customerName ?? '';
+      final seller = order.sellerName ?? '';
+      return order.displayId.toLowerCase().contains(q) || customer.toLowerCase().contains(q) || seller.toLowerCase().contains(q);
     }).toList();
   }
 
@@ -250,36 +255,37 @@ class AdminCubit extends Cubit<AdminState> {
   List<ProductsModel> _applyProductSearch(List<ProductsModel> list) {
     if (productsQuery.isEmpty) return list;
     final q = productsQuery.toLowerCase();
-    return list.where((p) {
-      final vendor = vendorNameFor(p).toLowerCase();
-      return p.name.toLowerCase().contains(q) || vendor.contains(q);
+    return list.where((product) {
+      final vendor = vendorNameFor(product).toLowerCase();
+      return product.name.toLowerCase().contains(q) || vendor.contains(q);
     }).toList();
   }
 
-  /// Allowed next-status transitions for a given order status.
-  /// Returns empty list for terminal statuses (delivered, cancelled).
-  List<(OrderStatus, String)> nextOrderActions(OrderStatus current) {
+  // Handle next-status transitions for order status.
+  List<NextStatusAction> nextOrderActions(OrderStatus current) {
     switch (current) {
       case OrderStatus.pending:
-        return [
-          (OrderStatus.confirmed, 'Confirm'),
-          (OrderStatus.cancelled, 'Cancel'),
+        return const [
+          NextStatusAction(status: OrderStatus.confirmed, label: 'Confirm'),
+          NextStatusAction(status: OrderStatus.cancelled, label: 'Cancel'),
         ];
       case OrderStatus.confirmed:
-        return [
-          (OrderStatus.preparing, 'Prepare'),
-          (OrderStatus.cancelled, 'Cancel'),
+        return const [
+          NextStatusAction(status: OrderStatus.preparing, label: 'Prepare'),
+          NextStatusAction(status: OrderStatus.cancelled, label: 'Cancel'),
         ];
       case OrderStatus.preparing:
-        return [
-          (OrderStatus.shipped, 'Ship'),
-          (OrderStatus.cancelled, 'Cancel'),
+        return const [
+          NextStatusAction(status: OrderStatus.shipped, label: 'Ship'),
+          NextStatusAction(status: OrderStatus.cancelled, label: 'Cancel'),
         ];
       case OrderStatus.shipped:
-        return [(OrderStatus.delivered, 'Deliver')];
+        return const [
+          NextStatusAction(status: OrderStatus.delivered, label: 'Deliver'),
+        ];
       case OrderStatus.delivered:
       case OrderStatus.cancelled:
-        return [];
+        return const [];
     }
   }
 

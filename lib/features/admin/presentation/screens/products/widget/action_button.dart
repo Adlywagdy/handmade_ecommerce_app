@@ -17,7 +17,7 @@ class ProductActionButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final disabled = isLoading || onTap == null;
+    final bool disabled = isLoading || onTap == null;
     return GestureDetector(
       onTap: disabled ? null : onTap,
       child: Container(

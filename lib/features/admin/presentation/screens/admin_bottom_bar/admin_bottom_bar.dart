@@ -6,7 +6,7 @@ import '../../../cubit/admin_cubit.dart';
 import '../../../services/admin_service.dart';
 import '../dashboard/dashboard_screen.dart';
 import '../orders_screen/orders_screen.dart';
-import '../products/approve_products.dart';
+import '../products/products_screen.dart';
 import '../sellers/sellers_screen.dart';
 import '../settings/settings_screen.dart';
 
@@ -37,7 +37,7 @@ class AdminBottomBarScreen extends StatelessWidget {
           BottomNavItem(
             iconPath: 'assets/images/products.svg',
             label: 'Products',
-            page: ApproveProductsScreen(),
+            page: ProductsScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/settings.svg',

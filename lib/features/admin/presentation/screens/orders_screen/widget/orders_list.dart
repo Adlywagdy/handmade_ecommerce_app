@@ -5,7 +5,7 @@ import 'package:get/get.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../cubit/admin_cubit.dart';
 import '../../../../models/orders_model.dart';
-import '../order_details_screen.dart';
+import '../orderdetails/order_details_screen.dart';
 import 'order_card.dart';
 
 class OrdersList extends StatelessWidget {

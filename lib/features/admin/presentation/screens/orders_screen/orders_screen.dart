@@ -63,10 +63,7 @@ class OrdersScreen extends StatelessWidget {
                     return Center(child: Text(state.error));
                   }
                   return TabBarView(
-                    children: List.generate(
-                      5,
-                      (tab) => OrdersList(orders: cubit.ordersByTab(tab)),
-                    ),
+                    children: List.generate(5, (tab) => OrdersList(orders: cubit.ordersByTab(tab))),
                   );
                 },
               ),

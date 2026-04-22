@@ -22,7 +22,7 @@ class AdminStats {
 class AdminFirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
 
-  // ── Reads (streams) ────────────────────────────────────────────────────────
+  ///////////////////// Reads (streams) /////////////////////
   Stream<List<OrderModel>> streamOrders() => _db.collection('orders').orderBy('createdAt', descending: true).snapshots().map((s) => s.docs.map((d) => OrderModel.fromJson(d.data(), id: d.id)).toList());
 
   Stream<List<ProductsModel>> streamProducts() => _db.collection('products').orderBy('createdAt', descending: true).snapshots().map((s) => s.docs.map((d) => ProductsModel.fromJson(d.data(), id: d.id)).toList());
@@ -31,7 +31,7 @@ class AdminFirestoreService {
 
   Stream<SettingsModel> streamSettings() => _db.doc('settings/platform').snapshots().map((d) => SettingsModel.fromJson(d.data() ?? {}));
 
-  // ── Writes ─────────────────────────────────────────────────────────────────
+  /////////////////////// Writes /////////////////////
   Future<void> approveSeller(String id) =>_db.collection('sellers').doc(id).update({
         'status': 'approved',
         'isActive': true,
@@ -65,7 +65,7 @@ class AdminFirestoreService {
       },
        SetOptions(merge: true));
 
-  // ── Aggregations (dashboard stats) ─────────────────────────────────────────
+  /////////////////////// Aggregations (dashboard stats) /////////////////////
   Future<AdminStats> fetchStats() async {
     final usersCount = await _db.collection('users').count().get();
     final sellersCount = await _db  .collection('sellers').where('status', isEqualTo: 'approved').count().get();

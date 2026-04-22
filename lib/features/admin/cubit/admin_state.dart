@@ -82,16 +82,16 @@ class GetDashboardDataError extends AdminState {
 
 
 // ── Update states ───────────────────────────────────────
-class UpdateAdminLoading extends AdminState {}
+class UpdateSettingsLoading extends AdminState {}
 
-class UpdateAdminSuccess extends AdminState {}
+class UpdateSettingsSuccess extends AdminState {}
 
-class UpdateAdminFailure extends AdminState {
+class UpdateSettingsFailure extends AdminState {
   final String error;
-  UpdateAdminFailure(this.error);
+  UpdateSettingsFailure(this.error);
 }
 
-class UpdateAdminError extends AdminState {
+class UpdateSettingsError extends AdminState {
   final String error;
-  UpdateAdminError(this.error);
+  UpdateSettingsError(this.error);
 }

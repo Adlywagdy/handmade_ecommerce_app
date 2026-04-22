@@ -40,7 +40,7 @@ class OrderCard extends StatelessWidget {
   }
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+//////////////////////////////  Helpers ////////////////////////////
 IconData _iconForStatus(OrderStatus status) {
   switch (status) {
     case OrderStatus.pending:
@@ -92,7 +92,7 @@ Color _bgColorForStatus(OrderStatus status) {
   }
 }
 
-// ── Status icon on the left ───────────────────────────────────────────────────
+//////////////////////////// Status icon on the left ////////////////////////////
 class _StatusIcon extends StatelessWidget {
   final OrderStatus status;
 
@@ -112,10 +112,9 @@ class _StatusIcon extends StatelessWidget {
   }
 }
 
-// ── Middle info section ───────────────────────────────────────────────────────
+////////////////////////////// Middle info section ////////////////////////////
 class _OrderInfo extends StatelessWidget {
   final OrderModel order;
-
   const _OrderInfo({required this.order});
 
   @override
@@ -123,31 +122,32 @@ class _OrderInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Order ID + badge
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              order.displayId,
-              style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
-                color: Colors.black87,
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  order.displayId,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                  ),
+                ),
               ),
             ),
+            SizedBox(width: 8.w),
             OrderStatusBadge(status: order.status),
           ],
         ),
         SizedBox(height: 4.h),
-
-        // Date • Customer
         Text(
           '${order.date} • ${order.customerName ?? ''}',
           style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500),
         ),
         SizedBox(height: 6.h),
-
-        // Price + Seller
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
