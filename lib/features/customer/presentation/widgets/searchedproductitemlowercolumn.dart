@@ -29,7 +29,7 @@ class SearchedProductItemLowerColumn extends StatelessWidget {
           children: [
             RatingRow(product: product, iconsize: 15),
             Text(
-              ' (${product.quantity ?? '0'})',
+              ' (${product.quantity})',
               style: AppTextStyles.t_10w400.copyWith(color: darkbrownColor),
             ),
           ],

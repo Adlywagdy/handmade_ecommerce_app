@@ -22,7 +22,7 @@ class UserProfileDetails extends StatelessWidget {
           style: AppTextStyles.t_24w700,
         ),
         Text(
-          customer.email!,
+          customer.email,
           textAlign: TextAlign.center,
           style: AppTextStyles.t_16w500.copyWith(color: subTitleColor),
         ),

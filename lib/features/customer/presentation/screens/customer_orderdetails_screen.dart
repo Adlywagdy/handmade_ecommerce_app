@@ -6,6 +6,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderstatusslider.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitemoforder.dart';
@@ -30,7 +31,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(order.orderid!, style: AppTextStyles.t_18w700),
+            Text(order.orderid, style: AppTextStyles.t_18w700),
             Text(
               'Placed on ${order.orderDate}',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
@@ -53,9 +54,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0).h,
-                    child: OrderStatusSlider(
-                      orderstatus: order.status ?? OrderStatus.preparing,
-                    ),
+                    child: OrderStatusSlider(orderstatus: order.status),
                   ),
                   Text(
                     'ORDER ITEMS (${order.products.length})',
@@ -122,7 +121,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        order.customer.phone ?? "+20 123 456 7890",
+                        order.customer.phone,
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
@@ -132,7 +131,9 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: OrderSummary(order: order)),
+            SliverToBoxAdapter(
+              child: OrderSummary(orderPaymentDetails: PaymentDetailsModel()),
+            ),
             SliverToBoxAdapter(
               child: CustomElevatedButton(
                 onPressed: () {},

@@ -5,10 +5,12 @@ class CategoryModel {
   final String? categoryiconpath;
   final String? categoryexample;
   final List<ProductModel>? categoryproducts;
+  final List<CategoryModel>? subcategories;
   const CategoryModel({
     required this.categorytitle,
     this.categoryiconpath,
     this.categoryexample,
     this.categoryproducts,
+    this.subcategories,
   });
 }

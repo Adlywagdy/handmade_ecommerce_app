@@ -1,10 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/amountcontainerbutton.dart';
 
 class CartProductItem extends StatelessWidget {
@@ -68,6 +70,11 @@ class CartProductItem extends StatelessWidget {
                         icon: CupertinoIcons.delete,
                         iconcolor: subTitleColor,
                         iconsize: 20.r,
+                        onPressed: () {
+                          BlocProvider.of<CartCubit>(
+                            context,
+                          ).deleteCartProducts(product);
+                        },
                       ),
                     ),
                   ],
@@ -87,6 +94,7 @@ class CartProductItem extends StatelessWidget {
                     ),
 
                     AmountContainerButton(
+                      product: product,
                       circularradius: 50.r,
                       verticalpadding: 4.h,
                       horizontalpadding: 8.w,

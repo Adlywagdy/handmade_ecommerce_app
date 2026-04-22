@@ -20,7 +20,7 @@ class OrderItem extends StatelessWidget {
           vertical: 12.0.h,
         ),
         leading: Card(
-          color: _getStatusColor(order.status!).withValues(alpha: .1),
+          color: _getStatusColor(order.status).withValues(alpha: .1),
           elevation: 0,
           shape: ContinuousRectangleBorder(
             borderRadius: BorderRadiusGeometry.circular(24.r),
@@ -33,8 +33,8 @@ class OrderItem extends StatelessWidget {
               top: 12.h,
             ),
             child: Icon(
-              getStatusIcon(order.status!),
-              color: _getStatusColor(order.status!),
+              getStatusIcon(order.status),
+              color: _getStatusColor(order.status),
               size: 26.r,
             ),
           ),
@@ -42,17 +42,17 @@ class OrderItem extends StatelessWidget {
         title: Row(
           spacing: 8.w,
           children: [
-            Text('${order.orderid}', style: AppTextStyles.t_16w700),
+            Text(order.orderid, style: AppTextStyles.t_16w700),
             CustomTextContainer(
               text: order.status.toString().split('.').last.toUpperCase(),
 
               horizontalpadding: 8.w,
               verticalpadding: 2.h,
               textstyle: AppTextStyles.t_12w400.copyWith(
-                color: _getStatusColor(order.status!),
+                color: _getStatusColor(order.status),
               ),
               backGroundColor: _getStatusColor(
-                order.status!,
+                order.status,
               ).withValues(alpha: .1),
               borderRadius: 200.r,
             ),
@@ -69,11 +69,11 @@ class OrderItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${order.orderDate!.toLocal().toString().split(' ')[0]} • ${order.products.length} Items',
+              '${order.orderDate.toLocal().toString().split(' ')[0]} • ${order.products.length} Items',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
             Text(
-              '\$${order.payment!.totalPrice!.toStringAsFixed(2)}',
+              '\$${order.payment.totalPrice!.toStringAsFixed(2)}',
               style: AppTextStyles.t_14w600.copyWith(color: commonColor),
             ),
           ],

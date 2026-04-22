@@ -1,46 +1,46 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addresscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cartproductitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/copounrow.dart';
-
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/paymentcolumn.dart';
 
 class CustomerCartScreen extends StatelessWidget {
-  // before get into this page it should trigger cubit to get the cubit to get the order products and calculate total & deleviryfee
-  final OrderModel order;
-  const CustomerCartScreen({super.key, required this.order});
+  const CustomerCartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: customerbackGroundColor,
-
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
         child: CustomScrollView(
-          physics: BouncingScrollPhysics(),
+          physics: const BouncingScrollPhysics(),
           slivers: [
             SliverAppBar(
               pinned: true,
               backgroundColor: customerbackGroundColor,
               scrolledUnderElevation: 0,
               centerTitle: true,
-
               title: Text(
                 'Your Cart',
-
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () async {
+                await BlocProvider.of<CartCubit>(context).getcartProducts();
                 await Future.delayed(Duration(seconds: 2));
               },
               builder:
@@ -66,55 +66,261 @@ class CustomerCartScreen extends StatelessWidget {
                 child: Divider(color: commonColor.withValues(alpha: .2)),
               ),
             ),
-
-            SliverList.builder(
-              itemBuilder: (context, index) {
-                return CartProductItem(product: order.products[index]);
+            BlocBuilder<CartCubit, CartState>(
+              buildWhen: (previous, current) {
+                return current is GetcartSuccessedstate ||
+                    current is GetcartLoadingstate ||
+                    current is GetcartFailedstate ||
+                    current is AddcartproductSuccessedstate ||
+                    current is DeletecartproductSuccessedstate;
               },
-              itemCount: order.products.length,
-            ),
-            SliverToBoxAdapter(child: OrderSummary(order: order)),
-
-            SliverToBoxAdapter(child: CopounRow()),
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 20.0).h,
-                child: AddressColumn(order: order),
-              ),
-            ),
-            SliverToBoxAdapter(child: PaymentColumn()),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.only(top: 50, bottom: 15).h,
-                child: Column(
-                  children: [
-                    Divider(color: commonColor.withValues(alpha: .2)),
-                    SizedBox(height: 16.h),
-                    CustomElevatedButton(
-                      buttoncolor: commonColor,
-                      onPressed: () {},
+              builder: (context, state) {
+                if (state is GetcartFailedstate) {
+                  return SliverToBoxAdapter(
+                    child: Center(
                       child: Text(
-                        'Proceed to Checkout',
-                        textAlign: TextAlign.center,
-                        style: AppTextStyles.t_16w700.copyWith(
-                          color: Colors.white,
+                        'Failed to load cart. Please try again.',
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: redDegree,
                         ),
                       ),
                     ),
-                    SizedBox(height: 16.h),
-                    Text(
-                      'By clicking confirm, you agree to our Terms of\nService and Privacy Policy.',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.t_12w400.copyWith(
-                        color: subTitleColor,
+                  );
+                } else if (state is GetcartSuccessedstate &&
+                    state.cartproducts.isEmpty) {
+                  return SliverFillRemaining(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Your cart is empty.',
+                          style: AppTextStyles.t_24w500.copyWith(
+                            color: subTitleColor,
+                          ),
+                        ),
+                        Text(
+                          'Start adding your favorite products!',
+                          style: AppTextStyles.t_14w500.copyWith(
+                            color: subTitleColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (state is GetcartSuccessedstate) {
+                  return SliverList.builder(
+                    itemBuilder: (context, index) {
+                      return CartProductItem(
+                        product: state.cartproducts[index],
+                      );
+                    },
+                    itemCount: state.cartproducts.length,
+                  );
+                } else {
+                  return SliverList.builder(
+                    itemCount: 2,
+                    itemBuilder: (context, index) {
+                      return Card(
+                        margin: EdgeInsets.only(bottom: 14.h),
+                        elevation: 0,
+                        color: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(16.r),
+                          side: BorderSide(
+                            color: commonColor.withValues(alpha: .08),
+                          ),
+                        ),
+                        child: ListTile(
+                          contentPadding: EdgeInsets.all(12.r),
+                          leading: Container(
+                            height: 74.h,
+                            width: 74.w,
+                            decoration: BoxDecoration(
+                              color: const Color(0xffEFEDEA),
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                          ),
+                          title: Padding(
+                            padding: EdgeInsets.only(top: 2.h),
+                            child: Container(
+                              height: 14.h,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                color: const Color(0xffE5E7EB),
+                                borderRadius: BorderRadius.circular(8.r),
+                              ),
+                            ),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 10.h),
+                              Container(
+                                height: 12.h,
+                                width: 120.w,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffE5E7EB),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                              ),
+                              SizedBox(height: 10.h),
+                              Container(
+                                height: 12.h,
+                                width: 70.w,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xffE5E7EB),
+                                  borderRadius: BorderRadius.circular(8.r),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                }
+              },
+            ),
+            BlocBuilder<CartCubit, CartState>(
+              buildWhen: (previous, current) {
+                return current is GetOrderSummarySuccessState ||
+                    current is GetOrderSummaryLoadingState ||
+                    current is GetOrderSummaryFailedState ||
+                    current is GetcartSuccessedstate;
+              },
+              builder: (context, state) {
+                if (BlocProvider.of<CartCubit>(
+                  context,
+                ).cartProductsList.isEmpty) {
+                  return const SliverToBoxAdapter(child: SizedBox());
+                } else if (state is GetOrderSummarySuccessState) {
+                  return SliverToBoxAdapter(
+                    child: Column(
+                      children: [
+                        OrderSummary(orderPaymentDetails: state.orderSummary!),
+                        SizedBox(height: 8.h),
+                        CopounRow(),
+                        SizedBox(height: 16.h),
+                        AddressColumn(),
+                        SizedBox(height: 16.h),
+                        PaymentColumn(),
+                        Divider(color: commonColor.withValues(alpha: .2)),
+                        SizedBox(height: 16.h),
+                        CheckoutButton(),
+                        SizedBox(height: 16.h),
+                        Text(
+                          'By clicking confirm, you agree to our Terms of Service and Privacy Policy.',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.t_12w400.copyWith(
+                            color: subTitleColor,
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                } else if (state is GetOrderSummaryFailedState) {
+                  return SliverToBoxAdapter(
+                    child: Center(
+                      child: Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Text(
+                          'Failed to load order summary. Please try again.',
+                          textAlign: TextAlign.center,
+                          style: AppTextStyles.t_14w500.copyWith(
+                            color: redDegree,
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  );
+                } else {
+                  return SliverToBoxAdapter(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 50.0),
+                      child: Center(
+                        child: CircularProgressIndicator(color: commonColor),
+                      ),
+                    ),
+                  );
+                }
+              },
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CheckoutButton extends StatelessWidget {
+  const CheckoutButton({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 20, bottom: 15).h,
+      child: CustomElevatedButton(
+        buttoncolor: commonColor,
+        onPressed: () async {
+          if (BlocProvider.of<CartCubit>(context).selectedOrderAddress ==
+              null) {
+            showSnack(
+              title: "Address required",
+              message: "Please add an address to proceed to checkout.",
+              bgColor: redDegree,
+            );
+          } else {
+            await BlocProvider.of<OrderCubit>(context).placeNewOrder(
+              OrderModel(
+                customer: BlocProvider.of<CustomerCubit>(context).customerData,
+                products: BlocProvider.of<CartCubit>(context).cartProductsList,
+                status: .pending,
+                address: BlocProvider.of<CartCubit>(
+                  context,
+                ).selectedOrderAddress!,
+                orderid: "1",
+                payment: BlocProvider.of<CartCubit>(
+                  context,
+                ).currentOrderSummary!,
+                orderDate: DateTime.now(),
+              ),
+              context,
+            );
+          }
+          print(
+            "${BlocProvider.of<CustomerCubit>(context).customerData}\n${BlocProvider.of<CartCubit>(context).cartProductsList}\n${BlocProvider.of<CartCubit>(context).selectedOrderAddress}\n${BlocProvider.of<CartCubit>(context).currentOrderSummary}\n${BlocProvider.of<CartCubit>(context).selectedPaymentMethod}",
+          );
+        },
+        child: BlocBuilder<OrderCubit, OrderState>(
+          buildWhen: (previous, current) {
+            return current is PlaceOrderSuccessState ||
+                current is PlaceOrderLoadingState ||
+                current is PlaceOrderFailedState;
+          },
+          builder: (context, state) {
+            if (state is PlaceOrderLoadingState) {
+              return CircularProgressIndicator(color: Colors.white);
+            } else if (state is PlaceOrderFailedState) {
+              return Text(
+                'Checkout Failed. Try Again.',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
+              );
+            } else if (state is PlaceOrderSuccessState) {
+              return Text(
+                'Checkout Successful!',
+                textAlign: TextAlign.center,
+                style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
+              );
+            }
+
+            return Text(
+              'Proceed to Checkout',
+              textAlign: TextAlign.center,
+              style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
+            );
+          },
         ),
       ),
     );

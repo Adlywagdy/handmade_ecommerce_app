@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/review_model.dar
 List<ProductModel> productsListData = [
   ProductModel(
     name: 'Handmade Ceramic Vase',
+    id: "1",
     description:
         'This exquisite Terra Vase is hand-thrown by master artisans using traditional Mediterranean techniques.\nEach piece is unique, featuring a natural matte finish and subtle variations in texture that celebrate the organic beauty of locally sourced clay. \nPerfect for dried botanicals or as a standalone sculptural piece.',
     price: 49.99,
@@ -17,6 +18,9 @@ List<ProductModel> productsListData = [
       ReviewModel(
         reviewer: CustomerModel(
           name: "Alice Smith",
+          password: "456789",
+          phone: "0651616161681",
+          image: "assets/images/splash.jpeg",
           email: "alice.smith@example.com",
         ),
         rating: 3,
@@ -43,6 +47,7 @@ List<ProductModel> productsListData = [
     tags: ["Handmade", "Ceramic", "Decorative"],
   ),
   ProductModel(
+    id: "2",
     name: 'Woven Basket',
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
@@ -67,6 +72,7 @@ List<ProductModel> productsListData = [
     tags: ["Handmade", "Wooden", "Decorative"],
   ),
   ProductModel(
+    id: "3",
     name: 'Hand-Painted Wooden Sign',
     description:
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
@@ -91,6 +97,8 @@ List<ProductModel> productsListData = [
     tags: ["Handmade", "Wooden", "Decorative"],
   ),
   ProductModel(
+    id: "4",
+    quantity: 5,
     name: 'Hand-Painted Wooden Sign',
     description:
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',
@@ -114,11 +122,13 @@ List<ProductModel> productsListData = [
     tags: ["Handmade", "Wooden", "Decorative"],
   ),
   ProductModel(
+    id: "5",
     name: 'Woven Basket',
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
     totalrate: 4.0,
+    quantity: 0,
     images: [
       "assets/images/splash.jpeg",
       "assets/images/test.png",
@@ -136,6 +146,8 @@ List<ProductModel> productsListData = [
     ),
   ),
   ProductModel(
+    id: "6",
+    quantity: 7,
     name: 'Woven Basket',
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
@@ -154,7 +166,9 @@ List<ProductModel> productsListData = [
     ),
   ),
   ProductModel(
+    id: "7",
     name: 'Woven Basket',
+    quantity: 6,
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
@@ -172,7 +186,9 @@ List<ProductModel> productsListData = [
     ),
   ),
   ProductModel(
+    id: "8",
     name: 'Woven Basket',
+    quantity: 0,
     description:
         'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
     price: 29.99,
@@ -190,6 +206,8 @@ List<ProductModel> productsListData = [
     ),
   ),
   ProductModel(
+    id: "9",
+    quantity: 7,
     name: 'Hand-Painted Wooden Sign',
     description:
         'A charming hand-painted wooden sign that adds a rustic touch to any space.',

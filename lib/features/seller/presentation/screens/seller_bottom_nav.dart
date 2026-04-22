@@ -1,11 +1,15 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../cubit/seller_cubit.dart';
-import 'seller_dashboard_screen.dart';
-import 'seller_manage_products_screen.dart';
-import 'seller_orders_screen.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
 
 class SellerBottomNav extends StatefulWidget {
   const SellerBottomNav({super.key});
@@ -15,19 +19,13 @@ class SellerBottomNav extends StatefulWidget {
 }
 
 class _SellerBottomNavState extends State<SellerBottomNav> {
-  int _currentIndex = 0;
+  int _activeScreenIndex = 0; // Default to Dashboard
 
-  final List<Widget> _pages = const [
-    SellerDashboardScreen(),
-    SellerManageProductsScreen(),
-    SellerOrdersScreen(),
-    _SellerProfilePlaceholder(),
-  ];
-
-  @override
-  void initState() {
-    super.initState();
-    context.read<SellerCubit>().loadDashboard();
+  void _switchTab(int index) {
+    FocusManagementTips.clearFocusBeforeNavigation(null);
+    setState(() {
+      _activeScreenIndex = index;
+    });
   }
 
   @override
@@ -35,40 +33,33 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
     return PopScope(
       canPop: false,
       onPopInvokedWithResult: (didPop, result) async {
-        if (_currentIndex != 0) {
-          setState(() => _currentIndex = 0);
+        if (_activeScreenIndex != 0) {
+          setState(() => _activeScreenIndex = 0);
           return;
         }
         SystemNavigator.pop();
       },
       child: Scaffold(
-        body: IndexedStack(
-          index: _currentIndex,
-          children: _pages,
-        ),
-        bottomNavigationBar: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFF16213E),
-            border: Border(
-              top: BorderSide(
-                color: Colors.white.withValues(alpha: 0.06),
-                width: 1,
-              ),
-            ),
-          ),
-          child: SafeArea(
-            top: false,
-            child: Padding(
-              padding: EdgeInsets.symmetric(vertical: 8.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  _buildNavItem(Icons.dashboard_outlined, 'Dashboard', 0),
-                  _buildNavItem(Icons.inventory_2_outlined, 'Products', 1),
-                  _buildNavItem(Icons.receipt_long_outlined, 'Orders', 2),
-                  _buildNavItem(Icons.person_outline, 'Profile', 3),
+        body: IndexedStack(index: _activeScreenIndex, children: _screens),
+        bottomNavigationBar: ClipRect(
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 60, sigmaY: 5),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: const Border(
+                  top: BorderSide(color: Color(0xFFE2E8F0), width: 0.8),
+                ),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withValues(alpha: 0.05),
+                    blurRadius: 12,
+                    offset: const Offset(0, -2),
+                  ),
                 ],
               ),
+              padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+              child: SafeArea(top: false, child: _buildBottomNav()),
             ),
           ),
         ),
@@ -76,89 +67,145 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
     );
   }
 
-  Widget _buildNavItem(IconData icon, String label, int index) {
-    final isSelected = _currentIndex == index;
+  List<Widget> get _screens => [
+    SellerDashboardScreen(
+      onAddProduct: () => Get.toNamed(AppRoutes.selleraddproduct),
+      onViewProducts: () => _switchTab(1),
+      onViewOrders: () => _switchTab(2),
+    ),
+    SellerManageProductsScreen(onBackPressed: () => _switchTab(0)),
+    SellerOrdersScreen(onBackPressed: () => _switchTab(0)),
+    SellerRegistrationScreen(onBackPressed: () => _switchTab(0)),
+    const _PlaceholderScreen(title: 'Earnings'),
+  ];
+
+  Widget _buildBottomNav() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _buildNavIcon(
+          Icons.dashboard_outlined,
+          Icons.dashboard_rounded,
+          'Home',
+          _activeScreenIndex == 0,
+          () => _switchTab(0),
+          false,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.inventory_2_outlined,
+          Icons.inventory_2_rounded,
+          'Products',
+          _activeScreenIndex == 1,
+          () => _switchTab(1),
+          false,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.shopping_bag_outlined,
+          Icons.shopping_bag_rounded,
+          'Orders',
+          _activeScreenIndex == 2,
+          () => _switchTab(2),
+          true,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.payments_outlined,
+          Icons.payments_rounded,
+          'Earnings',
+          _activeScreenIndex == 4,
+          () => _switchTab(4),
+          false,
+          false,
+        ),
+        _buildNavIcon(
+          Icons.person_outline_rounded,
+          Icons.person_rounded,
+          'Profile',
+          _activeScreenIndex == 3,
+          () => _switchTab(3),
+          false,
+          false,
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNavIcon(
+    IconData inactiveIcon,
+    IconData activeIcon,
+    String label,
+    bool isSelected,
+    VoidCallback onTap,
+    bool hasBadge,
+    bool isSmallText,
+  ) {
+    Widget iconWidget = Icon(
+      isSelected ? activeIcon : inactiveIcon,
+      color: isSelected ? commonColor : const Color(0xFF94A3B8),
+      size: 24.w,
+    );
+
+    if (hasBadge) {
+      iconWidget = Badge(
+        backgroundColor: const Color(0xFFEF4444),
+        smallSize: 8.w,
+        child: iconWidget,
+      );
+    }
+
     return InkWell(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        setState(() => _currentIndex = index);
-      },
-      borderRadius: BorderRadius.circular(12.r),
-      child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 12.w, vertical: 4.h),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            AnimatedContainer(
-              duration: const Duration(milliseconds: 200),
-              padding: EdgeInsets.all(6.w),
-              decoration: BoxDecoration(
-                color: isSelected
-                    ? const Color(0xff8B4513).withValues(alpha: 0.15)
-                    : Colors.transparent,
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              child: Icon(
-                icon,
-                color: isSelected
-                    ? const Color(0xff8B4513)
-                    : Colors.white.withValues(alpha: 0.4),
-                size: 22.sp,
-              ),
-            ),
-            SizedBox(height: 2.h),
-            Text(
+      onTap: onTap,
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          SizedBox(width: 24.w, height: 24.h, child: iconWidget),
+          SizedBox(height: 4.h),
+          FittedBox(
+            child: Text(
               label,
               style: TextStyle(
-                fontSize: 11.sp,
-                fontWeight: isSelected ? FontWeight.w600 : FontWeight.w400,
-                color: isSelected
-                    ? const Color(0xff8B4513)
-                    : Colors.white.withValues(alpha: 0.4),
+                color: isSelected ? commonColor : const Color(0xFF94A3B8),
+                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                fontSize: isSmallText ? 10.sp : 12.sp,
                 fontFamily: 'Plus Jakarta Sans',
               ),
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 }
 
-/// Profile tab placeholder — other team members can implement this
-class _SellerProfilePlaceholder extends StatelessWidget {
-  const _SellerProfilePlaceholder();
+/// Placeholder screen for tabs not yet implemented
+class _PlaceholderScreen extends StatelessWidget {
+  final String title;
+
+  const _PlaceholderScreen({required this.title});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: customerbackGroundColor,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(
-              Icons.person_outline,
-              size: 56.sp,
-              color: Colors.white.withValues(alpha: 0.2),
+              Icons.construction_outlined,
+              color: commonColor.withValues(alpha: 0.5),
+              size: 48.w,
             ),
             SizedBox(height: 16.h),
             Text(
-              'Seller Profile',
+              '$title - Coming Soon',
               style: TextStyle(
-                fontSize: 18.sp,
+                color: const Color(0xFF64748B),
+                fontSize: 16.sp,
+                fontFamily: 'Plus Jakarta Sans',
                 fontWeight: FontWeight.w600,
-                color: Colors.white.withValues(alpha: 0.4),
-                fontFamily: 'Plus Jakarta Sans',
-              ),
-            ),
-            SizedBox(height: 6.h),
-            Text(
-              'Coming soon',
-              style: TextStyle(
-                fontSize: 13.sp,
-                color: Colors.white.withValues(alpha: 0.3),
-                fontFamily: 'Plus Jakarta Sans',
               ),
             ),
           ],

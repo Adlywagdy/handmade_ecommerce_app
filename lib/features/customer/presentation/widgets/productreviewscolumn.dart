@@ -34,7 +34,7 @@ class ProductReviewsColumn extends StatelessWidget {
           ],
         ),
         ReviewCard(product: product),
-        InkWell(
+        GestureDetector(
           onTap: () {
             // Handle view all reviews action
           },

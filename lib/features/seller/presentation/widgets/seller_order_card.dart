@@ -1,121 +1,142 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../models/seller_model.dart';
-import 'seller_status_badge.dart';
 
 class SellerOrderCard extends StatelessWidget {
-  final SellerOrderModel order;
+  final String orderId;
+  final String status;
+  final String productName;
+  final String timeAgo;
+  final String price;
   final VoidCallback? onTap;
 
   const SellerOrderCard({
     super.key,
-    required this.order,
+    required this.orderId,
+    required this.status,
+    required this.productName,
+    required this.timeAgo,
+    required this.price,
     this.onTap,
   });
 
+  Color _getStatusColor() {
+    switch (status.toUpperCase()) {
+      case 'PROCESSING':
+        return const Color(0xFFD97706);
+      case 'SHIPPED':
+        return const Color(0xFF2563EB);
+      case 'DELIVERED':
+        return const Color(0xFF07880E);
+      case 'CANCELLED':
+        return const Color(0xFFD32F2F);
+      default:
+        return const Color(0xFF64748B);
+    }
+  }
+
+  Color _getStatusBackgroundColor() {
+    switch (status.toUpperCase()) {
+      case 'PROCESSING':
+        return const Color(0xFFFFF3E0);
+      case 'SHIPPED':
+        return const Color(0xFFE3F2FD);
+      case 'DELIVERED':
+        return const Color(0xFFE8F5E9);
+      case 'CANCELLED':
+        return const Color(0xFFFFEBEE);
+      default:
+        return const Color(0xFFF1F5F9);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return InkWell(
       onTap: onTap,
+      borderRadius: BorderRadius.circular(12.r),
       child: Container(
-        margin: EdgeInsets.only(bottom: 12.h),
-        padding: EdgeInsets.all(16.w),
+        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
         decoration: BoxDecoration(
-          color: const Color(0xFF16213E),
-          borderRadius: BorderRadius.circular(14.r),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: 0.06),
-          ),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.r),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.03),
+              blurRadius: 6,
+              offset: const Offset(0, 1),
+            ),
+          ],
         ),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+        child: Row(
           children: [
-            // Top row: Order ID + Status
+            // Left side: Order info
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    children: [
+                      Text(
+                        orderId,
+                        style: TextStyle(
+                          color: const Color(0xFF0F172A),
+                          fontSize: 14.sp,
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      SizedBox(width: 8.w),
+                      Container(
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 3.h,
+                        ),
+                        decoration: BoxDecoration(
+                          color: _getStatusBackgroundColor(),
+                          borderRadius: BorderRadius.circular(6.r),
+                        ),
+                        child: Text(
+                          status.toUpperCase(),
+                          style: TextStyle(
+                            color: _getStatusColor(),
+                            fontSize: 10.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 4.h),
+                  Text(
+                    '$productName • $timeAgo',
+                    style: TextStyle(
+                      color: const Color(0xFF94A3B8),
+                      fontSize: 12.sp,
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            // Right side: Price and arrow
             Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  order.orderId,
+                  price,
                   style: TextStyle(
-                    fontSize: 15.sp,
+                    color: const Color(0xFF0F172A),
+                    fontSize: 14.sp,
+                    fontFamily: 'Plus Jakarta Sans',
                     fontWeight: FontWeight.w700,
-                    color: Colors.white,
-                    fontFamily: 'Plus Jakarta Sans',
                   ),
                 ),
-                SellerStatusBadge(status: order.status),
-              ],
-            ),
-            SizedBox(height: 10.h),
-            // Customer name
-            Row(
-              children: [
+                SizedBox(width: 4.w),
                 Icon(
-                  Icons.person_outline,
-                  color: Colors.white.withValues(alpha: 0.5),
-                  size: 16.sp,
-                ),
-                SizedBox(width: 6.w),
-                Text(
-                  order.customerName,
-                  style: TextStyle(
-                    fontSize: 13.sp,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.white.withValues(alpha: 0.7),
-                    fontFamily: 'Plus Jakarta Sans',
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 6.h),
-            // Date
-            Row(
-              children: [
-                Icon(
-                  Icons.calendar_today_outlined,
-                  color: Colors.white.withValues(alpha: 0.4),
-                  size: 14.sp,
-                ),
-                SizedBox(width: 6.w),
-                Text(
-                  order.orderDate,
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withValues(alpha: 0.5),
-                    fontFamily: 'Plus Jakarta Sans',
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 10.h),
-            // Divider
-            Container(
-              height: 1,
-              color: Colors.white.withValues(alpha: 0.06),
-            ),
-            SizedBox(height: 10.h),
-            // Bottom row: Items count + Total
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${order.items.length} item${order.items.length > 1 ? 's' : ''}',
-                  style: TextStyle(
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    color: Colors.white.withValues(alpha: 0.5),
-                    fontFamily: 'Plus Jakarta Sans',
-                  ),
-                ),
-                Text(
-                  '\$${order.totalAmount.toStringAsFixed(2)}',
-                  style: TextStyle(
-                    fontSize: 16.sp,
-                    fontWeight: FontWeight.w700,
-                    color: const Color(0xff8B4513),
-                    fontFamily: 'Plus Jakarta Sans',
-                  ),
+                  Icons.chevron_right,
+                  color: const Color(0xFF94A3B8),
+                  size: 20.w,
                 ),
               ],
             ),

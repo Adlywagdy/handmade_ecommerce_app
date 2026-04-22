@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
+import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 
 class AmountContainerButton extends StatelessWidget {
   final Color? iconscolor;
-
+  final ProductModel product;
   final double circularradius;
   final double verticalpadding;
   final double horizontalpadding;
@@ -19,6 +23,7 @@ class AmountContainerButton extends StatelessWidget {
     this.verticalpadding = 12,
     this.horizontalpadding = 12,
     this.spacingwidth = 12,
+    required this.product,
   });
 
   @override
@@ -42,21 +47,45 @@ class AmountContainerButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: () {},
-            child: Icon(Icons.remove, color: iconscolor, size: 16.r),
+            onTap: () {
+              BlocProvider.of<CartCubit>(context).deleteCartProducts(product);
+            },
+            child: Icon(Icons.remove, color: iconscolor, size: 22.r),
           ),
 
-          Text(
-            '1', // This should be a variable that holds the current amount selected by the user
-            textAlign: TextAlign.center,
-            style: AppTextStyles.t_14w600.copyWith(
-              color: AppColors.textPrimary,
-            ),
-          ),
+          BlocBuilder<CartCubit, CartState>(
+            buildWhen: (previous, current) {
+              return current is AddcartproductSuccessedstate ||
+                  current is GetcartSuccessedstate ||
+                  current is DeletecartproductSuccessedstate;
+            },
+            builder: (context, state) {
+              final quantity =
+                  isItemExictedFun(
+                    productslist: BlocProvider.of<CartCubit>(
+                      context,
+                    ).cartProductsList,
+                    productID: product.id,
+                  )
+                  ? BlocProvider.of<CartCubit>(context).cartProductsList
+                        .firstWhere((item) => item.id == product.id)
+                        .quantity
+                  : 0;
 
+              return Text(
+                quantity.toString(),
+                textAlign: TextAlign.center,
+                style: AppTextStyles.t_14w600.copyWith(
+                  color: AppColors.textPrimary,
+                ),
+              );
+            },
+          ),
           InkWell(
-            onTap: () {},
-            child: Icon(Icons.add, color: iconscolor, size: 16.r),
+            onTap: () {
+              BlocProvider.of<CartCubit>(context).addCartProducts(product);
+            },
+            child: Icon(Icons.add, color: iconscolor, size: 22.r),
           ),
         ],
       ),
