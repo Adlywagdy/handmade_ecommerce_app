@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -13,10 +14,30 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/or
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productitemoforder.dart';
 
 class CustomerOrderDetailsScreen extends StatelessWidget {
-  final OrderModel order;
+  final CustomerOrderModel order;
   const CustomerOrderDetailsScreen({super.key, required this.order});
 
   String get _currencyLabel => order.payment.currency ?? 'EGP';
+
+  String get _customerName {
+    final authUser = FirebaseAuth.instance.currentUser;
+    final orderName = order.customer.name.trim();
+    final profileName = authUser?.displayName?.trim() ?? '';
+
+    if (orderName.isNotEmpty) return orderName;
+    if (profileName.isNotEmpty) return profileName;
+    return _customerEmail;
+  }
+
+  String get _customerEmail {
+    final authUser = FirebaseAuth.instance.currentUser;
+    final orderEmail = order.customer.email.trim();
+    final profileEmail = authUser?.email?.trim() ?? '';
+
+    if (orderEmail.isNotEmpty) return orderEmail;
+    if (profileEmail.isNotEmpty) return profileEmail;
+    return 'Unknown Customer';
+  }
 
   Future<void> _cancelOrder(BuildContext context) async {
     if (order.status != OrderStatus.pending) {
@@ -109,7 +130,10 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
               itemBuilder: (context, index) {
                 return Padding(
                   padding: const EdgeInsets.only(bottom: 16.0).h,
-                  child: ProductItemOfOrder(product: order.products[index]),
+                  child: ProductItemOfOrder(
+                    product: order.products[index],
+                    order: order,
+                  ),
                 );
               },
               itemCount: order.products.length,
@@ -146,7 +170,14 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(order.customer.name, style: AppTextStyles.t_14w700),
+                      Text(_customerName, style: AppTextStyles.t_14w700),
+                      if (_customerEmail != _customerName)
+                        Text(
+                          _customerEmail,
+                          style: AppTextStyles.t_14w400.copyWith(
+                            color: subTitleColor,
+                          ),
+                        ),
                       Text(
                         order.address.addressdescription,
                         style: AppTextStyles.t_14w400.copyWith(
@@ -181,33 +212,36 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                 discount: order.payment.discount,
               ),
             ),
-            SliverToBoxAdapter(
-              child: CustomElevatedButton(
-                onPressed: () => _cancelOrder(context),
-                buttoncolor: Colors.white,
-                bordercolor: redDegree,
-                child: Row(
-                  spacing: 8.w,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.cancel_outlined, color: redDegree, size: 24.r),
-                    Text(
-                      'Cancel Order',
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.t_16w700.copyWith(color: redDegree),
-                    ),
-                  ],
+            if (order.status == OrderStatus.pending)
+              SliverToBoxAdapter(
+                child: CustomElevatedButton(
+                  onPressed: () => _cancelOrder(context),
+                  buttoncolor: Colors.white,
+                  bordercolor: redDegree,
+                  child: Row(
+                    spacing: 8.w,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.cancel_outlined, color: redDegree, size: 24.r),
+                      Text(
+                        'Cancel Order',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.t_16w700.copyWith(
+                          color: redDegree,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            else
+              SliverToBoxAdapter(
+                child: Text(
+                  "Orders can only be cancelled while in 'Pending' status.",
+                  textAlign: TextAlign.center,
+                  style: AppTextStyles.t_10w400.copyWith(color: subTitleColor),
                 ),
               ),
-            ),
-            SliverToBoxAdapter(child: SizedBox(height: 12.h)),
-            SliverToBoxAdapter(
-              child: Text(
-                "Orders can only be cancelled while in 'Pending' status.",
-                textAlign: TextAlign.center,
-                style: AppTextStyles.t_10w400.copyWith(color: subTitleColor),
-              ),
-            ),
             SliverToBoxAdapter(child: SizedBox(height: 25.h)),
           ],
         ),

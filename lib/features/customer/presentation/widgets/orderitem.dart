@@ -6,7 +6,7 @@ import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 class OrderItem extends StatelessWidget {
-  final OrderModel order;
+  final CustomerOrderModel order;
   const OrderItem({super.key, required this.order});
 
   String get _currencyLabel => order.payment.currency ?? 'EGP';

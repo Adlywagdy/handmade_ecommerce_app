@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
@@ -15,10 +14,10 @@ class SearchCubit extends Cubit<SearchState> {
   CategoryModel? selectedCategory;
   /* ------------------------------------------- */
 
-  Future<void> resetSearchState(BuildContext context) async {
+  Future<void> resetSearchState() async {
     searchedproductsList = [];
     filteredproductsList = [];
-    BlocProvider.of<SearchCubit>(context).selectedCategory = null;
+    selectedCategory = null;
     emit(SearchInitial());
   }
 

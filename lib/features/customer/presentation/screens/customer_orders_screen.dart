@@ -17,6 +17,7 @@ class CustomerOrdersScreen extends StatelessWidget {
     'All',
     'Pending',
     'Confirmed',
+    'Preparing',
     'Shipped',
     'Delivered',
     'Cancelled',
@@ -29,10 +30,12 @@ class CustomerOrdersScreen extends StatelessWidget {
       case 2:
         return OrderStatus.confirmed;
       case 3:
-        return OrderStatus.shipped;
+        return OrderStatus.preparing;
       case 4:
-        return OrderStatus.delivered;
+        return OrderStatus.shipped;
       case 5:
+        return OrderStatus.delivered;
+      case 6:
         return OrderStatus.cancelled;
       default:
         return OrderStatus.pending;
@@ -52,7 +55,7 @@ class CustomerOrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 6,
+      length: _tabs.length,
       child: Scaffold(
         backgroundColor: customerbackGroundColor,
         appBar: AppBar(
@@ -113,7 +116,6 @@ class CustomerOrdersScreen extends StatelessWidget {
 
             return Column(
               children: [
-             
                 Expanded(
                   child: orders.isEmpty
                       ? ListView(

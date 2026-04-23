@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
-import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
@@ -80,19 +79,21 @@ class _CopounRowState extends State<CopounRow> {
           flex: 1,
           child: InkWell(
             onTap: () {
-              if (controller.text.trim().isEmpty) {
+              final coupon = controller.text.trim();
+              if (coupon.isEmpty) {
                 showSnack(
                   title: "Error",
                   message: "Please enter a promo code",
                   bgColor: Colors.red,
                   icon: Icons.error,
                 );
-              } else if (checkcopoun(controller.text)) {
+              } else {
                 BlocProvider.of<CartCubit>(context).getOrderSummary(
                   products: BlocProvider.of<CartCubit>(
                     context,
                   ).cartProductsList,
-                  coupon: controller.text,
+                  coupon: coupon,
+                  showCouponFeedback: true,
                 );
               }
               controller.clear();

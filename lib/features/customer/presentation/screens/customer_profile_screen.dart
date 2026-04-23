@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
@@ -6,19 +7,15 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/becomesellercard.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customerdetailsitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/userpofiledetails.dart';
 
 class CustomerProfilesScreen extends StatelessWidget {
-  final CustomerModel customer;
   final ValueChanged<int>? onNavigateToTab;
-  const CustomerProfilesScreen({
-    super.key,
-    required this.customer,
-    this.onNavigateToTab,
-  });
+  const CustomerProfilesScreen({super.key, this.onNavigateToTab});
 
   void _openTab(int tabIndex) {
     if (onNavigateToTab != null) {
@@ -29,9 +26,8 @@ class CustomerProfilesScreen extends StatelessWidget {
     Get.offNamed(AppRoutes.customerlayout, arguments: tabIndex);
   }
 
-  void _showEditBottomSheet(BuildContext context) {
+  void _showEditBottomSheet(BuildContext context, CustomerModel customer) {
     final nameController = TextEditingController(text: customer.name);
-    final bioController = TextEditingController();
 
     showModalBottomSheet<void>(
       context: context,
@@ -74,33 +70,22 @@ class CustomerProfilesScreen extends StatelessWidget {
                   ),
                 ),
               ),
-              SizedBox(height: 12.h),
-              TextField(
-                controller: bioController,
-                cursorColor: commonColor,
-                minLines: 2,
-                maxLines: 4,
-                decoration: const InputDecoration(
-                  labelText: 'Bio',
-                  labelStyle: TextStyle(color: subTitleColor),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                  ),
-                  enabledBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(color: Colors.grey),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(8)),
-                    borderSide: BorderSide(color: commonColor),
-                  ),
-                ),
-              ),
               SizedBox(height: 14.h),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () => Navigator.of(context).pop(),
+                  onPressed: () async {
+                    final updatedName = nameController.text.trim();
+                    if (updatedName.isEmpty) return;
+
+                    await context.read<CustomerCubit>().updateCustomerProfile(
+                      name: updatedName,
+                    );
+
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: commonColor,
                     foregroundColor: Colors.white,
@@ -167,69 +152,107 @@ class CustomerProfilesScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-          child: Column(
-            spacing: 16.h,
-            children: [
-              SizedBox(height: 16.h),
-              UserProfileDetails(customer: customer),
+          child: BlocBuilder<CustomerCubit, CustomerState>(
+            buildWhen: (previous, current) {
+              return current is GetCustomerdataLoadingstate ||
+                  current is GetCustomerdataSuccessedstate ||
+                  current is GetCustomerdataFailedstate;
+            },
+            builder: (context, state) {
+              if (state is GetCustomerdataLoadingstate) {
+                return Padding(
+                  padding: EdgeInsets.only(top: 80.h),
+                  child: const Center(
+                    child: CircularProgressIndicator(color: commonColor),
+                  ),
+                );
+              }
 
-              BecomeSellerCard(),
-              Column(
-                children: List.generate(_customerDetails.length, (index) {
-                  final title = _customerDetails[index]['title'] as String;
-                  return CustomerDetailsItem(
-                    item: _customerDetails[index],
-                    onTap: () {
-                      if (title == 'Edit Profile') {
-                        _showEditBottomSheet(context);
-                        return;
-                      }
-
-                      if (title == 'My Orders') {
-                        _openTab(3);
-                        return;
-                      }
-
-                      if (title == 'Favorites') {
-                        _openTab(1);
-                        return;
-                      }
-
-                      if (title == 'Settings') {
-                        Get.toNamed(AppRoutes.customerNotifications);
-                      }
-                    },
-                  );
-                }),
-              ),
-              CustomElevatedButton(
-                buttonheight: 70.h,
-                onPressed: () => _confirmLogout(context),
-                bordercolor: redDegree.withValues(alpha: .1),
-                buttoncolor: redDegree.withValues(alpha: .07),
-                child: Row(
-                  children: [
-                    Card(
-                      elevation: 0,
-                      shape: ContinuousRectangleBorder(
-                        borderRadius: BorderRadiusGeometry.circular(20.r),
-                      ),
-                      color: redDegree.withValues(alpha: .1),
-                      child: Padding(
-                        padding: const EdgeInsets.all(8.0).h,
-                        child: Icon(Icons.logout, color: redDegree, size: 25.r),
-                      ),
+              if (state is GetCustomerdataFailedstate) {
+                return Padding(
+                  padding: EdgeInsets.only(top: 80.h),
+                  child: Center(
+                    child: Text(
+                      state.errorMessage,
+                      textAlign: TextAlign.center,
+                      style: AppTextStyles.t_14w500.copyWith(color: redDegree),
                     ),
-                    SizedBox(width: 8.w),
-                    Text(
-                      'Logout',
-                      style: AppTextStyles.t_16w600.copyWith(color: redDegree),
+                  ),
+                );
+              }
+
+              final customer = context.read<CustomerCubit>().customerData;
+
+              return Column(
+                spacing: 16.h,
+                children: [
+                  SizedBox(height: 16.h),
+                  UserProfileDetails(customer: customer),
+                  BecomeSellerCard(),
+                  Column(
+                    children: List.generate(_customerDetails.length, (index) {
+                      final title = _customerDetails[index]['title'] as String;
+                      return CustomerDetailsItem(
+                        item: _customerDetails[index],
+                        onTap: () {
+                          if (title == 'Edit Profile') {
+                            _showEditBottomSheet(context, customer);
+                            return;
+                          }
+
+                          if (title == 'My Orders') {
+                            _openTab(3);
+                            return;
+                          }
+
+                          if (title == 'Favorites') {
+                            _openTab(1);
+                            return;
+                          }
+
+                          if (title == 'Settings') {
+                            Get.toNamed(AppRoutes.customerNotifications);
+                          }
+                        },
+                      );
+                    }),
+                  ),
+                  CustomElevatedButton(
+                    buttonheight: 70.h,
+                    onPressed: () => _confirmLogout(context),
+                    bordercolor: redDegree.withValues(alpha: .1),
+                    buttoncolor: redDegree.withValues(alpha: .07),
+                    child: Row(
+                      children: [
+                        Card(
+                          elevation: 0,
+                          shape: ContinuousRectangleBorder(
+                            borderRadius: BorderRadiusGeometry.circular(20.r),
+                          ),
+                          color: redDegree.withValues(alpha: .1),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0).h,
+                            child: Icon(
+                              Icons.logout,
+                              color: redDegree,
+                              size: 25.r,
+                            ),
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        Text(
+                          'Logout',
+                          style: AppTextStyles.t_16w600.copyWith(
+                            color: redDegree,
+                          ),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16.h),
-            ],
+                  ),
+                  SizedBox(height: 16.h),
+                ],
+              );
+            },
           ),
         ),
       ),
