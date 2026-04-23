@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/buttom_text.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_textfield.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/register_toggle.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/divider.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/social_button.dart';
 
 class RegisterScreen extends StatefulWidget {
   const RegisterScreen({super.key});
@@ -19,14 +20,19 @@ class RegisterScreen extends StatefulWidget {
   State<RegisterScreen> createState() => _RegisterScreenState();
 }
 
-late GlobalKey<FormState> _formkey;
-late TextEditingController _passwordController;
-late TextEditingController _emailController;
-
 class _RegisterScreenState extends State<RegisterScreen> {
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController _nameController;
+  late TextEditingController _emailController;
+  late TextEditingController _passwordController;
+
+  String? _selectedRole;
+  bool _isChecked = false;
+
   @override
   void initState() {
-    _formkey = GlobalKey<FormState>();
+    _formKey = GlobalKey<FormState>();
+    _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
     super.initState();
@@ -34,9 +40,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   void dispose() {
-    _passwordController.dispose();
+    _nameController.dispose();
     _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
+  }
+
+  void _goToNextScreenByRole(String role) {
+    if (role == 'customer') {
+      Get.offAllNamed(AppRoutes.customerlayout);
+    } else {
+      Get.offAllNamed(AppRoutes.sellerdashboard);
+    }
   }
 
   @override
@@ -61,7 +76,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         padding: const EdgeInsets.symmetric(horizontal: 16).w,
         child: SingleChildScrollView(
           child: Form(
-            key: _formkey,
+            key: _formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -69,7 +84,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   'Join Ayady',
                   style: AppTextStyles.t_30w700.copyWith(),
                 ),
-
                 SizedBox(height: 12.h),
                 Text(
                   'Experience the elegance of handcrafted items',
@@ -77,11 +91,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     color: blackDegree,
                   ),
                 ),
-
                 SizedBox(height: 12.h),
+
                 Customtextfield(
+                  controller: _nameController,
                   label: 'Full Name',
-                  hintText: 'JohnDoe',
+                  hintText: 'John Doe',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Name is required";
@@ -89,7 +104,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
+
                 SizedBox(height: 12.h),
+
                 Customtextfield(
                   controller: _emailController,
                   label: 'EMAIL ADDRESS',
@@ -108,6 +125,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     return null;
                   },
                 ),
+
                 SizedBox(height: 12.h),
 
                 Customtextfield(
@@ -117,6 +135,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icons.lock_outline_rounded,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
+                  label: 'Password',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Password is required";
@@ -126,9 +145,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     }
                     return null;
                   },
-                  label: 'Password',
                 ),
+
                 SizedBox(height: 15.h),
+
                 Text(
                   'Register as:',
                   style: AppTextStyles.t_12w400.copyWith(
@@ -137,35 +157,224 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
 
                 SizedBox(height: 10.h),
-                RegisterToggle(),
-                SizedBox(height: 20.h),
-                AgreeTermsRow(),
 
-                SizedBox(height: 30.h),
-                BlocBuilder<AuthCubit, AuthState>(
-                  builder: (context, state) {
-                    return CustomElevatedButton(
-                      onPressed: () async {
-                        if (_formkey.currentState!.validate()) {
-                          _formkey.currentState!.save();
-                          context.read<AuthCubit>().register(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
-                        }
-                      },
-                      buttoncolor: primaryColor,
-                      child: Text(
-                        'Create Account',
-                        style: AppTextStyles.t_16w500.copyWith(
-                          color: Colors.white,
+                Container(
+                  decoration: BoxDecoration(
+                    color: primaryColor.withValues(alpha: 0.15),
+                    borderRadius: BorderRadius.circular(12.r),
+                  ),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedRole = 'customer';
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 14.h),
+                            decoration: BoxDecoration(
+                              color: _selectedRole == 'customer'
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Customer',
+                                style: AppTextStyles.t_16w700.copyWith(
+                                  color: primaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
                         ),
                       ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              _selectedRole = 'seller';
+                            });
+                          },
+                          child: Container(
+                            padding: EdgeInsets.symmetric(vertical: 14.h),
+                            decoration: BoxDecoration(
+                              color: _selectedRole == 'seller'
+                                  ? Colors.white
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(12.r),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Seller',
+                                style: AppTextStyles.t_16w700.copyWith(
+                                  color: primaryColor,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+
+                SizedBox(height: 20.h),
+
+                Row(
+                  children: [
+                    Checkbox(
+                      checkColor: commonColor,
+                      activeColor: Colors.white,
+                      value: _isChecked,
+                      onChanged: (value) {
+                        setState(() {
+                          _isChecked = value ?? false;
+                        });
+                      },
+                    ),
+                    Expanded(
+                      child: Text(
+                        'I agree to the Terms of Service and Privacy Policy.',
+                        style: AppTextStyles.t_12w400.copyWith(
+                          color: primaryColor.withValues(alpha: 0.6),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 30.h),
+
+                BlocConsumer<AuthCubit, AuthState>(
+                  listener: (context, state) {
+                    if (state is RegisterSuccessState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(
+                          content: Text('Account created successfully'),
+                        ),
+                      );
+
+                      _goToNextScreenByRole(state.role);
+                    } else if (state is RegisterErrorState) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                    }
+                  },
+                  builder: (context, state) {
+                    final isLoading = state is AuthLoading;
+
+                    return CustomElevatedButton(
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              if (!_isChecked) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'You must agree to the terms first',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_selectedRole == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please choose Customer or Seller first',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
+
+                              if (_formKey.currentState!.validate()) {
+                                context.read<AuthCubit>().register(
+                                  fullName: _nameController.text.trim(),
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text,
+                                  role: _selectedRole!,
+                                );
+                              }
+                            },
+
+                      buttoncolor: primaryColor,
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              'Create Account',
+                              style: AppTextStyles.t_16w500.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
                     );
                   },
                 ),
 
-                SizedBox(height: 30.h),
+                SizedBox(height: 20.h),
+
+                Row(
+                  children: [
+                    const OrDivider(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8).w,
+                      child: Text(
+                        'Or continue with',
+                        style: AppTextStyles.t_14w400.copyWith(color: darkblue),
+                      ),
+                    ),
+                    const OrDivider(),
+                  ],
+                ),
+
+                SizedBox(height: 10.h),
+
+                Row(
+                  children: [
+                    SocialButton(
+                      text: 'Google',
+                      icon: Icons.g_mobiledata,
+                      onTap: () {
+                        final state = context.read<AuthCubit>().state;
+                        if (state is AuthLoading) return;
+
+                        if (!_isChecked) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'You must agree to the terms first',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        if (_selectedRole == null) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please choose Customer or Seller first',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
+
+                        context.read<AuthCubit>().registerWithGoogle(
+                          selectedRole: _selectedRole!,
+                        );
+                      },
+                    ),
+                  ],
+                ),
+
+                SizedBox(height: 20.h),
+
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -189,42 +398,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class AgreeTermsRow extends StatefulWidget {
-  const AgreeTermsRow({super.key});
-
-  @override
-  State<AgreeTermsRow> createState() => _AgreeTermsRowState();
-}
-
-bool isChecked = false;
-
-class _AgreeTermsRowState extends State<AgreeTermsRow> {
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Checkbox(
-          checkColor: commonColor,
-          activeColor: Colors.white,
-          value: isChecked,
-          onChanged: (value) {
-            setState(() {
-              isChecked = value!;
-            });
-          },
-        ),
-        SizedBox(width: 8.w),
-        Text(
-          'I agree to the Terms of Service and Privacy Policy.',
-          style: AppTextStyles.t_12w400.copyWith(
-            color: primaryColor.withValues(alpha: 0.6),
-          ),
-        ),
-      ],
     );
   }
 }

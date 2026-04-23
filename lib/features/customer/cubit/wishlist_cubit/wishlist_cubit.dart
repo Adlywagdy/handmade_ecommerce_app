@@ -3,13 +3,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_wishlistdata.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_wishlist_service.dart';
 
 part 'wishlist_state.dart';
 
 class WishListCubit extends Cubit<WishListState> {
-  WishListCubit() : super(WishListInitial());
+  WishListCubit({FirebaseWishlistService? wishlistService})
+    : _wishlistService = wishlistService ?? FirebaseWishlistService(),
+      super(WishListInitial());
+
+  final FirebaseWishlistService _wishlistService;
 
   List<ProductModel> wishlistProductsList = [];
 
@@ -17,10 +20,7 @@ class WishListCubit extends Cubit<WishListState> {
   Future<void> getWishlistProducts() async {
     emit(GetWishlistLoadingstate());
     try {
-      // Simulate a delay for loading wishlist products
-      await Future.delayed(const Duration(seconds: 2), () {});
-      wishlistProductsList =
-          wishlistProductsdata; // Replace with actual data from Firestore
+      wishlistProductsList = await _wishlistService.getWishlistProducts();
       emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
     } catch (e) {
       emit(GetWishlistFailedstate(errorMessage: e.toString()));
@@ -31,15 +31,15 @@ class WishListCubit extends Cubit<WishListState> {
   Future<void> addordeleteWishlistProducts(ProductModel product) async {
     emit(AddOrDeleteWishlistLoadingstate());
     try {
-      // Simulate a delay for loading wishlist products
-      await Future.delayed(const Duration(seconds: 2), () {});
-      if (isItemExictedFun(
+      final alreadyExists = isItemExictedFun(
         productslist: wishlistProductsList,
         productID: product.id,
-      )) {
-        wishlistProductsList.remove(
-          product,
-        ); // Replace with actual logic to add product to wishlist in Firestore
+      );
+
+      await _wishlistService.toggleWishlistProduct(product);
+
+      if (alreadyExists) {
+        wishlistProductsList.removeWhere((item) => item.id == product.id);
         showSnack(
           title: "product removed",
           message: "${product.name} has been removed from your wishlist.",
@@ -47,9 +47,7 @@ class WishListCubit extends Cubit<WishListState> {
           icon: Icons.check_circle_outline,
         );
       } else {
-        wishlistProductsList.add(
-          product,
-        ); // Replace with actual logic to add product to wishlist in Firestore
+        wishlistProductsList.add(product);
         showSnack(
           title: "Success",
           message: "${product.name} has been added to your wishlist.",

@@ -1,24 +1,23 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_product_service.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 
 part 'home_state.dart';
 
 class HomeCubit extends Cubit<HomeState> {
-  HomeCubit() : super(HomeInitial());
+  HomeCubit({FirebaseProductService? productService})
+    : _productService = productService ?? FirebaseProductService(),
+      super(HomeInitial());
+
+  final FirebaseProductService _productService;
 
   /* ------------------------------------------- */
   Future<void> getFeaturedProducts() async {
     emit(GetFeaturedLoadingstate());
     try {
-      // Simulate a delay for loading featured products
-      await Future.delayed(const Duration(seconds: 2), () {});
+      final featuredProducts = await _productService.getFeaturedProducts();
 
-      // should trigger get featured products logic here
-
-      emit(
-        GetFeaturedSuccessedstate(products: productsListData),
-      ); // replace with actual data
+      emit(GetFeaturedSuccessedstate(products: featuredProducts));
     } catch (e) {
       emit(GetFeaturedFailedstate(errorMessage: e.toString()));
     }
@@ -28,14 +27,9 @@ class HomeCubit extends Cubit<HomeState> {
   Future<void> getTopRatedProducts() async {
     emit(GetTopRatedLoadingstate());
     try {
-      // Simulate a delay for loading top-rated products
-      await Future.delayed(const Duration(seconds: 2), () {});
+      final topRatedProducts = await _productService.getTopRatedProducts();
 
-      // should trigger get top-rated products logic here
-
-      emit(
-        GetTopRatedSuccessedstate(products: productsListData),
-      ); // replace with actual data
+      emit(GetTopRatedSuccessedstate(products: topRatedProducts));
     } catch (e) {
       emit(GetTopRatedFailedstate(errorMessage: e.toString()));
     }

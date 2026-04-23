@@ -41,10 +41,7 @@ class PaymobManager {
   Future<String> _getAuthToken() async {
     final response = await _dio.post(
       "/auth/tokens",
-      data: {
-        "api_key": Constants.apiKey, 
-        
-      },
+      data: {"api_key": Constants.apiKey},
     );
 
     return response.data["token"];
@@ -116,10 +113,7 @@ class PaymobManager {
     final response = await _dio.post(
       "/acceptance/payments/pay",
       data: {
-        "source": {
-          "identifier": phone,
-          "subtype": "WALLET",
-        },
+        "source": {"identifier": phone, "subtype": "WALLET"},
         "payment_token": paymentKey,
       },
     );

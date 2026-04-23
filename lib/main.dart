@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,13 +15,15 @@ import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/cu
 import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
   await Hive.initFlutter();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   //////////////////////////// Crashlytics ///////////////////////////////////
@@ -32,6 +35,7 @@ void main() async {
   ///////////////////////////// RemoteConfig //////////////////////////////////
   await RemoteConfigService.instance.init();
   /////////////////////////////////////////////////////////////////////////
+
   runApp(const HandcraftedEcommerceApp());
 }
 
@@ -53,8 +57,27 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(create: (context) => HomeCubit()..getFeaturedProducts()..getTopRatedProducts()),
             BlocProvider(create: (context) => SearchCubit()..getCategories()),
             BlocProvider(create: (context) => WishListCubit()..getWishlistProducts()),
+            BlocProvider(
+              create: (BuildContext context) => AuthCubit(AuthService()),
+            ),
+            BlocProvider(
+              create: (BuildContext context) => SellerCubit()..loadDashboard(),
+            ),
+
+            BlocProvider(create: (BuildContext context) => CustomerCubit()),
+            BlocProvider(
+              create: (BuildContext context) => HomeCubit()
+                ..getFeaturedProducts()
+                ..getTopRatedProducts(),
+            ),
+            BlocProvider(
+              create: (BuildContext context) => SearchCubit()..getCategories(),
+            ),
+            BlocProvider(
+              create: (context) => WishListCubit()..getWishlistProducts(),
+            ),
             BlocProvider(create: (context) => CartCubit()..getcartProducts()),
-            BlocProvider(create: (context) => OrderCubit()),
+            BlocProvider(create: (context) => OrderCubit()..getAllOrders()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

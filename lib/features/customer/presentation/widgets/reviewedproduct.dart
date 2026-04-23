@@ -9,6 +9,9 @@ class ReviewedProduct extends StatelessWidget {
 
   final ProductModel product;
 
+  String get _imageUrl =>
+      product.images.isNotEmpty ? product.images.first : (product.image ?? '');
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -23,12 +26,18 @@ class ReviewedProduct extends StatelessWidget {
             child: Card(
               elevation: 0,
               clipBehavior: Clip.antiAlias,
-              child: Image.asset(
-                // should be image network in real app
-                product.images[0],
+              child: Image.network(
+                _imageUrl,
                 height: 70.h,
                 width: 70.h,
                 fit: BoxFit.fill,
+                errorBuilder: (_, __, ___) => Container(
+                  height: 70.h,
+                  width: 70.h,
+                  color: Colors.grey.shade200,
+                  alignment: Alignment.center,
+                  child: const Icon(Icons.image_not_supported_outlined),
+                ),
               ),
             ),
           ),

@@ -9,6 +9,8 @@ class OrderItem extends StatelessWidget {
   final OrderModel order;
   const OrderItem({super.key, required this.order});
 
+  String get _currencyLabel => order.payment.currency ?? 'EGP';
+
   @override
   Widget build(BuildContext context) {
     return Card(
@@ -73,7 +75,7 @@ class OrderItem extends StatelessWidget {
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
             Text(
-              '\$${order.payment.totalPrice!.toStringAsFixed(2)}',
+              '$_currencyLabel ${order.payment.totalPrice?.toStringAsFixed(2) ?? '0.00'}',
               style: AppTextStyles.t_14w600.copyWith(color: commonColor),
             ),
           ],
@@ -85,17 +87,17 @@ class OrderItem extends StatelessWidget {
 
 Color _getStatusColor(OrderStatus status) {
   switch (status) {
-    case .confirmed:
+    case OrderStatus.confirmed:
       return Colors.blue;
-    case .pending:
+    case OrderStatus.pending:
       return Colors.yellow;
-    case .preparing:
+    case OrderStatus.preparing:
       return Colors.orange;
-    case .shipped:
+    case OrderStatus.shipped:
       return Colors.purple;
-    case .delivered:
+    case OrderStatus.delivered:
       return Colors.green;
-    case .cancelled:
+    case OrderStatus.cancelled:
       return Colors.red;
   }
 }
