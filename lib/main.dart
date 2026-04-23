@@ -86,7 +86,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.splash,
+            initialRoute: AppRoutes.onboarding,
             getPages: AppPages.pages,
           ),
         );
