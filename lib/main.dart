@@ -19,6 +19,8 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/screens/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
+import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
@@ -26,15 +28,32 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_auth_service.dart';
 import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
+  await Hive.openBox('notifications');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // ─── TEST FIREBASE CONNECTION ───
+  try {
+    final db = FirebaseFirestore.instance;
+    await db.collection('test_connection').add({
+      'message': 'Firebase is connected successfully!',
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+    debugPrint('✅ FIREBASE CONNECTION SUCCESSFUL! Document written.');
+  } catch (e) {
+    debugPrint('❌ FIREBASE CONNECTION FAILED: $e');
+  }
+  // ────────────────────────────────
   runApp(const HandcraftedEcommerceApp());
 }
 
@@ -50,9 +69,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
       builder: (context, child) {
         return MultiBlocProvider(
           providers: [
-            BlocProvider(create: (BuildContext context) => AuthCubit()),
+            BlocProvider(create: (BuildContext context) => AuthCubit(FirebaseAuthService())),
             BlocProvider(
-              create: (BuildContext context) => SellerCubit()..loadDashboard(),
+              create: (BuildContext context) => SellerCubit(SellerFirestoreService())..loadDashboard(),
+            ),
+            BlocProvider(
+              create: (BuildContext context) => NotificationsCubit()..loadNotifications(),
             ),
           ],
           child: GetMaterialApp(
@@ -149,6 +171,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               GetPage(
                 name: AppRoutes.sellerregisteation,
                 page: () => const SellerRegistrationScreen(),
+              ),
+
+              // notifications
+              GetPage(
+                name: AppRoutes.notifications,
+                page: () => const NotificationsScreen(),
               ),
             ],
           ),

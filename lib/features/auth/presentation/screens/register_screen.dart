@@ -144,9 +144,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       onPressed: () async {
                         if (_formkey.currentState!.validate()) {
                           _formkey.currentState!.save();
-                          context.read<AuthCubit>().register(
+                          context.read<AuthCubit>().registerCustomer(
                             email: _emailController.text,
                             password: _passwordController.text,
+                            name: 'User', // A dedicated controller for name should be added later
                           );
                         }
                       },

@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 
 class SellerRegistrationScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -14,7 +17,25 @@ class SellerRegistrationScreen extends StatefulWidget {
 }
 
 class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
+  final _formKey = GlobalKey<FormState>();
   bool _agreedToTerms = false;
+
+  // Controllers for registration fields
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final _shopNameController = TextEditingController();
+  final _specialtyController = TextEditingController();
+  final _bioController = TextEditingController();
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _shopNameController.dispose();
+    _specialtyController.dispose();
+    _bioController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +71,12 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Info Cards
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Info Cards
               _buildInfoCard(
                 icon: Icons.language,
                 title: 'Global Reach',
@@ -72,6 +95,26 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
 
               SizedBox(height: 24.h),
 
+              // Account Details Section
+              Text(
+                'Account Details',
+                style: TextStyle(
+                  color: const Color(0xFF0F172A),
+                  fontSize: 18.sp,
+                  fontWeight: FontWeight.w800,
+                  fontFamily: 'Plus Jakarta Sans',
+                ),
+              ),
+              SizedBox(height: 16.h),
+              
+              _buildLabel('Email Address'),
+              _buildTextField(hint: 'e.g. seller@mail.com', controller: _emailController),
+              SizedBox(height: 16.h),
+              
+              _buildLabel('Password'),
+              _buildTextField(hint: 'Min 6 characters', isPassword: true, controller: _passwordController),
+              SizedBox(height: 24.h),
+
               // Shop Profile Section
               Text(
                 'Shop Profile',
@@ -86,13 +129,14 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
 
               // Shop Name
               _buildLabel('Shop Name'),
-              _buildTextField(hint: 'e.g. Damascus Woodcrafts'),
+              _buildTextField(hint: 'e.g. Damascus Woodcrafts', controller: _shopNameController),
               SizedBox(height: 16.h),
 
               // Craft Specialty
               _buildLabel('Craft Specialty'),
               _buildTextField(
                 hint: 'Select your primary craft',
+                controller: _specialtyController,
                 suffixIcon: Icon(Icons.keyboard_arrow_down,
                     color: commonColor, size: 24.w),
               ),
@@ -104,6 +148,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                 hint:
                     'Tell us about your journey, your craft, and\nwhat makes your products unique...',
                 maxLines: 4,
+                controller: _bioController,
               ),
               SizedBox(height: 16.h),
 
@@ -141,6 +186,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               ),
               SizedBox(height: 20.h),
             ],
+          ),
           ),
         ),
       ),
@@ -209,14 +255,24 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
     String? hint,
     int maxLines = 1,
     Widget? suffixIcon,
+    TextEditingController? controller,
+    bool isPassword = false,
   }) {
     return TextFormField(
+      controller: controller,
+      obscureText: isPassword,
       maxLines: maxLines,
       style: TextStyle(
         fontSize: 14.sp,
         fontFamily: 'Plus Jakarta Sans',
         color: const Color(0xFF0F172A),
       ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'This field is required';
+        }
+        return null;
+      },
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,
@@ -390,35 +446,73 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
   }
 
   Widget _buildSubmitButton() {
-    return SizedBox(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: () {},
-        style: ElevatedButton.styleFrom(
-          backgroundColor: commonColor,
-          padding: EdgeInsets.symmetric(vertical: 16.h),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.r),
-          ),
-          elevation: 0,
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              'Submit Request',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w600,
-                fontFamily: 'Plus Jakarta Sans',
+    return BlocConsumer<AuthCubit, AuthState>(
+      listener: (context, state) {
+        if (state is RegisterSuccessState) {
+          Get.snackbar(
+            'Success',
+            'Registration complete! Awaiting admin approval.',
+            backgroundColor: Colors.green,
+            colorText: Colors.white,
+          );
+          // Go to dashboard or wait screen
+          Get.offAllNamed(AppRoutes.sellerdashboard);
+        } else if (state is AuthError) {
+          Get.snackbar(
+            'Error',
+            state.message,
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+          );
+        }
+      },
+      builder: (context, state) {
+        if (state is AuthLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return SizedBox(
+          width: double.infinity,
+          child: ElevatedButton(
+            onPressed: () {
+              if (_formKey.currentState!.validate() && _agreedToTerms) {
+                context.read<AuthCubit>().registerSeller(
+                  email: _emailController.text,
+                  password: _passwordController.text,
+                  shopName: _shopNameController.text,
+                  specialty: _specialtyController.text,
+                  bio: _bioController.text,
+                );
+              } else if (!_agreedToTerms) {
+                Get.snackbar('Error', 'Please agree to the Terms of Service');
+              }
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: commonColor,
+              padding: EdgeInsets.symmetric(vertical: 16.h),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8.r),
               ),
+              elevation: 0,
             ),
-            SizedBox(width: 8.w),
-            Icon(Icons.send_outlined, color: Colors.white, size: 20.w),
-          ],
-        ),
-      ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text(
+                  'Submit Request',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w600,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                ),
+                SizedBox(width: 8.w),
+                Icon(Icons.send_outlined, color: Colors.white, size: 20.w),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 }

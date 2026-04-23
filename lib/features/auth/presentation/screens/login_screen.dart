@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/email_validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -119,10 +118,30 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 SizedBox(height: 20.h),
 
-                BlocBuilder<AuthCubit, AuthState>(
+                BlocConsumer<AuthCubit, AuthState>(
+                  listener: (context, state) {
+                    if (state is AuthAuthenticated) {
+                      if (state.role == 'seller') {
+                        Get.offAllNamed(AppRoutes.sellerdashboard); // Or sellerbottomnav if that's the correct route
+                      } else {
+                        Get.offAllNamed(AppRoutes.customerlayout);
+                      }
+                    } else if (state is AuthError) {
+                      Get.snackbar(
+                        'Login Failed',
+                        state.message,
+                        snackPosition: SnackPosition.BOTTOM,
+                        backgroundColor: Colors.redAccent,
+                        colorText: Colors.white,
+                      );
+                    }
+                  },
                   builder: (context, state) {
+                    if (state is AuthLoading) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
                     return CustomElevatedButton(
-                      onPressed: () async {
+                      onPressed: () {
                         if (_formkey.currentState!.validate()) {
                           _formkey.currentState!.save();
                           context.read<AuthCubit>().login(
@@ -131,7 +150,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           );
                         }
                       },
-
                       buttoncolor: primaryColor,
                       child: Text(
                         'Sign In',

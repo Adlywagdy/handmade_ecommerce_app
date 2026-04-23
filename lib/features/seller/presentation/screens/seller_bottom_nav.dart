@@ -7,6 +7,7 @@ import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_earnings_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
@@ -76,7 +77,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
     SellerManageProductsScreen(onBackPressed: () => _switchTab(0)),
     SellerOrdersScreen(onBackPressed: () => _switchTab(0)),
     SellerRegistrationScreen(onBackPressed: () => _switchTab(0)),
-    const _PlaceholderScreen(title: 'Earnings'),
+    SellerEarningsScreen(onBackPressed: () => _switchTab(0)),
   ];
 
   Widget _buildBottomNav() {
@@ -174,42 +175,6 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Placeholder screen for tabs not yet implemented
-class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-
-  const _PlaceholderScreen({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: customerbackGroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.construction_outlined,
-              color: commonColor.withValues(alpha: 0.5),
-              size: 48.w,
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              '$title - Coming Soon',
-              style: TextStyle(
-                color: const Color(0xFF64748B),
-                fontSize: 16.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

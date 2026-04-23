@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import '../../../../../core/routes/routes.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../widgets/dashboard_header.dart';
 import '../../widgets/dashboard_stats_grid.dart';
@@ -19,7 +21,9 @@ class DashboardScreen extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const DashboardHeader(),
+              DashboardHeader(
+                onNotificationTap: () => Get.toNamed(AppRoutes.notifications),
+              ),
               SizedBox(height: 20.h),
               Text(
                 'Good morning, Admin',

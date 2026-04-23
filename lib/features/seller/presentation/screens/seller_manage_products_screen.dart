@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
+import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_product_card.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -21,69 +23,18 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  // Mock product data
-  final List<Map<String, dynamic>> _allProducts = [
-    {
-      'name': 'Handmade Terracotta V...',
-      'price': 'EGP 450.00',
-      'stock': 'Stock: 12 units',
-      'status': 'Active',
-      'isActive': true,
-      'image':
-          'https://images.unsplash.com/photo-1565193566173-7a0ee3dbe261?w=200&h=200&fit=crop',
-    },
-    {
-      'name': 'Woven Palm Leaf Basket',
-      'price': 'EGP 250.00',
-      'stock': 'Stock: 5 units',
-      'status': 'Active',
-      'isActive': true,
-      'image':
-          'https://images.unsplash.com/photo-1622205313162-be1d5712a43f?w=200&h=200&fit=crop',
-    },
-    {
-      'name': 'Embroidered Linen Cush...',
-      'price': 'EGP 380.00',
-      'stock': 'Stock: 0 units',
-      'status': 'Pending Review',
-      'isActive': false,
-      'image':
-          'https://images.unsplash.com/photo-1629949009765-40fc74c9ec21?w=200&h=200&fit=crop',
-    },
-    {
-      'name': 'Ceramic Decorative Plate',
-      'price': 'EGP 600.00',
-      'stock': 'Stock: 8 units',
-      'status': 'Active',
-      'isActive': true,
-      'image':
-          'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&h=200&fit=crop',
-    },
-  ];
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
+    // Trigger load of dashboard if not loaded yet
+    context.read<SellerCubit>().loadDashboard();
   }
 
   @override
   void dispose() {
     _tabController.dispose();
     super.dispose();
-  }
-
-  List<Map<String, dynamic>> _getFilteredProducts(int tabIndex) {
-    switch (tabIndex) {
-      case 1: // Active
-        return _allProducts.where((p) => p['status'] == 'Active').toList();
-      case 2: // Pending
-        return _allProducts
-            .where((p) => p['status'] == 'Pending Review')
-            .toList();
-      default: // All
-        return _allProducts;
-    }
   }
 
   @override
@@ -141,13 +92,29 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
           child: _buildTabBar(),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildProductList(0),
-          _buildProductList(1),
-          _buildProductList(2),
-        ],
+      body: BlocBuilder<SellerCubit, SellerState>(
+        builder: (context, state) {
+          if (state is SellerLoading) {
+            return const Center(child: CircularProgressIndicator());
+          } else if (state is SellerError) {
+            return Center(child: Text(state.message, style: const TextStyle(color: Colors.red)));
+          } else if (state is SellerLoaded) {
+            final allProducts = state.products;
+            
+            final activeProducts = allProducts.where((p) => p.status == 'Active' || p.status == 'In Stock' || p.isActive).toList();
+            final pendingProducts = allProducts.where((p) => p.status == 'Pending Review').toList();
+
+            return TabBarView(
+              controller: _tabController,
+              children: [
+                _buildProductList(allProducts),
+                _buildProductList(activeProducts),
+                _buildProductList(pendingProducts),
+              ],
+            );
+          }
+          return const Center(child: Text('No products found'));
+        },
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
@@ -155,60 +122,63 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
         },
         backgroundColor: commonColor,
         elevation: 4,
-        shape: const CircleBorder(),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
         child: Icon(Icons.add, color: Colors.white, size: 28.w),
       ),
     );
   }
 
   Widget _buildTabBar() {
-    return TabBar(
-      controller: _tabController,
-      labelColor: const Color(0xFF0F172A),
-      unselectedLabelColor: const Color(0xFF94A3B8),
-      labelStyle: TextStyle(
-        fontSize: 14.sp,
-        fontFamily: 'Plus Jakarta Sans',
-        fontWeight: FontWeight.w600,
+    return Container(
+      decoration: const BoxDecoration(
+        border: Border(
+          bottom: BorderSide(
+            color: Color(0xFFE2E8F0),
+            width: 1.0,
+          ),
+        ),
       ),
-      unselectedLabelStyle: TextStyle(
-        fontSize: 14.sp,
-        fontFamily: 'Plus Jakarta Sans',
-        fontWeight: FontWeight.w500,
+      child: TabBar(
+        controller: _tabController,
+        labelColor: commonColor,
+        unselectedLabelColor: const Color(0xFF64748B),
+        indicatorColor: commonColor,
+        indicatorWeight: 3,
+        labelStyle: TextStyle(
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w700,
+          fontFamily: 'Plus Jakarta Sans',
+        ),
+        unselectedLabelStyle: TextStyle(
+          fontSize: 14.sp,
+          fontWeight: FontWeight.w500,
+          fontFamily: 'Plus Jakarta Sans',
+        ),
+        tabs: const [
+          Tab(text: 'All'),
+          Tab(text: 'Active'),
+          Tab(text: 'Pending'),
+        ],
       ),
-      indicatorColor: commonColor,
-      indicatorWeight: 2.5,
-      indicatorSize: TabBarIndicatorSize.tab,
-      dividerColor: const Color(0xFFE2E8F0),
-      tabs: [
-        Tab(text: 'All (${_allProducts.length})'),
-        Tab(text: 'Active'),
-        Tab(text: 'Pending'),
-      ],
     );
   }
 
-  Widget _buildProductList(int tabIndex) {
-    final products = _getFilteredProducts(tabIndex);
-
+  Widget _buildProductList(List<SellerProductModel> products) {
     if (products.isEmpty) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(
-              Icons.inventory_2_outlined,
-              color: const Color(0xFF94A3B8),
-              size: 48.w,
-            ),
-            SizedBox(height: 12.h),
+            Icon(Icons.inventory_2_outlined, size: 64.w, color: const Color(0xFFCBD5E1)),
+            SizedBox(height: 16.h),
             Text(
               'No products found',
               style: TextStyle(
-                color: const Color(0xFF94A3B8),
+                color: const Color(0xFF64748B),
                 fontSize: 16.sp,
                 fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -217,117 +187,144 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
     }
 
     return ListView.builder(
-      padding: EdgeInsets.only(top: 4.h),
+      padding: EdgeInsets.all(16.w),
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
-        return SellerProductCard(
-          productName: product['name'],
-          price: product['price'],
-          stock: product['stock'],
-          status: product['status'],
-          imageUrl: product['image'],
-          isActive: product['isActive'],
-          onToggle: (value) {
-            setState(() {
-              final originalIndex = _allProducts.indexOf(product);
-              if (originalIndex != -1) {
-                _allProducts[originalIndex]['isActive'] = value;
-              }
-            });
-          },
-          onMenuTap: () {
-            _showProductMenu(context, product);
-          },
+        return Padding(
+          padding: EdgeInsets.only(bottom: 12.h),
+          child: _buildRealProductCard(product),
         );
       },
     );
   }
 
-  void _showProductMenu(BuildContext context, Map<String, dynamic> product) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(16.r)),
-      ),
-      builder: (context) {
-        return SafeArea(
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 16.h),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 36.w,
-                  height: 4.h,
-                  margin: EdgeInsets.only(bottom: 16.h),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE2E8F0),
-                    borderRadius: BorderRadius.circular(2.r),
-                  ),
+  Widget _buildRealProductCard(SellerProductModel product) {
+    return InkWell(
+      onTap: () {
+        // Navigate to edit screen and pass product
+      },
+      borderRadius: BorderRadius.circular(12.r),
+      child: Container(
+        padding: EdgeInsets.all(12.w),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12.r),
+          border: Border.all(color: const Color(0xFFF1F5F9)),
+          boxShadow: [
+            BoxShadow(
+              color: const Color(0xFF0F172A).withValues(alpha: 0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Product Image
+            Container(
+              width: 80.w,
+              height: 80.w,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(8.r),
+                color: const Color(0xFFF8FAFC),
+                image: DecorationImage(
+                  image: NetworkImage(product.images.isNotEmpty ? product.images.first : 'https://via.placeholder.com/150'),
+                  fit: BoxFit.cover,
                 ),
-                ListTile(
-                  leading: Icon(Icons.edit_outlined, color: commonColor),
-                  title: Text(
-                    'Edit Product',
+              ),
+            ),
+            SizedBox(width: 12.w),
+
+            // Product Details
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    product.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
+                      color: const Color(0xFF0F172A),
+                      fontSize: 15.sp,
+                      fontWeight: FontWeight.w700,
                       fontFamily: 'Plus Jakarta Sans',
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
                     ),
                   ),
-                  onTap: () {
-                    Get.back();
-                    Get.toNamed(AppRoutes.selleraddproduct);
-                  },
-                ),
-                ListTile(
-                  leading: Icon(
-                    Icons.visibility_outlined,
-                    color: const Color(0xFF334155),
-                  ),
-                  title: Text(
-                    'View Details',
+                  SizedBox(height: 4.h),
+                  Text(
+                    'EGP ${product.price.toStringAsFixed(2)}',
                     style: TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
+                      color: commonColor,
                       fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
+                      fontWeight: FontWeight.w700,
+                      fontFamily: 'Plus Jakarta Sans',
                     ),
                   ),
-                  onTap: () {
-                    Get.back();
-                    Get.to(
-                      () => CustomerProductDetailsScreen(
-                        product: productsListData[0], // Using mock data
+                  SizedBox(height: 8.h),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Stock: ${product.stock} units',
+                        style: TextStyle(
+                          color: const Color(0xFF64748B),
+                          fontSize: 12.sp,
+                          fontFamily: 'Plus Jakarta Sans',
+                        ),
                       ),
-                    );
-                  },
+                      Container(
+                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        decoration: BoxDecoration(
+                          color: product.isActive
+                              ? const Color(0xFFECFDF5)
+                              : const Color(0xFFFFFBEB),
+                          borderRadius: BorderRadius.circular(4.r),
+                        ),
+                        child: Text(
+                          product.status,
+                          style: TextStyle(
+                            color: product.isActive
+                                ? const Color(0xFF10B981) // Green
+                                : const Color(0xFFF59E0B), // Amber/Orange
+                            fontSize: 10.sp,
+                            fontWeight: FontWeight.w700,
+                            fontFamily: 'Plus Jakarta Sans',
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+
+            // Actions Menu
+            PopupMenuButton<String>(
+              icon: Icon(Icons.more_vert, color: const Color(0xFF94A3B8), size: 20.w),
+              onSelected: (value) {
+                if (value == 'edit') {
+                  // Navigate to edit screen
+                } else if (value == 'delete') {
+                  context.read<SellerCubit>().deleteProduct(product.id);
+                }
+              },
+              itemBuilder: (BuildContext context) => [
+                const PopupMenuItem<String>(
+                  value: 'edit',
+                  child: Text('Edit Product'),
                 ),
-                ListTile(
-                  leading: Icon(
-                    Icons.delete_outlined,
-                    color: const Color(0xFFD32F2F),
-                  ),
-                  title: Text(
-                    'Delete Product',
-                    style: TextStyle(
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontSize: 14.sp,
-                      fontWeight: FontWeight.w500,
-                      color: const Color(0xFFD32F2F),
-                    ),
-                  ),
-                  onTap: () {
-                    Get.back();
-                    // TODO: Delete product
-                  },
+                const PopupMenuItem<String>(
+                  value: 'delete',
+                  child: Text('Delete', style: TextStyle(color: Colors.red)),
                 ),
               ],
             ),
-          ),
-        );
-      },
+          ],
+        ),
+      ),
     );
   }
 }

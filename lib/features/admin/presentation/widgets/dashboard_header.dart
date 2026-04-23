@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../../core/theme/colors.dart';
+import '../../../notifications/cubit/notifications_cubit.dart';
+import '../../../notifications/cubit/notifications_state.dart';
+import '../../../notifications/presentation/widgets/notification_badge.dart';
 
 class DashboardHeader extends StatelessWidget {
   final String iconPath;
@@ -29,10 +33,19 @@ class DashboardHeader extends StatelessWidget {
         ),
         GestureDetector(
           onTap: onNotificationTap,
-          child: Icon(
-            Icons.notifications_outlined,
-            color: commonColor,
-            size: 22.sp,
+          child: BlocBuilder<NotificationsCubit, NotificationsState>(
+            builder: (context, state) {
+              final unreadCount =
+                  state is NotificationsLoaded ? state.unreadCount : 0;
+              return NotificationBadge(
+                unreadCount: unreadCount,
+                child: Icon(
+                  Icons.notifications_outlined,
+                  color: commonColor,
+                  size: 22.sp,
+                ),
+              );
+            },
           ),
         ),
       ],

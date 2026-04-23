@@ -45,6 +45,11 @@ dependencies:
   flutter_svg: ^2.2.4
   flutter_paypal_payment: ^1.0.8
   firebase_core: ^4.6.0
+  fl_chart: ^0.70.2
+  firebase_auth: ^6.4.0
+  cloud_firestore: ^6.3.0
+  firebase_storage: ^13.3.0
+  image_picker: ^1.2.1
 
 
 dev_dependencies:

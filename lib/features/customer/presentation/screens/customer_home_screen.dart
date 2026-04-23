@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -14,6 +15,9 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/topratedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
+import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_state.dart';
+import 'package:handmade_ecommerce_app/features/notifications/presentation/widgets/notification_badge.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
@@ -38,10 +42,21 @@ class CustomerHomeScreen extends StatelessWidget {
                 style: AppTextStyles.t_20w700.copyWith(color: commonColor),
               ),
               actions: [
-                CustomIconButton(
-                  backgroundColor: customerbackGroundColor,
-                  icon: Icons.notifications_none,
-                  iconcolor: darkblue,
+                BlocBuilder<NotificationsCubit, NotificationsState>(
+                  builder: (context, state) {
+                    final unreadCount = state is NotificationsLoaded
+                        ? state.unreadCount
+                        : 0;
+                    return NotificationBadge(
+                      unreadCount: unreadCount,
+                      child: CustomIconButton(
+                        backgroundColor: customerbackGroundColor,
+                        icon: Icons.notifications_none,
+                        iconcolor: darkblue,
+                        onPressed: () => Get.toNamed(AppRoutes.notifications),
+                      ),
+                    );
+                  },
                 ),
               ],
             ),

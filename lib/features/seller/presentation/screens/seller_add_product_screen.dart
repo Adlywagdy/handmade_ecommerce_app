@@ -1,7 +1,12 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 
 class SellerAddProductScreen extends StatefulWidget {
   const SellerAddProductScreen({super.key});
@@ -11,7 +16,34 @@ class SellerAddProductScreen extends StatefulWidget {
 }
 
 class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
+  final _formKey = GlobalKey<FormState>();
   bool _isActive = true;
+
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController(text: 'Ceramics');
+  final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _descriptionController = TextEditingController();
+
+  final List<File> _selectedImages = [];
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickImage() async {
+    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _selectedImages.add(File(pickedFile.path));
+      });
+    }
+  }
+
+  @override
+  void dispose() {
+    _titleController.dispose();
+    _categoryController.dispose();
+    _priceController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,71 +82,78 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
       body: SingleChildScrollView(
         child: Padding(
           padding: EdgeInsets.all(20.w),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Product Images Section
-              _buildImagesSection(),
-              SizedBox(height: 24.h),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Product Images Section
+                _buildImagesSection(),
+                SizedBox(height: 24.h),
 
-              // Product Title
-              _buildLabel('Product Title'),
-              _buildTextField(
-                initialValue: 'Hand-painted Ceramic Serving Dish',
-              ),
-              SizedBox(height: 20.h),
+                // Product Title
+                _buildLabel('Product Title'),
+                _buildTextField(
+                  hint: 'e.g. Hand-painted Ceramic Serving Dish',
+                  controller: _titleController,
+                ),
+                SizedBox(height: 20.h),
 
-              // Category and Price Row
-              Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel('Category'),
-                        _buildTextField(
-                          initialValue: 'Ceramics',
-                          suffixIcon: Icon(Icons.keyboard_arrow_down,
-                              color: const Color(0xFF64748B), size: 20.w),
-                        ),
-                      ],
+                // Category and Price Row
+                Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLabel('Category'),
+                          _buildTextField(
+                            hint: 'Category',
+                            controller: _categoryController,
+                            suffixIcon: Icon(Icons.keyboard_arrow_down,
+                                color: const Color(0xFF64748B), size: 20.w),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(width: 16.w),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        _buildLabel('Price (EGP)'),
-                        _buildTextField(
-                          initialValue: ' 450.00', // Added space after £ prefix manually if prefixText has issues
-                          prefixText: '£', // UK Pound symbol as it appears in the design
-                        ),
-                      ],
+                    SizedBox(width: 16.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          _buildLabel('Price (EGP)'),
+                          _buildTextField(
+                            hint: '450.00',
+                            controller: _priceController,
+                            prefixText: 'EGP',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(height: 20.h),
+                  ],
+                ),
+                SizedBox(height: 20.h),
 
-              // Description
-              _buildLabel('Description'),
-              _buildTextField(
-                initialValue:
-                    'This serving dish is hand-painted using traditional motifs from Upper Egypt. Each piece is unique and kiln-fired for durability. Perfect for serving dates or traditional sweets...',
-                maxLines: 5,
-              ),
-              SizedBox(height: 24.h),
+                // Description
+                _buildLabel('Description'),
+                _buildTextField(
+                  hint: 'Describe your product...',
+                  controller: _descriptionController,
+                  maxLines: 5,
+                ),
+                SizedBox(height: 24.h),
 
-              // Active Listing Toggle
-              _buildActiveListingToggle(),
-              SizedBox(height: 32.h),
+                // Active Listing Toggle
+                _buildActiveListingToggle(),
+                SizedBox(height: 32.h),
 
-              // Action Buttons
-              _buildActionButtons(),
-              SizedBox(height: 16.h),
-            ],
+                // Action Buttons
+                _buildActionButtons(),
+                SizedBox(height: 16.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -144,7 +183,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 borderRadius: BorderRadius.circular(4.r),
               ),
               child: Text(
-                '2 / 5',
+                '${_selectedImages.length} / 5',
                 style: TextStyle(
                   color: commonColor,
                   fontSize: 12.sp,
@@ -161,13 +200,15 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           clipBehavior: Clip.none,
           child: Row(
             children: [
-              _buildImageCard(
-                  'https://images.unsplash.com/photo-1610701596007-11502861dcfa?w=200&h=200&fit=crop'), // Ceramic bowl
-              SizedBox(width: 12.w),
-              _buildImageCard(
-                  'https://images.unsplash.com/photo-1590059599551-2e63c0a52ca1?w=200&h=200&fit=crop'), // Woven plate/tray
-              SizedBox(width: 12.w),
-              _buildAddPhotoCard(),
+              ..._selectedImages.map((file) => Padding(
+                padding: EdgeInsets.only(right: 12.w),
+                child: _buildImageCard(file),
+              )),
+              if (_selectedImages.length < 5)
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: _buildAddPhotoCard(),
+                ),
             ],
           ),
         ),
@@ -175,18 +216,41 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
     );
   }
 
-  Widget _buildImageCard(String url) {
-    return Container(
-      width: 90.w,
-      height: 90.w,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF1F5F9),
-        borderRadius: BorderRadius.circular(8.r),
-        image: DecorationImage(
-          image: NetworkImage(url),
-          fit: BoxFit.cover,
+  Widget _buildImageCard(File file) {
+    return Stack(
+      children: [
+        Container(
+          width: 90.w,
+          height: 90.w,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF1F5F9),
+            borderRadius: BorderRadius.circular(8.r),
+            image: DecorationImage(
+              image: FileImage(file),
+              fit: BoxFit.cover,
+            ),
+          ),
         ),
-      ),
+        Positioned(
+          top: 4.w,
+          right: 4.w,
+          child: GestureDetector(
+            onTap: () {
+              setState(() {
+                _selectedImages.remove(file);
+              });
+            },
+            child: Container(
+              padding: EdgeInsets.all(4.w),
+              decoration: const BoxDecoration(
+                color: Colors.black54,
+                shape: BoxShape.circle,
+              ),
+              child: Icon(Icons.close, color: Colors.white, size: 12.w),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -203,7 +267,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
         width: 90.w,
         height: 90.w,
         decoration: BoxDecoration(
-          color: const Color(0xFFFDF8F4), // Muted warm background
+          color: const Color(0xFFFDF8F4), 
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Column(
@@ -242,14 +306,23 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   }
 
   Widget _buildTextField({
-    String? initialValue,
+    String? hint,
     int maxLines = 1,
     Widget? suffixIcon,
     String? prefixText,
+    TextEditingController? controller,
+    TextInputType? keyboardType,
   }) {
     return TextFormField(
-      initialValue: initialValue,
+      controller: controller,
       maxLines: maxLines,
+      keyboardType: keyboardType,
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'This field is required';
+        }
+        return null;
+      },
       style: TextStyle(
         fontSize: 14.sp,
         fontFamily: 'Plus Jakarta Sans',
@@ -259,9 +332,10 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
       decoration: InputDecoration(
         fillColor: Colors.white,
         filled: true,
+        hintText: hint,
         prefixText: prefixText != null ? '$prefixText ' : null,
         prefixStyle: TextStyle(
-          color: const Color(0xFF94A3B8), // Muted gray prefix
+          color: const Color(0xFF94A3B8), 
           fontSize: 14.sp,
           fontFamily: 'Plus Jakarta Sans',
         ),
@@ -339,56 +413,103 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   }
 
   Widget _buildActionButtons() {
-    return Column(
-      children: [
-        SizedBox(
-          width: double.infinity,
-          child: ElevatedButton.icon(
-            onPressed: () {},
-            icon: Icon(Icons.save_outlined, color: Colors.white, size: 20.w),
-            label: Text(
-              'Save Product',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Plus Jakarta Sans',
+    return BlocConsumer<SellerCubit, SellerState>(
+      listener: (context, state) {
+        if (state is SellerError) {
+          Get.snackbar(
+            'Error',
+            state.message,
+            backgroundColor: Colors.redAccent,
+            colorText: Colors.white,
+          );
+        } else if (state is SellerLoaded) {
+          // Handled manually after the await call
+        }
+      },
+      builder: (context, state) {
+        if (state is SellerLoading) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        return Column(
+          children: [
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton.icon(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    if (_selectedImages.isEmpty) {
+                      Get.snackbar('Error', 'Please add at least one product image', backgroundColor: Colors.redAccent, colorText: Colors.white);
+                      return;
+                    }
+
+                    double price = double.tryParse(_priceController.text) ?? 0;
+                    
+                    await context.read<SellerCubit>().addProductWithImages(
+                      name: _titleController.text,
+                      description: _descriptionController.text,
+                      price: price,
+                      stock: 10, // Default stock for now
+                      category: _categoryController.text,
+                      imageFiles: _selectedImages,
+                    );
+                    
+                    Get.back(); // Return to previous screen
+                    Get.snackbar(
+                      'Success',
+                      'Product added successfully!',
+                      backgroundColor: Colors.green,
+                      colorText: Colors.white,
+                    );
+                  }
+                },
+                icon: Icon(Icons.save_outlined, color: Colors.white, size: 20.w),
+                label: Text(
+                  'Save Product',
+                  style: TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                ),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: commonColor,
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                  elevation: 0,
+                ),
               ),
             ),
-            style: ElevatedButton.styleFrom(
-              backgroundColor: commonColor,
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-              elevation: 0,
-            ),
-          ),
-        ),
-        SizedBox(height: 12.h),
-        SizedBox(
-          width: double.infinity,
-          child: OutlinedButton(
-            onPressed: () {},
-            style: OutlinedButton.styleFrom(
-              side: BorderSide(color: commonColor, width: 1.5),
-              padding: EdgeInsets.symmetric(vertical: 16.h),
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(8.r),
-              ),
-            ),
-            child: Text(
-              'Discard Changes',
-              style: TextStyle(
-                color: commonColor,
-                fontSize: 16.sp,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Plus Jakarta Sans',
+            SizedBox(height: 12.h),
+            SizedBox(
+              width: double.infinity,
+              child: OutlinedButton(
+                onPressed: () {
+                  Get.back();
+                },
+                style: OutlinedButton.styleFrom(
+                  side: BorderSide(color: commonColor, width: 1.5),
+                  padding: EdgeInsets.symmetric(vertical: 16.h),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8.r),
+                  ),
+                ),
+                child: Text(
+                  'Discard Changes',
+                  style: TextStyle(
+                    color: commonColor,
+                    fontSize: 16.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                ),
               ),
             ),
-          ),
-        ),
-      ],
+          ],
+        );
+      },
     );
   }
 }
