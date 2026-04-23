@@ -124,13 +124,47 @@ class SellerFirestoreService {
 
   // ─── Dashboard Stats ───
 
-  /// Fetch dashboard stats (This should ideally be calculated by a cloud function)
+  /// Fetch dashboard stats dynamically
   Future<SellerDashboardStats> getDashboardStats() async {
     try {
-      // In a real app, we would calculate this by aggregating the products and orders collections,
-      // or fetching from a dedicated stats document. For now, returning mock data.
-      await Future.delayed(const Duration(milliseconds: 500)); // Simulate network
-      return mockDashboardStats;
+      final orders = await getOrders();
+      
+      double totalRevenue = 0;
+      int completedOrders = 0;
+      List<double> weeklySales = List.filled(7, 0.0);
+      
+      final now = DateTime.now();
+
+      for (var order in orders) {
+        // Only count completed/delivered orders as revenue
+        if (order.status.toLowerCase() == 'completed' || order.status.toLowerCase() == 'delivered') {
+          totalRevenue += order.totalAmount;
+          completedOrders++;
+          
+          // Try to parse orderDate, assuming it's an ISO string or similar. 
+          // If it's a string like "20 mins ago", this parsing will fail. 
+          // Ideally, we'd use a real Timestamp field. For safety, we wrap in try-catch.
+          try {
+            final date = DateTime.parse(order.orderDate);
+            final difference = now.difference(date).inDays;
+            if (difference >= 0 && difference < 7) {
+              // Day 6 is today, day 0 is 6 days ago
+              final index = 6 - difference;
+              weeklySales[index] += order.totalAmount;
+            }
+          } catch (_) {
+            // fallback if date is not parseable
+          }
+        }
+      }
+
+      return SellerDashboardStats(
+        totalSales: totalRevenue.toStringAsFixed(2),
+        totalOrders: completedOrders.toString(),
+        totalRevenue: totalRevenue.toStringAsFixed(2),
+        totalProducts: '0', // Not used strictly here, or could be fetched
+        weeklySales: weeklySales,
+      );
     } catch (e) {
       throw Exception('Failed to load dashboard stats: $e');
     }

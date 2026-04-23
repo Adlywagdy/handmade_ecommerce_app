@@ -457,7 +457,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
           );
           // Go to dashboard or wait screen
           Get.offAllNamed(AppRoutes.sellerdashboard);
-        } else if (state is AuthError) {
+        } else if (state is RegisterErrorState) {
           Get.snackbar(
             'Error',
             state.message,
@@ -475,12 +475,11 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
           child: ElevatedButton(
             onPressed: () {
               if (_formKey.currentState!.validate() && _agreedToTerms) {
-                context.read<AuthCubit>().registerSeller(
+                context.read<AuthCubit>().register(
                   email: _emailController.text,
                   password: _passwordController.text,
-                  shopName: _shopNameController.text,
-                  specialty: _specialtyController.text,
-                  bio: _bioController.text,
+                  fullName: _shopNameController.text,
+                  role: 'seller',
                 );
               } else if (!_agreedToTerms) {
                 Get.snackbar('Error', 'Please agree to the Terms of Service');

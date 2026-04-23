@@ -13,17 +13,21 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_best_selling_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_quick_action.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_order_card.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 class SellerDashboardScreen extends StatelessWidget {
   final VoidCallback? onAddProduct;
   final VoidCallback? onViewProducts;
   final VoidCallback? onViewOrders;
+  final VoidCallback? onOpenProfile;
 
   const SellerDashboardScreen({
     super.key,
     this.onAddProduct,
     this.onViewProducts,
     this.onViewOrders,
+    this.onOpenProfile,
   });
 
   @override
@@ -56,7 +60,7 @@ class SellerDashboardScreen extends StatelessWidget {
 
                     // ── Welcome Text ──
                     Text(
-                      'Welcome back, Aisha',
+                      'Welcome back, ${FirebaseAuth.instance.currentUser?.displayName ?? 'Seller'}',
                       style: TextStyle(
                         color: const Color(0xFF0F172A),
                         fontSize: 22.sp,
@@ -207,31 +211,33 @@ class SellerDashboardScreen extends StatelessWidget {
                     SizedBox(height: 8.h),
 
                     // ── Recent Orders List ──
-                    // For now, these are static UI representations, later we can map state.recentOrders here
-                    SellerOrderCard(
-                      orderId: '#ORD-2841',
-                      status: 'PROCESSING',
-                      productName: 'Leather Handbag',
-                      timeAgo: '20 mins ago',
-                      price: 'EGP 1,200',
-                    ),
-                    SizedBox(height: 10.h),
-                    SellerOrderCard(
-                      orderId: '#ORD-2839',
-                      status: 'SHIPPED',
-                      productName: 'Woven Rug',
-                      timeAgo: '2 hours ago',
-                      price: 'EGP 3,450',
-                    ),
-                    SizedBox(height: 10.h),
-                    SellerOrderCard(
-                      orderId: '#ORD-2835',
-                      status: 'DELIVERED',
-                      productName: 'Ceramic Vase',
-                      timeAgo: '5 hours ago',
-                      price: 'EGP 850',
-                    ),
-
+                    if (state.orders.isEmpty)
+                      Center(
+                        child: Padding(
+                          padding: EdgeInsets.symmetric(vertical: 24.h),
+                          child: Text(
+                            'No recent orders',
+                            style: TextStyle(
+                              color: const Color(0xFF64748B),
+                              fontSize: 14.sp,
+                              fontFamily: 'Plus Jakarta Sans',
+                            ),
+                          ),
+                        ),
+                      )
+                    else
+                      ...state.orders.take(3).map((order) {
+                        return Padding(
+                          padding: EdgeInsets.only(bottom: 10.h),
+                          child: SellerOrderCard(
+                            orderId: order.orderId,
+                            status: order.status.toUpperCase(),
+                            productName: order.items.isNotEmpty ? order.items.first.productName : 'Order Item',
+                            timeAgo: order.orderDate,
+                            price: 'EGP ${order.totalAmount}',
+                          ),
+                        );
+                      }),
                     SizedBox(height: 24.h),
                   ],
                 ),
@@ -245,31 +251,48 @@ class SellerDashboardScreen extends StatelessWidget {
   }
 
   Widget _buildProfileHeader() {
+    final user = FirebaseAuth.instance.currentUser;
+
     return Row(
       children: [
         // Profile Avatar
-        Container(
-          width: 44.w,
-          height: 44.w,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: commonColor.withValues(alpha: 0.1),
-            border: Border.all(
-              color: commonColor.withValues(alpha: 0.3),
-              width: 1.5,
+        GestureDetector(
+          onTap: () {
+            if (onOpenProfile != null) {
+              onOpenProfile!();
+              return;
+            }
+            Get.to(() => const SellerProfileScreen());
+          },
+          child: Container(
+            width: 44.w,
+            height: 44.w,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: commonColor.withValues(alpha: 0.1),
+              border: Border.all(
+                color: commonColor.withValues(alpha: 0.3),
+                width: 1.5,
+              ),
             ),
-          ),
-          child: ClipOval(
-            child: Image.network(
-              'https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=100&h=100&fit=crop&crop=face',
-              fit: BoxFit.cover,
-              errorBuilder: (context, error, stackTrace) {
-                return Icon(
-                  Icons.person,
-                  color: commonColor,
-                  size: 24.w,
-                );
-              },
+            child: ClipOval(
+              child: user?.photoURL != null && user!.photoURL!.isNotEmpty
+                  ? Image.network(
+                      user.photoURL!,
+                      fit: BoxFit.cover,
+                      errorBuilder: (context, error, stackTrace) {
+                        return Icon(
+                          Icons.person,
+                          color: commonColor,
+                          size: 24.w,
+                        );
+                      },
+                    )
+                  : Icon(
+                      Icons.person,
+                      color: commonColor,
+                      size: 24.w,
+                    ),
             ),
           ),
         ),
@@ -280,7 +303,7 @@ class SellerDashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Ayady Seller',
+                FirebaseAuth.instance.currentUser?.displayName ?? 'Ayady Seller',
                 style: TextStyle(
                   color: const Color(0xFF0F172A),
                   fontSize: 16.sp,

@@ -5,7 +5,10 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/utils/time_formatter.dart';
-
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
+import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 class SellerEarningsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
 
@@ -47,101 +50,151 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           ),
         ),
         actions: [
-          IconButton(
-            onPressed: () => Get.toNamed(AppRoutes.notifications),
-            icon: Icon(
-              Icons.notifications_outlined,
-              color: commonColor,
-              size: 22.w,
+          Padding(
+            padding: EdgeInsets.only(right: 12.w),
+            child: Container(
+              decoration: BoxDecoration(
+                color: commonColor.withValues(alpha: 0.10),
+                shape: BoxShape.circle,
+                border: Border.all(
+                  color: commonColor.withValues(alpha: 0.18),
+                ),
+              ),
+              child: IconButton(
+                onPressed: () => Get.toNamed(AppRoutes.notifications),
+                icon: Icon(
+                  Icons.notifications_none_rounded,
+                  color: commonColor,
+                  size: 22.w,
+                ),
+              ),
             ),
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        physics: const ClampingScrollPhysics(),
-        padding: EdgeInsets.symmetric(horizontal: 16.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            SizedBox(height: 8.h),
+      body: BlocBuilder<SellerCubit, SellerState>(
+        builder: (context, state) {
+          if (state is SellerLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (state is SellerLoaded) {
+            final stats = state.stats;
+            final revenue = stats.totalRevenue;
+            final completedOrdersCount = state.orders.where((o) => o.status.toLowerCase() == 'completed' || o.status.toLowerCase() == 'delivered').length;
+            final avgOrderValue = completedOrdersCount > 0 ? (double.parse(revenue) / completedOrdersCount).toStringAsFixed(2) : '0.00';
+            
+            final recentOrders = state.orders.take(5).toList();
+            final recentTransactions = recentOrders.map((o) => _Transaction(
+              orderId: o.orderId.length > 5 ? '#${o.orderId.substring(0, 5)}' : '#${o.orderId}',
+              amount: o.totalAmount.toStringAsFixed(2),
+              date: DateTime.tryParse(o.orderDate) ?? DateTime.now(),
+              isCompleted: o.status.toLowerCase() == 'completed' || o.status.toLowerCase() == 'delivered',
+            )).toList();
 
-            // ── Total Balance Card ──
-            _buildBalanceCard(),
-            SizedBox(height: 20.h),
+            return SingleChildScrollView(
+              physics: const ClampingScrollPhysics(),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8.h),
 
-            // ── Revenue Statistics Header + Toggle ──
-            _buildRevenueHeader(),
-            SizedBox(height: 14.h),
+                  // ── Total Balance Card ──
+                  _buildBalanceCard(revenue),
+                  SizedBox(height: 20.h),
 
-            // ── Chart ──
-            _EarningsChart(selectedPeriod: _selectedPeriod),
-            SizedBox(height: 16.h),
+                  // ── Revenue Statistics Header + Toggle ──
+                  _buildRevenueHeader(),
+                  SizedBox(height: 14.h),
 
-            // ── Quick Stats Row ──
-            Row(
-              children: [
-                Expanded(child: _buildQuickStatCard(
-                  title: 'Orders Processed',
-                  value: '156',
-                  icon: Icons.shopping_cart_outlined,
-                  iconColor: commonColor,
-                  iconBgColor: commonColor.withValues(alpha: 0.1),
-                )),
-                SizedBox(width: 12.w),
-                Expanded(child: _buildQuickStatCard(
-                  title: 'Avg. Order Value',
-                  value: 'EGP 82.30',
-                  icon: Icons.bar_chart_rounded,
-                  iconColor: primaryColor,
-                  iconBgColor: primaryColor.withValues(alpha: 0.1),
-                )),
-              ],
-            ),
-            SizedBox(height: 24.h),
+                  // ── Chart ──
+                  _EarningsChart(stats: stats, selectedPeriod: _selectedPeriod),
+                  SizedBox(height: 16.h),
 
-            // ── Recent Transactions Header ──
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  'Recent Transactions',
-                  style: TextStyle(
-                    color: const Color(0xFF0F172A),
-                    fontSize: 16.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w700,
+                  // ── Quick Stats Row ──
+                  Row(
+                    children: [
+                      Expanded(child: _buildQuickStatCard(
+                        title: 'Orders Processed',
+                        value: completedOrdersCount.toString(),
+                        icon: Icons.shopping_cart_outlined,
+                        iconColor: commonColor,
+                        iconBgColor: commonColor.withValues(alpha: 0.1),
+                      )),
+                      SizedBox(width: 12.w),
+                      Expanded(child: _buildQuickStatCard(
+                        title: 'Avg. Order Value',
+                        value: 'EGP $avgOrderValue',
+                        icon: Icons.bar_chart_rounded,
+                        iconColor: primaryColor,
+                        iconBgColor: primaryColor.withValues(alpha: 0.1),
+                      )),
+                    ],
                   ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    // TODO: Navigate to all transactions
-                  },
-                  child: Text(
-                    'View All ›',
-                    style: TextStyle(
-                      color: commonColor,
-                      fontSize: 13.sp,
-                      fontFamily: 'Plus Jakarta Sans',
-                      fontWeight: FontWeight.w600,
-                    ),
+                  SizedBox(height: 24.h),
+
+                  // ── Recent Transactions Header ──
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'Recent Transactions',
+                        style: TextStyle(
+                          color: const Color(0xFF0F172A),
+                          fontSize: 16.sp,
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          // TODO: Navigate to all transactions
+                        },
+                        child: Text(
+                          'View All ›',
+                          style: TextStyle(
+                            color: commonColor,
+                            fontSize: 13.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-              ],
-            ),
-            SizedBox(height: 12.h),
+                  SizedBox(height: 12.h),
 
-            // ── Transaction Cards ──
-            ..._mockTransactions.map((t) => _buildTransactionCard(t)),
+                  // ── Transaction Cards ──
+                  if (recentTransactions.isEmpty)
+                    Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(20.w),
+                        child: Text(
+                          'No recent transactions',
+                          style: TextStyle(
+                            color: const Color(0xFF94A3B8),
+                            fontSize: 14.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                          ),
+                        ),
+                      ),
+                    )
+                  else
+                    ...recentTransactions.map((t) => _buildTransactionCard(t)),
 
-            SizedBox(height: 24.h),
-          ],
-        ),
+                  SizedBox(height: 24.h),
+                ],
+              ),
+            );
+          }
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
 
   /// Total balance card with gradient background
-  Widget _buildBalanceCard() {
+  Widget _buildBalanceCard(String balance) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 22.h),
@@ -174,7 +227,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'EGP 12,840.00',
+            'EGP $balance',
             style: TextStyle(
               color: Colors.white,
               fontSize: 32.sp,
@@ -933,7 +986,8 @@ final _mockTransactions = [
 
 class _EarningsChart extends StatefulWidget {
   final int selectedPeriod;
-  const _EarningsChart({this.selectedPeriod = 0});
+  final SellerDashboardStats stats;
+  const _EarningsChart({required this.stats, this.selectedPeriod = 0});
 
   @override
   State<_EarningsChart> createState() => _EarningsChartState();
@@ -943,7 +997,6 @@ class _EarningsChartState extends State<_EarningsChart> {
   int _touchedIndex = -1;
 
   static const _wLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  static const _wData = [280.0, 350.0, 420.0, 310.0, 520.0, 380.0, 190.0];
   static const _mLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
   static const _mData = [1800.0, 2100.0, 2850.0, 2400.0, 1950.0, 2520.0];
 
@@ -958,10 +1011,12 @@ class _EarningsChartState extends State<_EarningsChart> {
   @override
   Widget build(BuildContext context) {
     final isW = widget.selectedPeriod == 0;
+    final List<double> _wData = widget.stats.weeklySales.isNotEmpty ? widget.stats.weeklySales : List.filled(7, 0.0);
     final data = isW ? _wData : _mData;
     final labels = isW ? _wLabels : _mLabels;
-    final maxY = isW ? 600.0 : 3500.0;
-    final interval = isW ? 200.0 : 1000.0;
+    final maxDataValue = data.isEmpty ? 0.0 : data.reduce((a, b) => a > b ? a : b);
+    final maxY = isW ? (maxDataValue + 200.0).clamp(600.0, double.infinity) : 3500.0;
+    final interval = isW ? (maxY / 4) : 1000.0;
     
     // Peak index = default highlighted bar when nothing is touched
     final peakIdx = data.indexOf(data.reduce((a, b) => a > b ? a : b));
@@ -1070,7 +1125,6 @@ class _EarningsChartState extends State<_EarningsChart> {
                   },
                   touchTooltipData: BarTouchTooltipData(
                     tooltipPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
-                    tooltipRoundedRadius: 8.r,
                     getTooltipItem: (group, gi, rod, ri) {
                       return BarTooltipItem(
                         'EGP ${rod.toY.toInt()}',
@@ -1086,8 +1140,8 @@ class _EarningsChartState extends State<_EarningsChart> {
                 ),
                 titlesData: FlTitlesData(
                   show: true,
-                  topTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: const AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,

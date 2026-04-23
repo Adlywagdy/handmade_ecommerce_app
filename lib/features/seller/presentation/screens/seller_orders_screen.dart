@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_manage_order_card.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
+import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 
 class SellerOrdersScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -16,57 +20,6 @@ class SellerOrdersScreen extends StatefulWidget {
 class _SellerOrdersScreenState extends State<SellerOrdersScreen>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
-
-  final List<Map<String, dynamic>> _dummyOrders = [
-    {
-      'id': 'Order #AY-9241',
-      'customer': 'Farah Khalil',
-      'items': 2,
-      'total': '850.00',
-      'status': 'NEW',
-      'time': 'Ordered 15 mins ago',
-      'buttonText': 'Process Order',
-      'isFilled': true,
-      'image':
-          'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop',
-    },
-    {
-      'id': 'Order #AY-9240',
-      'customer': 'Youssef Ibrahim',
-      'items': 1,
-      'total': '420.00',
-      'status': 'PROCESSING',
-      'time': 'Ordered 2 hours ago',
-      'buttonText': 'Update Status',
-      'isFilled': false,
-      'image':
-          'https://images.unsplash.com/photo-1582582621959-48d27397dc69?w=200&h=200&fit=crop',
-    },
-    {
-      'id': 'Order #AY-9238',
-      'customer': 'Mona Gad',
-      'items': 3,
-      'total': '1,200.00',
-      'status': 'PROCESSING',
-      'time': 'Ordered 5 hours ago',
-      'buttonText': 'Update Status',
-      'isFilled': false,
-      'image':
-          'https://images.unsplash.com/photo-1601924582970-9238bcb495d9?w=200&h=200&fit=crop',
-    },
-    {
-      'id': 'Order #AY-9235',
-      'customer': 'Ahmed Salem',
-      'items': 5,
-      'total': '340.00',
-      'status': 'URGENT',
-      'time': 'Ordered Yesterday',
-      'buttonText': 'Ship Order',
-      'isFilled': true,
-      'image':
-          'https://images.unsplash.com/photo-1600857062241-98e5dba7f214?w=200&h=200&fit=crop',
-    },
-  ];
 
   @override
   void initState() {
@@ -147,94 +100,139 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                 bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1),
               ),
             ),
-            child: TabBar(
-              controller: _tabController,
-              isScrollable: true,
-              tabAlignment: TabAlignment.start,
-              labelColor: commonColor,
-              unselectedLabelColor: const Color(0xFF64748B),
-              labelStyle: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w700,
-                fontFamily: 'Plus Jakarta Sans',
-              ),
-              unselectedLabelStyle: TextStyle(
-                fontSize: 14.sp,
-                fontWeight: FontWeight.w500,
-                fontFamily: 'Plus Jakarta Sans',
-              ),
-              indicatorColor: commonColor,
-              indicatorWeight: 2,
-              indicatorSize: TabBarIndicatorSize.tab,
-              dividerColor: Colors.transparent, // manually added border below
-              tabs: const [
-                Tab(text: 'Pending (12)'),
-                Tab(text: 'Shipped'),
-                Tab(text: 'Completed'),
-                Tab(text: 'Cancelled'),
-              ],
+            child: BlocBuilder<SellerCubit, SellerState>(
+              builder: (context, state) {
+                int pendingCount = 0;
+                if (state is SellerLoaded) {
+                  pendingCount = state.orders.where((o) => o.status.toLowerCase() == 'pending').length;
+                }
+                return TabBar(
+                  controller: _tabController,
+                  isScrollable: true,
+                  tabAlignment: TabAlignment.start,
+                  labelColor: commonColor,
+                  unselectedLabelColor: const Color(0xFF64748B),
+                  labelStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                  indicatorColor: commonColor,
+                  indicatorWeight: 2,
+                  indicatorSize: TabBarIndicatorSize.tab,
+                  dividerColor: Colors.transparent, // manually added border below
+                  tabs: [
+                    Tab(text: pendingCount > 0 ? 'Pending ($pendingCount)' : 'Pending'),
+                    const Tab(text: 'Shipped'),
+                    const Tab(text: 'Completed'),
+                    const Tab(text: 'Cancelled'),
+                  ],
+                );
+              },
             ),
           ),
         ),
       ),
-      body: TabBarView(
-        controller: _tabController,
-        children: [
-          _buildOrdersList(),
-          _buildPlaceholderList('Shipped'),
-          _buildPlaceholderList('Completed'),
-          _buildPlaceholderList('Cancelled'),
-        ],
+      body: BlocBuilder<SellerCubit, SellerState>(
+        builder: (context, state) {
+          if (state is SellerLoading) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          
+          if (state is SellerLoaded) {
+            final pendingOrders = state.orders.where((o) => o.status.toLowerCase() == 'pending').toList();
+            final shippedOrders = state.orders.where((o) => o.status.toLowerCase() == 'shipped').toList();
+            final completedOrders = state.orders.where((o) => o.status.toLowerCase() == 'completed' || o.status.toLowerCase() == 'delivered').toList();
+            final cancelledOrders = state.orders.where((o) => o.status.toLowerCase() == 'cancelled').toList();
+
+            return TabBarView(
+              controller: _tabController,
+              children: [
+                _buildOrdersList(pendingOrders, 'Pending'),
+                _buildOrdersList(shippedOrders, 'Shipped'),
+                _buildOrdersList(completedOrders, 'Completed'),
+                _buildOrdersList(cancelledOrders, 'Cancelled'),
+              ],
+            );
+          }
+          
+          return const SizedBox.shrink();
+        },
       ),
     );
   }
 
-  Widget _buildOrdersList() {
+  Widget _buildOrdersList(List<SellerOrderModel> orders, String tabName) {
+    if (orders.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.inventory_2_outlined,
+              size: 48.w,
+              color: const Color(0xFF94A3B8),
+            ),
+            SizedBox(height: 12.h),
+            Text(
+              'No $tabName Orders',
+              style: TextStyle(
+                color: const Color(0xFF64748B),
+                fontSize: 16.sp,
+                fontWeight: FontWeight.w500,
+                fontFamily: 'Plus Jakarta Sans',
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+
     return ListView.builder(
       padding: EdgeInsets.all(16.w),
-      itemCount: _dummyOrders.length,
+      itemCount: orders.length,
       itemBuilder: (context, index) {
-        final order = _dummyOrders[index];
+        final order = orders[index];
         return SellerManageOrderCard(
-          orderId: order['id'],
-          customerName: order['customer'],
-          itemCount: order['items'],
-          totalAmount: order['total'],
-          status: order['status'],
-          timeAgo: order['time'],
-          buttonText: order['buttonText'],
-          isButtonFilled: order['isFilled'],
-          imageUrl: order['image'],
+          orderId: order.orderId,
+          customerName: order.customerName,
+          itemCount: order.items.length,
+          totalAmount: order.totalAmount.toString(),
+          status: order.status.toUpperCase(),
+          timeAgo: order.orderDate,
+          buttonText: order.status.toLowerCase() == 'pending' 
+              ? 'Mark as Shipped' 
+              : order.status.toLowerCase() == 'shipped'
+                  ? 'Mark as Completed'
+                  : 'Order Completed',
+          isButtonFilled: order.status.toLowerCase() == 'pending' || order.status.toLowerCase() == 'shipped',
+          imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop', // Provide an actual image if order items have images
           onButtonPressed: () {
-            // Handle Action
+            String newStatus = '';
+            if (order.status.toLowerCase() == 'pending') {
+              newStatus = 'Shipped';
+            } else if (order.status.toLowerCase() == 'shipped') {
+              newStatus = 'Completed';
+            }
+            
+            if (newStatus.isNotEmpty) {
+              context.read<SellerCubit>().updateOrderStatus(order.orderId, newStatus);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Order status updated to $newStatus'),
+                  backgroundColor: const Color(0xff07880E),
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            }
           },
         );
       },
-    );
-  }
-
-  Widget _buildPlaceholderList(String tabName) {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Icon(
-            Icons.inventory_2_outlined,
-            size: 48.w,
-            color: const Color(0xFF94A3B8),
-          ),
-          SizedBox(height: 12.h),
-          Text(
-            'No $tabName Orders',
-            style: TextStyle(
-              color: const Color(0xFF64748B),
-              fontSize: 16.sp,
-              fontWeight: FontWeight.w500,
-              fontFamily: 'Plus Jakarta Sans',
-            ),
-          ),
-        ],
-      ),
     );
   }
 }

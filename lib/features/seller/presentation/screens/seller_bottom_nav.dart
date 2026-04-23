@@ -3,14 +3,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_earnings_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
 
 class SellerBottomNav extends StatefulWidget {
   const SellerBottomNav({super.key});
@@ -70,13 +70,14 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
 
   List<Widget> get _screens => [
     SellerDashboardScreen(
-      onAddProduct: () => Get.toNamed(AppRoutes.selleraddproduct),
+      onAddProduct: () => Get.to(() => const SellerAddEditProductScreen()),
       onViewProducts: () => _switchTab(1),
       onViewOrders: () => _switchTab(2),
+      onOpenProfile: () => _switchTab(3),
     ),
     SellerManageProductsScreen(onBackPressed: () => _switchTab(0)),
     SellerOrdersScreen(onBackPressed: () => _switchTab(0)),
-    SellerRegistrationScreen(onBackPressed: () => _switchTab(0)),
+    const SellerProfileScreen(),
     SellerEarningsScreen(onBackPressed: () => _switchTab(0)),
   ];
 

@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_product_card.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -202,7 +203,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
   Widget _buildRealProductCard(SellerProductModel product) {
     return InkWell(
       onTap: () {
-        // Navigate to edit screen and pass product
+        Get.to(() => SellerAddEditProductScreen(product: product));
       },
       borderRadius: BorderRadius.circular(12.r),
       child: Container(
@@ -306,7 +307,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
               icon: Icon(Icons.more_vert, color: const Color(0xFF94A3B8), size: 20.w),
               onSelected: (value) {
                 if (value == 'edit') {
-                  // Navigate to edit screen
+                  Get.to(() => SellerAddEditProductScreen(product: product));
                 } else if (value == 'delete') {
                   context.read<SellerCubit>().deleteProduct(product.id);
                 }
