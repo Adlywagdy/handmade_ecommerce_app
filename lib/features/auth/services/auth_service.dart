@@ -20,34 +20,59 @@ class AuthService {
     _googleInitialized = true;
   }
 
-  Future<void> login({
+  Future<String> login({
     required String email,
     required String password,
   }) async {
-    await _firebaseAuth.signInWithEmailAndPassword(
+    final UserCredential credential = await _firebaseAuth.signInWithEmailAndPassword(
       email: email,
       password: password,
     );
+    
+    final uid = credential.user!.uid;
+    final doc = await _firestore.collection('users').doc(uid).get();
+    
+    if (doc.exists && doc.data()?['role'] != null) {
+      return doc.data()!['role'].toString().toLowerCase();
+    }
+    
+    final sellerDoc = await _firestore.collection('sellers').doc(uid).get();
+    if (sellerDoc.exists) return 'seller';
+    
+    return 'customer';
   }
 
-  Future<UserCredential> signInWithGoogle() async {
+  Future<String> signInWithGoogle() async {
     await _initGoogleSignIn();
 
     try {
-      final GoogleSignInAccount googleUser =
-          await _googleSignIn.authenticate();
+      final GoogleSignInAccount? googleUser = await _googleSignIn.authenticate();
+      if (googleUser == null) {
+        throw FirebaseAuthException(
+          code: 'google-sign-in-cancelled',
+          message: 'Google sign-in cancelled',
+        );
+      }
 
-      final GoogleSignInAuthentication googleAuth =
-          googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth = await googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
       );
 
-      final userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-
-      return userCredential;
+      final userCredential = await _firebaseAuth.signInWithCredential(credential);
+      
+      final uid = userCredential.user!.uid;
+      final doc = await _firestore.collection('users').doc(uid).get();
+      
+      if (doc.exists && doc.data()?['role'] != null) {
+        return doc.data()!['role'].toString().toLowerCase();
+      }
+      
+      final sellerDoc = await _firestore.collection('sellers').doc(uid).get();
+      if (sellerDoc.exists) return 'seller';
+      
+      return 'customer';
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(

@@ -16,12 +16,12 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      await authService.login(
+      final String role = await authService.login(
         email: email,
         password: password,
       );
 
-      emit(LoginSuccessState());
+      emit(LoginSuccessState(role));
     } on FirebaseAuthException catch (e) {
       emit(LoginErrorState(e.message ?? 'Login failed'));
     } catch (e) {
@@ -33,8 +33,8 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      await authService.signInWithGoogle();
-      emit(GoogleLoginSuccessState());
+      final String role = await authService.signInWithGoogle();
+      emit(GoogleLoginSuccessState(role));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'network-request-failed') {
         emit(

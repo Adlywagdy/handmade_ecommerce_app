@@ -6,3 +6,4 @@ export 'seller_dashboard_screen.dart';
 export 'seller_manage_products_screen.dart';
 export 'seller_add_edit_product_screen.dart';
 export 'seller_orders_screen.dart';
+export 'seller_profile_screen.dart';

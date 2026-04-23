@@ -129,7 +129,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Login Success')),
                       );
-                      Get.offAllNamed(AppRoutes.customerlayout);
+                      final role = state.role.toLowerCase();
+                      if (role == 'seller') {
+                        Get.offAllNamed(AppRoutes.sellerdashboard);
+                      } else if (role == 'admin') {
+                        Get.offAllNamed(AppRoutes.adminBottomBar);
+                      } else {
+                        Get.offAllNamed(AppRoutes.customerlayout);
+                      }
                     } else if (state is LoginErrorState) {
                       ScaffoldMessenger.of(
                         context,
@@ -138,7 +145,14 @@ class _LoginScreenState extends State<LoginScreen> {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(content: Text('Google Sign In Success')),
                       );
-                      Get.offAllNamed(AppRoutes.customerlayout);
+                      final role = state.role.toLowerCase();
+                      if (role == 'seller') {
+                        Get.offAllNamed(AppRoutes.sellerdashboard);
+                      } else if (role == 'admin') {
+                        Get.offAllNamed(AppRoutes.adminBottomBar);
+                      } else {
+                        Get.offAllNamed(AppRoutes.customerlayout);
+                      }
                     } else if (state is GoogleLoginErrorState) {
                       ScaffoldMessenger.of(
                         context,

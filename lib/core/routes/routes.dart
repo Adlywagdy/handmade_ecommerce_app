@@ -29,10 +29,8 @@ abstract class AppRoutes {
   static const String adminBottomBar = '/admin';
   static const String adminDashboard = '/admin/dashboard';
   static const String adminSellers = '/admin/sellers';
+  static const String notifications = '/notifications';
   static const String adminProducts = '/admin/products';
   static const String adminOrders = '/admin/orders';
   static const String adminSettings = '/admin/settings';
-
-
-
 }

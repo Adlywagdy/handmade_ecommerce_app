@@ -15,6 +15,7 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/screens/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
+import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
@@ -86,6 +87,10 @@ class AppPages {
       page: () => CustomerWriteReviewScreen(
         product: Get.arguments as ProductModel,
       ),
+    ),
+    GetPage(
+      name: AppRoutes.notifications,
+      page: () => const NotificationsScreen(),
     ),
 
     // seller

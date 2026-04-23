@@ -6,14 +6,20 @@ final class AuthInitial extends AuthState {}
 
 final class AuthLoading extends AuthState {}
 
-final class LoginSuccessState extends AuthState {}
+final class LoginSuccessState extends AuthState {
+  final String role;
+  LoginSuccessState(this.role);
+}
 
 final class LoginErrorState extends AuthState {
   final String message;
   LoginErrorState(this.message);
 }
 
-final class GoogleLoginSuccessState extends AuthState {}
+final class GoogleLoginSuccessState extends AuthState {
+  final String role;
+  GoogleLoginSuccessState(this.role);
+}
 
 final class GoogleLoginErrorState extends AuthState {
   final String message;
