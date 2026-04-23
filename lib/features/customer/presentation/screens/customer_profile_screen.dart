@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -10,6 +11,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/customer_model.d
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/becomesellercard.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customerdetailsitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/userpofiledetails.dart';
+import 'package:hive/hive.dart';
 
 class CustomerProfilesScreen extends StatelessWidget {
   final CustomerModel customer;
@@ -129,7 +131,10 @@ class CustomerProfilesScreen extends StatelessWidget {
               child: const Text('Cancel'),
             ),
             TextButton(
-              onPressed: () => Navigator.of(context).pop(true),
+              onPressed: () {
+                HiveHelper.setLoginBox(value:false);
+                Navigator.of(context).pop(true);
+              },
               child: Text('Logout', style: TextStyle(color: redDegree)),
             ),
           ],

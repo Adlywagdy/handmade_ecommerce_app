@@ -1,6 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:hive/hive.dart';
 
 part 'auth_state.dart';
 
@@ -9,19 +11,15 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this.authService) : super(AuthInitial());
 
-  void login({
-    required String email,
-    required String password,
-  }) async {
+  void login({required String email, required String password}) async {
     emit(AuthLoading());
 
     try {
-      await authService.login(
-        email: email,
-        password: password,
-      );
+      await authService.login(email: email, password: password);
 
       emit(LoginSuccessState());
+      HiveHelper.setLoginBox(value: true);
+      HiveHelper.setEmailBoxValue(email);
     } on FirebaseAuthException catch (e) {
       emit(LoginErrorState(e.message ?? 'Login failed'));
     } catch (e) {
@@ -34,7 +32,15 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       await authService.signInWithGoogle();
+      final user = FirebaseAuth.instance.currentUser;
+      final email = user?.email;
+
       emit(GoogleLoginSuccessState());
+      HiveHelper.setLoginBox(value: true);
+
+      if (email != null) {
+        HiveHelper.setEmailBoxValue(email);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'network-request-failed') {
         emit(
@@ -69,6 +75,8 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       emit(RegisterSuccessState(role));
+      HiveHelper.setLoginBox(value: true );
+      HiveHelper.setEmailBoxValue(email);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         emit(RegisterErrorState('Password is too weak'));
@@ -88,9 +96,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void registerWithGoogle({
-    required String selectedRole,
-  }) async {
+  void registerWithGoogle({required String selectedRole}) async {
     emit(AuthLoading());
 
     try {
@@ -98,7 +104,15 @@ class AuthCubit extends Cubit<AuthState> {
         selectedRole: selectedRole,
       );
 
+      final user = FirebaseAuth.instance.currentUser;
+      final email = user?.email;
+
       emit(RegisterSuccessState(finalRole));
+      HiveHelper.setLoginBox(value: true);
+
+      if (email != null) {
+        HiveHelper.setEmailBoxValue(email);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'network-request-failed') {
         emit(
@@ -116,10 +130,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void otp({
-    required String email,
-    required String password,
-  }) async {
+  void otp({required String email, required String password}) async {
     emit(AuthLoading());
   }
 }

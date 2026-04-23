@@ -25,7 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             onPressed: () {
-              HiveHelper.setOnboardingBoxValue();
+              HiveHelper.setOnboardingBox();
               Get.offAllNamed(AppRoutes.login);
             },
             child: Text(
@@ -76,7 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 if (count < 3) {
                   count++;
                 } else {
-                  HiveHelper.setOnboardingBoxValue();
+                  HiveHelper.setOnboardingBox();
                   Get.offAllNamed(AppRoutes.login);
                 }
                 setState(() {});
