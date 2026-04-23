@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/route_manager.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -24,6 +25,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         actions: [
           TextButton(
             onPressed: () {
+              HiveHelper.setOnboardingBoxValue();
               Get.offAllNamed(AppRoutes.login);
             },
             child: Text(
@@ -74,6 +76,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 if (count < 3) {
                   count++;
                 } else {
+                  HiveHelper.setOnboardingBoxValue();
                   Get.offAllNamed(AppRoutes.login);
                 }
                 setState(() {});
