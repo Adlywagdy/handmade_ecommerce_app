@@ -44,10 +44,7 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential =
-          await _firebaseAuth.signInWithCredential(credential);
-
-      return userCredential;
+      return await _firebaseAuth.signInWithCredential(credential);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(
@@ -108,33 +105,29 @@ class AuthService {
       final UserCredential userCredential =
           await _firebaseAuth.signInWithCredential(credential);
 
+      final bool isNewUser =
+          userCredential.additionalUserInfo?.isNewUser ?? false;
+
       final User user = userCredential.user!;
-      final DocumentReference<Map<String, dynamic>> userDoc =
-          _firestore.collection('users').doc(user.uid);
 
-      final docSnapshot = await userDoc.get();
-
-      String finalRole = selectedRole;
-
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        final existingRole = data?['role'];
-
-        if (existingRole is String && existingRole.isNotEmpty) {
-          finalRole = existingRole;
-        }
+      if (!isNewUser) {
+        await signOut();
+        throw FirebaseAuthException(
+          code: 'account-already-exists',
+          message: 'You are already registered. Please log in instead.',
+        );
       }
 
-      await userDoc.set({
+      await _firestore.collection('users').doc(user.uid).set({
         'uid': user.uid,
         'fullName': user.displayName ?? '',
         'email': user.email ?? '',
-        'role': finalRole,
+        'role': selectedRole,
         'provider': 'google',
         'createdAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      });
 
-      return finalRole;
+      return selectedRole;
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(

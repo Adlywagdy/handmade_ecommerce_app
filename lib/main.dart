@@ -9,6 +9,7 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/presentation/screens/seller.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
@@ -53,6 +54,10 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               GetPage(
                 name: AppRoutes.customerHome,
                 page: () => const CustomerHomeScreen(),
+              ),
+               GetPage(
+                  name: AppRoutes.seller,
+                  page: () => const SellerHomeScreen(),
               ),
               GetPage(name: AppRoutes.login, page: () => LoginScreen()),
               GetPage(name: AppRoutes.register, page: () => RegisterScreen()),

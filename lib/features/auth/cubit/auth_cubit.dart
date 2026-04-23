@@ -73,7 +73,11 @@ class AuthCubit extends Cubit<AuthState> {
       if (e.code == 'weak-password') {
         emit(RegisterErrorState('Password is too weak'));
       } else if (e.code == 'email-already-in-use') {
-        emit(RegisterErrorState('Email is already in use'));
+        emit(
+          RegisterErrorState(
+            'You are already registered with this email. Please log in instead.',
+          ),
+        );
       } else if (e.code == 'network-request-failed') {
         emit(
           RegisterErrorState(
@@ -108,6 +112,12 @@ class AuthCubit extends Cubit<AuthState> {
         );
       } else if (e.code == 'google-sign-in-cancelled') {
         emit(RegisterErrorState('Google sign-in was cancelled'));
+      } else if (e.code == 'account-already-exists') {
+        emit(
+          RegisterErrorState(
+            'You are already registered. Please log in instead.',
+          ),
+        );
       } else {
         emit(RegisterErrorState(e.message ?? 'Google register failed'));
       }
