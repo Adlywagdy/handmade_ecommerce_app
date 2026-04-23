@@ -54,39 +54,28 @@ class AppPages {
     ),
 
     // customer
-    GetPage(
-      name: AppRoutes.customerlayout,
-      page: () => const CustomerLayout(),
-    ),
+    GetPage(name: AppRoutes.customerlayout, page: () => const CustomerLayout()),
     GetPage(
       name: AppRoutes.customerOrderDetails,
       page: () => CustomerOrderDetailsScreen(
-        order: Get.arguments as OrderModel,
+        order: Get.arguments as CustomerOrderModel,
       ),
     ),
-    GetPage(
-      name: AppRoutes.customerCart,
-      page: () => CustomerCartScreen(),
-    ),
+    GetPage(name: AppRoutes.customerCart, page: () => CustomerCartScreen()),
     GetPage(
       name: AppRoutes.customerProductDetails,
-      page: () => CustomerProductDetailsScreen(
-        product: Get.arguments as ProductModel,
-      ),
+      page: () =>
+          CustomerProductDetailsScreen(product: Get.arguments as ProductModel),
     ),
-    GetPage(
-      name: AppRoutes.customerSearch,
-      page: () => CustomerSearchScreen(),
-    ),
+    GetPage(name: AppRoutes.customerSearch, page: () => CustomerSearchScreen()),
     GetPage(
       name: AppRoutes.customerNotifications,
       page: () => const CustomerNotificationsScreen(),
     ),
     GetPage(
       name: AppRoutes.customerWriteReview,
-      page: () => CustomerWriteReviewScreen(
-        product: Get.arguments as ProductModel,
-      ),
+      page: () =>
+          CustomerWriteReviewScreen(product: Get.arguments as ProductModel),
     ),
     GetPage(
       name: AppRoutes.notifications,
@@ -136,10 +125,7 @@ class AppPages {
       name: AppRoutes.adminProducts,
       page: () => const AdminProductsScreen(),
     ),
-    GetPage(
-      name: AppRoutes.adminOrders,
-      page: () => const AdminOrdersScreen(),
-    ),
+    GetPage(name: AppRoutes.adminOrders, page: () => const AdminOrdersScreen()),
     GetPage(
       name: AppRoutes.adminSettings,
       page: () => const AdminSettingsScreen(),

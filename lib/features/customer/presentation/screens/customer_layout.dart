@@ -26,29 +26,28 @@ class _CustomerLayoutState extends State<CustomerLayout> {
     });
   }
 
-  late final List<Widget> pages;
   @override
   void initState() {
+    super.initState();
+
     final dynamic arg = Get.arguments;
     if (arg is int) {
       currentIndex = arg.clamp(0, 4);
     }
 
-    pages = [
-      CustomerHomeScreen(),
-      CustomerWishlistScreen(),
-      CustomerCartScreen(),
-      CustomerOrdersScreen(),
-      CustomerProfilesScreen(
-        customer: BlocProvider.of<CustomerCubit>(context).customerData,
-        onNavigateToTab: setTab,
-      ),
-    ];
-    super.initState();
+    context.read<CustomerCubit>().getCustomerdata();
   }
 
   @override
   Widget build(BuildContext context) {
+    final pages = [
+      CustomerHomeScreen(),
+      CustomerWishlistScreen(),
+      CustomerCartScreen(),
+      CustomerOrdersScreen(),
+      CustomerProfilesScreen(onNavigateToTab: setTab),
+    ];
+
     return Scaffold(
       backgroundColor: customerbackGroundColor,
       body: IndexedStack(index: currentIndex, children: pages),

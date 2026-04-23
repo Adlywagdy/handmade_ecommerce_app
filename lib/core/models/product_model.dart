@@ -7,7 +7,14 @@ class ProductModel {
   final String name;
   final String description;
   final double price;
+  final double? discountedPrice;
+  final String currency;
   final double? totalrate;
+  final int? salesCount;
+  final String? status;
+  final bool isActive;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
   int quantity;
   final List<ReviewModel>? reviews;
   final List<String> images;
@@ -21,7 +28,14 @@ class ProductModel {
     required this.name,
     required this.description,
     required this.price,
+    this.discountedPrice,
+    this.currency = 'EGP',
     this.totalrate,
+    this.salesCount,
+    this.status,
+    this.isActive = true,
+    this.createdAt,
+    this.updatedAt,
     required this.images,
     this.category,
     required this.quantity,
@@ -32,38 +46,23 @@ class ProductModel {
 
   String? get image => images.isNotEmpty ? images.first : null;
   double get rating => totalrate ?? 0;
-  int get reviewsCount => reviews?.length ?? 0;
   String get sellerId => seller.email;
   String? get categoryId => category?.id ?? category?.categorytitle;
 
   factory ProductModel.fromMap(Map<String, dynamic> map, {String? id}) {
     final imagesField = map['images'];
-    final String? singleImage =
-        map['image']?.toString() ??
-        map['imageUrl']?.toString() ??
-        map['productImage']?.toString();
-    final List<String> normalizedImages = imagesField is List
+    final singleImage =
+        map['productImage']?.toString() ?? map['imageUrl']?.toString();
+    final normalizedImages = imagesField is List
         ? imagesField.map((e) => e.toString()).toList()
         : (singleImage != null && singleImage.isNotEmpty)
-        ? [singleImage]
+        ? <String>[singleImage]
         : <String>[];
 
-    final dynamic rawPrice = map['price'] ?? 0;
-    final double parsedPrice = rawPrice is num
-        ? rawPrice.toDouble()
-        : double.tryParse(rawPrice.toString()) ?? 0;
-
-    final dynamic rawQuantity = map['quantity'] ?? map['stock'] ?? 0;
-    final int parsedQuantity = rawQuantity is int
-        ? rawQuantity
-        : int.tryParse(rawQuantity.toString()) ?? 0;
-
-    final dynamic rawRating = map['rating'] ?? map['totalrate'];
-    final double? parsedRating = rawRating == null
-        ? null
-        : (rawRating is num
-              ? rawRating.toDouble()
-              : double.tryParse(rawRating.toString()));
+    final parsedPrice = _parseDouble(map['price']) ?? 0;
+    final parsedDiscountedPrice = _parseDouble(map['discountedPrice']);
+    final parsedQuantity = _parseInt(map['stock'] ?? map['quantity']) ?? 0;
+    final parsedRating = _parseDouble(map['rating'] ?? map['totalrate']);
 
     final sellerMap = map['seller'];
     final seller = sellerMap is Map<String, dynamic>
@@ -86,22 +85,14 @@ class ProductModel {
             location: map['sellerLocation']?.toString(),
           );
 
-    final categoryField = map['category'];
-    final category = categoryField is Map<String, dynamic>
-        ? CategoryModel.fromMap(
-            categoryField,
-            id: map['categoryId']?.toString(),
-          )
-        : (map['categorytitle'] != null ||
-              map['categoryName'] != null ||
-              map['categoryId'] != null)
+    final categoryMap = map['category'];
+    final category = categoryMap is Map<String, dynamic>
+        ? CategoryModel.fromMap(categoryMap, id: map['categoryId']?.toString())
+        : (map['categoryId'] != null || map['categoryName'] != null)
         ? CategoryModel(
             id: map['categoryId']?.toString(),
             categorytitle:
-                (map['categorytitle'] ??
-                        map['categoryName'] ??
-                        map['categoryId'] ??
-                        'General')
+                (map['categoryName'] ?? map['categoryId'] ?? 'General')
                     .toString(),
           )
         : null;
@@ -110,12 +101,19 @@ class ProductModel {
       id: id ?? map['id']?.toString() ?? map['productId']?.toString() ?? '',
       name:
           map['name']?.toString() ??
-          map['title']?.toString() ??
           map['productName']?.toString() ??
+          map['title']?.toString() ??
           '',
       description: map['description']?.toString() ?? '',
       price: parsedPrice,
+      discountedPrice: parsedDiscountedPrice,
+      currency: map['currency']?.toString() ?? 'EGP',
       totalrate: parsedRating,
+      salesCount: _parseInt(map['salesCount']),
+      status: map['status']?.toString(),
+      isActive: map['isActive'] as bool? ?? true,
+      createdAt: _parseDateTime(map['createdAt']),
+      updatedAt: _parseDateTime(map['updatedAt']),
       quantity: parsedQuantity,
       images: normalizedImages,
       category: category,
@@ -128,52 +126,61 @@ class ProductModel {
   }
 
   Map<String, dynamic> toMap() {
-    return {
+    final data = <String, dynamic>{
       'productId': id,
       'name': name,
       'description': description,
       'price': price,
-      'currency': 'EGP',
-      'rating': totalrate,
-      'quantity': quantity,
+      'currency': currency,
+      'rating': totalrate ?? 0,
       'stock': quantity,
       'images': images,
-      'image': image,
-      'imageUrl': image,
       'productImage': image,
-      'title': name,
       'sellerId': seller.email,
-      'seller': {
-        'name': seller.name,
-        'email': seller.email,
-        'specialty': seller.specialty,
-        'submittedDate': seller.submittedDate,
-        'badge': seller.badge,
-        'image': seller.image,
-        'location': seller.location,
-      },
       'categoryId': category?.id,
-      'category': category?.toMap(),
-      'tags': tags,
-      'isActive': true,
-      'addedAt': DateTime.now().toIso8601String(),
+      'tags': tags ?? <String>[],
+      'isActive': isActive,
+      'status': status ?? 'approved',
+      'salesCount': salesCount ?? 0,
+      'createdAt': createdAt ?? DateTime.now(),
+      'updatedAt': updatedAt ?? DateTime.now(),
     };
+
+    if (discountedPrice != null) {
+      data['discountedPrice'] = discountedPrice;
+    } else {
+      data['discountedPrice'] = null;
+    }
+
+    return data;
   }
 
-  // to make a copy of the product coming from firebase with a new quantity value to add to cart
-  factory ProductModel.copywith(ProductModel product) {
-    return ProductModel(
-      id: product.id,
-      name: product.name,
-      description: product.description,
-      price: product.price,
-      totalrate: product.totalrate,
-      quantity: 1,
-      images: product.images,
-      category: product.category,
-      seller: product.seller,
-      tags: product.tags,
-      reviews: product.reviews,
-    );
+  static double? _parseDouble(dynamic value) {
+    if (value == null) return null;
+    if (value is num) return value.toDouble();
+    return double.tryParse(value.toString());
+  }
+
+  static int? _parseInt(dynamic value) {
+    if (value == null) return null;
+    if (value is int) return value;
+    if (value is num) return value.toInt();
+    return int.tryParse(value.toString());
+  }
+
+  static DateTime? _parseDateTime(dynamic value) {
+    if (value == null) return null;
+    if (value is DateTime) return value;
+    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
+    if (value is String) return DateTime.tryParse(value);
+
+    try {
+      final parsed = value.toDate();
+      if (parsed is DateTime) return parsed;
+    } catch (_) {
+      // Ignore unsupported types.
+    }
+
+    return null;
   }
 }

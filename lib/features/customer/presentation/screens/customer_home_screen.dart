@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -22,6 +21,85 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/to
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
+
+  void _openAllCategoriesSheet(BuildContext context) {
+    final searchCubit = context.read<SearchCubit>();
+    final categories = searchCubit.categoriesList;
+
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: customerbackGroundColor,
+      isScrollControlled: true,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
+      ),
+      builder: (sheetContext) {
+        return SafeArea(
+          child: Padding(
+            padding: EdgeInsets.fromLTRB(16.w, 12.h, 16.w, 20.h),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                SizedBox(height: 16.h),
+                Center(
+                  child: Container(
+                    width: 44.w,
+                    height: 4.h,
+                    decoration: BoxDecoration(
+                      color: commonColor.withValues(alpha: .2),
+                      borderRadius: BorderRadius.circular(100.r),
+                    ),
+                  ),
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  'All Categories',
+                  style: AppTextStyles.t_18w700.copyWith(color: commonColor),
+                ),
+                SizedBox(height: 12.h),
+                Wrap(
+                  spacing: 10.w,
+                  runSpacing: 10.h,
+                  children: List.generate(categories.length, (index) {
+                    final category = categories[index];
+                    return GestureDetector(
+                      onTap: () {
+                        searchCubit.selectedCategory = category;
+                        searchCubit.filterproducts(
+                          categoryname: category.categorytitle,
+                        );
+                        Get.back();
+                        Get.toNamed(AppRoutes.customerSearch);
+                      },
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 14,
+                          vertical: 9,
+                        ).w,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(100.r),
+                          color: commonColor.withValues(alpha: 0.1),
+                        ),
+                        child: Text(
+                          category.categorytitle,
+                          style: AppTextStyles.t_14w600.copyWith(
+                            color: commonColor,
+                          ),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+                SizedBox(height: 12.h),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,7 +134,6 @@ class CustomerHomeScreen extends StatelessWidget {
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 2));
                 BlocProvider.of<HomeCubit>(context).getTopRatedProducts();
                 BlocProvider.of<SearchCubit>(context).getCategories();
                 BlocProvider.of<HomeCubit>(context).getFeaturedProducts();
@@ -89,9 +166,7 @@ class CustomerHomeScreen extends StatelessWidget {
                   ),
                   readOnly: true,
                   onTap: () {
-                    BlocProvider.of<SearchCubit>(
-                      context,
-                    ).resetSearchState(context);
+                    BlocProvider.of<SearchCubit>(context).resetSearchState();
                     Get.toNamed(AppRoutes.customerSearch);
                   },
                 ),
@@ -104,102 +179,7 @@ class CustomerHomeScreen extends StatelessWidget {
                 child: CustomFeatureRow(
                   title: "Categories",
                   buttontext: "See All",
-                  onTap: () {
-                    showModalBottomSheet(
-                      context: context,
-                      backgroundColor: customerbackGroundColor,
-                      isScrollControlled: true,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.vertical(
-                          top: Radius.circular(24.r),
-                        ),
-                      ),
-                      builder: (sheetContext) {
-                        return SafeArea(
-                          child: Padding(
-                            padding: EdgeInsets.fromLTRB(
-                              16.w,
-                              12.h,
-                              16.w,
-                              20.h,
-                            ),
-
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                SizedBox(height: 16.h),
-                                Center(
-                                  child: Container(
-                                    width: 44.w,
-                                    height: 4.h,
-                                    decoration: BoxDecoration(
-                                      color: commonColor.withValues(alpha: .2),
-                                      borderRadius: BorderRadius.circular(
-                                        100.r,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 16.h),
-                                Text(
-                                  "All Categories",
-                                  style: AppTextStyles.t_18w700.copyWith(
-                                    color: commonColor,
-                                  ),
-                                ),
-                                SizedBox(height: 12.h),
-                                Wrap(
-                                  spacing: 10.w,
-                                  runSpacing: 10.h,
-                                  children: List.generate(
-                                    BlocProvider.of<SearchCubit>(
-                                      context,
-                                    ).categoriesList.length,
-                                    (index) => GestureDetector(
-                                      onTap: () {
-                                        Get.close(1);
-
-                                        Get.toNamed(
-                                          AppRoutes.customerSearch,
-                                          arguments:
-                                              BlocProvider.of<SearchCubit>(
-                                                context,
-                                              ).categoriesList[index],
-                                        );
-                                      },
-                                      child: Container(
-                                        padding: const EdgeInsets.symmetric(
-                                          horizontal: 14,
-                                          vertical: 9,
-                                        ).w,
-                                        decoration: BoxDecoration(
-                                          borderRadius: BorderRadius.circular(
-                                            100,
-                                          ).r,
-                                          color: commonColor.withValues(
-                                            alpha: 0.1,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          BlocProvider.of<SearchCubit>(
-                                            context,
-                                          ).categoriesList[index].categorytitle,
-                                          style: AppTextStyles.t_14w600
-                                              .copyWith(color: commonColor),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(height: 12.h),
-                              ],
-                            ),
-                          ),
-                        );
-                      },
-                    );
-                  },
+                  onTap: () => _openAllCategoriesSheet(context),
                   buttontextstyle: AppTextStyles.t_14w600.copyWith(
                     color: commonColor,
                   ),

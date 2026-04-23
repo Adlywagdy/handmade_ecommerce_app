@@ -5,14 +5,16 @@ import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 class ProductItemOfOrder extends StatelessWidget {
-  const ProductItemOfOrder({super.key, required this.product});
-
+  const ProductItemOfOrder({
+    super.key,
+    required this.product,
+    required this.order,
+  });
+  final CustomerOrderModel order;
   final ProductModel product;
-
-  String get _imageUrl =>
-      product.images.isNotEmpty ? product.images.first : (product.image ?? '');
 
   @override
   Widget build(BuildContext context) {
@@ -35,11 +37,13 @@ class ProductItemOfOrder extends StatelessWidget {
                   elevation: 0,
                   clipBehavior: Clip.antiAlias,
                   child: Image.network(
-                    _imageUrl,
+                    product.images.isNotEmpty
+                        ? product.images.first
+                        : (product.image ?? ''),
                     height: 100.h,
                     width: 100.w,
                     fit: BoxFit.fill,
-                    errorBuilder: (_, __, ___) => Container(
+                    errorBuilder: (_, _, _) => Container(
                       height: 100.h,
                       width: 100.w,
                       color: Colors.grey.shade200,
@@ -95,43 +99,72 @@ class ProductItemOfOrder extends StatelessWidget {
             ],
           ),
           SizedBox(height: 12.h),
-          InkWell(
-            borderRadius: BorderRadius.circular(12.r),
-            onTap: () {
-              Get.toNamed(AppRoutes.customerWriteReview, arguments: product);
-            },
-            child: Container(
-              width: double.infinity,
-              constraints: BoxConstraints(minHeight: 44.h),
-              padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 10.h),
-              decoration: BoxDecoration(
-                color: commonColor.withValues(alpha: .1),
-                borderRadius: BorderRadius.circular(12.r),
-                border: Border.all(color: commonColor.withValues(alpha: .22)),
-              ),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.rate_review_outlined,
-                    color: commonColor,
-                    size: 16.r,
+          order.status == OrderStatus.delivered
+              ? InkWell(
+                  borderRadius: BorderRadius.circular(12.r),
+                  onTap: () {
+                    Get.toNamed(
+                      AppRoutes.customerWriteReview,
+                      arguments: product,
+                    );
+                  },
+                  child: Container(
+                    width: double.infinity,
+                    constraints: BoxConstraints(minHeight: 44.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 14.w,
+                      vertical: 10.h,
+                    ),
+                    decoration: BoxDecoration(
+                      color: commonColor.withValues(alpha: .1),
+                      borderRadius: BorderRadius.circular(12.r),
+                      border: Border.all(
+                        color: commonColor.withValues(alpha: .22),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.rate_review_outlined,
+                          color: commonColor,
+                          size: 16.r,
+                        ),
+                        SizedBox(width: 6.w),
+                        Text(
+                          'Write Review',
+                          style: AppTextStyles.t_12w600.copyWith(
+                            color: commonColor,
+                          ),
+                        ),
+                        SizedBox(width: 8.w),
+                        Icon(
+                          Icons.arrow_forward_ios_rounded,
+                          color: commonColor,
+                          size: 12.r,
+                        ),
+                      ],
+                    ),
                   ),
-                  SizedBox(width: 6.w),
-                  Text(
-                    'Write Review',
-                    style: AppTextStyles.t_12w600.copyWith(color: commonColor),
+                )
+              : Container(
+                  width: double.infinity,
+                  constraints: BoxConstraints(minHeight: 44.h),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 14.w,
+                    vertical: 10.h,
                   ),
-                  SizedBox(width: 8.w),
-                  Icon(
-                    Icons.arrow_forward_ios_rounded,
-                    color: commonColor,
-                    size: 12.r,
+                  decoration: BoxDecoration(
+                    color: redDegree.withValues(alpha: .1),
+                    borderRadius: BorderRadius.circular(12.r),
+                    border: Border.all(color: redDegree.withValues(alpha: .22)),
                   ),
-                ],
-              ),
-            ),
-          ),
+                  child: Text(
+                    'You can review this product after delivery',
+                    textAlign: TextAlign.center,
+                    style: AppTextStyles.t_12w600.copyWith(color: redDegree),
+                  ),
+                ),
         ],
       ),
     );

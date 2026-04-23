@@ -19,7 +19,7 @@ List<ProductModel> productsListData = [
         reviewer: CustomerModel(
           id: "",
           name: "Alice Smith",
-          password: "456789",
+
           phone: "0651616161681",
           image: "assets/images/splash.jpeg",
           email: "alice.smith@example.com",

@@ -42,7 +42,6 @@ class CustomerCartScreen extends StatelessWidget {
             CupertinoSliverRefreshControl(
               onRefresh: () async {
                 await BlocProvider.of<CartCubit>(context).getcartProducts();
-                await Future.delayed(Duration(seconds: 2));
               },
               builder:
                   (
@@ -328,7 +327,7 @@ class CheckoutButton extends StatelessWidget {
                     );
 
                     await orderCubit.placeNewOrder(
-                      OrderModel(
+                      CustomerOrderModel(
                         customer: customerCubit.customerData,
                         products: cartCubit.cartProductsList,
                         status: .pending,

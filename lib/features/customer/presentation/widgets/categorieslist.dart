@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -20,13 +19,13 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
 
   @override
   Widget build(BuildContext context) {
+    final searchCubit = context.read<SearchCubit>();
+
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: BlocProvider.of<SearchCubit>(context).categoriesList.length,
+      itemCount: searchCubit.categoriesList.length,
       itemBuilder: (context, index) {
-        final category = BlocProvider.of<SearchCubit>(
-          context,
-        ).categoriesList[index];
+        final category = searchCubit.categoriesList[index];
         final iconPath = category.categoryiconpath;
 
         return Padding(
@@ -35,13 +34,11 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
             onTap: () {
               setState(() {
                 selectedIndex = index;
-                BlocProvider.of<SearchCubit>(context).selectedCategory =
-                    category;
-                BlocProvider.of<SearchCubit>(
-                  context,
-                ).filterproducts(categoryname: category.categorytitle);
-                Get.toNamed(AppRoutes.customerSearch);
               });
+
+              searchCubit.selectedCategory = category;
+              searchCubit.filterproducts(categoryname: category.categorytitle);
+              Get.toNamed(AppRoutes.customerSearch);
             },
             child: Column(
               spacing: 8.h,
@@ -60,7 +57,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
                         )
                       : Image.network(
                           iconPath,
-                          errorBuilder: (_, __, ___) => Icon(
+                          errorBuilder: (context, error, stackTrace) => Icon(
                             Icons.category_outlined,
                             color: selectedIndex == index
                                 ? Colors.white

@@ -14,9 +14,6 @@ class CartProductItem extends StatelessWidget {
 
   final ProductModel product;
 
-  String get _imageUrl =>
-      product.images.isNotEmpty ? product.images.first : (product.image ?? '');
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -42,7 +39,9 @@ class CartProductItem extends StatelessWidget {
             child: Card(
               clipBehavior: Clip.antiAlias,
               child: Image.network(
-                _imageUrl,
+                product.images.isNotEmpty
+                    ? product.images.first
+                    : (product.image ?? ''),
                 height: 100.h,
                 width: 100.w,
                 fit: BoxFit.fill,

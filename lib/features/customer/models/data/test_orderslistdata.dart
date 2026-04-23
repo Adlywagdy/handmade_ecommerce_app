@@ -4,13 +4,13 @@ import 'package:handmade_ecommerce_app/features/customer/models/data/test_produc
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 
-List<OrderModel> ordersListdata = [
-  OrderModel(
+List<CustomerOrderModel> ordersListdata = [
+  CustomerOrderModel(
     customer: CustomerModel(
       id: "",
       name: "adly",
       email: "adly.wagdy@ayady.com",
-      password: "456789",
+
       phone: "0651616161681",
       image: "assets/images/splash.jpeg",
     ),
@@ -30,12 +30,12 @@ List<OrderModel> ordersListdata = [
       country: "country",
     ),
   ),
-  OrderModel(
+  CustomerOrderModel(
     customer: CustomerModel(
       id: "",
       name: "adly",
       email: "adly.wagdy@ayady.com",
-      password: "456789",
+
       phone: "0651616161681",
       image: "assets/images/splash.jpeg",
     ),

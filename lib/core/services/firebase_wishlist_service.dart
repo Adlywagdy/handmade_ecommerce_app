@@ -11,7 +11,6 @@ class FirebaseWishlistService {
   }
 
   CollectionReference<Map<String, dynamic>> _wishlistItemsRef(String userId) {
-    // Exact path: /wishlists/{userId}/items/{productId}
     return _wishlistRootRef(userId).collection('items');
   }
 

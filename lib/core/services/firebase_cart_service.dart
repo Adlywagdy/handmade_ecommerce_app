@@ -6,6 +6,9 @@ class FirebaseCartService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  CollectionReference<Map<String, dynamic>> get _cartsRef =>
+      _firestore.collection('carts');
+
   List<Map<String, dynamic>> _normalizeItems(dynamic rawItems) {
     if (rawItems is! List) return <Map<String, dynamic>>[];
     return rawItems
@@ -15,8 +18,7 @@ class FirebaseCartService {
   }
 
   double _calculateSubtotal(List<Map<String, dynamic>> items) {
-    double subtotal = 0;
-    for (final item in items) {
+    return items.fold(0, (subtotal, item) {
       final rawPrice = item['price'];
       final rawQuantity = item['quantity'];
       final price = rawPrice is num
@@ -25,9 +27,8 @@ class FirebaseCartService {
       final quantity = rawQuantity is int
           ? rawQuantity
           : int.tryParse(rawQuantity?.toString() ?? '') ?? 0;
-      subtotal += price * quantity;
-    }
-    return subtotal;
+      return subtotal + (price * quantity);
+    });
   }
 
   Map<String, dynamic> _toCartItem(
@@ -36,7 +37,10 @@ class FirebaseCartService {
   }) {
     return {
       'productId': product.id,
+      'name': product.name,
       'title': product.name,
+      'images': product.images,
+      'productImage': product.image ?? '',
       'imageUrl': product.image ?? '',
       'price': product.price,
       'quantity': quantity.toString(),
@@ -44,27 +48,31 @@ class FirebaseCartService {
     };
   }
 
-  Future<QueryDocumentSnapshot<Map<String, dynamic>>?> _getCartDocument(
+  Map<String, dynamic> _buildCartPayload({
+    required String userId,
+    required List<Map<String, dynamic>> items,
+  }) {
+    return {
+      'userId': userId,
+      'items': items,
+      'itemsCount': items.length,
+      'subtotal': _calculateSubtotal(items),
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>?> _getCartDocument(
     User user,
   ) async {
-    final byUid = await _firestore
-        .collection('carts')
+    final byId = await _cartsRef.doc(user.uid).get();
+    if (byId.exists) return byId;
+
+    final byUid = await _cartsRef
         .where('userId', isEqualTo: user.uid)
         .limit(1)
         .get();
 
     if (byUid.docs.isNotEmpty) return byUid.docs.first;
-
-    final uidAsInt = int.tryParse(user.uid);
-    if (uidAsInt != null) {
-      final byIntId = await _firestore
-          .collection('carts')
-          .where('userId', isEqualTo: uidAsInt)
-          .limit(1)
-          .get();
-
-      if (byIntId.docs.isNotEmpty) return byIntId.docs.first;
-    }
 
     return null;
   }
@@ -72,33 +80,19 @@ class FirebaseCartService {
   Future<DocumentReference<Map<String, dynamic>>> _getOrCreateCartDocRef(
     User user,
   ) async {
+    final userCartRef = _cartsRef.doc(user.uid);
+    final userCartSnapshot = await userCartRef.get();
+    if (userCartSnapshot.exists) {
+      return userCartRef;
+    }
+
     final existing = await _getCartDocument(user);
-    if (existing != null) {
-      return existing.reference;
+    if (existing != null && existing.id != user.uid) {
+      await userCartRef.set(existing.data() ?? <String, dynamic>{});
+      await existing.reference.delete();
     }
 
-    return _firestore.collection('carts').doc();
-  }
-
-  List<ProductModel> _extractProductsFromCartDocs(
-    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
-  ) {
-    final products = <ProductModel>[];
-
-    for (final doc in docs) {
-      final data = doc.data();
-      final items = data['items'];
-
-      if (items is List) {
-        for (final item in items.whereType<Map<String, dynamic>>()) {
-          products.add(ProductModel.fromMap(item));
-        }
-      } else {
-        products.add(ProductModel.fromMap(data, id: doc.id));
-      }
-    }
-
-    return products;
+    return userCartRef;
   }
 
   /// Get user's cart products
@@ -108,28 +102,11 @@ class FirebaseCartService {
       if (user == null) return [];
 
       final cartsDoc = await _getCartDocument(user);
-      if (cartsDoc != null) {
-        final data = cartsDoc.data();
-        final items = _normalizeItems(data['items']);
-        return items.map((item) => ProductModel.fromMap(item)).toList();
-      }
+      if (cartsDoc == null) return [];
 
-      final customerCartDocs = await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('cart')
-          .get();
-
-      if (customerCartDocs.docs.isNotEmpty) {
-        return _extractProductsFromCartDocs(customerCartDocs.docs);
-      }
-
-      final globalCartDocs = await _firestore
-          .collection('cart')
-          .where('userId', isEqualTo: user.uid)
-          .get();
-
-      return _extractProductsFromCartDocs(globalCartDocs.docs);
+      final data = cartsDoc.data() ?? <String, dynamic>{};
+      final items = _normalizeItems(data['items']);
+      return items.map((item) => ProductModel.fromMap(item)).toList();
     } catch (e) {
       rethrow;
     }
@@ -158,13 +135,13 @@ class FirebaseCartService {
         items.add(_toCartItem(product, quantity: 1));
       }
 
-      await cartRef.set({
-        'userId': currentData['userId'] ?? user.uid,
-        'items': items,
-        'itemsCount': items.length,
-        'subtotal': _calculateSubtotal(items),
-        'updatedAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      await cartRef.set(
+        _buildCartPayload(
+          userId: currentData['userId']?.toString() ?? user.uid,
+          items: items,
+        ),
+        SetOptions(merge: true),
+      );
     } catch (e) {
       rethrow;
     }
@@ -179,7 +156,8 @@ class FirebaseCartService {
       final cartDoc = await _getCartDocument(user);
       if (cartDoc == null) return;
 
-      final items = _normalizeItems(cartDoc.data()['items']);
+      final data = cartDoc.data() ?? <String, dynamic>{};
+      final items = _normalizeItems(data['items']);
       final index = items.indexWhere(
         (item) => item['productId']?.toString() == productId,
       );
@@ -195,12 +173,9 @@ class FirebaseCartService {
         items.removeAt(index);
       }
 
-      await cartDoc.reference.update({
-        'items': items,
-        'itemsCount': items.length,
-        'subtotal': _calculateSubtotal(items),
-        'updatedAt': FieldValue.serverTimestamp(),
-      });
+      await cartDoc.reference.update(
+        _buildCartPayload(userId: user.uid, items: items),
+      );
     } catch (e) {
       rethrow;
     }
@@ -214,23 +189,10 @@ class FirebaseCartService {
 
       final cartDoc = await _getCartDocument(user);
       if (cartDoc != null) {
-        await cartDoc.reference.update({
-          'items': <Map<String, dynamic>>[],
-          'itemsCount': 0,
-          'subtotal': 0,
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
+        await cartDoc.reference.update(
+          _buildCartPayload(userId: user.uid, items: <Map<String, dynamic>>[]),
+        );
         return;
-      }
-
-      final docs = await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('cart')
-          .get();
-
-      for (var doc in docs.docs) {
-        await doc.reference.delete();
       }
     } catch (e) {
       rethrow;
@@ -245,7 +207,8 @@ class FirebaseCartService {
 
       final cartDoc = await _getCartDocument(user);
       if (cartDoc != null) {
-        final items = _normalizeItems(cartDoc.data()['items']);
+        final data = cartDoc.data() ?? <String, dynamic>{};
+        final items = _normalizeItems(data['items']);
         final index = items.indexWhere(
           (item) => item['productId']?.toString() == productId,
         );
@@ -258,24 +221,10 @@ class FirebaseCartService {
           items[index]['quantity'] = quantity.toString();
         }
 
-        await cartDoc.reference.update({
-          'items': items,
-          'itemsCount': items.length,
-          'subtotal': _calculateSubtotal(items),
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
+        await cartDoc.reference.update(
+          _buildCartPayload(userId: user.uid, items: items),
+        );
         return;
-      }
-
-      if (quantity <= 0) {
-        await removeFromCart(productId);
-      } else {
-        await _firestore
-            .collection('customers')
-            .doc(user.uid)
-            .collection('cart')
-            .doc(productId)
-            .update({'quantity': quantity});
       }
     } catch (e) {
       rethrow;
