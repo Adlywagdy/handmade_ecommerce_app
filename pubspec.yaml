@@ -51,10 +51,19 @@ dependencies:
   cloud_firestore: ^6.3.0
   firebase_auth: ^6.4.0
   google_sign_in: ^7.2.0
+  flutter_native_splash: ^2.4.7
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/icons/app icon/app_icon.png"
+  adaptive_icon_background: "#EEDFC8"
+  adaptive_icon_foreground: "assets/icons/app icon/logo_foreground.png"
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is

@@ -3,7 +3,7 @@
            <uses-permission android:name="android.permission.INTERNET"/>
 
     <application
-        android:label="handmade_ecommerce_app"
+        android:label="Ayady"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
