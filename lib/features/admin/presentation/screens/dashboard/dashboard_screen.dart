@@ -5,8 +5,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../cubit/admin_cubit.dart';
 import 'widgets/dashboard_body.dart';
 
-class DashboardScreen extends StatelessWidget {
-  const DashboardScreen({super.key});
+class AdminDashboardScreen extends StatelessWidget {
+  const AdminDashboardScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

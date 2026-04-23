@@ -7,8 +7,8 @@ import '../../../cubit/admin_cubit.dart';
 import '../../../models/settings_model.dart';
 import '../../widgets/commission_editor_dialog.dart';
 
-class SettingsScreen extends StatelessWidget {
-  const SettingsScreen({super.key});
+class AdminSettingsScreen extends StatelessWidget {
+  const AdminSettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

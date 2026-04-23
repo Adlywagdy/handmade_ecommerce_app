@@ -9,8 +9,8 @@ import '../../../models/products_model.dart';
 import 'productdetails/product_details_screen.dart';
 import 'widget/product_card.dart';
 
-class ProductsScreen extends StatelessWidget {
-  const ProductsScreen({super.key});
+class AdminProductsScreen extends StatelessWidget {
+  const AdminProductsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

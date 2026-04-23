@@ -22,27 +22,27 @@ class AdminBottomBarScreen extends StatelessWidget {
           BottomNavItem(
             iconPath: 'assets/images/dashboard.svg',
             label: 'Dashboard',
-            page: DashboardScreen(),
+            page: AdminDashboardScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/sellers.svg',
             label: 'Sellers',
-            page: SellersScreen(),
+            page: AdminSellersScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/orders.svg',
             label: 'Orders',
-            page: OrdersScreen(),
+            page: AdminOrdersScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/products.svg',
             label: 'Products',
-            page: ProductsScreen(),
+            page: AdminProductsScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/settings.svg',
             label: 'Settings',
-            page: SettingsScreen(),
+            page: AdminSettingsScreen(),
           ),
         ],
       ),

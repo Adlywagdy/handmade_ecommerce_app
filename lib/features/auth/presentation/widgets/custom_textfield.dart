@@ -60,7 +60,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(
-            color: primaryColor.withValues(alpha: 0.6),
+            color: primaryColor,
             width: 2.w,
           ),
         ),
@@ -73,7 +73,7 @@ class _CustomtextfieldState extends State<Customtextfield> {
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12.r),
           borderSide: BorderSide(
-            color: primaryColor.withValues(alpha: 0.6),
+            color: primaryColor,
             width: 2.w,
           ),
         ),

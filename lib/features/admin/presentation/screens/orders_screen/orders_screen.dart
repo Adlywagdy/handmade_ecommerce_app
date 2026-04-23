@@ -6,8 +6,8 @@ import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 
-class OrdersScreen extends StatelessWidget {
-  const OrdersScreen({super.key});
+class AdminOrdersScreen extends StatelessWidget {
+  const AdminOrdersScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

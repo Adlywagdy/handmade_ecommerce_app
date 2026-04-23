@@ -67,14 +67,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
               children: [
                 Text(
                   'Join Ayady',
-                  style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
+                  style: AppTextStyles.t_30w700.copyWith(),
                 ),
 
                 SizedBox(height: 12.h),
                 Text(
                   'Experience the elegance of handcrafted items',
                   style: AppTextStyles.t_14w400.copyWith(
-                    color: primaryColor.withValues(alpha: 0.6),
+                    color: blackDegree,
                   ),
                 ),
 
@@ -95,7 +95,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
-                    Icons.email,
+                    Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
@@ -113,6 +113,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Customtextfield(
                   controller: _passwordController,
                   isPassword: true,
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Password is required";

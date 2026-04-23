@@ -37,6 +37,10 @@ class DashboardBody extends StatelessWidget {
               color: blackDegree,
             ),
           ),
+           TextButton(
+            onPressed: () => throw Exception('Test Crash'),
+            child: const Text('Throw Test Exception'),
+          ),
           SizedBox(height: 20.h),
           DashboardStatsGrid(
             status: [
@@ -84,7 +88,7 @@ class DashboardBody extends StatelessWidget {
             subtitle: 'New artisan registrations',
             onButtonTap: () => Get.to( () => BlocProvider.value(
                   value: cubit,
-                  child: const SellersScreen(),
+                  child: const AdminSellersScreen(),
                 )),
           ),
           SizedBox(height: 10.h),
@@ -94,7 +98,7 @@ class DashboardBody extends StatelessWidget {
             subtitle: 'Quality control check required',
             onButtonTap: () => Get.to(() => BlocProvider.value(
                   value: cubit,
-                  child: const ProductsScreen(),
+                  child: const AdminProductsScreen(),
                 )),
           ),
         ],
