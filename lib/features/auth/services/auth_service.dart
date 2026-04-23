@@ -198,4 +198,35 @@ Future<String> login({
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
   }
+
+  Future<void> sendPasswordReset({
+  required String email,
+}) async {
+  final querySnapshot = await _firestore
+      .collection('users')
+      .where('email', isEqualTo: email.trim())
+      .limit(1)
+      .get();
+
+  if (querySnapshot.docs.isEmpty) {
+    throw FirebaseAuthException(
+      code: 'user-not-found',
+      message: 'No account found with this email.',
+    );
+  }
+
+  final data = querySnapshot.docs.first.data();
+  final provider = data['provider'];
+
+  if (provider == 'google') {
+    throw FirebaseAuthException(
+      code: 'google-account',
+      message: 'This account was created with Google. Please sign in with Google.',
+    );
+  }
+
+  await _firebaseAuth.sendPasswordResetEmail(
+    email: email.trim(),
+  );
+}
 }

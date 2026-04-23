@@ -126,10 +126,22 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void otp({
-    required String email,
-    required String password,
-  }) async {
-    emit(AuthLoading());
+  void forgotPassword({
+  required String email,
+}) async {
+  emit(AuthLoading());
+
+  try {
+    await authService.sendPasswordReset(email: email);
+    emit(ForgotPasswordSuccessState());
+  } on FirebaseAuthException catch (e) {
+    emit(
+      ForgotPasswordErrorState(
+        '${e.code} - ${e.message}',
+      ),
+    );
+  } catch (e) {
+    emit(ForgotPasswordErrorState(e.toString()));
   }
+}
 }
