@@ -20,6 +20,24 @@ abstract class AppTextStyles {
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
+  static final t_24w900 = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w900,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_24w800 = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w800,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_24w700 = TextStyle(
+    fontSize: 24.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
   static final t_24w500 = TextStyle(
     fontSize: 24.sp,
     fontWeight: FontWeight.w500,
@@ -81,7 +99,7 @@ abstract class AppTextStyles {
   static final t_14w600 = TextStyle(
     fontSize: 14.sp,
     fontWeight: FontWeight.w600,
-    color: AppColors.textMuted,
+    color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',
   );
   static final t_14w400 = TextStyle(
@@ -110,6 +128,36 @@ abstract class AppTextStyles {
   );
   static final t_12w400 = TextStyle(
     fontSize: 12.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w700 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w700,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w500 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w500,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w600 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w600,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_10w400 = TextStyle(
+    fontSize: 10.sp,
+    fontWeight: FontWeight.w400,
+    color: AppColors.textHeadline,
+    fontFamily: 'Plus Jakarta Sans',
+  );
+  static final t_8w400 = TextStyle(
+    fontSize: 8.sp,
     fontWeight: FontWeight.w400,
     color: AppColors.textHeadline,
     fontFamily: 'Plus Jakarta Sans',

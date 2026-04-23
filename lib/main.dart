@@ -1,28 +1,40 @@
-import 'package:firebase_core/firebase_core.dart';
+import 'dart:ui';
+import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/seller.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_home_screen.dart';
-import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
-import 'package:handmade_ecommerce_app/firebase_options.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/home_cubit/home_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'core/routes/app_pages.dart';
+import 'core/services/remote_config_services.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  await Firebase.initializeApp();
 
   await Hive.initFlutter();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  //////////////////////////// Crashlytics ///////////////////////////////////
+  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+  PlatformDispatcher.instance.onError = (error, stack) {
+    FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
+    return true;
+  };
+  ///////////////////////////// RemoteConfig //////////////////////////////////
+  await RemoteConfigService.instance.init();
+  /////////////////////////////////////////////////////////////////////////
   runApp(const HandcraftedEcommerceApp());
 }
 
@@ -41,41 +53,41 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(
               create: (BuildContext context) => AuthCubit(AuthService()),
             ),
+            BlocProvider(
+              create: (BuildContext context) => SellerCubit()..loadDashboard(),
+            ),
+
+            BlocProvider(create: (BuildContext context) => CustomerCubit()),
+            BlocProvider(
+              create: (BuildContext context) => HomeCubit()
+                ..getFeaturedProducts()
+                ..getTopRatedProducts(),
+            ),
+            BlocProvider(
+              create: (BuildContext context) => SearchCubit()..getCategories(),
+            ),
+            BlocProvider(
+              create: (context) => WishListCubit()..getWishlistProducts(),
+            ),
+
+            BlocProvider(create: (context) => SellerCubit()..loadDashboard()),
+            BlocProvider(create: (context) => CustomerCubit()),
+            BlocProvider(
+              create: (context) => HomeCubit()
+                ..getFeaturedProducts()
+                ..getTopRatedProducts(),
+            ),
+            BlocProvider(create: (context) => SearchCubit()..getCategories()),
+            BlocProvider(
+              create: (context) => WishListCubit()..getWishlistProducts(),
+            ),
+            BlocProvider(create: (context) => CartCubit()..getcartProducts()),
+            BlocProvider(create: (context) => OrderCubit()..getAllOrders()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: AppRoutes.splash,
-            getPages: [
-              GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
-              GetPage(
-                name: AppRoutes.onboarding,
-                page: () => const OnboardingScreen(),
-              ),
-              GetPage(
-                name: AppRoutes.customerHome,
-                page: () => const CustomerHomeScreen(),
-              ),
-               GetPage(
-                  name: AppRoutes.seller,
-                  page: () => const SellerHomeScreen(),
-              ),
-              GetPage(name: AppRoutes.login, page: () => LoginScreen()),
-              GetPage(name: AppRoutes.register, page: () => RegisterScreen()),
-              GetPage(
-                name: AppRoutes.forgotPassword,
-                page: () => ForgotPasswordScreen(),
-              ),
-              GetPage(
-                name: AppRoutes.verifyPassword,
-                page: () => VerifytPassword(),
-              ),
-              GetPage(
-                name: AppRoutes.resetPassword,
-                page: () => ResetPasswordScreen(),
-              ),
-            ],
-
-            home: const SplashScreen(),
+            getPages: AppPages.pages,
           ),
         );
       },

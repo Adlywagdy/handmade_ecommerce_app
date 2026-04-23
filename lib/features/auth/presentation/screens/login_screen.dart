@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/email_validation.dart';
+import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -42,9 +43,9 @@ class _LoginScreenState extends State<LoginScreen> {
 
   void _goToNextScreenByRole(String role) {
     if (role == 'customer') {
-      Get.offAllNamed(AppRoutes.customerHome);
+      Get.offAllNamed(AppRoutes.customerlayout);
     } else {
-      Get.offAllNamed(AppRoutes.seller);
+      Get.offAllNamed(AppRoutes.sellerdashboard);
     }
   }
 
@@ -88,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
-                    Icons.email,
+                    Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
@@ -107,6 +108,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Customtextfield(
                   controller: _passwordController,
                   isPassword: true,
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
                       return "Password is required";

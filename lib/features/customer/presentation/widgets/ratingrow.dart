@@ -8,28 +8,19 @@ class RatingRow extends StatelessWidget {
     super.key,
     required this.product,
     this.iconsize = 20,
-    this.fontSize = 12,
-    this.fontWeight = FontWeight.w500,
+    this.textstyle,
   });
-  final double? fontSize;
+
   final ProductModel product;
   final double? iconsize;
-  final FontWeight? fontWeight;
+
+  final TextStyle? textstyle;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.star_border_outlined, color: goldColor, size: iconsize!.sp),
-        Text(
-          "${product.totalrate}",
-          style: TextStyle(
-            color: blackDegree,
-            fontSize: fontSize!.sp,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: fontWeight,
-            height: 1.33,
-          ),
-        ),
+        Icon(Icons.star_border_outlined, color: goldColor, size: iconsize!.r),
+        Text("${product.totalrate}", style: textstyle),
       ],
     );
   }

@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ReviewCard.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/reviewcard.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ratingrow.dart';
 
 class ProductReviewsColumn extends StatelessWidget {
@@ -20,40 +20,27 @@ class ProductReviewsColumn extends StatelessWidget {
           children: [
             Text(
               'Reviews',
-              style: TextStyle(
-                color: blackDegree,
-                fontSize: 18.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w700,
-                height: 1.56,
-              ),
+              style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
             Row(
               children: [
-                RatingRow(
-                  product: product,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 16.sp,
-                ),
+                RatingRow(product: product),
                 Text(
                   ' (${product.reviews!.length})',
-                  style: TextStyle(
-                    color: subTitleColor,
-                    fontSize: 14.sp,
-                    fontFamily: 'Plus Jakarta Sans',
-                    fontWeight: FontWeight.w400,
-                    height: 1.43,
-                  ),
+                  style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
                 ),
               ],
             ),
           ],
         ),
         ReviewCard(product: product),
-        InkWell(
-          onTap: () {},
+        GestureDetector(
+          onTap: () {
+            // Handle view all reviews action
+          },
           child: CustomTextContainer(
-            buttontext: 'View all ${product.reviews!.length} reviews',
+            text: 'View all ${product.reviews!.length} reviews',
+            textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
           ),
         ),
       ],

@@ -64,7 +64,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '825459601482',
     projectId: 'ayady-b4737',
     storageBucket: 'ayady-b4737.firebasestorage.app',
-    iosClientId: '825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com',
+    iosClientId:
+        '825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com',
     iosBundleId: 'com.example.handmadeEcommerceApp',
   );
 
@@ -74,7 +75,8 @@ class DefaultFirebaseOptions {
     messagingSenderId: '825459601482',
     projectId: 'ayady-b4737',
     storageBucket: 'ayady-b4737.firebasestorage.app',
-    iosClientId: '825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com',
+    iosClientId:
+        '825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com',
     iosBundleId: 'com.example.handmadeEcommerceApp',
   );
 
@@ -87,5 +89,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'ayady-b4737.firebasestorage.app',
     measurementId: 'G-WLY3B679H6',
   );
-
 }

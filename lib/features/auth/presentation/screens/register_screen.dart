@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/extension/email_validation.dart';
+
+import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -46,13 +47,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
-void _goToNextScreenByRole(String role) {
-  if (role == 'customer') {
-    Get.offAllNamed(AppRoutes.customerHome);
-  } else {
-    Get.offAllNamed(AppRoutes.seller);
+  void _goToNextScreenByRole(String role) {
+    if (role == 'customer') {
+      Get.offAllNamed(AppRoutes.customerlayout);
+    } else {
+      Get.offAllNamed(AppRoutes.sellerdashboard);
+    }
   }
-}
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -79,16 +81,11 @@ void _goToNextScreenByRole(String role) {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Join Ayady',
-                  style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
-                ),
+                Text('Join Ayady', style: AppTextStyles.t_30w700.copyWith()),
                 SizedBox(height: 12.h),
                 Text(
                   'Experience the elegance of handcrafted items',
-                  style: AppTextStyles.t_14w400.copyWith(
-                    color: primaryColor.withValues(alpha: 0.6),
-                  ),
+                  style: AppTextStyles.t_14w400.copyWith(color: blackDegree),
                 ),
                 SizedBox(height: 12.h),
 
@@ -111,7 +108,7 @@ void _goToNextScreenByRole(String role) {
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
-                    Icons.email,
+                    Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
@@ -130,6 +127,10 @@ void _goToNextScreenByRole(String role) {
                 Customtextfield(
                   controller: _passwordController,
                   isPassword: true,
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   label: 'Password',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
@@ -271,37 +272,41 @@ void _goToNextScreenByRole(String role) {
                     final isLoading = state is AuthLoading;
 
                     return CustomElevatedButton(
-                     onPressed: isLoading
-                    ? null
-                      : () {
-                      if (!_isChecked) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                         const SnackBar(
-                             content: Text('You must agree to the terms first'),
-                               ),
-                                 );
-                                 return;
-                           }
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              if (!_isChecked) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'You must agree to the terms first',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
 
-                      if (_selectedRole == null) {
-                       ScaffoldMessenger.of(context).showSnackBar(
-                         const SnackBar(
-                        content: Text('Please choose Customer or Seller first'),
-                        ),
-                           );
-                              return;
-                         }
+                              if (_selectedRole == null) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text(
+                                      'Please choose Customer or Seller first',
+                                    ),
+                                  ),
+                                );
+                                return;
+                              }
 
-                      if (_formKey.currentState!.validate()) {
-                        context.read<AuthCubit>().register(
-                         fullName: _nameController.text.trim(),
-                         email: _emailController.text.trim(),
-                         password: _passwordController.text,
-                         role: _selectedRole!,
-                           );
-                            }
-                             },
-                           
+                              if (_formKey.currentState!.validate()) {
+                                context.read<AuthCubit>().register(
+                                  fullName: _nameController.text.trim(),
+                                  email: _emailController.text.trim(),
+                                  password: _passwordController.text,
+                                  role: _selectedRole!,
+                                );
+                              }
+                            },
+
                       buttoncolor: primaryColor,
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
@@ -342,28 +347,32 @@ void _goToNextScreenByRole(String role) {
                         final state = context.read<AuthCubit>().state;
                         if (state is AuthLoading) return;
 
-                       if (!_isChecked) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                           const SnackBar(
-                          content: Text('You must agree to the terms first'),
-                         ),
-                         );
-                            return;
-                          }
+                        if (!_isChecked) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'You must agree to the terms first',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
 
                         if (_selectedRole == null) {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                             const SnackBar(
-                         content: Text('Please choose Customer or Seller first'),
-                        ),
-                         );
-                        return;
-                         }
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              content: Text(
+                                'Please choose Customer or Seller first',
+                              ),
+                            ),
+                          );
+                          return;
+                        }
 
-                          context.read<AuthCubit>().registerWithGoogle(
-                           selectedRole: _selectedRole!,
-                           );
-                         },
+                        context.read<AuthCubit>().registerWithGoogle(
+                          selectedRole: _selectedRole!,
+                        );
+                      },
                     ),
                   ],
                 ),

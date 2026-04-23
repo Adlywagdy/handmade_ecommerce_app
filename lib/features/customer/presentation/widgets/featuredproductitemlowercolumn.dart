@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ratingrow.dart';
 
@@ -20,46 +21,32 @@ class FeaturedProductItemLowerColumn extends StatelessWidget {
 
           decoration: BoxDecoration(
             color: commonColor.withValues(alpha: .1),
-            borderRadius: BorderRadius.circular(20),
+            borderRadius: BorderRadius.circular(20).r,
           ),
           child: Text(
             product.category!.categorytitle,
 
-            style: TextStyle(
-              color: const Color(0xFF8B4513),
-              fontSize: 10,
-              fontFamily: 'Plus Jakarta Sans',
-              fontWeight: FontWeight.w700,
-              height: 1.50,
-              letterSpacing: 0.50,
-            ),
+            style: AppTextStyles.t_10w700.copyWith(color: commonColor),
           ),
         ),
         Text(
           product.name,
           overflow: .ellipsis,
-          style: TextStyle(
-            color: const Color(0xFF1E293B),
-            fontSize: 16,
-            fontFamily: 'Plus Jakarta Sans',
-            fontWeight: FontWeight.w700,
-            height: 1.50,
-          ),
+          style: AppTextStyles.t_16w700.copyWith(color: AppColors.textPrimary),
         ),
         Row(
           mainAxisAlignment: .spaceBetween,
           children: [
             Text(
               '\$${product.price}',
-              style: TextStyle(
-                color: const Color(0xFF8B4513),
-                fontSize: 16,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w700,
-                height: 1.50,
-              ),
+
+              style: AppTextStyles.t_16w700.copyWith(color: commonColor),
             ),
-            RatingRow(product: product),
+            RatingRow(
+              product: product,
+
+              textstyle: AppTextStyles.t_12w500.copyWith(color: darkblue),
+            ),
           ],
         ),
       ],
