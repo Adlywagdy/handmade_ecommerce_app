@@ -40,12 +40,16 @@ class OrderCard extends StatelessWidget {
   }
 }
 
-// ── Helpers ──────────────────────────────────────────────────────────────────
+//////////////////////////////  Helpers ////////////////////////////
 IconData _iconForStatus(OrderStatus status) {
   switch (status) {
     case OrderStatus.pending:
       return Icons.access_time;
-    case OrderStatus.active:
+    case OrderStatus.confirmed:
+      return Icons.task_alt;
+    case OrderStatus.preparing:
+      return Icons.inventory_2_outlined;
+    case OrderStatus.shipped:
       return Icons.local_shipping_outlined;
     case OrderStatus.delivered:
       return Icons.check_circle_outline;
@@ -58,8 +62,12 @@ Color _colorForStatus(OrderStatus status) {
   switch (status) {
     case OrderStatus.pending:
       return const Color(0xFFD97706);
-    case OrderStatus.active:
+    case OrderStatus.confirmed:
       return const Color(0xFF2563EB);
+    case OrderStatus.preparing:
+      return const Color(0xFFB45309);
+    case OrderStatus.shipped:
+      return const Color(0xFF7C3AED);
     case OrderStatus.delivered:
       return const Color(0xFF07880E);
     case OrderStatus.cancelled:
@@ -71,8 +79,12 @@ Color _bgColorForStatus(OrderStatus status) {
   switch (status) {
     case OrderStatus.pending:
       return const Color(0xFFFEF3C7);
-    case OrderStatus.active:
+    case OrderStatus.confirmed:
       return const Color(0xFFDBEAFE);
+    case OrderStatus.preparing:
+      return const Color(0xFFFEF3C7);
+    case OrderStatus.shipped:
+      return const Color(0xFFEDE9FE);
     case OrderStatus.delivered:
       return const Color(0xFFDCFCE7);
     case OrderStatus.cancelled:
@@ -80,7 +92,7 @@ Color _bgColorForStatus(OrderStatus status) {
   }
 }
 
-// ── Status icon on the left ───────────────────────────────────────────────────
+//////////////////////////// Status icon on the left ////////////////////////////
 class _StatusIcon extends StatelessWidget {
   final OrderStatus status;
 
@@ -100,10 +112,9 @@ class _StatusIcon extends StatelessWidget {
   }
 }
 
-// ── Middle info section ───────────────────────────────────────────────────────
+////////////////////////////// Middle info section ////////////////////////////
 class _OrderInfo extends StatelessWidget {
   final OrderModel order;
-
   const _OrderInfo({required this.order});
 
   @override
@@ -111,31 +122,32 @@ class _OrderInfo extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Order ID + badge
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              order.orderId,
-              style: TextStyle(
-                fontSize: 15.sp,
-                fontWeight: FontWeight.w700,
-                color: Colors.black87,
+            Expanded(
+              child: FittedBox(
+                fit: BoxFit.scaleDown,
+                alignment: Alignment.centerLeft,
+                child: Text(
+                  order.displayId,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black87,
+                  ),
+                ),
               ),
             ),
+            SizedBox(width: 8.w),
             OrderStatusBadge(status: order.status),
           ],
         ),
         SizedBox(height: 4.h),
-
-        // Date • Customer
         Text(
-          '${order.date} • ${order.customerName}',
+          '${order.date} • ${order.customerName ?? ''}',
           style: TextStyle(fontSize: 12.sp, color: Colors.grey.shade500),
         ),
         SizedBox(height: 6.h),
-
-        // Price + Seller
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -144,11 +156,11 @@ class _OrderInfo extends StatelessWidget {
               style: TextStyle(
                 fontSize: 14.sp,
                 fontWeight: FontWeight.w700,
-                color: const Color(0xFFC07D3A), // warm brown like screenshot
+                color: const Color(0xFFC07D3A),
               ),
             ),
             Text(
-              'Seller: ${order.sellerName}',
+              'Seller: ${order.sellerName ?? ''}',
               style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade500),
             ),
           ],

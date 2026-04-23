@@ -9,6 +9,7 @@ class ActionButton extends StatelessWidget {
   final Color color;
   final VoidCallback? onTap;
   final ActionButtonStyle style;
+  final bool isLoading;
 
   const ActionButton({
     super.key,
@@ -16,15 +17,16 @@ class ActionButton extends StatelessWidget {
     required this.color,
     this.onTap,
     this.style = ActionButtonStyle.filled,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
-    // Is the button filled or outlined?
     final isFilled = style == ActionButtonStyle.filled;
+    final disabled = isLoading || onTap == null;
     return Expanded(
       child: GestureDetector(
-        onTap: onTap,
+        onTap: disabled ? null : onTap,
         child: Container(
           padding: EdgeInsets.symmetric(vertical: 12.h),
           alignment: Alignment.center,
@@ -36,14 +38,25 @@ class ActionButton extends StatelessWidget {
               width: 1.5,
             ),
           ),
-          child: Text(
-            label,
-            style: TextStyle(
-              color: isFilled ? Colors.white : color,
-              fontSize: 14.sp,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: isLoading
+              ? SizedBox(
+                  width: 18.w,
+                  height: 18.w,
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                      isFilled ? Colors.white : color,
+                    ),
+                  ),
+                )
+              : Text(
+                  label,
+                  style: TextStyle(
+                    color: isFilled ? Colors.white : color,
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
         ),
       ),
     );

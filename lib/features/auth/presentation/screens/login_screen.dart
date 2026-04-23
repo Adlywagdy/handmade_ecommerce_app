@@ -82,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
-                    Icons.email,
+                    Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
@@ -98,6 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Customtextfield(
                   controller: _passwordController,
                   isPassword: true,
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   validator: (value) {
                     if (value!.length < 6) {
                       return "Password should be more than 5 letters";

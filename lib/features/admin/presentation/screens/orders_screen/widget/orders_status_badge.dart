@@ -12,8 +12,12 @@ class OrderStatusBadge extends StatelessWidget {
     switch (s) {
       case OrderStatus.pending:
         return 'PENDING';
-      case OrderStatus.active:
-        return 'ACTIVE';
+      case OrderStatus.confirmed:
+        return 'CONFIRMED';
+      case OrderStatus.preparing:
+        return 'PREPARING';
+      case OrderStatus.shipped:
+        return 'SHIPPED';
       case OrderStatus.delivered:
         return 'DELIVERED';
       case OrderStatus.cancelled:
@@ -25,8 +29,12 @@ class OrderStatusBadge extends StatelessWidget {
     switch (s) {
       case OrderStatus.pending:
         return const Color(0xFFD97706);
-      case OrderStatus.active:
+      case OrderStatus.confirmed:
         return const Color(0xFF2563EB);
+      case OrderStatus.preparing:
+        return const Color(0xFFB45309);
+      case OrderStatus.shipped:
+        return const Color(0xFF7C3AED);
       case OrderStatus.delivered:
         return const Color(0xFF07880E);
       case OrderStatus.cancelled:
@@ -38,8 +46,12 @@ class OrderStatusBadge extends StatelessWidget {
     switch (s) {
       case OrderStatus.pending:
         return const Color(0xFFFEF3C7);
-      case OrderStatus.active:
+      case OrderStatus.confirmed:
         return const Color(0xFFDBEAFE);
+      case OrderStatus.preparing:
+        return const Color(0xFFFEF3C7);
+      case OrderStatus.shipped:
+        return const Color(0xFFEDE9FE);
       case OrderStatus.delivered:
         return const Color(0xFFDCFCE7);
       case OrderStatus.cancelled:
