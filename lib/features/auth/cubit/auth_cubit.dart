@@ -10,47 +10,47 @@ class AuthCubit extends Cubit<AuthState> {
   AuthCubit(this.authService) : super(AuthInitial());
 
   void login({
-    required String email,
-    required String password,
-  }) async {
-    emit(AuthLoading());
+  required String email,
+  required String password,
+}) async {
+  emit(AuthLoading());
 
-    try {
-      await authService.login(
-        email: email,
-        password: password,
-      );
+  try {
+    final String role = await authService.login(
+      email: email,
+      password: password,
+    );
 
-      emit(LoginSuccessState());
-    } on FirebaseAuthException catch (e) {
-      emit(LoginErrorState(e.message ?? 'Login failed'));
-    } catch (e) {
-      emit(LoginErrorState('Something went wrong'));
-    }
+    emit(LoginSuccessState(role));
+  } on FirebaseAuthException catch (e) {
+    emit(LoginErrorState(e.message ?? 'Login failed'));
+  } catch (e) {
+    emit(LoginErrorState('Something went wrong'));
   }
+}
 
   void signInWithGoogle() async {
-    emit(AuthLoading());
+  emit(AuthLoading());
 
-    try {
-      await authService.signInWithGoogle();
-      emit(GoogleLoginSuccessState());
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'network-request-failed') {
-        emit(
-          GoogleLoginErrorState(
-            'Please check your internet connection and try again',
-          ),
-        );
-      } else if (e.code == 'google-sign-in-cancelled') {
-        emit(GoogleLoginErrorState('Google sign-in was cancelled'));
-      } else {
-        emit(GoogleLoginErrorState(e.message ?? 'Google sign in failed'));
-      }
-    } catch (e) {
-      emit(GoogleLoginErrorState('Something went wrong'));
+  try {
+    final String role = await authService.signInWithGoogle();
+    emit(GoogleLoginSuccessState(role));
+  } on FirebaseAuthException catch (e) {
+    if (e.code == 'network-request-failed') {
+      emit(
+        GoogleLoginErrorState(
+          'Please check your internet connection and try again',
+        ),
+      );
+    } else if (e.code == 'google-sign-in-cancelled') {
+      emit(GoogleLoginErrorState('Google sign-in was cancelled'));
+    } else {
+      emit(GoogleLoginErrorState(e.message ?? 'Google sign in failed'));
     }
+  } catch (e) {
+    emit(GoogleLoginErrorState('Something went wrong'));
   }
+}
 
   void register({
     required String fullName,
