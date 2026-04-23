@@ -2,6 +2,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/address_model.da
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 class CustomerModel {
+  final String id;
   final String name;
   final String email;
   final String phone;
@@ -11,6 +12,7 @@ class CustomerModel {
   final List<OrderModel>? orderslist;
 
   CustomerModel({
+    required this.id,
     required this.name,
     required this.email,
     required this.phone,
@@ -22,6 +24,7 @@ class CustomerModel {
 
   factory CustomerModel.fromMap(Map<String, dynamic> map) {
     return CustomerModel(
+      id: map['id']?.toString() ?? '',
       name: map['name']?.toString() ?? '',
       email: map['email']?.toString() ?? '',
       phone: map['phone']?.toString() ?? '',

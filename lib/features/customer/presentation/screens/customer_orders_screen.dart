@@ -19,6 +19,7 @@ class CustomerOrdersScreen extends StatelessWidget {
     'Confirmed',
     'Shipped',
     'Delivered',
+    'Cancelled',
   ];
 
   OrderStatus _statusFromTab(int tabIndex) {
@@ -31,6 +32,8 @@ class CustomerOrdersScreen extends StatelessWidget {
         return OrderStatus.shipped;
       case 4:
         return OrderStatus.delivered;
+      case 5:
+        return OrderStatus.cancelled;
       default:
         return OrderStatus.pending;
     }
@@ -49,7 +52,7 @@ class CustomerOrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 5,
+      length: 6,
       child: Scaffold(
         backgroundColor: customerbackGroundColor,
         appBar: AppBar(
@@ -110,31 +113,7 @@ class CustomerOrdersScreen extends StatelessWidget {
 
             return Column(
               children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(16, 12, 16, 8),
-                  child: TextFormField(
-                    onChanged: (value) {
-                      context.read<OrderCubit>().searchOrders(value);
-                    },
-                    onTapOutside: (event) {
-                      FocusScope.of(context).unfocus();
-                    },
-                    cursorColor: commonColor,
-                    decoration: InputDecoration(
-                      hintText: 'Search by order id, name, email, phone',
-                      prefixIcon: Icon(
-                        Icons.search,
-                        color: commonColor.withValues(alpha: .6),
-                      ),
-                      filled: true,
-                      fillColor: commonColor.withValues(alpha: .08),
-                      border: OutlineInputBorder(
-                        borderSide: BorderSide.none,
-                        borderRadius: BorderRadius.circular(12).r,
-                      ),
-                    ),
-                  ),
-                ),
+             
                 Expanded(
                   child: orders.isEmpty
                       ? ListView(

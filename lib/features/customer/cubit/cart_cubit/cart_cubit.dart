@@ -28,6 +28,7 @@ class CartCubit extends Cubit<CartState> {
   String selectedPaymentMethod = "Visa";
   PaymentDetailsModel? currentOrderSummary;
   String walletPhonenumber = "";
+  int orderID = 10060;
 
   /* ------------------------------------------- */
   Future<void> getcartProducts() async {
@@ -121,7 +122,7 @@ class CartCubit extends Cubit<CartState> {
         deliveryFee: deliveryFee,
         discount: discount,
         paymentMethod: selectedPaymentMethod,
-        currency: "USD",
+        currency: "EGP",
       );
       emit(
         GetOrderSummarySuccessState(
@@ -167,7 +168,7 @@ class CartCubit extends Cubit<CartState> {
       switch (paymentMethod) {
         case 'Visa':
           final paymentKey = await manager.getPaymentKey(
-            amount: amount * 50,
+            amount: amount,
             currency: "EGP",
             integrationId: Constants.integrationIdCard,
           );
@@ -191,7 +192,7 @@ class CartCubit extends Cubit<CartState> {
           final paypalSuccess = await PayPAlService.makePayPalpayment(
             context,
             AmountPaymentModel(
-              total: paymentmethoddetails.totalPrice.toString(),
+              total: ((paymentmethoddetails.totalPrice!) / 50).toString(),
               currency: "USD",
               details: Details(
                 subtotal: paymentmethoddetails.subtotalPrice.toString(),
@@ -238,7 +239,7 @@ class CartCubit extends Cubit<CartState> {
           }
 
           final paymentKey = await manager.getPaymentKey(
-            amount: amount * 50,
+            amount: amount,
             currency: "EGP",
             integrationId: Constants.integrationIdWallet,
           );

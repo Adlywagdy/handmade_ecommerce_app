@@ -25,6 +25,24 @@ class OrderModel {
   String get deliveryAddress => address.addressdescription;
   List<ProductModel> get items => products;
 
+  double get subtotalAmount => payment.subtotalPrice ?? totalAmount;
+
+  double get deliveryFeeAmount => payment.deliveryFee ?? 0;
+
+  double get commissionRate => 0.1;
+
+  double get commissionAmount => subtotalAmount * commissionRate;
+
+  double get sellerEarningAmount => subtotalAmount - commissionAmount;
+
+  String get paymentStatus {
+    final method = payment.paymentMethod?.toLowerCase();
+    if (method == 'cash_on_delivery') {
+      return 'pending';
+    }
+    return 'paid';
+  }
+
   static Map<String, dynamic> _asStringKeyedMap(dynamic value) {
     if (value is Map<String, dynamic>) {
       return value;
@@ -103,21 +121,7 @@ class OrderModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'orderId': orderid,
-      'customerName': customer.name,
-      'customerEmail': customer.email,
-      'customerPhone': customer.phone,
-      'customer': customer.toMap(),
-      'status': status.name,
-      'totalAmount': totalAmount,
-      'totalPrice': totalAmount,
-      'subtotal': payment.subtotalPrice,
-      'deliveryAddress': deliveryAddress,
-      'address': address.toMap(),
-      'shippingAddress': address.toMap(),
-      'paymentMethod': payment.paymentMethod,
-      'payment': payment.toMap(),
-      'products': products.map((product) => product.toMap()).toList(),
+      'orderNumber': orderid,
       'items': products
           .map(
             (product) => {
@@ -130,8 +134,23 @@ class OrderModel {
             },
           )
           .toList(),
-      'itemsCount': products.length,
-      'orderNumber': orderid,
+      'shippingAddress': {
+        'street': address.street,
+        'city': address.city,
+        'governorate': address.city,
+        'country': address.country,
+        'zipCode': address.zipCode,
+      },
+      'status': status.name,
+      'subtotal': subtotalAmount,
+      'deliveryFee': deliveryFeeAmount,
+      'commissionRate': commissionRate,
+      'commission': commissionAmount,
+      'sellerEarning': sellerEarningAmount,
+      'totalPrice': payment.totalPrice ?? totalAmount,
+      'currency': payment.currency ?? 'EGP',
+      'paymentMethod': payment.paymentMethod,
+      'paymentStatus': paymentStatus,
       'orderDate': orderDate.toIso8601String(),
       'createdAt': orderDate.toIso8601String(),
       'updatedAt': DateTime.now().toIso8601String(),

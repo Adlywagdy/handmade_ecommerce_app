@@ -20,22 +20,8 @@ class OrderCubit extends Cubit<OrderState> {
   List<OrderModel> displayedordersList = [];
   OrderStatus? selectedStatus;
   String searchQuery = '';
-  int orderID = 10007;
+  int orderID = 10050;
   Timer? _searchDebounce;
-
-  List<OrderModel> _applySearch(List<OrderModel> source, String query) {
-    final normalizedQuery = query.trim().toLowerCase();
-    if (normalizedQuery.isEmpty) {
-      return source;
-    }
-
-    return source.where((order) {
-      return order.orderid.toLowerCase().contains(normalizedQuery) ||
-          order.customer.name.toLowerCase().contains(normalizedQuery) ||
-          order.customer.email.toLowerCase().contains(normalizedQuery) ||
-          order.customer.phone.toLowerCase().contains(normalizedQuery);
-    }).toList();
-  }
 
   List<OrderModel> _ordersForActiveTab() {
     if (selectedStatus == null) {
@@ -57,7 +43,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(GetAllOrdersLoadingState());
     try {
       allordersList = await _orderService.getAllOrders();
-      _syncDisplayedOrders(_applySearch(allordersList, searchQuery));
+
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {
       emit(GetAllOrdersFailedState(errorMessage: e.toString()));
@@ -69,7 +55,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(GetFilteredOrdersLoadingState());
     try {
       final fetchedOrders = await _orderService.getFilteredOrders(status);
-      filteredordersList = _applySearch(fetchedOrders, searchQuery);
+
       _syncDisplayedOrders(filteredordersList);
       emit(GetFilteredOrdersSuccessState(filteredorders: filteredordersList));
     } catch (e) {
@@ -77,26 +63,7 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
-  void searchOrders(String query) {
-    searchQuery = query;
-
-    _searchDebounce?.cancel();
-    _searchDebounce = Timer(const Duration(milliseconds: 300), () {
-      final source = _ordersForActiveTab();
-      displayedordersList = _applySearch(source, searchQuery);
-      if (selectedStatus != null) {
-        filteredordersList = displayedordersList;
-      }
-      emit(SearchOrdersSuccessState(orders: displayedordersList));
-    });
-  }
-
   @override
-  Future<void> close() {
-    _searchDebounce?.cancel();
-    return super.close();
-  }
-
   /*------------------------------------------- */
   Future<void> getOrderDetails(String orderId) async {
     emit(GetOrderDetailsLoadingState());
@@ -130,8 +97,7 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       await _orderService.cancelOrder(orderId);
       allordersList = await _orderService.getAllOrders();
-      filteredordersList = _applySearch(_ordersForActiveTab(), searchQuery);
-      displayedordersList = _applySearch(_ordersForActiveTab(), searchQuery);
+
       emit(CancelOrderSuccessState());
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {

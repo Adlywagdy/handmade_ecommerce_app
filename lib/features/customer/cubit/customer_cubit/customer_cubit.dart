@@ -12,6 +12,7 @@ class CustomerCubit extends Cubit<CustomerState> {
 
   final FirebaseCustomerService _customerService;
   CustomerModel customerData = CustomerModel(
+    id: "",
     name: '',
     email: '',
     image: null,

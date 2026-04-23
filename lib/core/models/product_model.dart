@@ -108,7 +108,11 @@ class ProductModel {
 
     return ProductModel(
       id: id ?? map['id']?.toString() ?? map['productId']?.toString() ?? '',
-      name: map['name']?.toString() ?? map['title']?.toString() ?? '',
+      name:
+          map['name']?.toString() ??
+          map['title']?.toString() ??
+          map['productName']?.toString() ??
+          '',
       description: map['description']?.toString() ?? '',
       price: parsedPrice,
       totalrate: parsedRating,

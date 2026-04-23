@@ -6,8 +6,15 @@ class FirebaseOrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  static const double _commissionRate = 0.1;
+
   String _docLogicalId(Map<String, dynamic> data, String docId) {
     return (data['orderId'] ?? data['orderNumber'] ?? docId).toString();
+  }
+
+  double _toDouble(dynamic value) {
+    if (value is num) return value.toDouble();
+    return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
   List<OrderModel> _mergeAndSortOrders({
@@ -151,11 +158,15 @@ class FirebaseOrderService {
         final customerName = order.customer.name.toLowerCase();
         final customerEmail = order.customer.email.toLowerCase();
         final customerPhone = order.customer.phone.toLowerCase();
+        final productNames = order.products
+            .map((product) => product.name.toLowerCase())
+            .join(' ');
 
         return orderId.contains(normalizedQuery) ||
             customerName.contains(normalizedQuery) ||
             customerEmail.contains(normalizedQuery) ||
-            customerPhone.contains(normalizedQuery);
+            customerPhone.contains(normalizedQuery) ||
+            productNames.contains(normalizedQuery);
       }).toList();
     } catch (e) {
       rethrow;
@@ -214,11 +225,19 @@ class FirebaseOrderService {
       if (user == null) throw Exception('User not authenticated');
 
       final rootOrderRef = _firestore.collection('orders').doc();
+      final subtotal = _toDouble(order.payment.subtotalPrice);
+      final deliveryFee = _toDouble(order.payment.deliveryFee);
+      final totalPrice = _toDouble(order.payment.totalPrice);
+      final commission = subtotal * _commissionRate;
       final orderPayload = {
         ...order.toMap(),
         'customerId': user.uid,
-        'orderId': order.orderid,
-        'orderNumber': order.orderid,
+        'commissionRate': _commissionRate,
+        'commission': commission,
+        'sellerEarning': subtotal - commission,
+        'subtotal': subtotal,
+        'deliveryFee': deliveryFee,
+        'totalPrice': totalPrice > 0 ? totalPrice : subtotal + deliveryFee,
         'status': _statusToString(order.status),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
