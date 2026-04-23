@@ -46,8 +46,17 @@ final class DeletecartproductFailedstate extends CartState {
 final class GetOrderSummaryLoadingState extends CartState {}
 
 final class GetOrderSummarySuccessState extends CartState {
-  final PaymentDetailsModel? orderSummary;
-  GetOrderSummarySuccessState({required this.orderSummary});
+  final double? subtotalPrice;
+  final double? totalPrice;
+  final double? deliveryFee;
+  final double? discount;
+
+  GetOrderSummarySuccessState({
+    required this.subtotalPrice,
+    required this.totalPrice,
+    required this.deliveryFee,
+    required this.discount,
+  });
 }
 
 final class GetOrderSummaryFailedState extends CartState {

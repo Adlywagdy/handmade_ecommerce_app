@@ -2,12 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_categorieslistdata.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/data/test_productslistdata.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_product_service.dart';
 part 'search_state.dart';
 
 class SearchCubit extends Cubit<SearchState> {
-  SearchCubit() : super(SearchInitial());
+  SearchCubit({FirebaseProductService? productService})
+    : _productService = productService ?? FirebaseProductService(),
+      super(SearchInitial());
+
+  final FirebaseProductService _productService;
 
   CategoryModel? selectedCategory;
   /* ------------------------------------------- */
@@ -23,11 +26,7 @@ class SearchCubit extends Cubit<SearchState> {
   Future<void> getCategories() async {
     emit(GetCategoriesLoadingstate());
     try {
-      // Simulate a delay for loading categories
-      await Future.delayed(const Duration(seconds: 2), () {});
-
-      // should trigger get categories logic here
-      categoriesList = testcategorieslistdata; // replace with actual data
+      categoriesList = await _productService.getCategories();
       emit(GetCategoriesSuccessedstate());
     } catch (e) {
       emit(GetCategoriesFailedstate(errorMessage: e.toString()));
@@ -39,11 +38,7 @@ class SearchCubit extends Cubit<SearchState> {
   Future<void> searchproducts({required String productname}) async {
     emit(SearchProductsLoadingstate());
     try {
-      // Simulate a delay for loading categories
-      await Future.delayed(const Duration(seconds: 2), () {});
-
-      // should trigger search logic here
-      searchedproductsList = productsListData; // replace with actual data
+      searchedproductsList = await _productService.searchProducts(productname);
       emit(SearchProductsSuccessedstate());
     } catch (e) {
       emit(SearchProductsFailedstate(errorMessage: e.toString()));
@@ -60,11 +55,23 @@ class SearchCubit extends Cubit<SearchState> {
   }) async {
     emit(FilterProductsLoadingstate());
     try {
-      // Simulate a delay for loading categories
-      await Future.delayed(const Duration(seconds: 2), () {});
+      String? categoryId;
+      if (categoryname != null && categoryname.trim().isNotEmpty) {
+        final normalized = categoryname.trim().toLowerCase();
+        for (final category in categoriesList) {
+          if (category.categorytitle.toLowerCase() == normalized) {
+            categoryId = category.id ?? category.categorytitle;
+            break;
+          }
+        }
+      }
 
-      // should trigger filter logic here
-      filteredproductsList = productsListData; // replace with actual data
+      filteredproductsList = await _productService.filterProducts(
+        categoryId: categoryId,
+        minPrice: minprice,
+        maxPrice: maxprice,
+        minRating: rating,
+      );
       emit(FilterProductsSuccessedstate());
     } catch (e) {
       emit(FilterProductsFailedstate(errorMessage: e.toString()));

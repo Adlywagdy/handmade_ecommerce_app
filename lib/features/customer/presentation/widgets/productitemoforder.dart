@@ -11,6 +11,9 @@ class ProductItemOfOrder extends StatelessWidget {
 
   final ProductModel product;
 
+  String get _imageUrl =>
+      product.images.isNotEmpty ? product.images.first : (product.image ?? '');
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -25,18 +28,24 @@ class ProductItemOfOrder extends StatelessWidget {
         children: [
           Row(
             spacing: 16.w,
-
             children: [
               Expanded(
                 flex: 1,
                 child: Card(
                   elevation: 0,
                   clipBehavior: Clip.antiAlias,
-                  child: Image.asset(
-                    product.images[0],
+                  child: Image.network(
+                    _imageUrl,
                     height: 100.h,
                     width: 100.w,
                     fit: BoxFit.fill,
+                    errorBuilder: (_, __, ___) => Container(
+                      height: 100.h,
+                      width: 100.w,
+                      color: Colors.grey.shade200,
+                      alignment: Alignment.center,
+                      child: const Icon(Icons.image_not_supported_outlined),
+                    ),
                   ),
                 ),
               ),

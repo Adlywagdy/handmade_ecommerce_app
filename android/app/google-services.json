@@ -7,12 +7,17 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:825459601482:android:fa70618ad2d0d04417f6b3",
+        "mobilesdk_app_id": "1:825459601482:android:063cfcd0d95596d417f6b3",
         "android_client_info": {
-          "package_name": "com.example.handmade_ecommerce_app"
+          "package_name": "com.example.handmade_app"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyCGdPsObNEKqKDipyb4ji-xBnW_GjJ_jFk"
@@ -20,7 +25,63 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.handmadeEcommerceApp"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:825459601482:android:fa70618ad2d0d04417f6b3",
+        "android_client_info": {
+          "package_name": "com.example.handmade_ecommerce_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "825459601482-57loutd7bnt82t2edisut4hh1vr5rj08.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.handmade_ecommerce_app",
+            "certificate_hash": "a885d3b68334c3313719471f2c32a8b9b18ea1d8"
+          }
+        },
+        {
+          "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGdPsObNEKqKDipyb4ji-xBnW_GjJ_jFk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "825459601482-ge1oq3992bl6qmcln2q53bliab294esn.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "825459601482-e4fqfbopc3jifk20ldk2gjkh5om7e9ac.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.handmadeEcommerceApp"
+              }
+            }
+          ]
         }
       }
     }

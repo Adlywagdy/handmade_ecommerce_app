@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
@@ -25,6 +24,11 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
       scrollDirection: Axis.horizontal,
       itemCount: BlocProvider.of<SearchCubit>(context).categoriesList.length,
       itemBuilder: (context, index) {
+        final category = BlocProvider.of<SearchCubit>(
+          context,
+        ).categoriesList[index];
+        final iconPath = category.categoryiconpath;
+
         return Padding(
           padding: const EdgeInsets.only(right: 13.0),
           child: GestureDetector(
@@ -32,12 +36,10 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
               setState(() {
                 selectedIndex = index;
                 BlocProvider.of<SearchCubit>(context).selectedCategory =
-                    BlocProvider.of<SearchCubit>(context).categoriesList[index];
-                BlocProvider.of<SearchCubit>(context).filterproducts(
-                  categoryname: BlocProvider.of<SearchCubit>(
-                    context,
-                  ).categoriesList[index].categorytitle,
-                );
+                    category;
+                BlocProvider.of<SearchCubit>(
+                  context,
+                ).filterproducts(categoryname: category.categorytitle);
                 Get.toNamed(AppRoutes.customerSearch);
               });
             },
@@ -49,20 +51,25 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
                   backgroundColor: selectedIndex == index
                       ? commonColor
                       : commonColor.withValues(alpha: 0.1),
-                  child: SvgPicture.asset(
-                    BlocProvider.of<SearchCubit>(
-                      context,
-                    ).categoriesList[index].categoryiconpath!,
-                    colorFilter: ColorFilter.mode(
-                      selectedIndex == index ? Colors.white : commonColor,
-                      BlendMode.srcIn,
-                    ),
-                  ),
+                  child: iconPath == null || iconPath.isEmpty
+                      ? Icon(
+                          Icons.category_outlined,
+                          color: selectedIndex == index
+                              ? Colors.white
+                              : commonColor,
+                        )
+                      : Image.network(
+                          iconPath,
+                          errorBuilder: (_, __, ___) => Icon(
+                            Icons.category_outlined,
+                            color: selectedIndex == index
+                                ? Colors.white
+                                : commonColor,
+                          ),
+                        ),
                 ),
                 Text(
-                  BlocProvider.of<SearchCubit>(
-                    context,
-                  ).categoriesList[index].categorytitle,
+                  category.categorytitle,
                   style: AppTextStyles.t_12w500.copyWith(color: darkblue),
                 ),
               ],

@@ -31,6 +31,12 @@ final class GetFilteredOrdersFailedState extends OrderState {
 }
 
 /*------------------------------------------- */
+final class SearchOrdersSuccessState extends OrderState {
+  final List<OrderModel> orders;
+  SearchOrdersSuccessState({required this.orders});
+}
+
+/*------------------------------------------- */
 final class GetOrderDetailsLoadingState extends OrderState {}
 
 final class GetOrderDetailsSuccessState extends OrderState {}
