@@ -12,10 +12,13 @@ import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order
 import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
+import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
@@ -25,7 +28,22 @@ void main() async {
   await Firebase.initializeApp();
 
   await Hive.initFlutter();
+  await Hive.openBox('notifications');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // ─── TEST FIREBASE CONNECTION ───
+  try {
+    final db = FirebaseFirestore.instance;
+    await db.collection('test_connection').add({
+      'message': 'Firebase is connected successfully!',
+      'timestamp': FieldValue.serverTimestamp(),
+    });
+    debugPrint('✅ FIREBASE CONNECTION SUCCESSFUL! Document written.');
+  } catch (e) {
+    debugPrint('❌ FIREBASE CONNECTION FAILED: $e');
+  }
+  // ────────────────────────────────
+
   //////////////////////////// Crashlytics ///////////////////////////////////
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
   PlatformDispatcher.instance.onError = (error, stack) {
@@ -35,6 +53,7 @@ void main() async {
   ///////////////////////////// RemoteConfig //////////////////////////////////
   await RemoteConfigService.instance.init();
   /////////////////////////////////////////////////////////////////////////
+  
   runApp(const HandcraftedEcommerceApp());
 }
 
@@ -54,9 +73,11 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) => AuthCubit(AuthService()),
             ),
             BlocProvider(
-              create: (BuildContext context) => SellerCubit()..loadDashboard(),
+              create: (BuildContext context) => SellerCubit(SellerFirestoreService())..loadDashboard(),
             ),
-
+            BlocProvider(
+              create: (BuildContext context) => NotificationsCubit()..loadNotifications(),
+            ),
             BlocProvider(create: (BuildContext context) => CustomerCubit()),
             BlocProvider(
               create: (BuildContext context) => HomeCubit()
@@ -66,18 +87,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(
               create: (BuildContext context) => SearchCubit()..getCategories(),
             ),
-            BlocProvider(
-              create: (context) => WishListCubit()..getWishlistProducts(),
-            ),
-
-            BlocProvider(create: (context) => SellerCubit()..loadDashboard()),
-            BlocProvider(create: (context) => CustomerCubit()),
-            BlocProvider(
-              create: (context) => HomeCubit()
-                ..getFeaturedProducts()
-                ..getTopRatedProducts(),
-            ),
-            BlocProvider(create: (context) => SearchCubit()..getCategories()),
             BlocProvider(
               create: (context) => WishListCubit()..getWishlistProducts(),
             ),

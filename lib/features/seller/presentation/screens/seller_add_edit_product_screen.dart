@@ -1,7 +1,9 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
 import '../../cubit/seller_cubit.dart';
 import '../../models/seller_model.dart';
 import '../../models/data/seller_mock_data.dart';
@@ -54,7 +56,10 @@ class _SellerAddEditProductScreenState
     super.dispose();
   }
 
-  void _saveProduct() {
+  final List<File> _newImages = [];
+  bool _isLoading = false;
+
+  void _saveProduct() async {
     if (!_formKey.currentState!.validate()) return;
 
     final stock = int.tryParse(_stockController.text) ?? 0;
@@ -67,54 +72,79 @@ class _SellerAddEditProductScreenState
       status = 'In Stock';
     }
 
-    final product = SellerProductModel(
-      id: _isEditing
-          ? widget.product!.id
-          : 'P${DateTime.now().millisecondsSinceEpoch}',
-      name: _nameController.text.trim(),
-      description: _descriptionController.text.trim(),
-      price: double.tryParse(_priceController.text) ?? 0,
-      stock: stock,
-      category: _selectedCategory ?? 'Ceramics',
-      images: _images.isNotEmpty ? _images : ['assets/images/splash.jpeg'],
-      isActive: stock > 0,
-      status: status,
-    );
+    setState(() => _isLoading = true);
 
-    final cubit = context.read<SellerCubit>();
-    if (_isEditing) {
-      cubit.updateProduct(product);
-    } else {
-      cubit.addProduct(product);
+    try {
+      final cubit = context.read<SellerCubit>();
+      if (_isEditing) {
+        final product = SellerProductModel(
+          id: widget.product!.id,
+          name: _nameController.text.trim(),
+          description: _descriptionController.text.trim(),
+          price: double.tryParse(_priceController.text) ?? 0,
+          stock: stock,
+          category: _selectedCategory ?? 'Ceramics',
+          images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
+          isActive: stock > 0,
+          status: status,
+        );
+        await cubit.updateProduct(product);
+      } else {
+        if (_newImages.isEmpty) {
+          Get.snackbar('Error', 'Please add at least one image',
+              backgroundColor: Colors.redAccent, colorText: Colors.white);
+          setState(() => _isLoading = false);
+          return;
+        }
+        await cubit.addProductWithImages(
+          name: _nameController.text.trim(),
+          description: _descriptionController.text.trim(),
+          price: double.tryParse(_priceController.text) ?? 0,
+          stock: stock,
+          category: _selectedCategory ?? 'Ceramics',
+          imageFiles: _newImages,
+        );
+      }
+
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              _isEditing
+                  ? 'Product updated successfully'
+                  : 'Product added successfully',
+            ),
+            backgroundColor: const Color(0xff07880E),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+          ),
+        );
+        Get.back();
+      }
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Error saving product: $e'),
+            backgroundColor: Colors.redAccent,
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _isLoading = false);
     }
-
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          _isEditing
-              ? 'Product updated successfully'
-              : 'Product added successfully',
-        ),
-        backgroundColor: const Color(0xff07880E),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      ),
-    );
-
-    Get.back();
   }
 
-  void _mockImageUpload() {
-    final mockImages = [
-      'assets/images/splash.jpeg',
-      'assets/images/test.png',
-      'assets/images/test2.png',
-    ];
-    setState(() {
-      if (_images.length < 5) {
-        _images.add(mockImages[_images.length % mockImages.length]);
-      }
-    });
+  Future<void> _pickImage() async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedFile != null) {
+      setState(() {
+        _newImages.add(File(pickedFile.path));
+        // We add it to _images so the UI updates
+        _images.add(pickedFile.path); 
+      });
+    }
   }
 
   @override
@@ -165,7 +195,7 @@ class _SellerAddEditProductScreenState
                       SizedBox(height: 10.h),
                       SellerImageUpload(
                         images: _images,
-                        onTap: _mockImageUpload,
+                        onTap: _pickImage,
                       ),
                       SizedBox(height: 24.h),
 
@@ -372,23 +402,30 @@ class _SellerAddEditProductScreenState
                       child: SizedBox(
                         height: 48.h,
                         child: ElevatedButton(
-                          onPressed: _saveProduct,
+                          onPressed: _isLoading ? null : _saveProduct,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff8B4513),
                             foregroundColor: Colors.white,
+                            disabledBackgroundColor: const Color(0xff8B4513).withValues(alpha: 0.5),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             elevation: 0,
                           ),
-                          child: Text(
-                            'Save Product',
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              fontWeight: FontWeight.w700,
-                              fontFamily: 'Plus Jakarta Sans',
-                            ),
-                          ),
+                          child: _isLoading 
+                            ? SizedBox(
+                                width: 20.w,
+                                height: 20.w,
+                                child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              )
+                            : Text(
+                                'Save Product',
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  fontWeight: FontWeight.w700,
+                                  fontFamily: 'Plus Jakarta Sans',
+                                ),
+                              ),
                         ),
                       ),
                     ),
