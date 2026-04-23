@@ -69,7 +69,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             BlocProvider(
               create: (context) => WishListCubit()..getWishlistProducts(),
             ),
-            BlocProvider(create: (context) => AuthCubit()),
+
             BlocProvider(create: (context) => SellerCubit()..loadDashboard()),
             BlocProvider(create: (context) => CustomerCubit()),
             BlocProvider(
