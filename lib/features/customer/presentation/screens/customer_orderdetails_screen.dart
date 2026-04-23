@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderstatusslider.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
@@ -13,6 +15,45 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/pr
 class CustomerOrderDetailsScreen extends StatelessWidget {
   final OrderModel order;
   const CustomerOrderDetailsScreen({super.key, required this.order});
+
+  String get _currencyLabel => order.payment.currency ?? 'EGP';
+
+  Future<void> _cancelOrder(BuildContext context) async {
+    if (order.status != OrderStatus.pending) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Only pending orders can be cancelled.')),
+      );
+      return;
+    }
+
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) {
+        return AlertDialog(
+          backgroundColor: customerbackGroundColor,
+
+          title: const Text('Cancel order?'),
+          content: const Text(
+            'This order will be cancelled and cannot be restored.',
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(false),
+              child: const Text('No', style: TextStyle(color: subTitleColor)),
+            ),
+            TextButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              child: const Text('Yes', style: TextStyle(color: redDegree)),
+            ),
+          ],
+        );
+      },
+    );
+
+    if (confirmed != true) return;
+
+    await context.read<OrderCubit>().cancelOrder(order.orderid);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +71,9 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
         title: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(order.orderid!, style: AppTextStyles.t_18w700),
+            Text(order.orderid, style: AppTextStyles.t_18w700),
             Text(
-              'Placed on ${order.orderDate}',
+              'Placed on ${order.orderDate.toLocal().toString().split(' ').first}',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
           ],
@@ -53,9 +94,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
 
                   Padding(
                     padding: const EdgeInsets.symmetric(vertical: 32.0).h,
-                    child: OrderStatusSlider(
-                      orderstatus: order.status ?? OrderStatus.preparing,
-                    ),
+                    child: OrderStatusSlider(orderstatus: order.status),
                   ),
                   Text(
                     'ORDER ITEMS (${order.products.length})',
@@ -109,20 +148,21 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                       SizedBox(height: 4.h),
                       Text(order.customer.name, style: AppTextStyles.t_14w700),
                       Text(
-                        order.customer.address?.addressdescription ??
-                            "123 Main St, City, Country",
+                        order.address.addressdescription,
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
                       ),
+                      order.address.city != null
+                          ? Text(
+                              "${order.address.city}, ${order.address.country}",
+                              style: AppTextStyles.t_14w400.copyWith(
+                                color: subTitleColor,
+                              ),
+                            )
+                          : SizedBox(),
                       Text(
-                        order.customer.address?.city ?? "Cairo, Egypt",
-                        style: AppTextStyles.t_14w400.copyWith(
-                          color: subTitleColor,
-                        ),
-                      ),
-                      Text(
-                        order.customer.phone ?? "+20 123 456 7890",
+                        "zipCode:${order.address.zipCode.toString()}",
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
@@ -132,15 +172,23 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                 ),
               ),
             ),
-            SliverToBoxAdapter(child: OrderSummary(order: order)),
+            SliverToBoxAdapter(
+              child: OrderSummary(
+                currency: _currencyLabel,
+                subtotalPrice: order.payment.subtotalPrice,
+                totalPrice: order.payment.totalPrice,
+                deliveryFee: order.payment.deliveryFee,
+                discount: order.payment.discount,
+              ),
+            ),
             SliverToBoxAdapter(
               child: CustomElevatedButton(
-                onPressed: () {},
+                onPressed: () => _cancelOrder(context),
                 buttoncolor: Colors.white,
                 bordercolor: redDegree,
                 child: Row(
                   spacing: 8.w,
-                  mainAxisAlignment: .center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.cancel_outlined, color: redDegree, size: 24.r),
                     Text(

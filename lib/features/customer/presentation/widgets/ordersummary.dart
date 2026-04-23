@@ -2,12 +2,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/orderdetailsrow.dart';
 
 class OrderSummary extends StatelessWidget {
-  final OrderModel order;
-  const OrderSummary({super.key, required this.order});
+  final String currency;
+  final double? subtotalPrice;
+  final double? totalPrice;
+  final double? deliveryFee;
+  final double? discount;
+
+  const OrderSummary({
+    super.key,
+    this.currency = 'EGP',
+    required this.subtotalPrice,
+    required this.totalPrice,
+    required this.deliveryFee,
+    required this.discount,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -33,22 +44,34 @@ class OrderSummary extends StatelessWidget {
 
           OrderDetailsRow(
             title: 'Subtotal',
-            value: '\$${order.payment?.subtotalPrice?.toStringAsFixed(2)}',
+            valuestyle: AppTextStyles.t_14w500,
+            titlestyle: AppTextStyles.t_14w400.copyWith(
+              color: darkblue.withValues(alpha: .9),
+            ),
+            value: '$currency ${subtotalPrice?.toStringAsFixed(2) ?? '0.00'}',
           ),
           OrderDetailsRow(
             title: 'Delivery Fee',
-            value: '\$${order.payment?.deliveryFee?.toStringAsFixed(2)}',
+            valuestyle: AppTextStyles.t_14w500,
+            titlestyle: AppTextStyles.t_14w400.copyWith(
+              color: darkblue.withValues(alpha: .9),
+            ),
+            value: '$currency ${deliveryFee?.toStringAsFixed(2) ?? '0.00'}',
           ),
           OrderDetailsRow(
             title: 'Discount',
-            valuecolor: greenDegree,
-            value: '- \$${order.payment?.discount?.toStringAsFixed(2)}',
+            valuestyle: AppTextStyles.t_14w500.copyWith(color: greenDegree),
+            titlestyle: AppTextStyles.t_14w400.copyWith(
+              color: darkblue.withValues(alpha: .9),
+            ),
+            value: '- $currency ${discount?.toStringAsFixed(2) ?? '0.00'}',
           ),
           Divider(color: commonColor.withValues(alpha: .1)),
           OrderDetailsRow(
             title: 'Total Amount',
-
-            value: '\$${order.payment?.totalPrice?.toStringAsFixed(2)}',
+            titlestyle: AppTextStyles.t_18w700,
+            valuestyle: AppTextStyles.t_20w700.copyWith(color: commonColor),
+            value: '$currency ${totalPrice?.toStringAsFixed(2) ?? '0.00'}',
           ),
         ],
       ),

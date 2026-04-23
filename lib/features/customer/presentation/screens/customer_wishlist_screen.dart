@@ -1,14 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/core/models/category_model.dart';
-import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/review_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/searchedproductitemlowercolumn.dart';
 
 class CustomerWishlistScreen extends StatelessWidget {
@@ -32,13 +30,14 @@ class CustomerWishlistScreen extends StatelessWidget {
 
               title: Text(
                 'Your Wishlist',
-
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
             CupertinoSliverRefreshControl(
               onRefresh: () async {
-                await Future.delayed(Duration(seconds: 2));
+                await BlocProvider.of<WishListCubit>(
+                  context,
+                ).getWishlistProducts();
               },
               builder:
                   (
@@ -93,11 +92,27 @@ class CustomerWishlistScreen extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            '${wishlistProducts.length} saved items',
-                            style: AppTextStyles.t_16w700.copyWith(
-                              color: blackDegree,
-                            ),
+                          BlocBuilder<WishListCubit, WishListState>(
+                            buildWhen: (previous, current) {
+                              return current is GetWishlistLoadingstate ||
+                                  current is GetWishlistFailedstate ||
+                                  current is GetWishlistSuccessedstate;
+                            },
+                            builder: (context, state) {
+                              final productsCount =
+                                  state is GetWishlistSuccessedstate
+                                  ? state.wishlistproducts.length
+                                  : BlocProvider.of<WishListCubit>(
+                                      context,
+                                    ).wishlistProductsList.length;
+
+                              return Text(
+                                '$productsCount saved items',
+                                style: AppTextStyles.t_16w700.copyWith(
+                                  color: blackDegree,
+                                ),
+                              );
+                            },
                           ),
                           SizedBox(height: 2.h),
                           Text(
@@ -114,31 +129,83 @@ class CustomerWishlistScreen extends StatelessWidget {
               ),
             ),
 
-            SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                childAspectRatio: 1 / 1.8,
-              ),
-              itemCount: wishlistProducts.length,
-              itemBuilder: (context, index) {
-                return Padding(
-                  padding: const EdgeInsets.only(left: 8.0, right: 8.0).w,
-                  child: ProductItem(
-                    cardclipBehavior: .antiAlias,
-                    product: wishlistProducts[index],
-                    imageflex: 2,
-                    lowercolumnflex: 1,
-                    elevation: 0,
-                    imageclipBehavior: Clip.antiAlias,
-                    lowercolumnbottompadding: 7.h,
-                    lowercolumntoppadding: 7.h,
-                    lowercolumnleftpadding: 8,
-                    lowercolumnrightpadding: 8,
-                    lowercolumn: SearchedProductItemLowerColumn(
-                      product: wishlistProducts[index],
+            BlocBuilder<WishListCubit, WishListState>(
+              buildWhen: (previous, current) {
+                return current is GetWishlistLoadingstate ||
+                    current is GetWishlistFailedstate ||
+                    current is GetWishlistSuccessedstate ||
+                    current is AddOrDeleteWishlistSuccessedstate;
+              },
+              builder: (context, state) {
+                if (state is GetWishlistFailedstate) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'Failed to load wishlist. Please try again.',
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: redDegree,
+                        ),
+                      ),
                     ),
-                  ),
-                );
+                  );
+                } else if (state is GetWishlistSuccessedstate &&
+                    state.wishlistproducts.isEmpty) {
+                  return SliverFillRemaining(
+                    child: Center(
+                      child: Text(
+                        'Your wishlist is empty. \nStart adding your favorite products!',
+                        textAlign: .center,
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: subTitleColor,
+                        ),
+                      ),
+                    ),
+                  );
+                } else if (state is GetWishlistSuccessedstate) {
+                  return SliverGrid.builder(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.8,
+                    ),
+                    itemCount: state.wishlistproducts.length,
+                    itemBuilder: (context, index) {
+                      return Padding(
+                        padding: const EdgeInsets.only(left: 8.0, right: 8.0).w,
+                        child: ProductItem(
+                          cardclipBehavior: .antiAlias,
+                          product: state.wishlistproducts[index],
+                          imageflex: 2,
+                          lowercolumnflex: 1,
+                          elevation: 0,
+                          imageclipBehavior: Clip.antiAlias,
+                          lowercolumnbottompadding: 7.h,
+                          lowercolumntoppadding: 7.h,
+                          lowercolumnleftpadding: 8,
+                          lowercolumnrightpadding: 8,
+                          lowercolumn: SearchedProductItemLowerColumn(
+                            product: state.wishlistproducts[index],
+                          ),
+                        ),
+                      );
+                    },
+                  );
+                } else {
+                  return SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 2,
+                      childAspectRatio: 1 / 1.8,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      childCount: 4,
+                      (context, index) => Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
+                        child: SvgPicture.asset(
+                          "assets/images/loadingCard.svg",
+                        ),
+                      ),
+                    ),
+                  );
+                }
               },
             ),
             SliverToBoxAdapter(child: SizedBox(height: 50.h)),
@@ -148,90 +215,3 @@ class CustomerWishlistScreen extends StatelessWidget {
     );
   }
 }
-
-List<ProductModel> wishlistProducts = [
-  ProductModel(
-    name: 'Handmade Ceramic Vase',
-    description:
-        'This exquisite Terra Vase is hand-thrown by master artisans using traditional Mediterranean techniques.\nEach piece is unique, featuring a natural matte finish and subtle variations in texture that celebrate the organic beauty of locally sourced clay. \nPerfect for dried botanicals or as a standalone sculptural piece.',
-    price: 49.99,
-    totalrate: 4.5,
-    quantity: 50,
-    reviews: [
-      ReviewModel(
-        reviewer: CustomerModel(
-          name: "Alice Smith",
-          email: "alice.smith@example.com",
-        ),
-        rating: 3,
-        reviewText:
-            "Absolutely stunning quality. You can feel the craftsmanship in the texture of the clay.",
-        reviewDate: DateTime.now(),
-      ),
-    ],
-    images: [
-      "assets/images/splash.jpeg",
-      "assets/images/test.png",
-      "assets/images/test2.png",
-    ],
-    category: CategoryModel(categorytitle: "WOODWORK"),
-    seller: SellerModel(
-      name: "John Doe",
-      email: "john.doe@example.com",
-      specialty: "Artisan ",
-      submittedDate: "2023-01-01",
-      image: "assets/images/profile.svg",
-      badge: "Verified",
-      location: "Tunisia",
-    ),
-    tags: ["Handmade", "Ceramic", "Decorative"],
-  ),
-  ProductModel(
-    name: 'Woven Basket',
-    description:
-        'A sturdy and stylish woven basket, ideal for storage or as a decorative piece.',
-    price: 29.99,
-    totalrate: 4.0,
-    quantity: 30,
-    images: [
-      "assets/images/splash.jpeg",
-      "assets/images/test.png",
-      "assets/images/test2.png",
-    ],
-    category: CategoryModel(categorytitle: "WOODWORK"),
-    seller: SellerModel(
-      name: "John Doe",
-      email: "john.doe@example.com",
-      specialty: "Ceramics",
-      submittedDate: "2023-01-01",
-      image: "assets/images/profile.svg",
-      badge: "Top Seller",
-      location: "Tunisia",
-    ),
-    tags: ["Handmade", "Wooden", "Decorative"],
-  ),
-  ProductModel(
-    name: 'Hand-Painted Wooden Sign',
-    description:
-        'A charming hand-painted wooden sign that adds a rustic touch to any space.',
-    price: 19.99,
-    totalrate: 4.8,
-    quantity: 20,
-    images: [
-      "assets/images/splash.jpeg",
-      "assets/images/test.png",
-      "assets/images/test2.png",
-    ],
-    category: CategoryModel(categorytitle: "WOODWORK"),
-    seller: SellerModel(
-      name: "John Doe",
-      email: "john.doe@example.com",
-      specialty: "Ceramics",
-      submittedDate: "2023-01-01",
-      image: "assets/images/profile.svg",
-      badge: "Top Seller",
-      location: "Tunisia",
-    ),
-    tags: ["Handmade", "Wooden", "Decorative"],
-  ),
-];

@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/extension/email_validation.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -81,7 +82,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   label: 'EMAIL ADDRESS',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
-                    Icons.email,
+                    Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
@@ -97,6 +98,10 @@ class _LoginScreenState extends State<LoginScreen> {
                 Customtextfield(
                   controller: _passwordController,
                   isPassword: true,
+                  prefixIcon: Icon(
+                    Icons.lock_outline_rounded,
+                    color: primaryColor.withValues(alpha: 0.6),
+                  ),
                   validator: (value) {
                     if (value!.length < 6) {
                       return "Password should be more than 5 letters";
@@ -120,36 +125,42 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
-                    if (state is AuthAuthenticated) {
-                      if (state.role == 'seller') {
-                        Get.offAllNamed(AppRoutes.sellerdashboard); // Or sellerbottomnav if that's the correct route
-                      } else {
-                        Get.offAllNamed(AppRoutes.customerlayout);
-                      }
-                    } else if (state is AuthError) {
-                      Get.snackbar(
-                        'Login Failed',
-                        state.message,
-                        snackPosition: SnackPosition.BOTTOM,
-                        backgroundColor: Colors.redAccent,
-                        colorText: Colors.white,
+                    if (state is LoginSuccessState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Login Success')),
                       );
+                      Get.offAllNamed(AppRoutes.customerlayout);
+                    } else if (state is LoginErrorState) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                    } else if (state is GoogleLoginSuccessState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Google Sign In Success')),
+                      );
+                      Get.offAllNamed(AppRoutes.customerlayout);
+                    } else if (state is GoogleLoginErrorState) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
                     }
                   },
+
                   builder: (context, state) {
-                    if (state is AuthLoading) {
-                      return const Center(child: CircularProgressIndicator());
-                    }
+                    final isLoading = state is AuthLoading;
                     return CustomElevatedButton(
-                      onPressed: () {
-                        if (_formkey.currentState!.validate()) {
-                          _formkey.currentState!.save();
-                          context.read<AuthCubit>().login(
-                            email: _emailController.text,
-                            password: _passwordController.text,
-                          );
-                        }
-                      },
+                      onPressed: isLoading
+                          ? null
+                          : () {
+                              if (_formkey.currentState!.validate()) {
+                                _formkey.currentState!.save();
+                                context.read<AuthCubit>().login(
+                                  email: _emailController.text,
+                                  password: _passwordController.text,
+                                );
+                              }
+                            },
+
                       buttoncolor: primaryColor,
                       child: Text(
                         'Sign In',
@@ -178,10 +189,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20.h),
                 Row(
                   children: [
-                    SocialButton(text: 'Google', icon: Icons.g_mobiledata),
+                    SocialButton(
+                      text: 'Google',
+                      icon: Icons.g_mobiledata,
+                      onTap: () {
+                        final state = context.read<AuthCubit>().state;
+                        if (state is! AuthLoading) {
+                          context.read<AuthCubit>().signInWithGoogle();
+                        }
+                      },
+                    ),
                     SizedBox(width: 10.h),
-
-                    SocialButton(text: 'Apple', icon: Icons.apple),
                   ],
                 ),
 

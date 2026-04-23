@@ -14,10 +14,19 @@ class ProductImagesScroll extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       itemCount: product.images.length,
       itemBuilder: (context, index) {
+        final imageUrl = product.images[index];
         return Stack(
           fit: StackFit.expand,
           children: [
-            Image.asset(product.images[index], fit: BoxFit.fill),
+            Image.network(
+              imageUrl,
+              fit: BoxFit.fill,
+              errorBuilder: (_, __, ___) => Container(
+                color: Colors.grey.shade200,
+                alignment: Alignment.center,
+                child: const Icon(Icons.image_not_supported_outlined),
+              ),
+            ),
 
             Positioned(
               right: 8.w,

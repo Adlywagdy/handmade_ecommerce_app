@@ -6,24 +6,33 @@ final class AuthInitial extends AuthState {}
 
 final class AuthLoading extends AuthState {}
 
-final class AuthAuthenticated extends AuthState {
-  final String uid;
-  final String role; // 'seller' or 'customer'
-  
-  AuthAuthenticated({required this.uid, required this.role});
-}
+final class LoginSuccessState extends AuthState {}
 
-final class AuthError extends AuthState {
+final class LoginErrorState extends AuthState {
   final String message;
-  AuthError(this.message);
+  LoginErrorState(this.message);
 }
 
-final class RegisterSuccessState extends AuthState {}
+final class GoogleLoginSuccessState extends AuthState {}
 
-// Legacy states kept temporarily if needed by other screens
-final class LoadingSuccessState extends AuthState {}
+final class GoogleLoginErrorState extends AuthState {
+  final String message;
+  GoogleLoginErrorState(this.message);
+}
+
+final class RegisterSuccessState extends AuthState {
+  final String role;
+  RegisterSuccessState(this.role);
+}
+
+final class RegisterErrorState extends AuthState {
+  final String message;
+  RegisterErrorState(this.message);
+}
+
 final class OtpSuccessState extends AuthState {}
-final class OtpErorrState extends AuthState {
-  final String massege;
-  OtpErorrState(this.massege);
+
+final class OtpErrorState extends AuthState {
+  final String message;
+  OtpErrorState(this.message);
 }

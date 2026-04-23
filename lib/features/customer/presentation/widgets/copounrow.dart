@@ -1,19 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
+import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
+import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
 
 class CopounRow extends StatefulWidget {
-  const CopounRow({super.key});
+  final void Function()? onTap;
+  const CopounRow({super.key, this.onTap});
 
   @override
   State<CopounRow> createState() => _CopounRowState();
 }
 
-late TextEditingController? controller;
-
 class _CopounRowState extends State<CopounRow> {
+  late final TextEditingController controller;
+
   @override
   void initState() {
     controller = TextEditingController();
@@ -23,7 +28,7 @@ class _CopounRowState extends State<CopounRow> {
 
   @override
   void dispose() {
-    controller?.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -75,14 +80,28 @@ class _CopounRowState extends State<CopounRow> {
           flex: 1,
           child: InkWell(
             onTap: () {
-              // apply copoun logic
-              // String copounCode = controller.text;
+              if (controller.text.trim().isEmpty) {
+                showSnack(
+                  title: "Error",
+                  message: "Please enter a promo code",
+                  bgColor: Colors.red,
+                  icon: Icons.error,
+                );
+              } else if (checkcopoun(controller.text)) {
+                BlocProvider.of<CartCubit>(context).getOrderSummary(
+                  products: BlocProvider.of<CartCubit>(
+                    context,
+                  ).cartProductsList,
+                  coupon: controller.text,
+                );
+              }
+              controller.clear();
             },
             child: CustomTextContainer(
               text: "Apply",
               textstyle: AppTextStyles.t_16w700.copyWith(color: commonColor),
-              horizontalpadding: 4.w,
-              verticalpadding: 8.h,
+              horizontalpadding: 4.h,
+              verticalpadding: 12.h,
               backGroundColor: commonColor.withValues(alpha: .1),
             ),
           ),

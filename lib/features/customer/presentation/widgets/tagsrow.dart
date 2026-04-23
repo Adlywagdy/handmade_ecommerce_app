@@ -14,24 +14,20 @@ class TagsRow extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       height: 33.h,
-      child: ListView.builder(
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(right: 8.0),
-            child: CustomTextContainer(
-              text: product.tags![index],
-
-              backGroundColor: customerbackGroundColor,
-              bordercolor: commonColor.withValues(alpha: 0.1),
-              verticalpadding: 4.h,
-              horizontalpadding: 12,
-              textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
-              borderRadius: 200.r,
-            ),
+      child: Wrap(
+        spacing: 8.w,
+        runSpacing: 8.h,
+        children: List.generate(product.tags!.length, (index) {
+          return CustomTextContainer(
+            text: product.tags![index],
+            backGroundColor: customerbackGroundColor,
+            bordercolor: commonColor.withValues(alpha: 0.1),
+            verticalpadding: 4.h,
+            horizontalpadding: 12,
+            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
+            borderRadius: 200.r,
           );
-        },
-        itemCount: product.tags!.length,
-        scrollDirection: Axis.horizontal,
+        }),
       ),
     );
   }

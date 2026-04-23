@@ -34,7 +34,7 @@ class CustomSellerListTile extends StatelessWidget {
         backgroundColor: commonColor.withValues(alpha: 0.10),
         child: SvgPicture.asset('assets/images/unknown_user_icon.svg'),
       ),
-      trailing: InkWell(
+      trailing: GestureDetector(
         onTap: () {
           // Handle view shop action
         },

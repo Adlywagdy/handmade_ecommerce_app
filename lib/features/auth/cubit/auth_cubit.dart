@@ -1,72 +1,125 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handmade_ecommerce_app/core/services/firebase_auth_service.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
-  final FirebaseAuthService _authService;
+  final AuthService authService;
 
-  AuthCubit(this._authService) : super(AuthInitial());
+  AuthCubit(this.authService) : super(AuthInitial());
 
-  void login({required String email, required String password}) async {
-    emit(AuthLoading());
-    try {
-      final credential = await _authService.signInWithEmailAndPassword(email, password);
-      final uid = credential.user?.uid;
-      
-      if (uid != null) {
-        // Fetch user role from Firestore to decide where to navigate
-        final role = await _authService.getUserRole(uid);
-        emit(AuthAuthenticated(uid: uid, role: role ?? 'customer'));
-      } else {
-        emit(AuthError("Login failed: User ID is null"));
-      }
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
-  }
-
-  void registerCustomer({required String email, required String password, required String name}) async {
-    emit(AuthLoading());
-    try {
-      await _authService.registerCustomer(email, password, name);
-      emit(RegisterSuccessState());
-    } catch (e) {
-      emit(AuthError(e.toString()));
-    }
-  }
-
-  void registerSeller({
-    required String email, 
+  void login({
+    required String email,
     required String password,
-    required String shopName,
-    required String specialty,
-    required String bio,
   }) async {
     emit(AuthLoading());
+
     try {
-      await _authService.registerSeller(
-        email: email, 
-        password: password, 
-        shopName: shopName, 
-        specialty: specialty, 
-        bio: bio
+      await authService.login(
+        email: email,
+        password: password,
       );
-      emit(RegisterSuccessState());
+
+      emit(LoginSuccessState());
+    } on FirebaseAuthException catch (e) {
+      emit(LoginErrorState(e.message ?? 'Login failed'));
     } catch (e) {
-      emit(AuthError(e.toString()));
+      emit(LoginErrorState('Something went wrong'));
     }
   }
 
-  void otp({required String email, required String password}) async {
-    emit(AuthInitial());
-    emit(OtpSuccessState());
-    emit(OtpErorrState(email.toString()));
+  void signInWithGoogle() async {
+    emit(AuthLoading());
+
+    try {
+      await authService.signInWithGoogle();
+      emit(GoogleLoginSuccessState());
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'network-request-failed') {
+        emit(
+          GoogleLoginErrorState(
+            'Please check your internet connection and try again',
+          ),
+        );
+      } else if (e.code == 'google-sign-in-cancelled') {
+        emit(GoogleLoginErrorState('Google sign-in was cancelled'));
+      } else {
+        emit(GoogleLoginErrorState(e.message ?? 'Google sign in failed'));
+      }
+    } catch (e) {
+      emit(GoogleLoginErrorState('Something went wrong'));
+    }
   }
 
-  Future<void> logout() async {
+  void register({
+    required String fullName,
+    required String email,
+    required String password,
+    required String role,
+  }) async {
     emit(AuthLoading());
-    await _authService.signOut();
-    emit(AuthInitial());
+
+    try {
+      await authService.register(
+        fullName: fullName,
+        email: email,
+        password: password,
+        role: role,
+      );
+
+      emit(RegisterSuccessState(role));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        emit(RegisterErrorState('Password is too weak'));
+      } else if (e.code == 'email-already-in-use') {
+        emit(RegisterErrorState('Email is already in use'));
+      } else if (e.code == 'network-request-failed') {
+        emit(
+          RegisterErrorState(
+            'Please check your internet connection and try again',
+          ),
+        );
+      } else {
+        emit(RegisterErrorState(e.message ?? 'Register failed'));
+      }
+    } catch (e) {
+      emit(RegisterErrorState('Something went wrong'));
+    }
+  }
+
+  void registerWithGoogle({
+    required String selectedRole,
+  }) async {
+    emit(AuthLoading());
+
+    try {
+      final String finalRole = await authService.registerWithGoogle(
+        selectedRole: selectedRole,
+      );
+
+      emit(RegisterSuccessState(finalRole));
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'network-request-failed') {
+        emit(
+          RegisterErrorState(
+            'Please check your internet connection and try again',
+          ),
+        );
+      } else if (e.code == 'google-sign-in-cancelled') {
+        emit(RegisterErrorState('Google sign-in was cancelled'));
+      } else {
+        emit(RegisterErrorState(e.message ?? 'Google register failed'));
+      }
+    } catch (e) {
+      emit(RegisterErrorState('Something went wrong'));
+    }
+  }
+
+  void otp({
+    required String email,
+    required String password,
+  }) async {
+    emit(AuthLoading());
   }
 }

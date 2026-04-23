@@ -35,6 +35,7 @@ class ProductDetailsLowerColumn extends StatelessWidget {
             ? ProductReviewsColumn(product: product)
             : Text(
                 "No reviews yet for this product. Be the first to share your thoughts!",
+                textAlign: TextAlign.center,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               ),
 

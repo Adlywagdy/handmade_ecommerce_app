@@ -2,21 +2,47 @@ import 'package:handmade_ecommerce_app/features/customer/models/address_model.da
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 class CustomerModel {
+  final String id;
   final String name;
-  final String? email;
-  final String? phone;
-  final AddressModel? address;
-  final String? password;
+  final String email;
+  final String phone;
+  AddressModel? address;
+  final String password;
   final String? image;
   final List<OrderModel>? orderslist;
 
   CustomerModel({
+    required this.id,
     required this.name,
-    this.email,
-    this.phone,
+    required this.email,
+    required this.phone,
     this.address,
-    this.password,
-    this.image,
+    required this.password,
+    this.image = "assets/images/splash.jpeg",
     this.orderslist,
   });
+
+  factory CustomerModel.fromMap(Map<String, dynamic> map) {
+    return CustomerModel(
+      id: map['id']?.toString() ?? '',
+      name: map['name']?.toString() ?? '',
+      email: map['email']?.toString() ?? '',
+      phone: map['phone']?.toString() ?? '',
+      password: map['password']?.toString() ?? '',
+      image: map['image']?.toString(),
+      address: map['address'] is Map<String, dynamic>
+          ? AddressModel.fromMap(map['address'] as Map<String, dynamic>)
+          : null,
+    );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'name': name,
+      'email': email,
+      'phone': phone,
+      'image': image,
+      'address': address?.toMap(),
+    };
+  }
 }
