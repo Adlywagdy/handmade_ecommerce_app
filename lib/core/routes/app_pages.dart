@@ -14,6 +14,7 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/screens/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orderdetails_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_shop_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
@@ -66,6 +67,10 @@ class AppPages {
       name: AppRoutes.customerProductDetails,
       page: () =>
           CustomerProductDetailsScreen(product: Get.arguments as ProductModel),
+    ),
+    GetPage(
+      name: AppRoutes.customerShopDetails,
+      page: () => CustomerShopDetailsScreen(sellerId: Get.arguments as String),
     ),
     GetPage(name: AppRoutes.customerSearch, page: () => CustomerSearchScreen()),
     GetPage(

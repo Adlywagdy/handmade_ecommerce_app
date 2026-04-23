@@ -46,7 +46,7 @@ class ProductModel {
 
   String? get image => images.isNotEmpty ? images.first : null;
   double get rating => totalrate ?? 0;
-  String get sellerId => seller.email;
+  String get sellerId => seller.primaryIdentifier;
   String? get categoryId => category?.id ?? category?.categorytitle;
 
   factory ProductModel.fromMap(Map<String, dynamic> map, {String? id}) {
@@ -65,25 +65,25 @@ class ProductModel {
     final parsedRating = _parseDouble(map['rating'] ?? map['totalrate']);
 
     final sellerMap = map['seller'];
-    final seller = sellerMap is Map<String, dynamic>
-        ? SellerModel(
-            name: sellerMap['name']?.toString() ?? 'Unknown Seller',
-            email: sellerMap['email']?.toString() ?? '',
-            specialty: sellerMap['specialty']?.toString() ?? '',
-            submittedDate: sellerMap['submittedDate']?.toString() ?? '',
-            badge: sellerMap['badge']?.toString(),
-            image: sellerMap['image']?.toString(),
-            location: sellerMap['location']?.toString(),
-          )
-        : SellerModel(
-            name: map['sellerName']?.toString() ?? 'Unknown Seller',
-            email: map['sellerId']?.toString() ?? '',
-            specialty: map['sellerSpecialty']?.toString() ?? '',
-            submittedDate: '',
-            image: map['sellerImage']?.toString(),
-            badge: map['sellerBadge']?.toString(),
-            location: map['sellerLocation']?.toString(),
-          );
+    final sellerReferenceId =
+        _extractSellerReferenceId(sellerMap) ??
+        _extractSellerReferenceId(map['sellerId']);
+    final sellerData = sellerMap is Map<String, dynamic>
+        ? sellerMap
+        : <String, dynamic>{
+            'id': sellerReferenceId ?? map['sellerId'],
+            'sellerId': sellerReferenceId ?? map['sellerId'],
+            'name': map['sellerName'],
+            'email': map['sellerEmail'] ?? sellerReferenceId ?? map['sellerId'],
+            'specialty': map['sellerSpecialty'],
+            'image': map['sellerImage'],
+            'badge': map['sellerBadge'],
+            'location': map['sellerLocation'],
+          };
+    final seller = SellerModel.fromMap(
+      sellerData,
+      fallbackId: (sellerReferenceId ?? map['sellerId'])?.toString(),
+    );
 
     final categoryMap = map['category'];
     final category = categoryMap is Map<String, dynamic>
@@ -136,7 +136,7 @@ class ProductModel {
       'stock': quantity,
       'images': images,
       'productImage': image,
-      'sellerId': seller.email,
+      'sellerId': sellerId,
       'categoryId': category?.id,
       'tags': tags ?? <String>[],
       'isActive': isActive,
@@ -182,5 +182,48 @@ class ProductModel {
     }
 
     return null;
+  }
+
+  static String? _extractSellerReferenceId(dynamic value) {
+    if (value == null) return null;
+
+    if (value is String) {
+      return _normalizeSellerPath(value);
+    }
+
+    try {
+      final dynamic id = value.id;
+      if (id is String && id.trim().isNotEmpty) {
+        return id.trim();
+      }
+    } catch (_) {
+      // Value is not a document reference.
+    }
+
+    try {
+      final dynamic path = value.path;
+      if (path is String) {
+        return _normalizeSellerPath(path);
+      }
+    } catch (_) {
+      // Value does not expose a path.
+    }
+
+    return _normalizeSellerPath(value.toString());
+  }
+
+  static String? _normalizeSellerPath(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return null;
+
+    final sellersPath = RegExp(r'^/?sellers/([^/]+)$');
+    final pathMatch = sellersPath.firstMatch(trimmed);
+    if (pathMatch != null) return pathMatch.group(1);
+
+    final embeddedPath = RegExp(r'sellers/([^/\s)]+)');
+    final embeddedMatch = embeddedPath.firstMatch(trimmed);
+    if (embeddedMatch != null) return embeddedMatch.group(1);
+
+    return trimmed;
   }
 }

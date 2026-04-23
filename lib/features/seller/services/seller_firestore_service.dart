@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import '../models/seller_model.dart';
-import '../models/data/seller_mock_data.dart'; // fallback data
 
 class SellerFirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
@@ -45,9 +44,14 @@ class SellerFirestoreService {
     List<String> downloadUrls = [];
     try {
       for (var image in images) {
-        String fileName = DateTime.now().millisecondsSinceEpoch.toString() + '_' + image.path.split('/').last;
-        Reference ref = _storage.ref().child('product_images/$currentSellerId/$fileName');
-        
+        String fileName =
+            DateTime.now().millisecondsSinceEpoch.toString() +
+            '_' +
+            image.path.split('/').last;
+        Reference ref = _storage.ref().child(
+          'product_images/$currentSellerId/$fileName',
+        );
+
         UploadTask uploadTask = ref.putFile(image);
         TaskSnapshot snapshot = await uploadTask;
         String downloadUrl = await snapshot.ref.getDownloadURL();
@@ -65,7 +69,7 @@ class SellerFirestoreService {
       final map = product.toMap();
       map['sellerId'] = currentSellerId; // Link product to seller
       map['createdAt'] = FieldValue.serverTimestamp();
-      
+
       await _db.collection('products').add(map);
     } catch (e) {
       throw Exception('Failed to add product: $e');
@@ -128,21 +132,22 @@ class SellerFirestoreService {
   Future<SellerDashboardStats> getDashboardStats() async {
     try {
       final orders = await getOrders();
-      
+
       double totalRevenue = 0;
       int completedOrders = 0;
       List<double> weeklySales = List.filled(7, 0.0);
-      
+
       final now = DateTime.now();
 
       for (var order in orders) {
         // Only count completed/delivered orders as revenue
-        if (order.status.toLowerCase() == 'completed' || order.status.toLowerCase() == 'delivered') {
+        if (order.status.toLowerCase() == 'completed' ||
+            order.status.toLowerCase() == 'delivered') {
           totalRevenue += order.totalAmount;
           completedOrders++;
-          
-          // Try to parse orderDate, assuming it's an ISO string or similar. 
-          // If it's a string like "20 mins ago", this parsing will fail. 
+
+          // Try to parse orderDate, assuming it's an ISO string or similar.
+          // If it's a string like "20 mins ago", this parsing will fail.
           // Ideally, we'd use a real Timestamp field. For safety, we wrap in try-catch.
           try {
             final date = DateTime.parse(order.orderDate);
