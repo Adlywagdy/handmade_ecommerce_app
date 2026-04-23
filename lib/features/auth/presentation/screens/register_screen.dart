@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/extension/email_validation.dart';
+
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -49,9 +49,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   void _goToNextScreenByRole(String role) {
     if (role == 'customer') {
-      Get.offAllNamed(AppRoutes.customerHome);
+      Get.offAllNamed(AppRoutes.customerlayout);
     } else {
-      Get.offAllNamed(AppRoutes.seller);
+      Get.offAllNamed(AppRoutes.sellerdashboard);
     }
   }
 
