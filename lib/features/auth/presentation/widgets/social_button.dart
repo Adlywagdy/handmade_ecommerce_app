@@ -5,29 +5,29 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class SocialButton extends StatelessWidget {
   final String text;
-
   final IconData icon;
-  const SocialButton({super.key, required this.text, required this.icon});
+  final VoidCallback? onTap;
+
+  const SocialButton({
+    super.key,
+    required this.text,
+    required this.icon,
+    this.onTap,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: InkWell(
-        onTap: () {
-          print(
-            "$text",
-          ); // handle social login logic here based on the text or icon
-        },
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 12).h,
-          decoration: BoxDecoration(
-            color: Colors.grey.shade200,
-            borderRadius: BorderRadius.circular(12.r),
-          ),
+      child: GestureDetector(
+        onTap: onTap,
+        child: CircleAvatar(
+          radius: 40.r,
+          backgroundColor: backGroundColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(icon, color: Colors.black),
+              SizedBox(width: 8.w),
               Text(
                 text,
                 style: AppTextStyles.t_14w600.copyWith(color: darkblue),

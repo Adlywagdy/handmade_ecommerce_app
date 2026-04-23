@@ -119,10 +119,38 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 SizedBox(height: 20.h),
 
-                BlocBuilder<AuthCubit, AuthState>(
+                BlocConsumer<AuthCubit, AuthState>(
+                   listener: (context, state) {
+                    if (state is LoginSuccessState) {
+                       ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(content: Text('Login Success')),
+                        );
+                        Get.offAllNamed(AppRoutes.customerHome);
+                   } else if (state is LoginErrorState) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(state.message)),
+                    );
+                    }
+                    else if (state is GoogleLoginSuccessState) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Google Sign In Success')),
+                    );
+                       Get.offAllNamed(AppRoutes.customerHome);
+                    } 
+                        else if (state is GoogleLoginErrorState) {
+                         ScaffoldMessenger.of(context).showSnackBar(
+                         SnackBar(content: Text(state.message)),
+                         );
+                         }
+                   },
+
+
                   builder: (context, state) {
+                    final isLoading = state is AuthLoading;
                     return CustomElevatedButton(
-                      onPressed: () async {
+                      onPressed:isLoading
+                        ? null
+                        : () {
                         if (_formkey.currentState!.validate()) {
                           _formkey.currentState!.save();
                           context.read<AuthCubit>().login(
@@ -160,10 +188,17 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20.h),
                 Row(
                   children: [
-                    SocialButton(text: 'Google', icon: Icons.g_mobiledata),
+                    SocialButton(
+                        text: 'Google',
+                        icon: Icons.g_mobiledata,
+                        onTap: () {
+                        final state = context.read<AuthCubit>().state;
+                        if (state is! AuthLoading) {
+                          context.read<AuthCubit>().signInWithGoogle();
+                        }
+                       },
+                        ),
                     SizedBox(width: 10.h),
-
-                    SocialButton(text: 'Apple', icon: Icons.apple),
                   ],
                 ),
 
