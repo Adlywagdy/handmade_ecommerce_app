@@ -6,14 +6,14 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addresscolumn.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/cartproductitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/copounrow.dart';
+import 'package:handmade_ecommerce_app/features/cart/presentation/widgets/cartproductitem.dart';
+import 'package:handmade_ecommerce_app/features/cart/presentation/widgets/copounrow.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ordersummary.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/paymentcolumn.dart';
 

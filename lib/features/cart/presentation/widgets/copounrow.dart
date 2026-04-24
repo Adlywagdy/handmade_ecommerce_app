@@ -5,7 +5,7 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/cart/cart_cubit/cart_cubit.dart';
 
 class CopounRow extends StatefulWidget {
   final void Function()? onTap;

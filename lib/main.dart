@@ -6,7 +6,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/home_cubit/home_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/order_cubit/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';

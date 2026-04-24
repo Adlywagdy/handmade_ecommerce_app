@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/services/firebase_order_service.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 
 part 'order_state.dart';

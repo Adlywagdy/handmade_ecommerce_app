@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ReviewCard.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/widgets/ReviewCard.dart';
 import 'package:handmade_ecommerce_app/features/reviews/models/reviews_model.dart';
 import 'package:handmade_ecommerce_app/features/reviews/presentation/screens/reviews_screen.dart';
 

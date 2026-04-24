@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ratingrow.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/widgets/ratingrow.dart';
 
 class FeaturedProductItemLowerColumn extends StatelessWidget {
   const FeaturedProductItemLowerColumn({super.key, required this.product});

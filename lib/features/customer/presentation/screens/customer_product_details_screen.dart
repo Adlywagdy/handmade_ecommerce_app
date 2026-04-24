@@ -11,7 +11,7 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productdetailslowercolumn.dart';
 import 'package:share_plus/share_plus.dart';
 

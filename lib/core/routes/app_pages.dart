@@ -8,14 +8,14 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/regist
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
+import 'package:handmade_ecommerce_app/features/cart/presentation/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_layout.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_orderdetails_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_shop_details_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';

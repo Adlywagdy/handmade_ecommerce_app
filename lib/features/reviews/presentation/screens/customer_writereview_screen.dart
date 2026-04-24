@@ -7,10 +7,10 @@ import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/addreviewedphotos.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/widgets/addreviewedphotos.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customreviewdetailstextfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customstarsratingreview.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/reviewedproduct.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/widgets/reviewedproduct.dart';
 import 'package:handmade_ecommerce_app/features/reviews/cubit/reviews_cubit.dart';
 
 class CustomerWriteReviewScreen extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customfeaturerow.dart';

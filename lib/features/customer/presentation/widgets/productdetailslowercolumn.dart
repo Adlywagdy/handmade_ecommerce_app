@@ -5,7 +5,7 @@ import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customsellerlisttile.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/productreviewscolumn.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/widgets/productreviewscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/tagsrow.dart';
 import 'package:handmade_ecommerce_app/features/reviews/cubit/reviews_cubit.dart';
 
