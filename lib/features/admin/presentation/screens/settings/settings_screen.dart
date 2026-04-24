@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
+import '../../../../../core/routes/routes.dart';
+import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/colors.dart';
+import '../../../../../core/widgets/customelevatedbutton.dart';
+import '../../../../auth/services/auth_service.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/settings_model.dart';
 import '../../widgets/commission_editor_dialog.dart';
@@ -72,6 +77,47 @@ class _SettingsBody extends StatelessWidget {
           icon: Icons.support_agent_outlined,
           label: 'Support Email',
           value: settings.supportEmail.isNotEmpty ? settings.supportEmail : '—',
+        ),
+        SizedBox(height: 12.h),
+        CustomElevatedButton(
+          buttonheight: 60.h,
+          onPressed: () async {
+            await showDialog<bool>(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: const Text('Logout'),
+                  content: const Text('Are you sure you want to logout?'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.of(context).pop(false),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: ()async{
+                          await AuthService().signOut();
+                          Get.offAllNamed(AppRoutes.login);
+                      },
+                      child: Text('Logout', style: TextStyle(color: redDegree)),
+                    ),
+                  ],
+                );
+              },
+            );
+          },
+          bordercolor: redDegree.withValues(alpha: 0.10),
+          buttoncolor: redDegree.withValues(alpha: 0.07),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.logout_rounded, color: redDegree, size: 22.r),
+              SizedBox(width: 8.w),
+              Text(
+                'Logout',
+                style: AppTextStyles.t_16w600.copyWith(color: redDegree),
+              ),
+            ],
+          ),
         ),
       ],
     );
