@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
+
 class SellerEarningsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
 
@@ -61,7 +62,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -85,16 +86,33 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           if (state is SellerLoaded) {
             final stats = state.stats;
             final revenue = stats.totalRevenue;
-            final completedOrdersCount = state.orders.where((o) => o.status.toLowerCase() == 'completed' || o.status.toLowerCase() == 'delivered').length;
-            final avgOrderValue = completedOrdersCount > 0 ? (double.parse(revenue) / completedOrdersCount).toStringAsFixed(2) : '0.00';
-            
+            final completedOrdersCount = state.orders
+                .where(
+                  (o) =>
+                      o.status.toLowerCase() == 'completed' ||
+                      o.status.toLowerCase() == 'delivered',
+                )
+                .length;
+            final avgOrderValue = completedOrdersCount > 0
+                ? (double.parse(revenue) / completedOrdersCount)
+                      .toStringAsFixed(2)
+                : '0.00';
+
             final recentOrders = state.orders.take(5).toList();
-            final recentTransactions = recentOrders.map((o) => _Transaction(
-              orderId: o.orderId.length > 5 ? '#${o.orderId.substring(0, 5)}' : '#${o.orderId}',
-              amount: o.totalAmount.toStringAsFixed(2),
-              date: DateTime.tryParse(o.orderDate) ?? DateTime.now(),
-              isCompleted: o.status.toLowerCase() == 'completed' || o.status.toLowerCase() == 'delivered',
-            )).toList();
+            final recentTransactions = recentOrders
+                .map(
+                  (o) => _Transaction(
+                    orderId: o.orderId.length > 5
+                        ? '#${o.orderId.substring(0, 5)}'
+                        : '#${o.orderId}',
+                    amount: o.totalAmount.toStringAsFixed(2),
+                    date: DateTime.tryParse(o.orderDate) ?? DateTime.now(),
+                    isCompleted:
+                        o.status.toLowerCase() == 'completed' ||
+                        o.status.toLowerCase() == 'delivered',
+                  ),
+                )
+                .toList();
 
             return SingleChildScrollView(
               physics: const ClampingScrollPhysics(),
@@ -119,21 +137,25 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                   // ── Quick Stats Row ──
                   Row(
                     children: [
-                      Expanded(child: _buildQuickStatCard(
-                        title: 'Orders Processed',
-                        value: completedOrdersCount.toString(),
-                        icon: Icons.shopping_cart_outlined,
-                        iconColor: commonColor,
-                        iconBgColor: commonColor.withValues(alpha: 0.1),
-                      )),
+                      Expanded(
+                        child: _buildQuickStatCard(
+                          title: 'Orders Processed',
+                          value: completedOrdersCount.toString(),
+                          icon: Icons.shopping_cart_outlined,
+                          iconColor: commonColor,
+                          iconBgColor: commonColor.withValues(alpha: 0.1),
+                        ),
+                      ),
                       SizedBox(width: 12.w),
-                      Expanded(child: _buildQuickStatCard(
-                        title: 'Avg. Order Value',
-                        value: 'EGP $avgOrderValue',
-                        icon: Icons.bar_chart_rounded,
-                        iconColor: primaryColor,
-                        iconBgColor: primaryColor.withValues(alpha: 0.1),
-                      )),
+                      Expanded(
+                        child: _buildQuickStatCard(
+                          title: 'Avg. Order Value',
+                          value: 'EGP $avgOrderValue',
+                          icon: Icons.bar_chart_rounded,
+                          iconColor: primaryColor,
+                          iconBgColor: primaryColor.withValues(alpha: 0.1),
+                        ),
+                      ),
                     ],
                   ),
                   SizedBox(height: 24.h),
@@ -531,9 +553,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
               ),
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.vertical(
-                  top: Radius.circular(24.r),
-                ),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
               ),
               child: SingleChildScrollView(
                 padding: EdgeInsets.fromLTRB(20.w, 12.h, 20.w, 24.h),
@@ -630,8 +650,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                         ),
                         onChanged: (val) {
                           setSheetState(() {
-                            selectedAmount =
-                                double.tryParse(val) ?? 0;
+                            selectedAmount = double.tryParse(val) ?? 0;
                             selectedPresetIndex = -1;
                           });
                         },
@@ -653,8 +672,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                                 setSheetState(() {
                                   selectedPresetIndex = i;
                                   selectedAmount = presetAmounts[i];
-                                  amountController.text =
-                                      presetAmounts[i].toStringAsFixed(0);
+                                  amountController.text = presetAmounts[i]
+                                      .toStringAsFixed(0);
                                 });
                               },
                               child: AnimatedContainer(
@@ -711,9 +730,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       bankName: 'National Bank of Egypt',
                       accountEnding: '•••• 4821',
                       icon: Icons.account_balance_rounded,
-                      onTap: () => setSheetState(
-                        () => selectedBankIndex = 0,
-                      ),
+                      onTap: () => setSheetState(() => selectedBankIndex = 0),
                     ),
                     SizedBox(height: 8.h),
                     _buildBankOption(
@@ -722,9 +739,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       bankName: 'Vodafone Cash',
                       accountEnding: '010 •••• 3847',
                       icon: Icons.phone_android_rounded,
-                      onTap: () => setSheetState(
-                        () => selectedBankIndex = 1,
-                      ),
+                      onTap: () => setSheetState(() => selectedBankIndex = 1),
                     ),
 
                     SizedBox(height: 24.h),
@@ -742,8 +757,9 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                             : null,
                         style: ElevatedButton.styleFrom(
                           backgroundColor: commonColor,
-                          disabledBackgroundColor:
-                              commonColor.withValues(alpha: 0.3),
+                          disabledBackgroundColor: commonColor.withValues(
+                            alpha: 0.3,
+                          ),
                           foregroundColor: Colors.white,
                           elevation: 0,
                           shape: RoundedRectangleBorder(
@@ -1005,7 +1021,20 @@ class _EarningsChartState extends State<_EarningsChart> {
 
   List<String> _getMonthlyLabels() {
     final now = DateTime.now();
-    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    final months = [
+      'Jan',
+      'Feb',
+      'Mar',
+      'Apr',
+      'May',
+      'Jun',
+      'Jul',
+      'Aug',
+      'Sep',
+      'Oct',
+      'Nov',
+      'Dec',
+    ];
     List<String> labels = [];
     for (int i = 5; i >= 0; i--) {
       final date = DateTime(now.year, now.month - i, 1);
@@ -1025,15 +1054,25 @@ class _EarningsChartState extends State<_EarningsChart> {
   @override
   Widget build(BuildContext context) {
     final isW = widget.selectedPeriod == 0;
-    final List<double> _wData = widget.stats.weeklySales.isNotEmpty ? widget.stats.weeklySales : List.filled(7, 0.0);
-    final List<double> _mData = widget.stats.monthlySales.isNotEmpty ? widget.stats.monthlySales : List.filled(6, 0.0);
-    
+    final List<double> _wData = widget.stats.weeklySales.isNotEmpty
+        ? widget.stats.weeklySales
+        : List.filled(7, 0.0);
+    final List<double> _mData = widget.stats.monthlySales.isNotEmpty
+        ? widget.stats.monthlySales
+        : List.filled(6, 0.0);
+
     final data = isW ? _wData : _mData;
     final labels = isW ? _wLabels : _getMonthlyLabels();
-    final maxDataValue = data.isEmpty ? 0.0 : data.reduce((a, b) => a > b ? a : b);
-    final maxY = isW ? (maxDataValue + 200.0).clamp(600.0, double.infinity) : (maxDataValue + 1000.0).clamp(3500.0, double.infinity);
-    final interval = isW ? (maxY / 4) : (maxY / 4).clamp(500.0, double.infinity);
-    
+    final maxDataValue = data.isEmpty
+        ? 0.0
+        : data.reduce((a, b) => a > b ? a : b);
+    final maxY = isW
+        ? (maxDataValue + 200.0).clamp(600.0, double.infinity)
+        : (maxDataValue + 1000.0).clamp(3500.0, double.infinity);
+    final interval = isW
+        ? (maxY / 4)
+        : (maxY / 4).clamp(500.0, double.infinity);
+
     // Peak index = default highlighted bar when nothing is touched
     final peakIdx = data.indexOf(data.reduce((a, b) => a > b ? a : b));
     final activeIdx = _touchedIndex >= 0 ? _touchedIndex : peakIdx;
@@ -1082,10 +1121,14 @@ class _EarningsChartState extends State<_EarningsChart> {
                           : defaultTotal,
                       key: ValueKey(_touchedIndex),
                       style: TextStyle(
-                        color: _touchedIndex >= 0 ? commonColor : const Color(0xFF64748B),
+                        color: _touchedIndex >= 0
+                            ? commonColor
+                            : const Color(0xFF64748B),
                         fontSize: 13.sp,
                         fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: _touchedIndex >= 0 ? FontWeight.w700 : FontWeight.w500,
+                        fontWeight: _touchedIndex >= 0
+                            ? FontWeight.w700
+                            : FontWeight.w500,
                       ),
                     ),
                   ),
@@ -1100,7 +1143,11 @@ class _EarningsChartState extends State<_EarningsChart> {
                 child: Row(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Icon(Icons.trending_up_rounded, color: darkgreen, size: 14.w),
+                    Icon(
+                      Icons.trending_up_rounded,
+                      color: darkgreen,
+                      size: 14.w,
+                    ),
                     SizedBox(width: 3.w),
                     Text(
                       isW ? widget.stats.revenueGrowth : '8%',
@@ -1128,20 +1175,25 @@ class _EarningsChartState extends State<_EarningsChart> {
                   enabled: true,
                   handleBuiltInTouches: true,
                   touchCallback: (FlTouchEvent event, barTouchResponse) {
-                    if (!event.isInterestedForInteractions || barTouchResponse == null || barTouchResponse.spot == null) {
+                    if (!event.isInterestedForInteractions ||
+                        barTouchResponse == null ||
+                        barTouchResponse.spot == null) {
                       if (_touchedIndex != -1) {
                         setState(() => _touchedIndex = -1);
                       }
                       return;
                     }
-                    
+
                     int newIndex = barTouchResponse.spot!.touchedBarGroupIndex;
                     if (_touchedIndex != newIndex) {
                       setState(() => _touchedIndex = newIndex);
                     }
                   },
                   touchTooltipData: BarTouchTooltipData(
-                    tooltipPadding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 6.h),
+                    tooltipPadding: EdgeInsets.symmetric(
+                      horizontal: 10.w,
+                      vertical: 6.h,
+                    ),
                     getTooltipItem: (group, gi, rod, ri) {
                       return BarTooltipItem(
                         'EGP ${rod.toY.toInt()}',
@@ -1157,8 +1209,12 @@ class _EarningsChartState extends State<_EarningsChart> {
                 ),
                 titlesData: FlTitlesData(
                   show: true,
-                  topTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
-                  rightTitles: AxisTitles(sideTitles: SideTitles(showTitles: false)),
+                  topTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
+                  rightTitles: AxisTitles(
+                    sideTitles: SideTitles(showTitles: false),
+                  ),
                   leftTitles: AxisTitles(
                     sideTitles: SideTitles(
                       showTitles: true,
@@ -1169,8 +1225,15 @@ class _EarningsChartState extends State<_EarningsChart> {
                         return Padding(
                           padding: EdgeInsets.only(right: 6.w),
                           child: Text(
-                            value >= 1000 ? '${(value / 1000).toStringAsFixed(1)}k' : value.toInt().toString(),
-                            style: TextStyle(color: const Color(0xFF94A3B8), fontSize: 10.sp, fontFamily: 'Plus Jakarta Sans', fontWeight: FontWeight.w400),
+                            value >= 1000
+                                ? '${(value / 1000).toStringAsFixed(1)}k'
+                                : value.toInt().toString(),
+                            style: TextStyle(
+                              color: const Color(0xFF94A3B8),
+                              fontSize: 10.sp,
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontWeight: FontWeight.w400,
+                            ),
                           ),
                         );
                       },
@@ -1182,17 +1245,22 @@ class _EarningsChartState extends State<_EarningsChart> {
                       reservedSize: 28.h,
                       getTitlesWidget: (value, meta) {
                         final idx = value.toInt();
-                        if (idx < 0 || idx >= labels.length) return const SizedBox.shrink();
+                        if (idx < 0 || idx >= labels.length)
+                          return const SizedBox.shrink();
                         final isLabelActive = idx == activeIdx;
                         return Padding(
                           padding: EdgeInsets.only(top: 8.h),
                           child: Text(
                             labels[idx],
                             style: TextStyle(
-                              color: isLabelActive ? commonColor : const Color(0xFF94A3B8),
+                              color: isLabelActive
+                                  ? commonColor
+                                  : const Color(0xFF94A3B8),
                               fontSize: isW ? 11.sp : 10.sp,
                               fontFamily: 'Plus Jakarta Sans',
-                              fontWeight: isLabelActive ? FontWeight.w700 : FontWeight.w500,
+                              fontWeight: isLabelActive
+                                  ? FontWeight.w700
+                                  : FontWeight.w500,
                             ),
                           ),
                         );
@@ -1204,7 +1272,11 @@ class _EarningsChartState extends State<_EarningsChart> {
                   show: true,
                   drawVerticalLine: false,
                   horizontalInterval: interval,
-                  getDrawingHorizontalLine: (value) => FlLine(color: const Color(0xFFE2E8F0), strokeWidth: 0.8, dashArray: [5, 5]),
+                  getDrawingHorizontalLine: (value) => FlLine(
+                    color: const Color(0xFFE2E8F0),
+                    strokeWidth: 0.8,
+                    dashArray: [5, 5],
+                  ),
                 ),
                 borderData: FlBorderData(show: false),
                 barGroups: List.generate(data.length, (i) {
@@ -1215,10 +1287,23 @@ class _EarningsChartState extends State<_EarningsChart> {
                       BarChartRodData(
                         toY: data[i],
                         width: isW ? 28.w : 18.w,
-                        borderRadius: BorderRadius.vertical(top: Radius.circular(6.r)),
+                        borderRadius: BorderRadius.vertical(
+                          top: Radius.circular(6.r),
+                        ),
                         gradient: isBarActive
-                            ? const LinearGradient(colors: [commonColor, primaryColor], begin: Alignment.bottomCenter, end: Alignment.topCenter)
-                            : LinearGradient(colors: [commonColor.withValues(alpha: 0.18), commonColor.withValues(alpha: 0.32)], begin: Alignment.bottomCenter, end: Alignment.topCenter),
+                            ? const LinearGradient(
+                                colors: [commonColor, primaryColor],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              )
+                            : LinearGradient(
+                                colors: [
+                                  commonColor.withValues(alpha: 0.18),
+                                  commonColor.withValues(alpha: 0.32),
+                                ],
+                                begin: Alignment.bottomCenter,
+                                end: Alignment.topCenter,
+                              ),
                         backDrawRodData: BackgroundBarChartRodData(
                           show: isBarActive,
                           toY: maxY,
@@ -1229,7 +1314,8 @@ class _EarningsChartState extends State<_EarningsChart> {
                   );
                 }),
               ),
-              duration: Duration.zero, // REMOVE ANIMATION TO PREVENT LAG ON DRAG
+              duration:
+                  Duration.zero, // REMOVE ANIMATION TO PREVENT LAG ON DRAG
             ),
           ),
         ],

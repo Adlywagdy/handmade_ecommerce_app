@@ -13,7 +13,6 @@ import 'package:handmade_ecommerce_app/features/customer/models/customer_model.d
 import 'package:handmade_ecommerce_app/features/customer/profile/presentation/widgets/becomesellercard.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/presentation/widgets/customerdetailsitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/presentation/widgets/userpofiledetails.dart';
-import 'package:hive/hive.dart';
 
 class CustomerProfilesScreen extends StatelessWidget {
   final ValueChanged<int>? onNavigateToTab;

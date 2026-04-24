@@ -13,7 +13,6 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_earnings_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
 
 class SellerBottomNav extends StatefulWidget {
@@ -90,7 +89,9 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
       builder: (context, state) {
         bool hasPendingOrders = false;
         if (state is SellerLoaded) {
-          hasPendingOrders = state.orders.any((o) => o.status.toLowerCase() == 'pending');
+          hasPendingOrders = state.orders.any(
+            (o) => o.status.toLowerCase() == 'pending',
+          );
         }
 
         return Row(

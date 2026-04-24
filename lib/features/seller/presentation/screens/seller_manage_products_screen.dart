@@ -7,7 +7,6 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_product_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
@@ -98,12 +97,26 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
           if (state is SellerLoading) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is SellerError) {
-            return Center(child: Text(state.message, style: const TextStyle(color: Colors.red)));
+            return Center(
+              child: Text(
+                state.message,
+                style: const TextStyle(color: Colors.red),
+              ),
+            );
           } else if (state is SellerLoaded) {
             final allProducts = state.products;
-            
-            final activeProducts = allProducts.where((p) => p.status == 'Active' || p.status == 'In Stock' || p.isActive).toList();
-            final pendingProducts = allProducts.where((p) => p.status == 'Pending Review').toList();
+
+            final activeProducts = allProducts
+                .where(
+                  (p) =>
+                      p.status == 'Active' ||
+                      p.status == 'In Stock' ||
+                      p.isActive,
+                )
+                .toList();
+            final pendingProducts = allProducts
+                .where((p) => p.status == 'Pending Review')
+                .toList();
 
             return TabBarView(
               controller: _tabController,
@@ -135,10 +148,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
     return Container(
       decoration: const BoxDecoration(
         border: Border(
-          bottom: BorderSide(
-            color: Color(0xFFE2E8F0),
-            width: 1.0,
-          ),
+          bottom: BorderSide(color: Color(0xFFE2E8F0), width: 1.0),
         ),
       ),
       child: TabBar(
@@ -172,7 +182,11 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Icon(Icons.inventory_2_outlined, size: 64.w, color: const Color(0xFFCBD5E1)),
+            Icon(
+              Icons.inventory_2_outlined,
+              size: 64.w,
+              color: const Color(0xFFCBD5E1),
+            ),
             SizedBox(height: 16.h),
             Text(
               'No products found',
@@ -231,7 +245,11 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                 borderRadius: BorderRadius.circular(8.r),
                 color: const Color(0xFFF8FAFC),
                 image: DecorationImage(
-                  image: NetworkImage(product.images.isNotEmpty ? product.images.first : 'https://via.placeholder.com/150'),
+                  image: NetworkImage(
+                    product.images.isNotEmpty
+                        ? product.images.first
+                        : 'https://via.placeholder.com/150',
+                  ),
                   fit: BoxFit.cover,
                 ),
               ),
@@ -277,7 +295,10 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 8.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 8.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
                           color: product.isActive
                               ? const Color(0xFFECFDF5)
@@ -304,7 +325,11 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
 
             // Actions Menu
             PopupMenuButton<String>(
-              icon: Icon(Icons.more_vert, color: const Color(0xFF94A3B8), size: 20.w),
+              icon: Icon(
+                Icons.more_vert,
+                color: const Color(0xFF94A3B8),
+                size: 20.w,
+              ),
               onSelected: (value) {
                 if (value == 'edit') {
                   Get.to(() => SellerAddEditProductScreen(product: product));
