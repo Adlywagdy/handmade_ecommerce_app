@@ -8,6 +8,8 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+
 class SellerProfileScreen extends StatelessWidget {
   const SellerProfileScreen({super.key});
 
@@ -25,10 +27,7 @@ class SellerProfileScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text(
-                'Logout',
-                style: TextStyle(color: redDegree),
-              ),
+              child: Text('Logout', style: TextStyle(color: redDegree)),
             ),
           ],
         );
@@ -37,6 +36,8 @@ class SellerProfileScreen extends StatelessWidget {
 
     if (shouldLogout == true) {
       await AuthService().signOut();
+      await HiveHelperService.setLoginBox(value: false);
+      await HiveHelperService.clearEmailBox();
       Get.offAllNamed(AppRoutes.login);
     }
   }
@@ -52,10 +53,7 @@ class SellerProfileScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         elevation: 0,
         centerTitle: true,
-        title: Text(
-          'Profile',
-          style: AppTextStyles.t_18w700,
-        ),
+        title: Text('Profile', style: AppTextStyles.t_18w700),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -91,17 +89,13 @@ class SellerProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            Text(
-              user?.displayName ?? 'Ayady Seller',
-              style: AppTextStyles.t_20w700,
-            ),
+            Text(user?.displayName ?? 'Seller', style: AppTextStyles.t_20w700),
             SizedBox(height: 4.h),
-            Text(
-              user?.email ?? 'seller@ayady.com',
-              style: AppTextStyles.t_14w400.copyWith(
-                color: subTitleColor,
+            if (user?.email != null)
+              Text(
+                user!.email!,
+                style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               ),
-            ),
             SizedBox(height: 28.h),
             _ProfileMenuTile(
               icon: Icons.storefront_outlined,
@@ -171,9 +165,7 @@ class _ProfileMenuTile extends StatelessWidget {
           decoration: BoxDecoration(
             color: Colors.white,
             borderRadius: BorderRadius.circular(16.r),
-            border: Border.all(
-              color: commonColor.withValues(alpha: 0.08),
-            ),
+            border: Border.all(color: commonColor.withValues(alpha: 0.08)),
           ),
           child: Row(
             children: [

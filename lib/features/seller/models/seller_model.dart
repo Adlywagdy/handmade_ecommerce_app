@@ -172,6 +172,9 @@ class SellerDashboardStats {
   final String totalRevenue;
   final String totalProducts;
   final List<double> weeklySales; // 7 values for bar chart
+  final List<double> monthlySales; // 6 values for monthly chart
+  final String revenueGrowth; // e.g. "+12.5%"
+  final String ordersGrowth; // e.g. "+5.4%"
 
   const SellerDashboardStats({
     required this.totalSales,
@@ -179,5 +182,8 @@ class SellerDashboardStats {
     required this.totalRevenue,
     required this.totalProducts,
     required this.weeklySales,
+    required this.monthlySales,
+    required this.revenueGrowth,
+    required this.ordersGrowth,
   });
 }

@@ -26,6 +26,7 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 
 import '../../features/admin/presentation/screens/dashboard/dashboard_screen.dart';
 import '../../features/admin/presentation/screens/orders_screen/orders_screen.dart';
@@ -101,7 +102,9 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.selleraddoreditproduct,
-      page: () => const SellerAddEditProductScreen(),
+      page: () => SellerAddEditProductScreen(
+        product: Get.arguments as SellerProductModel,
+      ),
     ),
     GetPage(
       name: AppRoutes.sellerorders,
