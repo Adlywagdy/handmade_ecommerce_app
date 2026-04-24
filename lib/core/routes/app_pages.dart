@@ -17,6 +17,8 @@ import 'package:handmade_ecommerce_app/features/customer/search/presentation/scr
 import 'package:handmade_ecommerce_app/features/customer/shop_details/presentation/screens/customer_shop_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
+
+import 'package:handmade_ecommerce_app/features/home/presentation/screens/Decider_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
@@ -24,7 +26,6 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
-import 'package:handmade_ecommerce_app/features/splash/presentation/screens/splash_screen.dart';
 
 import '../../features/admin/presentation/screens/dashboard/dashboard_screen.dart';
 import '../../features/admin/presentation/screens/orders_screen/orders_screen.dart';
@@ -34,8 +35,7 @@ import '../../features/admin/presentation/screens/settings/settings_screen.dart'
 
 class AppPages {
   static final List<GetPage<dynamic>> pages = [
-    // splash and onboarding
-    GetPage(name: AppRoutes.splash, page: () => const SplashScreen()),
+    // onboarding
     GetPage(name: AppRoutes.onboarding, page: () => const OnboardingScreen()),
 
     // auth
@@ -53,6 +53,9 @@ class AppPages {
       name: AppRoutes.resetPassword,
       page: () => const ResetPasswordScreen(),
     ),
+
+    // decider
+    GetPage(name: AppRoutes.decider, page: () => const DeciderScreen()),
 
     // customer
     GetPage(name: AppRoutes.customerlayout, page: () => const CustomerLayout()),

@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_initial_route.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/cubit/home_cubit.dart';
@@ -31,6 +32,10 @@ void main() async {
   await Hive.openBox('notifications');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
+  await Hive.openBox(HiveHelper.onboardingBox);
+  await Hive.openBox(HiveHelper.login);
+  await Hive.openBox(HiveHelper.email);
+
   // ─── TEST FIREBASE CONNECTION ───
   try {
     final db = FirebaseFirestore.instance;
@@ -46,19 +51,23 @@ void main() async {
 
   //////////////////////////// Crashlytics ///////////////////////////////////
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
+
   PlatformDispatcher.instance.onError = (error, stack) {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
-  ///////////////////////////// RemoteConfig //////////////////////////////////
-  await RemoteConfigService.instance.init();
-  /////////////////////////////////////////////////////////////////////////
 
-  runApp(const HandcraftedEcommerceApp());
+  await RemoteConfigService.instance.init();
+
+  final initialRoute = await getInitialRoute();
+
+  runApp(HandcraftedEcommerceApp(initialRoute: initialRoute));
 }
 
 class HandcraftedEcommerceApp extends StatelessWidget {
-  const HandcraftedEcommerceApp({super.key});
+  final String initialRoute;
+
+  const HandcraftedEcommerceApp({super.key, required this.initialRoute});
 
   @override
   Widget build(BuildContext context) {
@@ -98,7 +107,8 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
-            initialRoute: AppRoutes.onboarding,
+            initialRoute: initialRoute,
+
             getPages: AppPages.pages,
           ),
         );
