@@ -5,7 +5,7 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-import 'package:handmade_ecommerce_app/core/services/firebase_cart_service.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/service/firebase_cart_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';

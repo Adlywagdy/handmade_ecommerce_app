@@ -1,6 +1,6 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/review_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_model.dart';
 
 class ProductModel {
   final String id;
@@ -16,7 +16,7 @@ class ProductModel {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   int quantity;
-  final List<ReviewModel>? reviews;
+  final List<ReviewsModel>? reviews;
   final List<String> images;
   final List<String>? tags;
   final SellerModel seller;
@@ -58,7 +58,7 @@ class ProductModel {
     DateTime? createdAt,
     DateTime? updatedAt,
     int? quantity,
-    List<ReviewModel>? reviews,
+    List<ReviewsModel>? reviews,
     List<String>? images,
     List<String>? tags,
     SellerModel? seller,
@@ -108,8 +108,8 @@ class ProductModel {
 
     final sellerMap = map['seller'];
     final sellerReferenceId =
-        _extractSellerReferenceId(sellerMap) ??
-        _extractSellerReferenceId(map['sellerId']);
+        SellerModel.normalizeReferenceId(sellerMap) ??
+        SellerModel.normalizeReferenceId(map['sellerId']);
     final sellerData = sellerMap is Map<String, dynamic>
         ? sellerMap
         : <String, dynamic>{
@@ -129,8 +129,8 @@ class ProductModel {
 
     final categoryMap = map['category'];
     final categoryReferenceId =
-        _extractCategoryReferenceId(categoryMap) ??
-        _extractCategoryReferenceId(map['categoryId']);
+        CategoryModel.normalizeReferenceId(categoryMap) ??
+        CategoryModel.normalizeReferenceId(map['categoryId']);
     final category = categoryMap is Map<String, dynamic>
         ? CategoryModel.fromMap(categoryMap, id: categoryReferenceId)
         : (categoryReferenceId != null || map['categoryName'] != null)
@@ -227,91 +227,5 @@ class ProductModel {
     }
 
     return null;
-  }
-
-  static String? _extractSellerReferenceId(dynamic value) {
-    if (value == null) return null;
-
-    if (value is String) {
-      return _normalizeSellerPath(value);
-    }
-
-    try {
-      final dynamic id = value.id;
-      if (id is String && id.trim().isNotEmpty) {
-        return id.trim();
-      }
-    } catch (_) {
-      // Value is not a document reference.
-    }
-
-    try {
-      final dynamic path = value.path;
-      if (path is String) {
-        return _normalizeSellerPath(path);
-      }
-    } catch (_) {
-      // Value does not expose a path.
-    }
-
-    return _normalizeSellerPath(value.toString());
-  }
-
-  static String? _extractCategoryReferenceId(dynamic value) {
-    if (value == null) return null;
-
-    if (value is String) {
-      return _normalizeCategoryPath(value);
-    }
-
-    try {
-      final dynamic id = value.id;
-      if (id is String && id.trim().isNotEmpty) {
-        return id.trim();
-      }
-    } catch (_) {
-      // Value is not a document reference.
-    }
-
-    try {
-      final dynamic path = value.path;
-      if (path is String) {
-        return _normalizeCategoryPath(path);
-      }
-    } catch (_) {
-      // Value does not expose a path.
-    }
-
-    return _normalizeCategoryPath(value.toString());
-  }
-
-  static String? _normalizeSellerPath(String raw) {
-    final trimmed = raw.trim();
-    if (trimmed.isEmpty) return null;
-
-    final sellersPath = RegExp(r'^/?sellers/([^/]+)$');
-    final pathMatch = sellersPath.firstMatch(trimmed);
-    if (pathMatch != null) return pathMatch.group(1);
-
-    final embeddedPath = RegExp(r'sellers/([^/\s)]+)');
-    final embeddedMatch = embeddedPath.firstMatch(trimmed);
-    if (embeddedMatch != null) return embeddedMatch.group(1);
-
-    return trimmed;
-  }
-
-  static String? _normalizeCategoryPath(String raw) {
-    final trimmed = raw.trim();
-    if (trimmed.isEmpty) return null;
-
-    final categoriesPath = RegExp(r'^/?categories/([^/]+)$');
-    final pathMatch = categoriesPath.firstMatch(trimmed);
-    if (pathMatch != null) return pathMatch.group(1);
-
-    final embeddedPath = RegExp(r'categories/([^/\s)]+)');
-    final embeddedMatch = embeddedPath.firstMatch(trimmed);
-    if (embeddedMatch != null) return embeddedMatch.group(1);
-
-    return trimmed;
   }
 }

@@ -23,7 +23,7 @@ class ReviewsService {
         .map((doc) => ReviewsModel.fromMap(doc.data(), id: doc.id))
         .toList();
 
-    reviews.sort((a, b) => b.createdAt!.compareTo(a.createdAt!));
+    reviews.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return reviews;
   }
 

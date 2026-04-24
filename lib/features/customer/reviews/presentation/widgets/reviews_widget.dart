@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/widgets/ReviewCard.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/widgets/review_card.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_model.dart';
 
 class ReviewsWidget extends StatelessWidget {

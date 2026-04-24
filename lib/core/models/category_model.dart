@@ -25,4 +25,21 @@ class CategoryModel {
       order: orderValue is int ? orderValue : int.tryParse('$orderValue'),
     );
   }
+
+  static String? normalizeReferenceId(dynamic value) {
+    if (value == null) return null;
+
+    final text = value.toString().trim();
+    if (text.isEmpty) return null;
+
+    final categoriesPath = RegExp(r'^/?categories/([^/]+)$');
+    final pathMatch = categoriesPath.firstMatch(text);
+    if (pathMatch != null) return pathMatch.group(1);
+
+    final embeddedPath = RegExp(r'categories/([^/\s)]+)');
+    final embeddedMatch = embeddedPath.firstMatch(text);
+    if (embeddedMatch != null) return embeddedMatch.group(1);
+
+    return text;
+  }
 }

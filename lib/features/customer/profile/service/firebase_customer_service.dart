@@ -41,7 +41,7 @@ class FirebaseCustomerService {
       'fullName': name,
       'name': name,
       'phone': phone,
-      if (image != null) 'image': image,
+      'image': image,
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
 

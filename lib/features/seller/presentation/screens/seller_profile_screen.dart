@@ -77,7 +77,7 @@ class SellerProfileScreen extends StatelessWidget {
                     ? Image.network(
                         user.photoURL!,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, __, ___) => Icon(
+                        errorBuilder: (_, _, _) => Icon(
                           Icons.storefront_rounded,
                           size: 48.w,
                           color: commonColor,

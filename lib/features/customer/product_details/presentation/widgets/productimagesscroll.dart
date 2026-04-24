@@ -21,7 +21,7 @@ class ProductImagesScroll extends StatelessWidget {
             Image.network(
               imageUrl,
               fit: BoxFit.fill,
-              errorBuilder: (_, __, ___) => Container(
+              errorBuilder: (_, _, _) => Container(
                 color: Colors.grey.shade200,
                 alignment: Alignment.center,
                 child: const Icon(Icons.image_not_supported_outlined),

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-import 'package:handmade_ecommerce_app/core/services/firebase_wishlist_service.dart';
+import 'package:handmade_ecommerce_app/features/customer/wishlist/service/firebase_wishlist_service.dart';
 
 part 'wishlist_state.dart';
 

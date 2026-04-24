@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
-import 'package:handmade_ecommerce_app/core/services/firebase_order_service.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/service/firebase_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 

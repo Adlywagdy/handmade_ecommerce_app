@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 
 Future<SellerModel> getsellerdata(String sellerId) async {
-  final normalizedId = _normalizeSellerIdentifier(sellerId);
+  final normalizedId = SellerModel.normalizeReferenceId(sellerId) ?? '';
   if (normalizedId.isEmpty) {
     throw ArgumentError('Seller id is empty');
   }
@@ -14,61 +14,34 @@ Future<SellerModel> getsellerdata(String sellerId) async {
     return SellerModel.fromMap(doc.data()!, fallbackId: doc.id);
   }
 
-  final byUid = await db
-      .collection('sellers')
-      .where('uid', isEqualTo: normalizedId)
-      .limit(1)
-      .get();
-  if (byUid.docs.isNotEmpty) {
-    final first = byUid.docs.first;
-    return SellerModel.fromMap(first.data(), fallbackId: first.id);
-  }
-
-  final byEmail = await db
-      .collection('sellers')
-      .where('email', isEqualTo: normalizedId)
-      .limit(1)
-      .get();
-  if (byEmail.docs.isNotEmpty) {
-    final first = byEmail.docs.first;
-    return SellerModel.fromMap(first.data(), fallbackId: first.id);
-  }
-
-  final bySellerId = await db
-      .collection('sellers')
-      .where('sellerId', isEqualTo: normalizedId)
-      .limit(1)
-      .get();
-  if (bySellerId.docs.isNotEmpty) {
-    final first = bySellerId.docs.first;
-    return SellerModel.fromMap(first.data(), fallbackId: first.id);
+  for (final field in const ['uid', 'email', 'sellerId']) {
+    final match = await _findSellerByField(
+      db: db,
+      field: field,
+      value: normalizedId,
+    );
+    if (match != null) {
+      return SellerModel.fromMap(match.data(), fallbackId: match.id);
+    }
   }
 
   throw StateError('Seller not found for id: $normalizedId');
 }
 
-String _normalizeSellerIdentifier(String raw) {
-  final trimmed = raw.trim().replaceAll('\\', '/');
+Future<QueryDocumentSnapshot<Map<String, dynamic>>?> _findSellerByField({
+  required FirebaseFirestore db,
+  required String field,
+  required String value,
+}) async {
+  final result = await db
+      .collection('sellers')
+      .where(field, isEqualTo: value)
+      .limit(1)
+      .get();
 
-  final sellersPath = RegExp(r'^/?sellers/([^/]+)$');
-  final pathMatch = sellersPath.firstMatch(trimmed);
-  if (pathMatch != null && pathMatch.groupCount >= 1) {
-    return pathMatch.group(1)!.trim();
+  if (result.docs.isEmpty) {
+    return null;
   }
 
-  final embeddedPath = RegExp(r'sellers/([^/\s)]+)');
-  final embeddedMatch = embeddedPath.firstMatch(trimmed);
-  if (embeddedMatch != null && embeddedMatch.groupCount >= 1) {
-    return embeddedMatch.group(1)!.trim();
-  }
-
-  final segments = trimmed
-      .split('/')
-      .where((e) => e.trim().isNotEmpty)
-      .toList();
-  if (segments.isNotEmpty) {
-    return segments.last.trim();
-  }
-
-  return trimmed;
+  return result.docs.first;
 }

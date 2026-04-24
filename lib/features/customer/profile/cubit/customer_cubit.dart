@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:handmade_ecommerce_app/core/services/firebase_customer_service.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/service/firebase_customer_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 

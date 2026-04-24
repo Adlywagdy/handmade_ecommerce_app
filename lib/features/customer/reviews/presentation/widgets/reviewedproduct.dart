@@ -31,7 +31,7 @@ class ReviewedProduct extends StatelessWidget {
                 height: 70.h,
                 width: 70.h,
                 fit: BoxFit.fill,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   height: 70.h,
                   width: 70.h,
                   color: Colors.grey.shade200,

@@ -149,16 +149,16 @@ class SellerModel {
   String? get avatarUrl => _cleanString(image);
 
   String get primaryIdentifier {
-    final normalizedId = _normalizeIdentifier(id);
+    final normalizedId = normalizeReferenceId(id);
     if (normalizedId != null) return normalizedId;
 
-    final normalizedEmail = _normalizeIdentifier(email);
+    final normalizedEmail = normalizeReferenceId(email);
     if (normalizedEmail != null) return normalizedEmail;
 
     return '';
   }
 
-  static String? _normalizeIdentifier(dynamic value) {
+  static String? normalizeReferenceId(dynamic value) {
     final cleaned = _cleanString(value);
     if (cleaned == null) return null;
 

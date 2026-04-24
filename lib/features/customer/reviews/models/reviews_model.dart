@@ -7,7 +7,7 @@ class ReviewsModel {
   final String userId;
   final String comment;
   final int rating;
-  final DateTime? createdAt;
+  final DateTime createdAt;
 
   const ReviewsModel({
     required this.id,
@@ -27,7 +27,7 @@ class ReviewsModel {
       userId: map['userId']?.toString() ?? '',
       comment: map['comment']?.toString() ?? '',
       rating: _parseInt(map['rating']) ?? 0,
-      createdAt: _parseDateTime(map['createdAt']),
+      createdAt: _parseDateTime(map['createdAt']) ?? DateTime.now(),
     );
   }
 
@@ -38,7 +38,7 @@ class ReviewsModel {
       'userId': userId,
       'comment': comment,
       'rating': rating,
-      'createdAt': Timestamp.fromDate(createdAt!),
+      'createdAt': Timestamp.fromDate(createdAt),
     };
   }
 
