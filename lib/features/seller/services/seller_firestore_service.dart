@@ -131,7 +131,12 @@ class SellerFirestoreService {
       
       double totalRevenue = 0;
       int completedOrders = 0;
+      double currentWeekRevenue = 0;
+      double previousWeekRevenue = 0;
+      int currentWeekOrders = 0;
+      int previousWeekOrders = 0;
       List<double> weeklySales = List.filled(7, 0.0);
+      List<double> monthlySales = List.filled(6, 0.0);
       
       final now = DateTime.now();
 
@@ -141,29 +146,50 @@ class SellerFirestoreService {
           totalRevenue += order.totalAmount;
           completedOrders++;
           
-          // Try to parse orderDate, assuming it's an ISO string or similar. 
-          // If it's a string like "20 mins ago", this parsing will fail. 
-          // Ideally, we'd use a real Timestamp field. For safety, we wrap in try-catch.
           try {
             final date = DateTime.parse(order.orderDate);
-            final difference = now.difference(date).inDays;
-            if (difference >= 0 && difference < 7) {
-              // Day 6 is today, day 0 is 6 days ago
-              final index = 6 - difference;
+            final diffInDays = now.difference(date).inDays;
+
+            // Growth calculation logic
+            if (diffInDays >= 0 && diffInDays < 7) {
+              currentWeekRevenue += order.totalAmount;
+              currentWeekOrders++;
+              
+              // Weekly chart index
+              final index = 6 - diffInDays;
               weeklySales[index] += order.totalAmount;
+            } else if (diffInDays >= 7 && diffInDays < 14) {
+              previousWeekRevenue += order.totalAmount;
+              previousWeekOrders++;
             }
-          } catch (_) {
-            // fallback if date is not parseable
-          }
+
+            // Monthly logic (Last 6 months)
+            final yearDiff = now.year - date.year;
+            final monthDiff = (now.month - date.month) + (yearDiff * 12);
+            if (monthDiff >= 0 && monthDiff < 6) {
+              final index = 5 - monthDiff;
+              monthlySales[index] += order.totalAmount;
+            }
+          } catch (_) {}
         }
+      }
+
+      // Calculate percentages
+      String calculateGrowth(double current, double previous) {
+        if (previous == 0) return current > 0 ? '+100%' : '0%';
+        final growth = ((current - previous) / previous) * 100;
+        return '${growth >= 0 ? '+' : ''}${growth.toStringAsFixed(1)}%';
       }
 
       return SellerDashboardStats(
         totalSales: totalRevenue.toStringAsFixed(2),
         totalOrders: completedOrders.toString(),
         totalRevenue: totalRevenue.toStringAsFixed(2),
-        totalProducts: '0', // Not used strictly here, or could be fetched
+        totalProducts: '0', 
         weeklySales: weeklySales,
+        monthlySales: monthlySales,
+        revenueGrowth: calculateGrowth(currentWeekRevenue, previousWeekRevenue),
+        ordersGrowth: calculateGrowth(currentWeekOrders.toDouble(), previousWeekOrders.toDouble()),
       );
     } catch (e) {
       throw Exception('Failed to load dashboard stats: $e');

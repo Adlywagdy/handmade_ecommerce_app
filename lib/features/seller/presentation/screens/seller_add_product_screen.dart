@@ -8,6 +8,8 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 
+import 'package:handmade_ecommerce_app/features/seller/models/data/seller_mock_data.dart';
+
 class SellerAddProductScreen extends StatefulWidget {
   const SellerAddProductScreen({super.key});
 
@@ -108,11 +110,49 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           _buildLabel('Category'),
-                          _buildTextField(
-                            hint: 'Category',
-                            controller: _categoryController,
-                            suffixIcon: Icon(Icons.keyboard_arrow_down,
+                          DropdownButtonFormField<String>(
+                            value: _categoryController.text.isEmpty ? 'Ceramics' : _categoryController.text,
+                            dropdownColor: Colors.white,
+                            icon: Icon(Icons.keyboard_arrow_down,
                                 color: const Color(0xFF64748B), size: 20.w),
+                            decoration: InputDecoration(
+                              fillColor: Colors.white,
+                              filled: true,
+                              contentPadding: EdgeInsets.symmetric(
+                                horizontal: 16.w,
+                                vertical: 14.h,
+                              ),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8.r),
+                                borderSide: BorderSide(color: commonColor),
+                              ),
+                            ),
+                            items: sellerCategories.map((cat) {
+                              return DropdownMenuItem<String>(
+                                value: cat,
+                                child: Text(
+                                  cat,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    color: const Color(0xFF334155),
+                                  ),
+                                ),
+                              );
+                            }).toList(),
+                            onChanged: (val) {
+                              if (val != null) {
+                                _categoryController.text = val;
+                              }
+                            },
                           ),
                         ],
                       ),

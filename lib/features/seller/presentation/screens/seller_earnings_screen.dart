@@ -52,19 +52,24 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
         actions: [
           Padding(
             padding: EdgeInsets.only(right: 12.w),
-            child: Container(
-              decoration: BoxDecoration(
-                color: commonColor.withValues(alpha: 0.10),
-                shape: BoxShape.circle,
-                border: Border.all(
-                  color: commonColor.withValues(alpha: 0.18),
+            child: GestureDetector(
+              onTap: () => Get.toNamed(AppRoutes.notifications),
+              child: Container(
+                padding: EdgeInsets.all(8.w),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.05),
+                      blurRadius: 6,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
                 ),
-              ),
-              child: IconButton(
-                onPressed: () => Get.toNamed(AppRoutes.notifications),
-                icon: Icon(
+                child: Icon(
                   Icons.notifications_none_rounded,
-                  color: commonColor,
+                  color: const Color(0xFF334155),
                   size: 22.w,
                 ),
               ),
@@ -100,7 +105,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                   SizedBox(height: 8.h),
 
                   // ── Total Balance Card ──
-                  _buildBalanceCard(revenue),
+                  _buildBalanceCard(stats),
                   SizedBox(height: 20.h),
 
                   // ── Revenue Statistics Header + Toggle ──
@@ -194,7 +199,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
   }
 
   /// Total balance card with gradient background
-  Widget _buildBalanceCard(String balance) {
+  Widget _buildBalanceCard(SellerDashboardStats stats) {
     return Container(
       width: double.infinity,
       padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 22.h),
@@ -227,7 +232,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'EGP $balance',
+            'EGP ${stats.totalRevenue}',
             style: TextStyle(
               color: Colors.white,
               fontSize: 32.sp,
@@ -238,7 +243,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           SizedBox(height: 16.h),
           // Withdraw button
           GestureDetector(
-            onTap: () => _showWithdrawSheet(context),
+            onTap: () => _showWithdrawSheet(context, stats),
             child: Container(
               padding: EdgeInsets.symmetric(horizontal: 24.w, vertical: 10.h),
               decoration: BoxDecoration(
@@ -506,7 +511,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
   }
 
   /// Show withdraw funds bottom sheet
-  void _showWithdrawSheet(BuildContext context) {
+  void _showWithdrawSheet(BuildContext context, SellerDashboardStats stats) {
     double selectedAmount = 0;
     int selectedPresetIndex = -1;
     int selectedBankIndex = 0;
@@ -561,12 +566,12 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      'Available balance: EGP 12,840.00',
+                      'Available balance: EGP ${stats.totalRevenue}',
                       style: TextStyle(
-                        color: const Color(0xFF94A3B8),
-                        fontSize: 13.sp,
+                        color: const Color(0xFF64748B),
+                        fontSize: 14.sp,
                         fontFamily: 'Plus Jakarta Sans',
-                        fontWeight: FontWeight.w400,
+                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: 20.h),
@@ -997,8 +1002,17 @@ class _EarningsChartState extends State<_EarningsChart> {
   int _touchedIndex = -1;
 
   static const _wLabels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
-  static const _mLabels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'];
-  static const _mData = [1800.0, 2100.0, 2850.0, 2400.0, 1950.0, 2520.0];
+
+  List<String> _getMonthlyLabels() {
+    final now = DateTime.now();
+    final months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    List<String> labels = [];
+    for (int i = 5; i >= 0; i--) {
+      final date = DateTime(now.year, now.month - i, 1);
+      labels.add(months[date.month - 1]);
+    }
+    return labels;
+  }
 
   @override
   void didUpdateWidget(covariant _EarningsChart oldWidget) {
@@ -1012,17 +1026,20 @@ class _EarningsChartState extends State<_EarningsChart> {
   Widget build(BuildContext context) {
     final isW = widget.selectedPeriod == 0;
     final List<double> _wData = widget.stats.weeklySales.isNotEmpty ? widget.stats.weeklySales : List.filled(7, 0.0);
+    final List<double> _mData = widget.stats.monthlySales.isNotEmpty ? widget.stats.monthlySales : List.filled(6, 0.0);
+    
     final data = isW ? _wData : _mData;
-    final labels = isW ? _wLabels : _mLabels;
+    final labels = isW ? _wLabels : _getMonthlyLabels();
     final maxDataValue = data.isEmpty ? 0.0 : data.reduce((a, b) => a > b ? a : b);
-    final maxY = isW ? (maxDataValue + 200.0).clamp(600.0, double.infinity) : 3500.0;
-    final interval = isW ? (maxY / 4) : 1000.0;
+    final maxY = isW ? (maxDataValue + 200.0).clamp(600.0, double.infinity) : (maxDataValue + 1000.0).clamp(3500.0, double.infinity);
+    final interval = isW ? (maxY / 4) : (maxY / 4).clamp(500.0, double.infinity);
     
     // Peak index = default highlighted bar when nothing is touched
     final peakIdx = data.indexOf(data.reduce((a, b) => a > b ? a : b));
     final activeIdx = _touchedIndex >= 0 ? _touchedIndex : peakIdx;
 
-    final defaultTotal = isW ? '+EGP 2,450.00' : '+EGP 9,820.00';
+    final totalValue = data.reduce((a, b) => a + b);
+    final defaultTotal = '+EGP ${totalValue.toStringAsFixed(2)}';
     final percentage = isW ? '12%' : '8%';
 
     return Container(
@@ -1086,7 +1103,7 @@ class _EarningsChartState extends State<_EarningsChart> {
                     Icon(Icons.trending_up_rounded, color: darkgreen, size: 14.w),
                     SizedBox(width: 3.w),
                     Text(
-                      percentage,
+                      isW ? widget.stats.revenueGrowth : '8%',
                       style: TextStyle(
                         color: darkgreen,
                         fontSize: 12.sp,

@@ -88,7 +88,7 @@ class SellerDashboardScreen extends StatelessWidget {
                           child: SellerStatCard(
                             title: 'Total Revenue',
                             value: 'EGP ${stats.totalRevenue}',
-                            percentage: '+12%',
+                            percentage: stats.revenueGrowth,
                             icon: Icons.account_balance_wallet_outlined,
                             iconBackgroundColor: const Color(0xFFFFF3E0),
                             iconColor: const Color(0xFFD97706),
@@ -99,7 +99,7 @@ class SellerDashboardScreen extends StatelessWidget {
                           child: SellerStatCard(
                             title: 'Total Orders',
                             value: stats.totalOrders.toString(),
-                            percentage: '+5.4%',
+                            percentage: stats.ordersGrowth,
                             icon: Icons.shopping_cart_outlined,
                             iconBackgroundColor: const Color(0xFFE8F5E9),
                             iconColor: const Color(0xFF07880E),
@@ -341,7 +341,7 @@ class SellerDashboardScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.05),
+                        color: Colors.black.withOpacity(0.05),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),

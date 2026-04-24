@@ -11,9 +11,9 @@ import '../widgets/seller_input_field.dart';
 import '../widgets/seller_image_upload.dart';
 
 class SellerAddEditProductScreen extends StatefulWidget {
-  final SellerProductModel? product;
+  final SellerProductModel product;
 
-  const SellerAddEditProductScreen({super.key, this.product});
+  const SellerAddEditProductScreen({super.key, required this.product});
 
   @override
   State<SellerAddEditProductScreen> createState() =>
@@ -30,21 +30,19 @@ class _SellerAddEditProductScreenState
   String? _selectedCategory;
   late List<String> _images;
 
-  bool get _isEditing => widget.product != null;
-
   @override
   void initState() {
     super.initState();
     _nameController =
-        TextEditingController(text: widget.product?.name ?? '');
+        TextEditingController(text: widget.product.name);
     _priceController = TextEditingController(
-        text: widget.product?.price.toStringAsFixed(2) ?? '');
+        text: widget.product.price.toStringAsFixed(2));
     _stockController =
-        TextEditingController(text: widget.product?.stock.toString() ?? '');
+        TextEditingController(text: widget.product.stock.toString());
     _descriptionController =
-        TextEditingController(text: widget.product?.description ?? '');
-    _selectedCategory = widget.product?.category;
-    _images = widget.product?.images.toList() ?? [];
+        TextEditingController(text: widget.product.description);
+    _selectedCategory = widget.product.category;
+    _images = widget.product.images.toList();
   }
 
   @override
@@ -76,44 +74,23 @@ class _SellerAddEditProductScreenState
 
     try {
       final cubit = context.read<SellerCubit>();
-      if (_isEditing) {
-        final product = SellerProductModel(
-          id: widget.product!.id,
-          name: _nameController.text.trim(),
-          description: _descriptionController.text.trim(),
-          price: double.tryParse(_priceController.text) ?? 0,
-          stock: stock,
-          category: _selectedCategory ?? 'Ceramics',
-          images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
-          isActive: stock > 0,
-          status: status,
-        );
-        await cubit.updateProduct(product);
-      } else {
-        if (_newImages.isEmpty) {
-          Get.snackbar('Error', 'Please add at least one image',
-              backgroundColor: Colors.redAccent, colorText: Colors.white);
-          setState(() => _isLoading = false);
-          return;
-        }
-        await cubit.addProductWithImages(
-          name: _nameController.text.trim(),
-          description: _descriptionController.text.trim(),
-          price: double.tryParse(_priceController.text) ?? 0,
-          stock: stock,
-          category: _selectedCategory ?? 'Ceramics',
-          imageFiles: _newImages,
-        );
-      }
+      final product = SellerProductModel(
+        id: widget.product.id,
+        name: _nameController.text.trim(),
+        description: _descriptionController.text.trim(),
+        price: double.tryParse(_priceController.text) ?? 0,
+        stock: stock,
+        category: _selectedCategory ?? 'Ceramics',
+        images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
+        isActive: stock > 0,
+        status: status,
+      );
+      await cubit.updateProduct(product);
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(
-              _isEditing
-                  ? 'Product updated successfully'
-                  : 'Product added successfully',
-            ),
+            content: const Text('Product updated successfully'),
             backgroundColor: const Color(0xff07880E),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -147,22 +124,31 @@ class _SellerAddEditProductScreenState
     }
   }
 
+  void _removeImage(int index) {
+    setState(() {
+      final imagePath = _images[index];
+      _images.removeAt(index);
+      // Remove from new images list if it was a local file
+      _newImages.removeWhere((file) => file.path == imagePath);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFF1A1A2E),
+      backgroundColor: Colors.white,
       appBar: AppBar(
-        backgroundColor: const Color(0xFF1A1A2E),
+        backgroundColor: Colors.white,
         elevation: 0,
         scrolledUnderElevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios_new, color: Colors.white),
+          icon: const Icon(Icons.arrow_back_ios_new, color: Color(0xFF0F172A)),
           onPressed: () => Get.back(),
         ),
         title: Text(
-          _isEditing ? 'Edit Product' : 'Add Product',
+          'Edit Product',
           style: TextStyle(
-            color: Colors.white,
+            color: const Color(0xFF0F172A),
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
             fontFamily: 'Plus Jakarta Sans',
@@ -188,7 +174,7 @@ class _SellerAddEditProductScreenState
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
-                          color: Colors.white.withValues(alpha: 0.8),
+                          color: const Color(0xFF0F172A),
                           fontFamily: 'Plus Jakarta Sans',
                         ),
                       ),
@@ -196,6 +182,7 @@ class _SellerAddEditProductScreenState
                       SellerImageUpload(
                         images: _images,
                         onTap: _pickImage,
+                        onDelete: _removeImage,
                       ),
                       SizedBox(height: 24.h),
 
@@ -266,46 +253,46 @@ class _SellerAddEditProductScreenState
                             style: TextStyle(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: const Color(0xFF0F172A),
                               fontFamily: 'Plus Jakarta Sans',
                             ),
                           ),
                           SizedBox(height: 8.h),
                           DropdownButtonFormField<String>(
-                            initialValue: _selectedCategory,
-                            dropdownColor: const Color(0xFF16213E),
+                            value: _selectedCategory,
+                            dropdownColor: Colors.white,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
-                              color: Colors.white.withValues(alpha: 0.5),
+                              color: const Color(0xFF94A3B8),
                             ),
                             style: TextStyle(
                               fontSize: 14.sp,
-                              color: Colors.white,
+                              color: const Color(0xFF0F172A),
                               fontFamily: 'Plus Jakarta Sans',
                             ),
                             decoration: InputDecoration(
                               hintText: 'Select category',
                               hintStyle: TextStyle(
                                 fontSize: 13.sp,
-                                color: Colors.white.withValues(alpha: 0.3),
+                                color: const Color(0xFF94A3B8),
                                 fontFamily: 'Plus Jakarta Sans',
                               ),
                               filled: true,
-                              fillColor: const Color(0xFF16213E),
+                              fillColor: const Color(0xFFF8FAFC),
                               contentPadding: EdgeInsets.symmetric(
                                 horizontal: 16.w,
                                 vertical: 14.h,
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12.r),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withValues(alpha: 0.1),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
                                 ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(12.r),
-                                borderSide: BorderSide(
-                                  color: Colors.white.withValues(alpha: 0.1),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
                                 ),
                               ),
                               focusedBorder: OutlineInputBorder(
@@ -323,7 +310,7 @@ class _SellerAddEditProductScreenState
                               return null;
                             },
                             items: sellerCategories.map((cat) {
-                              return DropdownMenuItem(
+                              return DropdownMenuItem<String>(
                                   value: cat, child: Text(cat));
                             }).toList(),
                             onChanged: (val) {
@@ -358,10 +345,10 @@ class _SellerAddEditProductScreenState
             Container(
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               decoration: BoxDecoration(
-                color: const Color(0xFF16213E),
+                color: Colors.white,
                 border: Border(
                   top: BorderSide(
-                    color: Colors.white.withValues(alpha: 0.06),
+                    color: const Color(0xFFE2E8F0),
                   ),
                 ),
               ),
@@ -376,8 +363,8 @@ class _SellerAddEditProductScreenState
                         child: OutlinedButton(
                           onPressed: () => Get.back(),
                           style: OutlinedButton.styleFrom(
-                            side: BorderSide(
-                              color: Colors.white.withValues(alpha: 0.2),
+                            side: const BorderSide(
+                              color: Color(0xFFE2E8F0),
                             ),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
@@ -388,7 +375,7 @@ class _SellerAddEditProductScreenState
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
-                              color: Colors.white.withValues(alpha: 0.6),
+                              color: const Color(0xFF64748B),
                               fontFamily: 'Plus Jakarta Sans',
                             ),
                           ),
@@ -406,7 +393,7 @@ class _SellerAddEditProductScreenState
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff8B4513),
                             foregroundColor: Colors.white,
-                            disabledBackgroundColor: const Color(0xff8B4513).withValues(alpha: 0.5),
+                            disabledBackgroundColor: const Color(0xff8B4513).withOpacity(0.5),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),
