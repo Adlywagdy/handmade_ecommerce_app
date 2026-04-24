@@ -25,13 +25,4 @@ class CategoryModel {
       order: orderValue is int ? orderValue : int.tryParse('$orderValue'),
     );
   }
-
-  Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'name': categorytitle,
-      'icon': categoryiconpath,
-      'isActive': isActive,
-      'order': order,
-    };
-  }
 }

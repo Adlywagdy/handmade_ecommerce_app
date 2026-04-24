@@ -14,6 +14,53 @@ class FirebaseProductService {
   Query<Map<String, dynamic>> get _activeProductsQuery =>
       _productsRef.where('isActive', isEqualTo: true);
 
+  Future<Map<String, CategoryModel>> _getCategoriesById() async {
+    final categories = await getCategories();
+    return {
+      for (final category in categories)
+        if (category.id != null && category.id!.trim().isNotEmpty)
+          category.id!: category,
+    };
+  }
+
+  ProductModel _withResolvedCategory(
+    ProductModel product,
+    Map<String, CategoryModel> categoriesById,
+  ) {
+    final productCategory = product.category;
+    final categoryId = productCategory?.id?.trim();
+
+    if (categoryId == null || categoryId.isEmpty) {
+      return product;
+    }
+
+    final resolvedCategory = categoriesById[categoryId];
+    if (resolvedCategory == null) {
+      return product;
+    }
+
+    final currentTitle = productCategory?.categorytitle.trim() ?? '';
+    if (currentTitle.isNotEmpty &&
+        currentTitle.toLowerCase() != categoryId.toLowerCase()) {
+      return product;
+    }
+
+    return product.copyWith(category: resolvedCategory);
+  }
+
+  Future<List<ProductModel>> _resolveProductsCategories(
+    List<ProductModel> products,
+  ) async {
+    if (products.isEmpty) return products;
+
+    final categoriesById = await _getCategoriesById();
+    if (categoriesById.isEmpty) return products;
+
+    return products
+        .map((product) => _withResolvedCategory(product, categoriesById))
+        .toList();
+  }
+
   List<ProductModel> _sortProductsByRating(List<ProductModel> products) {
     final sortedProducts = [...products];
     sortedProducts.sort((a, b) => b.rating.compareTo(a.rating));
@@ -49,7 +96,7 @@ class FirebaseProductService {
           .toList();
 
       if (featuredProducts.isNotEmpty) {
-        return featuredProducts;
+        return _resolveProductsCategories(featuredProducts);
       }
     } catch (_) {
       // Some datasets do not include isFeatured.
@@ -60,7 +107,8 @@ class FirebaseProductService {
       return [];
     }
 
-    return _sortProductsBySales(products).take(10).toList();
+    final featuredProducts = _sortProductsBySales(products).take(10).toList();
+    return _resolveProductsCategories(featuredProducts);
   }
 
   /// Get top-rated products
@@ -68,7 +116,8 @@ class FirebaseProductService {
     final products = await _loadActiveProducts();
     if (products.isEmpty) return [];
 
-    return _sortProductsByRating(products).take(10).toList();
+    final topRatedProducts = _sortProductsByRating(products).take(10).toList();
+    return _resolveProductsCategories(topRatedProducts);
   }
 
   /// Get all categories
@@ -125,12 +174,14 @@ class FirebaseProductService {
           .toList();
 
       if (firestoreMatches.isNotEmpty) {
-        return firestoreMatches;
+        return _resolveProductsCategories(firestoreMatches);
       }
 
-      return loadClientSideMatches();
+      final matches = await loadClientSideMatches();
+      return _resolveProductsCategories(matches);
     } catch (_) {
-      return loadClientSideMatches();
+      final matches = await loadClientSideMatches();
+      return _resolveProductsCategories(matches);
     }
   }
 
@@ -164,11 +215,15 @@ class FirebaseProductService {
 
       final docs = await query.limit(50).get();
 
-      return docs.docs.map(_productFromSnapshot).where(_isApproved).toList();
+      final products = docs.docs
+          .map(_productFromSnapshot)
+          .where(_isApproved)
+          .toList();
+      return _resolveProductsCategories(products);
     } catch (_) {
       final docs = await _productsRef.limit(200).get();
 
-      return docs.docs.map(_productFromSnapshot).where((product) {
+      final products = docs.docs.map(_productFromSnapshot).where((product) {
         if (!product.isActive || !_isApproved(product)) return false;
         if (normalizedCategoryId != null &&
             normalizedCategoryId.isNotEmpty &&
@@ -180,6 +235,7 @@ class FirebaseProductService {
         if (minRating != null && product.rating < minRating) return false;
         return true;
       }).toList();
+      return _resolveProductsCategories(products);
     }
   }
 
@@ -193,7 +249,11 @@ class FirebaseProductService {
       return null;
     }
 
-    return product;
+    final resolvedProducts = await _resolveProductsCategories([product]);
+    if (resolvedProducts.isEmpty) {
+      return null;
+    }
+    return resolvedProducts.first;
   }
 
   /// Helper to convert Firestore document to ProductModel

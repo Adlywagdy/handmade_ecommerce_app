@@ -20,7 +20,7 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
       crossAxisAlignment: .start,
       children: [
         Text(
-          product.category!.id!,
+          product.category!.categorytitle,
 
           style: AppTextStyles.t_10w700.copyWith(color: commonColor),
         ),

@@ -44,6 +44,48 @@ class ProductModel {
     this.reviews,
   });
 
+  ProductModel copyWith({
+    String? id,
+    String? name,
+    String? description,
+    double? price,
+    double? discountedPrice,
+    String? currency,
+    double? totalrate,
+    int? salesCount,
+    String? status,
+    bool? isActive,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? quantity,
+    List<ReviewModel>? reviews,
+    List<String>? images,
+    List<String>? tags,
+    SellerModel? seller,
+    CategoryModel? category,
+  }) {
+    return ProductModel(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      description: description ?? this.description,
+      price: price ?? this.price,
+      discountedPrice: discountedPrice ?? this.discountedPrice,
+      currency: currency ?? this.currency,
+      totalrate: totalrate ?? this.totalrate,
+      salesCount: salesCount ?? this.salesCount,
+      status: status ?? this.status,
+      isActive: isActive ?? this.isActive,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      quantity: quantity ?? this.quantity,
+      reviews: reviews ?? this.reviews,
+      images: images ?? this.images,
+      tags: tags ?? this.tags,
+      seller: seller ?? this.seller,
+      category: category ?? this.category,
+    );
+  }
+
   String? get image => images.isNotEmpty ? images.first : null;
   double get rating => totalrate ?? 0;
   String get sellerId => seller.primaryIdentifier;
@@ -86,13 +128,16 @@ class ProductModel {
     );
 
     final categoryMap = map['category'];
+    final categoryReferenceId =
+        _extractCategoryReferenceId(categoryMap) ??
+        _extractCategoryReferenceId(map['categoryId']);
     final category = categoryMap is Map<String, dynamic>
-        ? CategoryModel.fromMap(categoryMap, id: map['categoryId']?.toString())
-        : (map['categoryId'] != null || map['categoryName'] != null)
+        ? CategoryModel.fromMap(categoryMap, id: categoryReferenceId)
+        : (categoryReferenceId != null || map['categoryName'] != null)
         ? CategoryModel(
-            id: map['categoryId']?.toString(),
+            id: categoryReferenceId,
             categorytitle:
-                (map['categoryName'] ?? map['categoryId'] ?? 'General')
+                (map['categoryName'] ?? categoryReferenceId ?? 'General')
                     .toString(),
           )
         : null;
@@ -212,6 +257,34 @@ class ProductModel {
     return _normalizeSellerPath(value.toString());
   }
 
+  static String? _extractCategoryReferenceId(dynamic value) {
+    if (value == null) return null;
+
+    if (value is String) {
+      return _normalizeCategoryPath(value);
+    }
+
+    try {
+      final dynamic id = value.id;
+      if (id is String && id.trim().isNotEmpty) {
+        return id.trim();
+      }
+    } catch (_) {
+      // Value is not a document reference.
+    }
+
+    try {
+      final dynamic path = value.path;
+      if (path is String) {
+        return _normalizeCategoryPath(path);
+      }
+    } catch (_) {
+      // Value does not expose a path.
+    }
+
+    return _normalizeCategoryPath(value.toString());
+  }
+
   static String? _normalizeSellerPath(String raw) {
     final trimmed = raw.trim();
     if (trimmed.isEmpty) return null;
@@ -221,6 +294,21 @@ class ProductModel {
     if (pathMatch != null) return pathMatch.group(1);
 
     final embeddedPath = RegExp(r'sellers/([^/\s)]+)');
+    final embeddedMatch = embeddedPath.firstMatch(trimmed);
+    if (embeddedMatch != null) return embeddedMatch.group(1);
+
+    return trimmed;
+  }
+
+  static String? _normalizeCategoryPath(String raw) {
+    final trimmed = raw.trim();
+    if (trimmed.isEmpty) return null;
+
+    final categoriesPath = RegExp(r'^/?categories/([^/]+)$');
+    final pathMatch = categoriesPath.firstMatch(trimmed);
+    if (pathMatch != null) return pathMatch.group(1);
+
+    final embeddedPath = RegExp(r'categories/([^/\s)]+)');
     final embeddedMatch = embeddedPath.firstMatch(trimmed);
     if (embeddedMatch != null) return embeddedMatch.group(1);
 
