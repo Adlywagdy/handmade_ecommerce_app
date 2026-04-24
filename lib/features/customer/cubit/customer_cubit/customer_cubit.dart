@@ -11,28 +11,17 @@ class CustomerCubit extends Cubit<CustomerState> {
       super(CustomerInitial());
 
   final FirebaseCustomerService _customerService;
-  CustomerModel customerData = CustomerModel(
-    id: "",
-    name: '',
-    email: '',
-    image: null,
-    password: '',
-    phone: '',
-  );
+  CustomerModel customerData = CustomerModel.empty();
 
   Future<void> getCustomerdata() async {
     emit(GetCustomerdataLoadingstate());
     try {
-      final firebaseCustomer = await _customerService.getCustomerData();
-      if (firebaseCustomer != null) {
-        customerData = firebaseCustomer;
-      }
+      customerData = await _customerService.getCustomerData() ?? customerData;
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
   }
-  /* ------------------------------------------- */
 
   Future<void> getNotifications() async {
     emit(NotificationsLoadingstate());
@@ -44,7 +33,6 @@ class CustomerCubit extends Cubit<CustomerState> {
     }
   }
 
-  /* ------------------------------------------- */
   Future<void> setDefaultAddress(AddressModel address) async {
     try {
       await _customerService.setDefaultAddress(address);
@@ -55,5 +43,21 @@ class CustomerCubit extends Cubit<CustomerState> {
     }
   }
 
-  /* ------------------------------------------- */
+  Future<void> updateCustomerProfile({
+    required String name,
+    String? phone,
+    String? image,
+  }) async {
+    emit(GetCustomerdataLoadingstate());
+    try {
+      await _customerService.updateCustomerProfile(
+        name: name,
+        phone: phone ?? customerData.phone,
+        image: image,
+      );
+      await getCustomerdata();
+    } catch (e) {
+      emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+    }
+  }
 }

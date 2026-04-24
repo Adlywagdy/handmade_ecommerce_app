@@ -8,6 +8,15 @@ class SellerInitial extends SellerState {
   const SellerInitial();
 }
 
+class SellerLoading extends SellerState {
+  const SellerLoading();
+}
+
+class SellerError extends SellerState {
+  final String message;
+  const SellerError(this.message);
+}
+
 class SellerLoaded extends SellerState {
   final List<SellerProductModel> products;
   final List<SellerOrderModel> orders;

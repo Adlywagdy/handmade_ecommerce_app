@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/functions/filter_sheet_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
+import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
@@ -25,19 +25,17 @@ class CustomerSearchScreen extends StatefulWidget {
 
 class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
   late final TextEditingController controller;
+
+  SearchCubit get _searchCubit => context.read<SearchCubit>();
+
   @override
   void initState() {
     super.initState();
     controller = TextEditingController();
-    if (BlocProvider.of<SearchCubit>(context).selectedCategory != null) {
-      controller.text = BlocProvider.of<SearchCubit>(
-        context,
-      ).selectedCategory!.categorytitle;
-      BlocProvider.of<SearchCubit>(context).filterproducts(
-        categoryname: BlocProvider.of<SearchCubit>(
-          context,
-        ).selectedCategory!.categorytitle,
-      );
+    final selectedCategory = _searchCubit.selectedCategory;
+    if (selectedCategory != null) {
+      controller.text = selectedCategory.categorytitle;
+      _searchCubit.filterproducts(categoryname: selectedCategory.categorytitle);
     }
   }
 
@@ -74,9 +72,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
               ),
 
               onChanged: (value) {
-                BlocProvider.of<SearchCubit>(
-                  context,
-                ).searchproducts(productname: value);
+                _searchCubit.searchproducts(productname: value);
               },
             ),
             actions: [
@@ -86,8 +82,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                 iconcolor: commonColor,
                 onPressed: () {
                   if (controller.text.trim().isNotEmpty ||
-                      BlocProvider.of<SearchCubit>(context).selectedCategory !=
-                          null) {
+                      _searchCubit.selectedCategory != null) {
                     openFilterSheet(context);
                   } else {
                     showSnack(
@@ -103,17 +98,13 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
           CupertinoSliverRefreshControl(
             onRefresh: () async {
               await Future.delayed(Duration(seconds: 2));
-              if (BlocProvider.of<SearchCubit>(context).selectedCategory !=
-                  null) {
-                BlocProvider.of<SearchCubit>(context).filterproducts(
-                  categoryname: BlocProvider.of<SearchCubit>(
-                    context,
-                  ).selectedCategory!.categorytitle,
+              final selectedCategory = _searchCubit.selectedCategory;
+              if (selectedCategory != null) {
+                _searchCubit.filterproducts(
+                  categoryname: selectedCategory.categorytitle,
                 );
               } else if (controller.text.isNotEmpty) {
-                BlocProvider.of<SearchCubit>(
-                  context,
-                ).searchproducts(productname: controller.text);
+                _searchCubit.searchproducts(productname: controller.text);
               }
             },
             builder:
@@ -158,20 +149,15 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
             builder: (context, state) {
               if (state is SearchProductsSuccessedstate ||
                   state is FilterProductsSuccessedstate) {
-                int listlength;
-                listlength = state is SearchProductsSuccessedstate
-                    ? listlength = BlocProvider.of<SearchCubit>(
-                        context,
-                      ).searchedproductsList.length
-                    : listlength = BlocProvider.of<SearchCubit>(
-                        context,
-                      ).filteredproductsList.length;
+                final resultsCount = state is SearchProductsSuccessedstate
+                    ? _searchCubit.searchedproductsList.length
+                    : _searchCubit.filteredproductsList.length;
 
                 return SliverToBoxAdapter(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
                     child: Text(
-                      '${listlength.toString()} RESULTS FOUND',
+                      '$resultsCount RESULTS FOUND',
                       style: AppTextStyles.t_14w500.copyWith(
                         color: commonColor.withValues(alpha: .6),
                       ),
@@ -213,27 +199,23 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                 );
               } else if (state is SearchProductsSuccessedstate ||
                   state is FilterProductsSuccessedstate) {
-                List list;
-                list = state is SearchProductsSuccessedstate
-                    ? list = BlocProvider.of<SearchCubit>(
-                        context,
-                      ).searchedproductsList
-                    : list = BlocProvider.of<SearchCubit>(
-                        context,
-                      ).filteredproductsList;
+                final List<ProductModel> products =
+                    state is SearchProductsSuccessedstate
+                    ? _searchCubit.searchedproductsList
+                    : _searchCubit.filteredproductsList;
 
                 return SliverGrid.builder(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
                     childAspectRatio: 1 / 1.8,
                   ),
-                  itemCount: list.length,
+                  itemCount: products.length,
                   itemBuilder: (context, index) {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
                       child: ProductItem(
                         cardclipBehavior: .antiAlias,
-                        product: list[index],
+                        product: products[index],
                         imageflex: 2,
                         lowercolumnflex: 1,
                         elevation: 0,
@@ -243,7 +225,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                         lowercolumnleftpadding: 8,
                         lowercolumnrightpadding: 8,
                         lowercolumn: SearchedProductItemLowerColumn(
-                          product: list[index],
+                          product: products[index],
                         ),
                       ),
                     );

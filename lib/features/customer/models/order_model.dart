@@ -3,7 +3,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/address_model.da
 import 'package:handmade_ecommerce_app/features/customer/models/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/payment_model.dart';
 
-class OrderModel {
+class CustomerOrderModel {
   final CustomerModel customer;
   final String orderid;
   final List<ProductModel> products;
@@ -11,7 +11,7 @@ class OrderModel {
   final DateTime orderDate;
   final PaymentDetailsModel payment;
   final AddressModel address;
-  OrderModel({
+  CustomerOrderModel({
     required this.customer,
     required this.products,
     required this.status,
@@ -53,7 +53,7 @@ class OrderModel {
     return <String, dynamic>{};
   }
 
-  factory OrderModel.fromMap(Map<String, dynamic> map, {String? id}) {
+  factory CustomerOrderModel.fromMap(Map<String, dynamic> map, {String? id}) {
     final productsData = map['products'] ?? map['items'];
     final products = productsData is List
         ? productsData
@@ -82,16 +82,19 @@ class OrderModel {
       map['address'] ?? map['shippingAddress'],
     );
     final paymentMap = _asStringKeyedMap(map['payment']);
+    final customerMap = _asStringKeyedMap(map['customer']);
 
-    return OrderModel(
+    return CustomerOrderModel(
       customer: CustomerModel.fromMap(
-        map['customer'] is Map<String, dynamic>
-            ? map['customer'] as Map<String, dynamic>
+        customerMap.isNotEmpty
+            ? customerMap
             : {
-                'name': map['customerName'] ?? '',
-                'email': map['customerEmail'] ?? '',
-                'phone': map['customerPhone'] ?? '',
-                'password': '',
+                'fullName':
+                    map['customerName'] ?? map['fullName'] ?? map['name'] ?? '',
+                'name': map['customerName'] ?? map['name'] ?? '',
+                'email': map['customerEmail'] ?? map['email'] ?? '',
+                'phone': map['customerPhone'] ?? map['phone'] ?? '',
+                'uid': map['customerId'] ?? map['uid'] ?? map['id'] ?? '',
               },
       ),
       products: products,
@@ -141,6 +144,11 @@ class OrderModel {
         'country': address.country,
         'zipCode': address.zipCode,
       },
+      'customer': customer.toMap(),
+      'customerId': customer.id,
+      'customerName': customer.name,
+      'customerEmail': customer.email,
+      'customerPhone': customer.phone,
       'status': status.name,
       'subtotal': subtotalAmount,
       'deliveryFee': deliveryFeeAmount,

@@ -80,16 +80,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Join Ayady',
-                  style: AppTextStyles.t_30w700.copyWith(),
-                ),
+                Text('Join Ayady', style: AppTextStyles.t_30w700.copyWith()),
                 SizedBox(height: 12.h),
                 Text(
                   'Experience the elegance of handcrafted items',
-                  style: AppTextStyles.t_14w400.copyWith(
-                    color: blackDegree,
-                  ),
+                  style: AppTextStyles.t_14w400.copyWith(color: blackDegree),
                 ),
                 SizedBox(height: 12.h),
 

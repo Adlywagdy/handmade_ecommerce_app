@@ -8,7 +8,7 @@ final class OrderInitial extends OrderState {}
 final class GetAllOrdersLoadingState extends OrderState {}
 
 final class GetAllOrdersSuccessState extends OrderState {
-  final List<OrderModel> orders;
+  final List<CustomerOrderModel> orders;
   GetAllOrdersSuccessState({required this.orders});
 }
 
@@ -21,7 +21,7 @@ final class GetAllOrdersFailedState extends OrderState {
 final class GetFilteredOrdersLoadingState extends OrderState {}
 
 final class GetFilteredOrdersSuccessState extends OrderState {
-  final List<OrderModel> filteredorders;
+  final List<CustomerOrderModel> filteredorders;
   GetFilteredOrdersSuccessState({required this.filteredorders});
 }
 
@@ -32,7 +32,7 @@ final class GetFilteredOrdersFailedState extends OrderState {
 
 /*------------------------------------------- */
 final class SearchOrdersSuccessState extends OrderState {
-  final List<OrderModel> orders;
+  final List<CustomerOrderModel> orders;
   SearchOrdersSuccessState({required this.orders});
 }
 

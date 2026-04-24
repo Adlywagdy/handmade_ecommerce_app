@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
@@ -15,26 +13,24 @@ class OrderCubit extends Cubit<OrderState> {
       super(OrderInitial());
 
   final FirebaseOrderService _orderService;
-  List<OrderModel> allordersList = [];
-  List<OrderModel> filteredordersList = [];
-  List<OrderModel> displayedordersList = [];
+  List<CustomerOrderModel> allordersList = [];
+  List<CustomerOrderModel> displayedordersList = [];
   OrderStatus? selectedStatus;
-  String searchQuery = '';
   int orderID = 10050;
-  Timer? _searchDebounce;
 
-  List<OrderModel> _ordersForActiveTab() {
-    if (selectedStatus == null) {
-      return allordersList;
-    }
-
-    return allordersList
-        .where((order) => order.status == selectedStatus)
-        .toList();
+  void _syncDisplayedOrders(List<CustomerOrderModel> orders) {
+    displayedordersList = orders;
   }
 
-  void _syncDisplayedOrders(List<OrderModel> orders) {
-    displayedordersList = orders;
+  Future<void> _refreshByCurrentFilter() async {
+    if (selectedStatus == null) {
+      allordersList = await _orderService.getAllOrders();
+      _syncDisplayedOrders(allordersList);
+      return;
+    }
+
+    final filtered = await _orderService.getFilteredOrders(selectedStatus!);
+    _syncDisplayedOrders(filtered);
   }
 
   /*------------------------------------------- */
@@ -43,6 +39,7 @@ class OrderCubit extends Cubit<OrderState> {
     emit(GetAllOrdersLoadingState());
     try {
       allordersList = await _orderService.getAllOrders();
+      _syncDisplayedOrders(allordersList);
 
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {
@@ -55,15 +52,13 @@ class OrderCubit extends Cubit<OrderState> {
     emit(GetFilteredOrdersLoadingState());
     try {
       final fetchedOrders = await _orderService.getFilteredOrders(status);
-
-      _syncDisplayedOrders(filteredordersList);
-      emit(GetFilteredOrdersSuccessState(filteredorders: filteredordersList));
+      _syncDisplayedOrders(fetchedOrders);
+      emit(GetFilteredOrdersSuccessState(filteredorders: fetchedOrders));
     } catch (e) {
       emit(GetFilteredOrdersFailedState(errorMessage: e.toString()));
     }
   }
 
-  @override
   /*------------------------------------------- */
   Future<void> getOrderDetails(String orderId) async {
     emit(GetOrderDetailsLoadingState());
@@ -76,16 +71,19 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
-  Future<void> placeNewOrder(OrderModel newOrder, BuildContext context) async {
+  Future<void> placeNewOrder(
+    CustomerOrderModel newOrder,
+    BuildContext context,
+  ) async {
     emit(PlaceOrderLoadingState());
     try {
       final cartCubit = context.read<CartCubit>();
       await cartCubit.makePayment(newOrder.payment, context);
       await _orderService.placeOrder(newOrder);
-      allordersList.add(newOrder);
+      await _refreshByCurrentFilter();
       showSnack(title: "Success", message: "Order placed successfully.");
       emit(PlaceOrderSuccessState());
-      cartCubit.clearCart();
+      await cartCubit.clearCart();
     } catch (e) {
       emit(PlaceOrderFailedState(errorMessage: e.toString()));
     }
@@ -96,10 +94,16 @@ class OrderCubit extends Cubit<OrderState> {
     emit(CancelOrderLoadingState());
     try {
       await _orderService.cancelOrder(orderId);
-      allordersList = await _orderService.getAllOrders();
+      await _refreshByCurrentFilter();
 
       emit(CancelOrderSuccessState());
-      emit(GetAllOrdersSuccessState(orders: allordersList));
+      if (selectedStatus == null) {
+        emit(GetAllOrdersSuccessState(orders: displayedordersList));
+      } else {
+        emit(
+          GetFilteredOrdersSuccessState(filteredorders: displayedordersList),
+        );
+      }
     } catch (e) {
       emit(CancelOrderFailedState(errorMessage: e.toString()));
     }

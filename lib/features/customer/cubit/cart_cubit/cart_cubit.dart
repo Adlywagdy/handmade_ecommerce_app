@@ -28,7 +28,7 @@ class CartCubit extends Cubit<CartState> {
   String selectedPaymentMethod = "Visa";
   PaymentDetailsModel? currentOrderSummary;
   String walletPhonenumber = "";
-  int orderID = 10060;
+  String _appliedCoupon = "";
 
   /* ------------------------------------------- */
   Future<void> getcartProducts() async {
@@ -105,17 +105,21 @@ class CartCubit extends Cubit<CartState> {
 
   Future<void> getOrderSummary({
     required List<ProductModel> products,
-    String? coupon = "",
+    String? coupon,
     double deliveryFee = 0,
+    bool showCouponFeedback = false,
   }) async {
     emit(GetOrderSummaryLoadingState());
     try {
-      // Simulate a delay for loading order summary
-      await Future.delayed(const Duration(seconds: 2));
+      final effectiveCoupon = (coupon ?? _appliedCoupon).trim();
+      _appliedCoupon = effectiveCoupon;
+
       final ordersubtotalPrice = calculateOrdersubTotalPrice(
         cartproducts: products,
       );
-      final double discount = applycoupon(coupon!);
+      final double discount = showCouponFeedback
+          ? applyCoupon(effectiveCoupon)
+          : getCouponDiscount(effectiveCoupon);
       currentOrderSummary = PaymentDetailsModel(
         subtotalPrice: ordersubtotalPrice,
         totalPrice: ordersubtotalPrice + deliveryFee - discount,
@@ -276,13 +280,14 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
-  void clearCart() {
-    _cartService.clearCart();
+  Future<void> clearCart() async {
+    await _cartService.clearCart();
     cartProductsList.clear();
     currentOrderSummary = null;
     selectedOrderAddress = null;
     selectedPaymentMethod = "Visa";
     walletPhonenumber = "";
+    _appliedCoupon = "";
     emit(GetcartSuccessedstate(cartproducts: cartProductsList));
   }
 }

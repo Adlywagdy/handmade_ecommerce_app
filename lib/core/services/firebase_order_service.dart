@@ -8,69 +8,20 @@ class FirebaseOrderService {
 
   static const double _commissionRate = 0.1;
 
-  String _docLogicalId(Map<String, dynamic> data, String docId) {
-    return (data['orderId'] ?? data['orderNumber'] ?? docId).toString();
-  }
-
   double _toDouble(dynamic value) {
     if (value is num) return value.toDouble();
     return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
-  List<OrderModel> _mergeAndSortOrders({
-    required List<QueryDocumentSnapshot<Map<String, dynamic>>> customerDocs,
-    required List<QueryDocumentSnapshot<Map<String, dynamic>>> rootDocs,
-  }) {
-    final merged = <String, OrderModel>{};
-
-    for (final doc in rootDocs) {
-      final data = doc.data();
-      final key = _docLogicalId(data, doc.id);
-      merged[key] = _orderFromSnapshot(doc);
-    }
-
-    for (final doc in customerDocs) {
-      final data = doc.data();
-      final key = _docLogicalId(data, doc.id);
-      merged[key] = _orderFromSnapshot(doc);
-    }
-
-    final orders = merged.values.toList();
+  List<CustomerOrderModel> _sortOrders(
+    List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
+  ) {
+    final orders = docs.map(_orderFromSnapshot).toList();
     orders.sort((a, b) => b.orderDate.compareTo(a.orderDate));
     return orders;
   }
 
-  Future<QuerySnapshot<Map<String, dynamic>>> _getCustomerOrdersSnapshot(
-    String userId, {
-    OrderStatus? status,
-    String? orderNumber,
-    int? limit,
-  }) async {
-    Query<Map<String, dynamic>> query = _firestore
-        .collection('customers')
-        .doc(userId)
-        .collection('orders');
-
-    if (status != null) {
-      query = query.where('status', isEqualTo: _statusToString(status));
-    }
-
-    if (orderNumber != null) {
-      query = query.where('orderNumber', isEqualTo: orderNumber);
-    }
-
-    if (limit != null) {
-      query = query.limit(limit);
-    }
-
-    try {
-      return await query.orderBy('createdAt', descending: true).get();
-    } catch (_) {
-      return await query.get();
-    }
-  }
-
-  Future<QuerySnapshot<Map<String, dynamic>>> _getRootOrdersSnapshot(
+  Future<QuerySnapshot<Map<String, dynamic>>> _getOrdersSnapshot(
     String userId, {
     OrderStatus? status,
     String? orderNumber,
@@ -100,58 +51,42 @@ class FirebaseOrderService {
   }
 
   /// Get all orders for current user
-  Future<List<OrderModel>> getAllOrders() async {
+  Future<List<CustomerOrderModel>> getAllOrders() async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
 
-      final customerOrdersDocs = await _getCustomerOrdersSnapshot(user.uid);
-      final docs = await _getRootOrdersSnapshot(user.uid);
-
-      return _mergeAndSortOrders(
-        customerDocs: customerOrdersDocs.docs,
-        rootDocs: docs.docs,
-      );
+      final docs = await _getOrdersSnapshot(user.uid);
+      return _sortOrders(docs.docs);
     } catch (e) {
       rethrow;
     }
   }
 
   /// Get filtered orders by status
-  Future<List<OrderModel>> getFilteredOrders(OrderStatus status) async {
+  Future<List<CustomerOrderModel>> getFilteredOrders(OrderStatus status) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
 
-      final customerOrdersDocs = await _getCustomerOrdersSnapshot(
-        user.uid,
-        status: status,
-      );
-      final docs = await _getRootOrdersSnapshot(user.uid, status: status);
+      final docs = await _getOrdersSnapshot(user.uid, status: status);
 
-      return _mergeAndSortOrders(
-        customerDocs: customerOrdersDocs.docs,
-        rootDocs: docs.docs,
-      );
+      return _sortOrders(docs.docs);
     } catch (e) {
       rethrow;
     }
   }
 
   /// Search orders by ID, name, email, or phone
-  Future<List<OrderModel>> searchOrders(String query) async {
+  Future<List<CustomerOrderModel>> searchOrders(String query) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
 
       final normalizedQuery = query.toLowerCase();
 
-      final customerOrdersDocs = await _getCustomerOrdersSnapshot(user.uid);
-      final rootOrdersDocs = await _getRootOrdersSnapshot(user.uid);
-      final mergedOrders = _mergeAndSortOrders(
-        customerDocs: customerOrdersDocs.docs,
-        rootDocs: rootOrdersDocs.docs,
-      );
+      final ordersDocs = await _getOrdersSnapshot(user.uid);
+      final mergedOrders = _sortOrders(ordersDocs.docs);
 
       return mergedOrders.where((order) {
         final orderId = order.orderid.toLowerCase();
@@ -174,37 +109,26 @@ class FirebaseOrderService {
   }
 
   /// Get order details
-  Future<OrderModel?> getOrderDetails(String orderId) async {
+  Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return null;
-
-      final customerDoc = await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('orders')
-          .doc(orderId)
-          .get();
-
-      if (customerDoc.exists) {
-        return _orderFromSnapshot(customerDoc);
-      }
 
       final rootDoc = await _firestore.collection('orders').doc(orderId).get();
       if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
         return _orderFromSnapshot(rootDoc);
       }
 
-      final customerQuery = await _getCustomerOrdersSnapshot(
+      final userQuery = await _getOrdersSnapshot(
         user.uid,
         orderNumber: orderId,
         limit: 1,
       );
-      if (customerQuery.docs.isNotEmpty) {
-        return _orderFromSnapshot(customerQuery.docs.first);
+      if (userQuery.docs.isNotEmpty) {
+        return _orderFromSnapshot(userQuery.docs.first);
       }
 
-      final docs = await _getRootOrdersSnapshot(
+      final docs = await _getOrdersSnapshot(
         user.uid,
         orderNumber: orderId,
         limit: 1,
@@ -219,7 +143,7 @@ class FirebaseOrderService {
   }
 
   /// Place new order
-  Future<String> placeOrder(OrderModel order) async {
+  Future<String> placeOrder(CustomerOrderModel order) async {
     try {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
@@ -245,13 +169,6 @@ class FirebaseOrderService {
 
       await rootOrderRef.set(orderPayload);
 
-      await _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('orders')
-          .doc(rootOrderRef.id)
-          .set(orderPayload, SetOptions(merge: true));
-
       return rootOrderRef.id;
     } catch (e) {
       rethrow;
@@ -264,39 +181,24 @@ class FirebaseOrderService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
-      final customerDocRef = _firestore
-          .collection('customers')
-          .doc(user.uid)
-          .collection('orders')
-          .doc(orderId);
-      final customerDoc = await customerDocRef.get();
-      if (customerDoc.exists) {
-        await customerDocRef.update({
-          'status': _statusToString(OrderStatus.cancelled),
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
-      }
+      final cancelPayload = {
+        'status': _statusToString(OrderStatus.cancelled),
+        'updatedAt': FieldValue.serverTimestamp(),
+      };
 
       final rootDocRef = _firestore.collection('orders').doc(orderId);
       final rootDoc = await rootDocRef.get();
       if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
-        await rootDocRef.update({
-          'status': _statusToString(OrderStatus.cancelled),
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
-        return;
+        await rootDocRef.update(cancelPayload);
       }
 
-      final rootByOrderNumber = await _getRootOrdersSnapshot(
+      final userByOrderNumber = await _getOrdersSnapshot(
         user.uid,
         orderNumber: orderId,
         limit: 1,
       );
-      if (rootByOrderNumber.docs.isNotEmpty) {
-        await rootByOrderNumber.docs.first.reference.update({
-          'status': _statusToString(OrderStatus.cancelled),
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
+      if (userByOrderNumber.docs.isNotEmpty) {
+        await userByOrderNumber.docs.first.reference.update(cancelPayload);
       }
     } catch (e) {
       rethrow;
@@ -304,7 +206,9 @@ class FirebaseOrderService {
   }
 
   /// Helper to convert Firestore document to OrderModel
-  OrderModel _orderFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
+  CustomerOrderModel _orderFromSnapshot(
+    DocumentSnapshot<Map<String, dynamic>> doc,
+  ) {
     final data = doc.data() ?? <String, dynamic>{};
     final createdAt = data['createdAt'];
     final updatedAt = data['updatedAt'];
@@ -316,7 +220,7 @@ class FirebaseOrderService {
         ? updatedAt.toDate().toIso8601String()
         : updatedAt?.toString();
 
-    return OrderModel.fromMap({
+    return CustomerOrderModel.fromMap({
       ...data,
       'orderId': data['orderId'] ?? data['orderNumber'] ?? doc.id,
       'status': data['status'] ?? 'pending',
@@ -327,19 +231,6 @@ class FirebaseOrderService {
   }
 
   String _statusToString(OrderStatus status) {
-    switch (status) {
-      case OrderStatus.pending:
-        return 'pending';
-      case OrderStatus.confirmed:
-        return 'confirmed';
-      case OrderStatus.preparing:
-        return 'preparing';
-      case OrderStatus.shipped:
-        return 'shipped';
-      case OrderStatus.delivered:
-        return 'delivered';
-      case OrderStatus.cancelled:
-        return 'cancelled';
-    }
+    return status.name;
   }
 }

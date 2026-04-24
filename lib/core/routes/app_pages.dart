@@ -15,6 +15,7 @@ import 'package:handmade_ecommerce_app/features/customer/presentation/screens/cu
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_search_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_writereview_screen.dart';
+import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
@@ -53,39 +54,32 @@ class AppPages {
     ),
 
     // customer
-    GetPage(
-      name: AppRoutes.customerlayout,
-      page: () => const CustomerLayout(),
-    ),
+    GetPage(name: AppRoutes.customerlayout, page: () => const CustomerLayout()),
     GetPage(
       name: AppRoutes.customerOrderDetails,
       page: () => CustomerOrderDetailsScreen(
-        order: Get.arguments as OrderModel,
+        order: Get.arguments as CustomerOrderModel,
       ),
     ),
-    GetPage(
-      name: AppRoutes.customerCart,
-      page: () => CustomerCartScreen(),
-    ),
+    GetPage(name: AppRoutes.customerCart, page: () => CustomerCartScreen()),
     GetPage(
       name: AppRoutes.customerProductDetails,
-      page: () => CustomerProductDetailsScreen(
-        product: Get.arguments as ProductModel,
-      ),
+      page: () =>
+          CustomerProductDetailsScreen(product: Get.arguments as ProductModel),
     ),
-    GetPage(
-      name: AppRoutes.customerSearch,
-      page: () => CustomerSearchScreen(),
-    ),
+    GetPage(name: AppRoutes.customerSearch, page: () => CustomerSearchScreen()),
     GetPage(
       name: AppRoutes.customerNotifications,
       page: () => const CustomerNotificationsScreen(),
     ),
     GetPage(
       name: AppRoutes.customerWriteReview,
-      page: () => CustomerWriteReviewScreen(
-        product: Get.arguments as ProductModel,
-      ),
+      page: () =>
+          CustomerWriteReviewScreen(product: Get.arguments as ProductModel),
+    ),
+    GetPage(
+      name: AppRoutes.notifications,
+      page: () => const NotificationsScreen(),
     ),
 
     // seller
@@ -131,10 +125,7 @@ class AppPages {
       name: AppRoutes.adminProducts,
       page: () => const AdminProductsScreen(),
     ),
-    GetPage(
-      name: AppRoutes.adminOrders,
-      page: () => const AdminOrdersScreen(),
-    ),
+    GetPage(name: AppRoutes.adminOrders, page: () => const AdminOrdersScreen()),
     GetPage(
       name: AppRoutes.adminSettings,
       page: () => const AdminSettingsScreen(),
