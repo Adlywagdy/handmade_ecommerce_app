@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -18,12 +19,11 @@ import 'package:handmade_ecommerce_app/features/customer/reviews/cubit/reviews_c
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,11 +43,10 @@ void main() async {
       'message': 'Firebase is connected successfully!',
       'timestamp': FieldValue.serverTimestamp(),
     });
-    debugPrint('✅ FIREBASE CONNECTION SUCCESSFUL! Document written.');
+    debugPrint('FIREBASE CONNECTION SUCCESSFUL! Document written.');
   } catch (e) {
-    debugPrint('❌ FIREBASE CONNECTION FAILED: $e');
+    debugPrint('FIREBASE CONNECTION FAILED: $e');
   }
-  // ────────────────────────────────
 
   //////////////////////////// Crashlytics ///////////////////////////////////
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;

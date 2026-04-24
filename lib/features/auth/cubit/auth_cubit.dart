@@ -2,7 +2,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
-
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
