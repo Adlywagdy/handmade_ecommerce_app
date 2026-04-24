@@ -17,7 +17,8 @@ class CustomerShopDetailsScreen extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => SellerProfileCubit()..getSellerProfileById(sellerId),
+          create: (context) =>
+              SellerProfileCubit()..getSellerProfileById(sellerId),
         ),
         BlocProvider(create: (context) => ContactSellerCubit()),
       ],
@@ -34,7 +35,8 @@ class CustomerShopDetailsScreen extends StatelessWidget {
         ),
         body: BlocBuilder<SellerProfileCubit, SellerProfileState>(
           builder: (context, state) {
-            if (state is SellerProfileInitial || state is SellerProfileLoading) {
+            if (state is SellerProfileInitial ||
+                state is SellerProfileLoading) {
               return Center(
                 child: CircularProgressIndicator(color: commonColor),
               );
@@ -131,7 +133,10 @@ class _ShopDetailsBody extends StatelessWidget {
                       context: context,
                       isScrollControlled: true,
                       backgroundColor: Colors.transparent,
-                      builder: (_) => _ContactSellerSheet(seller: seller),
+                      builder: (_) => BlocProvider.value(
+                        value: context.read<ContactSellerCubit>(),
+                        child: _ContactSellerSheet(seller: seller),
+                      ),
                     ),
               style: ElevatedButton.styleFrom(
                 backgroundColor: commonColor,
@@ -168,10 +173,7 @@ class _SellerHeroCard extends StatelessWidget {
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(24.r),
         gradient: LinearGradient(
-          colors: [
-            Colors.white,
-            commonColor.withValues(alpha: 0.08),
-          ],
+          colors: [Colors.white, commonColor.withValues(alpha: 0.08)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
@@ -404,9 +406,7 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
   @override
   void initState() {
     super.initState();
-    _subjectController = TextEditingController(
-      text: 'Custom order request',
-    );
+    _subjectController = TextEditingController(text: 'Custom order request');
     _messageController = TextEditingController(
       text:
           'Hello ${widget.seller.displayName},\n\nI would like to request a customized order.\n\nDetails:\n',
@@ -590,7 +590,11 @@ class _StatusView extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.store_mall_directory_outlined, size: 44.r, color: commonColor),
+            Icon(
+              Icons.store_mall_directory_outlined,
+              size: 44.r,
+              color: commonColor,
+            ),
             SizedBox(height: 14.h),
             Text(
               title,

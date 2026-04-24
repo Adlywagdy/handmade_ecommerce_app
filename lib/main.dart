@@ -25,7 +25,6 @@ import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
 
   await Hive.initFlutter();
   await Hive.openBox('notifications');
@@ -53,7 +52,7 @@ void main() async {
   ///////////////////////////// RemoteConfig //////////////////////////////////
   await RemoteConfigService.instance.init();
   /////////////////////////////////////////////////////////////////////////
-  
+
   runApp(const HandcraftedEcommerceApp());
 }
 
@@ -73,10 +72,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) => AuthCubit(AuthService()),
             ),
             BlocProvider(
-              create: (BuildContext context) => SellerCubit(SellerFirestoreService())..loadDashboard(),
+              create: (BuildContext context) =>
+                  SellerCubit(SellerFirestoreService())..loadDashboard(),
             ),
             BlocProvider(
-              create: (BuildContext context) => NotificationsCubit()..loadNotifications(),
+              create: (BuildContext context) =>
+                  NotificationsCubit()..loadNotifications(),
             ),
             BlocProvider(create: (BuildContext context) => CustomerCubit()),
             BlocProvider(
