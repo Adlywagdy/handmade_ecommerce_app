@@ -1,18 +1,31 @@
 import 'package:flutter/material.dart';
-import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/reviewcard.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ratingrow.dart';
+import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/ReviewCard.dart';
+import 'package:handmade_ecommerce_app/features/reviews/models/reviews_model.dart';
+import 'package:handmade_ecommerce_app/features/reviews/presentation/screens/reviews_screen.dart';
 
 class ProductReviewsColumn extends StatelessWidget {
-  const ProductReviewsColumn({super.key, required this.product});
+  const ProductReviewsColumn({
+    super.key,
+    required this.reviews,
+    this.productName = 'Product',
+  });
 
-  final ProductModel product;
+  final List<ReviewsModel> reviews;
+  final String productName;
+
+  double get _averageRating {
+    if (reviews.isEmpty) return 0;
+    final total = reviews.fold<int>(0, (sum, review) => sum + review.rating);
+    return total / reviews.length;
+  }
 
   @override
   Widget build(BuildContext context) {
+    final displayedReviews = reviews.take(2).toList();
+
     return Column(
       children: [
         Row(
@@ -24,25 +37,35 @@ class ProductReviewsColumn extends StatelessWidget {
             ),
             Row(
               children: [
-                RatingRow(product: product),
+                Icon(Icons.star_border_outlined, color: goldColor, size: 20),
                 Text(
-                  ' (${product.reviews!.length})',
+                  _averageRating.toStringAsFixed(1),
+                  style: AppTextStyles.t_14w400,
+                ),
+                Text(
+                  ' (${reviews.length})',
                   style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
                 ),
               ],
             ),
           ],
         ),
-        ReviewCard(product: product),
-        GestureDetector(
-          onTap: () {
-            // Handle view all reviews action
-          },
-          child: CustomTextContainer(
-            text: 'View all ${product.reviews!.length} reviews',
-            textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
+        ...displayedReviews.map((review) => ReviewCard(review: review)),
+        if (reviews.length > 2)
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute<void>(
+                  builder: (_) =>
+                      ReviewsScreen(productName: productName, reviews: reviews),
+                ),
+              );
+            },
+            child: CustomTextContainer(
+              text: 'View all ${reviews.length} reviews',
+              textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
+            ),
           ),
-        ),
       ],
     );
   }

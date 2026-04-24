@@ -20,7 +20,7 @@ class RatingRow extends StatelessWidget {
     return Row(
       children: [
         Icon(Icons.star_border_outlined, color: goldColor, size: iconsize!.r),
-        Text("${product.totalrate}", style: textstyle),
+        Text("${product.totalrate!.toStringAsFixed(1)}", style: textstyle),
       ],
     );
   }

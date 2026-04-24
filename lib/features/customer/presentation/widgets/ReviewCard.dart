@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/customstarsratingrow.dart';
+import 'package:handmade_ecommerce_app/features/reviews/models/reviews_model.dart';
 
 class ReviewCard extends StatelessWidget {
-  const ReviewCard({super.key, required this.product});
+  const ReviewCard({super.key, required this.review});
 
-  final ProductModel product;
+  final ReviewsModel review;
+
+  String get _formattedDate {
+    final date = review.createdAt;
+    final month = date.month.toString().padLeft(2, '0');
+    final day = date.day.toString().padLeft(2, '0');
+    return '${date.year}-$month-$day';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,18 +32,28 @@ class ReviewCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  product.reviews![0].reviewer.name,
+                  'User ${review.userId.substring(0, review.userId.length >= 6 ? 6 : review.userId.length)}',
                   style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
                 ),
                 Text(
-                  "${product.reviews![0].reviewDate.year.toString()}-${product.reviews![0].reviewDate.month.toString().padLeft(2, '0')}-${product.reviews![0].reviewDate.day.toString().padLeft(2, '0')}",
+                  _formattedDate,
                   style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
                 ),
               ],
             ),
-            CustomStarsRatingRow(product: product),
+            Row(
+              children: List.generate(5, (index) {
+                return Icon(
+                  review.rating >= index + 1
+                      ? Icons.star
+                      : Icons.star_border_outlined,
+                  size: 15.r,
+                  color: goldColor,
+                );
+              }),
+            ),
             Text(
-              '"${product.reviews![0].reviewText}"',
+              '"${review.comment}"',
               style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             ),
           ],

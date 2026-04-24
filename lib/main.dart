@@ -13,6 +13,7 @@ import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/sear
 import 'package:handmade_ecommerce_app/features/customer/cubit/customer_cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/cubit/wishlist_cubit/wishlist_cubit.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
+import 'package:handmade_ecommerce_app/features/reviews/cubit/reviews_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
@@ -93,6 +94,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             ),
             BlocProvider(create: (context) => CartCubit()..getcartProducts()),
             BlocProvider(create: (context) => OrderCubit()..getAllOrders()),
+            BlocProvider(create: (context) => ReviewsCubit()),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,

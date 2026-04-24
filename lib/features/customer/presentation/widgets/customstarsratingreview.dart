@@ -1,21 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
-class CustomStarsRatingReview extends StatefulWidget {
-  const CustomStarsRatingReview({super.key, required this.product});
+class CustomStarsRatingReview extends StatelessWidget {
+  const CustomStarsRatingReview({
+    super.key,
+    required this.selectedRating,
+    required this.onChanged,
+  });
 
-  final ProductModel product;
-
-  @override
-  State<CustomStarsRatingReview> createState() =>
-      _CustomStarsRatingReviewState();
-}
-
-class _CustomStarsRatingReviewState extends State<CustomStarsRatingReview> {
-  int? selectedRatingIndex;
+  final int selectedRating;
+  final ValueChanged<int> onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -25,16 +21,13 @@ class _CustomStarsRatingReviewState extends State<CustomStarsRatingReview> {
           mainAxisAlignment: .center,
 
           children: List.generate(5, (rateindex) {
-            final isSelected =
-                selectedRatingIndex != null &&
-                selectedRatingIndex! >= rateindex;
+            final starValue = rateindex + 1;
+            final isSelected = selectedRating >= starValue;
 
             return InkWell(
               borderRadius: BorderRadius.circular(999.r),
               onTap: () {
-                setState(() {
-                  selectedRatingIndex = rateindex;
-                });
+                onChanged(starValue);
               },
 
               child: Padding(
@@ -52,12 +45,12 @@ class _CustomStarsRatingReviewState extends State<CustomStarsRatingReview> {
         ),
         SizedBox(height: 10.h),
         Text(
-          selectedRatingIndex != null
-              ? getReviewLabel(selectedRatingIndex!).name.toUpperCase()
+          selectedRating > 0
+              ? getReviewLabel(selectedRating).name.toUpperCase()
               : 'TAP TO RATE',
           textAlign: TextAlign.center,
           style: AppTextStyles.t_18w700.copyWith(
-            color: selectedRatingIndex != null
+            color: selectedRating > 0
                 ? orangedegree.withValues(alpha: .9)
                 : subTitleColor,
           ),
@@ -71,15 +64,15 @@ enum Rating { poor, bad, average, great, excellent }
 
 Rating getReviewLabel(int rating) {
   switch (rating) {
-    case 0:
-      return Rating.poor;
     case 1:
-      return Rating.bad;
+      return Rating.poor;
     case 2:
-      return Rating.average;
+      return Rating.bad;
     case 3:
-      return Rating.great;
+      return Rating.average;
     case 4:
+      return Rating.great;
+    case 5:
       return Rating.excellent;
     default:
       throw ArgumentError('Invalid rating value: $rating');

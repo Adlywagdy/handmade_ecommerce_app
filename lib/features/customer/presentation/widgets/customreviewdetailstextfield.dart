@@ -3,30 +3,15 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
-class CustomReviewDetailsTextField extends StatefulWidget {
-  const CustomReviewDetailsTextField({super.key});
+class CustomReviewDetailsTextField extends StatelessWidget {
+  const CustomReviewDetailsTextField({
+    super.key,
+    required this.controller,
+    this.onChanged,
+  });
 
-  @override
-  State<CustomReviewDetailsTextField> createState() =>
-      _CustomReviewDetailsTextFieldState();
-}
-
-TextEditingController? textfieldcontroller;
-
-class _CustomReviewDetailsTextFieldState
-    extends State<CustomReviewDetailsTextField> {
-  @override
-  void initState() {
-    textfieldcontroller = TextEditingController();
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    textfieldcontroller?.dispose();
-
-    super.dispose();
-  }
+  final TextEditingController controller;
+  final ValueChanged<String>? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -47,7 +32,7 @@ class _CustomReviewDetailsTextFieldState
               child: Padding(
                 padding: EdgeInsets.symmetric(vertical: 4.h, horizontal: 8.w),
                 child: Text(
-                  '${textfieldcontroller?.text.length ?? 0} / 500',
+                  '${controller.text.length} / 500',
                   style: AppTextStyles.t_12w500.copyWith(color: subTitleColor),
                 ),
               ),
@@ -56,15 +41,13 @@ class _CustomReviewDetailsTextFieldState
         ),
         TextFormField(
           cursorColor: commonColor,
-          controller: textfieldcontroller,
+          controller: controller,
           minLines: 1,
           maxLength: 500,
           maxLines: null,
           autocorrect: true,
           textAlignVertical: TextAlignVertical.top,
-          onChanged: (value) {
-            setState(() {});
-          },
+          onChanged: onChanged,
           onTapOutside: (event) {
             FocusScope.of(context).unfocus();
           },
