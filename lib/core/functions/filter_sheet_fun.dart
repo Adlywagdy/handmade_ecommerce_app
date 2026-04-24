@@ -5,7 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/search/cubit/search_cubit.dart';
 
 void openFilterSheet(BuildContext context) {
   showModalBottomSheet(
