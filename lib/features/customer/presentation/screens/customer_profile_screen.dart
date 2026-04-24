@@ -133,6 +133,7 @@ class CustomerProfilesScreen extends StatelessWidget {
             TextButton(
               onPressed: () {
                 HiveHelper.setLoginBox(value:false);
+                HiveHelper.clearEmailBox();
                 Navigator.of(context).pop(true);
               },
               child: Text('Logout', style: TextStyle(color: redDegree)),

@@ -29,5 +29,7 @@ class HiveHelper {
     return Hive.box(email).get(email, defaultValue: '');
   }
 
-
+  static void clearEmailBox() {
+    Hive.box(email).delete(email);
+  }
 }
