@@ -83,7 +83,12 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                 onPressed: () {
                   if (controller.text.trim().isNotEmpty ||
                       _searchCubit.selectedCategory != null) {
-                    openFilterSheet(context);
+                    openFilterSheet(
+                      context,
+                      searchCubit: _searchCubit,
+                      selectedCategory:
+                          _searchCubit.selectedCategory?.categorytitle,
+                    );
                   } else {
                     showSnack(
                       title: "No filters",

@@ -12,6 +12,8 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/cubit/order_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/widgets/productdetailslowercolumn.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -142,10 +144,29 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                         flex: 1,
                         child: CustomElevatedButton(
                           onPressed: () {
-                            BlocProvider.of<CartCubit>(
+                            final cartCubit = BlocProvider.of<CartCubit>(
                               context,
-                            ).addCartProducts(product);
-                            Get.toNamed(AppRoutes.customerCart);
+                            );
+                            OrderCubit? orderCubit;
+                            CustomerCubit? customerCubit;
+
+                            try {
+                              orderCubit = context.read<OrderCubit>();
+                            } catch (_) {}
+
+                            try {
+                              customerCubit = context.read<CustomerCubit>();
+                            } catch (_) {}
+
+                            cartCubit.addCartProducts(product);
+                            Get.toNamed(
+                              AppRoutes.customerCart,
+                              arguments: {
+                                'cartCubit': cartCubit,
+                                'orderCubit': orderCubit,
+                                'customerCubit': customerCubit,
+                              },
+                            );
                           },
                           buttoncolor: commonColor,
                           child: Text(

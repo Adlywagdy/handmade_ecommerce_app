@@ -151,7 +151,10 @@ class CustomerOrdersScreen extends StatelessWidget {
                                 onTap: () {
                                   Get.toNamed(
                                     AppRoutes.customerOrderDetails,
-                                    arguments: orders[index],
+                                    arguments: {
+                                      'order': orders[index],
+                                      'orderCubit': orderCubit,
+                                    },
                                   );
                                 },
                                 child: OrderItem(order: orders[index]),

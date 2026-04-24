@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/widgets/productimagesscroll.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/cubit/reviews_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductModel product;
@@ -40,7 +44,31 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoutes.customerProductDetails, arguments: product);
+        CartCubit? cartCubit;
+        WishListCubit? wishListCubit;
+        ReviewsCubit? reviewsCubit;
+
+        try {
+          cartCubit = context.read<CartCubit>();
+        } catch (_) {}
+
+        try {
+          wishListCubit = context.read<WishListCubit>();
+        } catch (_) {}
+
+        try {
+          reviewsCubit = context.read<ReviewsCubit>();
+        } catch (_) {}
+
+        Get.toNamed(
+          AppRoutes.customerProductDetails,
+          arguments: {
+            'product': product,
+            'cartCubit': cartCubit,
+            'wishListCubit': wishListCubit,
+            'reviewsCubit': reviewsCubit,
+          },
+        );
       },
       child: Card(
         color: customerbackGroundColor,

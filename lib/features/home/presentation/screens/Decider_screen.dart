@@ -19,52 +19,52 @@ class _DeciderScreenState extends State<DeciderScreen> {
   }
 
   Future<void> _decide() async {
-  try {
-    final user = FirebaseAuth.instance.currentUser;
+    try {
+      final user = FirebaseAuth.instance.currentUser;
 
-    if (user == null) {
+      if (user == null) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
+      }
+
+      final email = user.email?.trim().toLowerCase();
+
+      if (email == null) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
+      }
+
+      final query = await FirebaseFirestore.instance
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+
+      if (query.docs.isEmpty) {
+        Get.offAllNamed(AppRoutes.login);
+        return;
+      }
+
+      final data = query.docs.first.data();
+      final role = data['role'];
+
+      if (role == 'seller') {
+        Get.offAllNamed(AppRoutes.sellerdashboard);
+      } else if (role == 'admin') {
+        Get.offAllNamed(AppRoutes.adminBottomBar);
+      } else {
+        Get.offAllNamed(AppRoutes.customerlayout);
+      }
+    } catch (e) {
       Get.offAllNamed(AppRoutes.login);
-      return;
     }
-
-    final email = user.email?.trim().toLowerCase();
-
-    if (email == null) {
-      Get.offAllNamed(AppRoutes.login);
-      return;
-    }
-
-    final query = await FirebaseFirestore.instance
-        .collection('users')
-        .where('email', isEqualTo: email)
-        .limit(1)
-        .get();
-
-    if (query.docs.isEmpty) {
-      Get.offAllNamed(AppRoutes.login);
-      return;
-    }
-
-    final data = query.docs.first.data();
-    final role = data['role'];
-
-    if (role == 'seller') {
-      Get.offAllNamed(AppRoutes.sellerdashboard);
-    } else if (role == 'admin') {
-      Get.offAllNamed(AppRoutes.adminDashboard);
-    } else {
-      Get.offAllNamed(AppRoutes.customerlayout);
-    }
-  } catch (e) {
-    Get.offAllNamed(AppRoutes.login);
   }
-}
 
   @override
   Widget build(BuildContext context) {
     return const Scaffold(
       backgroundColor: Color(0xffEEDFC8),
-      body: Center(child: CircularProgressIndicator(color: Color(0xff492914),)),
+      body: Center(child: CircularProgressIndicator(color: Color(0xff492914))),
     );
   }
 }
