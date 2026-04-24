@@ -488,18 +488,21 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       name: _titleController.text,
                       description: _descriptionController.text,
                       price: price,
-                      stock: 10, // Default stock for now
+                      stock: 10,
                       category: _categoryController.text,
                       imageFiles: _selectedImages,
                     );
                     
-                    Get.back(); // Return to previous screen
-                    Get.snackbar(
-                      'Success',
-                      'Product added successfully!',
-                      backgroundColor: Colors.green,
-                      colorText: Colors.white,
-                    );
+                    // Check if the operation succeeded
+                    if (context.read<SellerCubit>().state is! SellerError) {
+                      Get.back(); // Return to previous screen only on success
+                      Get.snackbar(
+                        'Success',
+                        'Product added successfully!',
+                        backgroundColor: Colors.green,
+                        colorText: Colors.white,
+                      );
+                    }
                   }
                 },
                 icon: Icon(Icons.save_outlined, color: Colors.white, size: 20.w),
