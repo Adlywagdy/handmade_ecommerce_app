@@ -180,7 +180,7 @@ class NotificationItem extends StatelessWidget {
                 ),
                 SizedBox(height: 6.h),
                 Text(
-                  'Just now', //  replace this with actual timestamp
+                  'Just now',
                   style: AppTextStyles.t_12w400.copyWith(
                     color: darkblue.withValues(alpha: .6),
                   ),

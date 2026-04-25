@@ -77,37 +77,6 @@ class FirebaseOrderService {
     }
   }
 
-  /// Search orders by ID, name, email, or phone
-  Future<List<CustomerOrderModel>> searchOrders(String query) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) return [];
-
-      final normalizedQuery = query.toLowerCase();
-
-      final ordersDocs = await _getOrdersSnapshot(user.uid);
-      final mergedOrders = _sortOrders(ordersDocs.docs);
-
-      return mergedOrders.where((order) {
-        final orderId = order.orderid.toLowerCase();
-        final customerName = order.customer.name.toLowerCase();
-        final customerEmail = order.customer.email.toLowerCase();
-        final customerPhone = order.customer.phone.toLowerCase();
-        final productNames = order.products
-            .map((product) => product.name.toLowerCase())
-            .join(' ');
-
-        return orderId.contains(normalizedQuery) ||
-            customerName.contains(normalizedQuery) ||
-            customerEmail.contains(normalizedQuery) ||
-            customerPhone.contains(normalizedQuery) ||
-            productNames.contains(normalizedQuery);
-      }).toList();
-    } catch (e) {
-      rethrow;
-    }
-  }
-
   /// Get order details
   Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
     try {

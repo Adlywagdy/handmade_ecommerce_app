@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
@@ -7,7 +6,11 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/cubit/search_cubit.dart';
 
-void openFilterSheet(BuildContext context) {
+void openFilterSheet(
+  BuildContext context, {
+  required SearchCubit searchCubit,
+  String? selectedCategory,
+}) {
   showModalBottomSheet(
     context: context,
     backgroundColor: customerbackGroundColor,
@@ -17,14 +20,22 @@ void openFilterSheet(BuildContext context) {
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
     ),
     builder: (sheetContext) {
-      return FilterSheet();
+      return FilterSheet(
+        searchCubit: searchCubit,
+        selectedcategory: selectedCategory,
+      );
     },
   );
 }
 
 class FilterSheet extends StatefulWidget {
+  final SearchCubit searchCubit;
   final String? selectedcategory;
-  const FilterSheet({super.key, this.selectedcategory});
+  const FilterSheet({
+    super.key,
+    required this.searchCubit,
+    this.selectedcategory,
+  });
 
   @override
   State<FilterSheet> createState() => _FilterSheetState();
@@ -170,11 +181,18 @@ class _FilterSheetState extends State<FilterSheet> {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        setState(() {});
+                        if (!(formkey.currentState?.validate() ?? false)) {
+                          return;
+                        }
+
+                        final effectiveCategory =
+                            widget.selectedcategory ??
+                            widget.searchCubit.selectedCategory?.categorytitle;
+
                         Get.close(1);
 
-                        BlocProvider.of<SearchCubit>(context).filterproducts(
-                          categoryname: widget.selectedcategory,
+                        widget.searchCubit.filterproducts(
+                          categoryname: effectiveCategory,
                           minprice:
                               mincontroller?.text != null &&
                                   mincontroller!.text.isNotEmpty

@@ -7,6 +7,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
+import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
@@ -34,36 +35,40 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
-      onPopInvokedWithResult: (didPop, result) async {
-        if (_activeScreenIndex != 0) {
-          setState(() => _activeScreenIndex = 0);
-          return;
-        }
-        SystemNavigator.pop();
-      },
-      child: Scaffold(
-        body: IndexedStack(index: _activeScreenIndex, children: _screens),
-        bottomNavigationBar: ClipRect(
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 60, sigmaY: 5),
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: const Border(
-                  top: BorderSide(color: Color(0xFFE2E8F0), width: 0.8),
-                ),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withValues(alpha: 0.05),
-                    blurRadius: 12,
-                    offset: const Offset(0, -2),
+    return BlocProvider(
+      create: (context) =>
+          SellerCubit(SellerFirestoreService())..loadDashboard(),
+      child: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (didPop, result) async {
+          if (_activeScreenIndex != 0) {
+            setState(() => _activeScreenIndex = 0);
+            return;
+          }
+          SystemNavigator.pop();
+        },
+        child: Scaffold(
+          body: IndexedStack(index: _activeScreenIndex, children: _screens),
+          bottomNavigationBar: ClipRect(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 60, sigmaY: 5),
+              child: Container(
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: const Border(
+                    top: BorderSide(color: Color(0xFFE2E8F0), width: 0.8),
                   ),
-                ],
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withValues(alpha: 0.05),
+                      blurRadius: 12,
+                      offset: const Offset(0, -2),
+                    ),
+                  ],
+                ),
+                padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                child: SafeArea(top: false, child: _buildBottomNav()),
               ),
-              padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-              child: SafeArea(top: false, child: _buildBottomNav()),
             ),
           ),
         ),

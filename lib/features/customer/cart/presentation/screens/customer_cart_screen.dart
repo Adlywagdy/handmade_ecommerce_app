@@ -301,8 +301,11 @@ class CheckoutButton extends StatelessWidget {
                     final cartCubit = context.read<CartCubit>();
                     final orderCubit = context.read<OrderCubit>();
                     final customerCubit = context.read<CustomerCubit>();
+                    final effectiveAddress =
+                        cartCubit.selectedOrderAddress ??
+                        customerCubit.customerData.address;
 
-                    if (cartCubit.selectedOrderAddress == null) {
+                    if (effectiveAddress == null) {
                       showSnack(
                         title: "Address required",
                         message:
@@ -331,7 +334,7 @@ class CheckoutButton extends StatelessWidget {
                         customer: customerCubit.customerData,
                         products: cartCubit.cartProductsList,
                         status: .pending,
-                        address: cartCubit.selectedOrderAddress!,
+                        address: effectiveAddress,
                         orderid: "#AY-${orderCubit.orderID++}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),

@@ -15,7 +15,7 @@ class OrderItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.white,
-      margin: EdgeInsets.only(top: 12.h),
+      margin: EdgeInsets.only(top: 8.h, bottom: 8.h),
       child: ListTile(
         contentPadding: EdgeInsets.symmetric(
           horizontal: 10.0.w,

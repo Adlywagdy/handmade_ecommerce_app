@@ -8,8 +8,6 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
-import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
-import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
@@ -22,24 +20,16 @@ import 'features/customer/wishlist/cubit/wishlist_cubit.dart';
 import 'firebase_options.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
   await Hive.initFlutter();
   await Hive.openBox('notifications');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
-
-  // ─── TEST FIREBASE CONNECTION ───
-  try {
-    final db = FirebaseFirestore.instance;
-    await db.collection('test_connection').add({
-      'message': 'Firebase is connected successfully!',
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-    debugPrint('FIREBASE CONNECTION SUCCESSFUL! Document written.');
-  } catch (e) {
-    debugPrint('FIREBASE CONNECTION FAILED: $e');
-  }
+  ////////////////////////
+  await Hive.openBox(HiveHelper.onboardingBox);
+  await Hive.openBox(HiveHelper.login);
+  await Hive.openBox(HiveHelper.email);
 
   //////////////////////////// Crashlytics ///////////////////////////////////
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -69,26 +59,13 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) => AuthCubit(AuthService()),
             ),
             BlocProvider(
-              create: (BuildContext context) => SellerCubit(SellerFirestoreService())..loadDashboard(),
+              create: (BuildContext context) =>
+                  NotificationsCubit()..loadNotifications(),
             ),
-            BlocProvider(
-              create: (BuildContext context) => NotificationsCubit()..loadNotifications(),
-            ),
-            BlocProvider(create: (BuildContext context) => CustomerCubit()),
-            BlocProvider(
-              create: (BuildContext context) => HomeCubit()
-                ..getFeaturedProducts()
-                ..getTopRatedProducts(),
-            ),
-            BlocProvider(
-              create: (BuildContext context) => SearchCubit()..getCategories(),
-            ),
-            BlocProvider(
-              create: (context) => WishListCubit()..getWishlistProducts(),
-            ),
-            BlocProvider(create: (context) => CartCubit()..getcartProducts()),
-            BlocProvider(create: (context) => OrderCubit()..getAllOrders()),
           ],
+ 
+ 
+
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: AppRoutes.onboarding,

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
@@ -6,6 +7,7 @@ import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/cubit/reviews_cubit.dart';
 
 class ProductItemOfOrder extends StatelessWidget {
   const ProductItemOfOrder({
@@ -103,9 +105,17 @@ class ProductItemOfOrder extends StatelessWidget {
               ? InkWell(
                   borderRadius: BorderRadius.circular(12.r),
                   onTap: () {
+                    ReviewsCubit? reviewsCubit;
+                    try {
+                      reviewsCubit = context.read<ReviewsCubit>();
+                    } catch (_) {}
+
                     Get.toNamed(
                       AppRoutes.customerWriteReview,
-                      arguments: product,
+                      arguments: {
+                        'product': product,
+                        'reviewsCubit': reviewsCubit,
+                      },
                     );
                   },
                   child: Container(

@@ -216,7 +216,12 @@ class CustomerProfilesScreen extends StatelessWidget {
                           }
 
                           if (title == 'Settings') {
-                            Get.toNamed(AppRoutes.customerNotifications);
+                            final customerCubit = context.read<CustomerCubit>();
+                            customerCubit.getNotifications();
+                            Get.toNamed(
+                              AppRoutes.customerNotifications,
+                              arguments: customerCubit,
+                            );
                           }
                         },
                       );
