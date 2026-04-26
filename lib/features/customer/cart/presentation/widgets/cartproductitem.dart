@@ -45,7 +45,7 @@ class CartProductItem extends StatelessWidget {
                 height: 100.h,
                 width: 100.w,
                 fit: BoxFit.fill,
-                errorBuilder: (_, __, ___) => Container(
+                errorBuilder: (_, _, _) => Container(
                   height: 100.h,
                   width: 100.w,
                   color: Colors.grey.shade200,
