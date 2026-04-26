@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_textfield.dart';
 
 class ForgotPasswordScreen extends StatefulWidget {
@@ -16,13 +17,13 @@ class ForgotPasswordScreen extends StatefulWidget {
   State<ForgotPasswordScreen> createState() => _ForgotPasswordScreenState();
 }
 
-late GlobalKey<FormState> _formkey;
-late TextEditingController _emailController;
-
 class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
+  late GlobalKey<FormState> _formKey;
+  late TextEditingController _emailController;
+
   @override
   void initState() {
-    _formkey = GlobalKey<FormState>();
+    _formKey = GlobalKey<FormState>();
     _emailController = TextEditingController();
     super.initState();
   }
@@ -47,63 +48,102 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           icon: Icon(Icons.arrow_back_ios, color: primaryColor),
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Form(
-            key: _formkey,
+      body: BlocConsumer<AuthCubit, AuthState>(
+        listener: (context, state) {
+          if (state is ForgotPasswordSuccessState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Password reset link sent to your email'),
+              ),
+            );
 
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Password recovery',
-                  style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
-                ),
-                Text(
-                  'Please enter your email address to send to a password recovery email.',
-                  style: AppTextStyles.t_12w500.copyWith(
-                    color: primaryColor.withValues(alpha: 0.6),
-                  ),
-                ),
+            Get.toNamed(
+              AppRoutes.verifyPassword,
+              arguments: _emailController.text.trim(),
+            );
+          } else if (state is ForgotPasswordErrorState) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(state.message)),
+            );
+          }
+        },
+        builder: (context, state) {
+          final isLoading = state is AuthLoading;
 
-                SizedBox(height: 20),
-                Customtextfield(
-                  controller: _emailController,
-                  label: 'EMAIL ADDRESS',
-                  hintText: 'example@mail.com',
-                  prefixIcon: Icon(
-                    Icons.email,
-                    color: primaryColor.withValues(alpha: 0.6),
-                  ),
-                  validator: (value) {
-                    if (!value!.emailValid()) {
-                      return "email isn't valid";
-                    }
-                    return null;
-                  },
+          return SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Password recovery',
+                      style: AppTextStyles.t_30w700.copyWith(
+                        color: primaryColor,
+                      ),
+                    ),
+                    Text(
+                      'Please enter your email address to receive a password reset link.',
+                      style: AppTextStyles.t_12w500.copyWith(
+                        color: primaryColor.withValues(alpha: 0.6),
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    SizedBox(height: 20.h),
+                    Customtextfield(
+                      controller: _emailController,
+                      label: 'EMAIL ADDRESS',
+                      hintText: 'example@mail.com',
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: primaryColor.withValues(alpha: 0.6),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Email is required";
+                        }
+                        if (!value.emailValid()) {
+                          return "Email isn't valid";
+                        }
+                        return null;
+                      },
+                    ),
+                  ],
                 ),
-              ],
+              ),
             ),
-          ),
-        ),
+          );
+        },
       ),
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
-        child: CustomElevatedButton(
-          onPressed: () async {
-            if (_formkey.currentState!.validate()) {
-              _formkey.currentState!.save();
-              // logic to send otp
-              Get.toNamed(AppRoutes.verifyPassword);
-            }
-          },
+        child: BlocBuilder<AuthCubit, AuthState>(
+          builder: (context, state) {
+            final isLoading = state is AuthLoading;
 
-          buttoncolor: primaryColor,
-          child: Text(
-            'Send Code',
-            style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
-          ),
+            return CustomElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthCubit>().forgotPassword(
+                              email: _emailController.text.trim(),
+                            );
+                      }
+                    },
+              buttoncolor: primaryColor,
+              child: isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      'Send reset link',
+                      style: AppTextStyles.t_16w500.copyWith(
+                        color: Colors.white,
+                      ),
+                    ),
+            );
+          },
         ),
       ),
     );

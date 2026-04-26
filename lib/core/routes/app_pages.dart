@@ -56,7 +56,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.verifyPassword,
-      page: () => const VerifytPasswordScreen(),
+      page: () => const VerifyPasswordScreen(),
     ),
     GetPage(
       name: AppRoutes.resetPassword,

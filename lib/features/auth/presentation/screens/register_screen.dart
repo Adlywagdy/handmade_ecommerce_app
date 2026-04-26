@@ -246,19 +246,27 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is RegisterSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text('Account created successfully'),
-                        ),
-                      );
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Account created successfully'),
+                         ),
+                          );
 
-                      _goToNextScreenByRole(state.role);
-                    } else if (state is RegisterErrorState) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
-                    }
-                  },
+                       _goToNextScreenByRole(state.role);
+                         } else if (state is RegisterErrorState) {
+                           ScaffoldMessenger.of(context).showSnackBar(
+                             SnackBar(content: Text(state.message)),
+                               );
+
+                         if (state.message.contains('already registered')) {
+                           Future.delayed(const Duration(seconds: 1), () {
+                            if (!mounted) return;
+                               Get.offAllNamed(AppRoutes.login);
+                               });
+                                }
+                                   }
+                    },
+              
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 

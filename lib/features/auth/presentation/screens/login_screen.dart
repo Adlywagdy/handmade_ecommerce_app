@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -70,7 +69,6 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 20.h),
                 Text('Welcome to Ayady', style: AppTextStyles.t_30w700),
                 SizedBox(height: 16.h),
-
                 Text(
                   'Please enter your details to continue',
                   style: AppTextStyles.t_16w400.copyWith(color: darkblue),
@@ -86,8 +84,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
-                    if (!value!.emailValid()) {
-                      return "email isn't valid";
+                    if (value == null || value.isEmpty) {
+                      return "Email is required";
+                    }
+                    if (!value.emailValid()) {
+                      return "Email isn't valid";
                     }
                     return null;
                   },
@@ -103,21 +104,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
-                    if (value!.length < 6) {
+                    if (value == null || value.isEmpty) {
+                      return "Password is required";
+                    }
+                    if (value.length < 6) {
                       return "Password should be more than 5 letters";
                     }
                     return null;
                   },
-
                   label: 'Password',
                 ),
 
                 SizedBox(height: 10.h),
+
                 ButtomText(
                   onTap: () {
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
-
                   text: 'Forgot Password?',
                 ),
 
@@ -159,37 +162,38 @@ class _LoginScreenState extends State<LoginScreen> {
                       ).showSnackBar(SnackBar(content: Text(state.message)));
                     }
                   },
-
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
+
                     return CustomElevatedButton(
                       onPressed: isLoading
                           ? null
                           : () {
                               if (_formkey.currentState!.validate()) {
-                                _formkey.currentState!.save();
                                 context.read<AuthCubit>().login(
-                                  email: _emailController.text,
+                                  email: _emailController.text.trim(),
                                   password: _passwordController.text,
                                 );
                               }
                             },
-
                       buttoncolor: primaryColor,
-                      child: Text(
-                        'Sign In',
-                        style: AppTextStyles.t_16w700.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              'Sign In',
+                              style: AppTextStyles.t_16w700.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
                     );
                   },
                 ),
+
                 SizedBox(height: 30.h),
 
                 Row(
                   children: [
-                    OrDivider(),
+                    const OrDivider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8).w,
                       child: Text(
@@ -197,10 +201,12 @@ class _LoginScreenState extends State<LoginScreen> {
                         style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                       ),
                     ),
-                    OrDivider(),
+                    const OrDivider(),
                   ],
                 ),
+
                 SizedBox(height: 20.h),
+
                 Row(
                   children: [
                     SocialButton(
@@ -231,7 +237,6 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         Get.toNamed(AppRoutes.register);
                       },
-
                       text: 'Sign Up',
                     ),
                   ],

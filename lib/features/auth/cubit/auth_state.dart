@@ -36,9 +36,9 @@ final class RegisterErrorState extends AuthState {
   RegisterErrorState(this.message);
 }
 
-final class OtpSuccessState extends AuthState {}
+final class ForgotPasswordSuccessState extends AuthState {}
 
-final class OtpErrorState extends AuthState {
+final class ForgotPasswordErrorState extends AuthState {
   final String message;
-  OtpErrorState(this.message);
+  ForgotPasswordErrorState(this.message);
 }
