@@ -10,6 +10,7 @@ import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
@@ -62,10 +63,11 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) =>
                   NotificationsCubit()..loadNotifications(),
             ),
-            //   BlocProvider(
-            //   create: (BuildContext context) =>
-            //       SellerCubit()..loadDashboard(),
-            // ),
+            // seller
+            BlocProvider(
+              create: (BuildContext context) =>
+                  SellerCubit(SellerFirestoreService())..loadDashboard(),
+            ),
           ],
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
