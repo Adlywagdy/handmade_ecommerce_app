@@ -5,7 +5,6 @@ import 'package:handmade_ecommerce_app/features/admin/presentation/screens/admin
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/presentation/screens/customer_cart_screen.dart';
@@ -47,11 +46,7 @@ class AppPages {
       name: AppRoutes.verifyPassword,
       page: () => const VerifyPasswordScreen(),
     ),
-    GetPage(
-      name: AppRoutes.resetPassword,
-      page: () => const ResetPasswordScreen(),
-    ),
-
+    
     // customer
     GetPage(
       name: AppRoutes.customerlayout,
