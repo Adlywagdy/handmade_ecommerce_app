@@ -1,6 +1,10 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/constants/seller_status.dart';
+import 'package:handmade_ecommerce_app/core/constants/user_roles.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/auth_session.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 part 'auth_state.dart';
 
@@ -13,37 +17,28 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      await authService.login(email: email, password: password);
-      final String role = await authService.login(
-        email: email,
-        password: password,
-      );
-
-      HiveHelper.setLoginBox(value: true);
-      HiveHelper.setEmailBoxValue(email);
-      emit(LoginSuccessState(role));
+      final AuthSession session =
+          await authService.login(email: email, password: password);
+      _persistSession(email: email, session: session);
+      emit(LoginSuccessState(session.role));
     } on FirebaseAuthException catch (e) {
+      debugPrint('[AuthCubit.login] FirebaseAuthException: ${e.code} - ${e.message}');
       emit(LoginErrorState(e.message ?? 'Login failed'));
-    } catch (e) {
-      emit(LoginErrorState('Something went wrong'));
+    } catch (e, stack) {
+      debugPrint('[AuthCubit.login] $e\n$stack');
+      emit(LoginErrorState('Login failed: $e'));
     }
   }
 
   void signInWithGoogle() async {
     emit(AuthLoading());
-
     try {
-      await authService.signInWithGoogle();
-      final user = FirebaseAuth.instance.currentUser;
-      final email = user?.email;
-
-      HiveHelper.setLoginBox(value: true);
-
-      if (email != null) {
-        HiveHelper.setEmailBoxValue(email);
-      }
-      final String role = await authService.signInWithGoogle();
-      emit(GoogleLoginSuccessState(role));
+      final AuthSession session = await authService.signInWithGoogle();
+      _persistSession(
+        email: FirebaseAuth.instance.currentUser?.email,
+        session: session,
+      );
+      emit(GoogleLoginSuccessState(session.role));
     } on FirebaseAuthException catch (e) {
       if (e.code == 'network-request-failed') {
         emit(
@@ -77,9 +72,14 @@ class AuthCubit extends Cubit<AuthState> {
         role: role,
       );
 
+      _persistSession(
+        email: email,
+        session: AuthSession(
+          role: role,
+          status: role == UserRoles.seller ? SellerStatus.pending : null,
+        ),
+      );
       emit(RegisterSuccessState(role));
-      HiveHelper.setLoginBox(value: true);
-      HiveHelper.setEmailBoxValue(email);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         emit(RegisterErrorState('Password is too weak'));
@@ -111,15 +111,14 @@ class AuthCubit extends Cubit<AuthState> {
         selectedRole: selectedRole,
       );
 
-      final user = FirebaseAuth.instance.currentUser;
-      final email = user?.email;
-
+      _persistSession(
+        email: FirebaseAuth.instance.currentUser?.email,
+        session: AuthSession(
+          role: finalRole,
+          status: finalRole == UserRoles.seller ? SellerStatus.pending : null,
+        ),
+      );
       emit(RegisterSuccessState(finalRole));
-      HiveHelper.setLoginBox(value: true);
-
-      if (email != null) {
-        HiveHelper.setEmailBoxValue(email);
-      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'network-request-failed') {
         emit(
@@ -140,6 +139,23 @@ class AuthCubit extends Cubit<AuthState> {
       }
     } catch (e) {
       emit(RegisterErrorState('Something went wrong'));
+    }
+  }
+
+  void _persistSession({
+    required String? email,
+    required AuthSession session,
+  }) {
+    HiveHelper.setLoginBox(value: true);
+    HiveHelper.setRoleBoxValue(session.role);
+    if (email != null && email.isNotEmpty) {
+      HiveHelper.setEmailBoxValue(email);
+    }
+    final status = session.status;
+    if (status != null && status.isNotEmpty) {
+      HiveHelper.setStatusBoxValue(status);
+    } else {
+      HiveHelper.clearStatusBox();
     }
   }
 

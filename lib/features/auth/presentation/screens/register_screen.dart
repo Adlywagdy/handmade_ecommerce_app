@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -47,11 +49,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
   }
 
   void _goToNextScreenByRole(String role) {
-    if (role == 'customer') {
-      Get.offAllNamed(AppRoutes.customerlayout);
-    } else {
-      Get.offAllNamed(AppRoutes.sellerdashboard);
-    }
+    Get.offAllNamed(
+      AuthRedirectService.routeForRoleAndStatus(
+        role,
+        HiveHelper.getStatusBoxValue(),
+      ),
+    );
   }
 
   @override

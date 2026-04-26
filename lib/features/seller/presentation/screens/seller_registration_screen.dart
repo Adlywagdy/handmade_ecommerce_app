@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 
@@ -449,14 +450,12 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          Get.snackbar(
-            'Success',
-            'Registration complete! Awaiting admin approval.',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
+          Get.offAllNamed(
+            AuthRedirectService.routeForRoleAndStatus(
+              state.role,
+              HiveHelper.getStatusBoxValue(),
+            ),
           );
-          // Go to dashboard or wait screen
-          Get.offAllNamed(AppRoutes.sellerdashboard);
         } else if (state is RegisterErrorState) {
           Get.snackbar(
             'Error',

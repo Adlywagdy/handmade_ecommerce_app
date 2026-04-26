@@ -4,6 +4,8 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -128,99 +130,93 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
-                    if (state is LoginSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Login Success')),
+                    if (!context.mounted) return;
+
+                    if (state is LoginSuccessState ||
+                        state is GoogleLoginSuccessState) {
+                      final role = state is LoginSuccessState
+                          ? state.role
+                          : (state as GoogleLoginSuccessState).role;
+                      Get.offAllNamed(
+                        AuthRedirectService.routeForRoleAndStatus(
+                          role,
+                          HiveHelper.getStatusBoxValue(),
+                        ),
                       );
-                      final role = state.role.toLowerCase();
-                      if (role == 'seller') {
-                        Get.offAllNamed(AppRoutes.sellerdashboard);
-                      } else if (role == 'admin') {
-                        Get.offAllNamed(AppRoutes.adminBottomBar);
-                      } else {
-                        Get.offAllNamed(AppRoutes.customerlayout);
-                      }
                     } else if (state is LoginErrorState) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
-                    } else if (state is GoogleLoginSuccessState) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google Sign In Success')),
+                        SnackBar(content: Text(state.message)),
                       );
-                      final role = state.role.toLowerCase();
-                      if (role == 'seller') {
-                        Get.offAllNamed(AppRoutes.sellerdashboard);
-                      } else if (role == 'admin') {
-                        Get.offAllNamed(AppRoutes.adminBottomBar);
-                      } else {
-                        Get.offAllNamed(AppRoutes.customerlayout);
-                      }
                     } else if (state is GoogleLoginErrorState) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(state.message)),
+                      );
                     }
                   },
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
+                    return Column(
+                      children: [
+                        CustomElevatedButton(
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  if (_formkey.currentState!.validate()) {
+                                    context.read<AuthCubit>().login(
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text,
+                                    );
+                                  }
+                                },
+                          buttoncolor: primaryColor,
+                          child: isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  'Sign In',
+                                  style: AppTextStyles.t_16w700.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                        ),
 
-                    return CustomElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              if (_formkey.currentState!.validate()) {
-                                context.read<AuthCubit>().login(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                );
-                              }
-                            },
-                      buttoncolor: primaryColor,
-                      child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                              'Sign In',
-                              style: AppTextStyles.t_16w700.copyWith(
-                                color: Colors.white,
+                        SizedBox(height: 30.h),
+
+                        Row(
+                          children: [
+                            const OrDivider(),
+                            Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 8).w,
+                              child: Text(
+                                'Or continue with',
+                                style: AppTextStyles.t_14w400
+                                    .copyWith(color: darkblue),
                               ),
                             ),
+                            const OrDivider(),
+                          ],
+                        ),
+
+                        SizedBox(height: 20.h),
+
+                        Row(
+                          children: [
+                            SocialButton(
+                              text: 'Google',
+                              icon: Icons.g_mobiledata,
+                              onTap: isLoading
+                                  ? null
+                                  : () => context
+                                      .read<AuthCubit>()
+                                      .signInWithGoogle(),
+                            ),
+                          ],
+                        ),
+                      ],
                     );
                   },
-                ),
-
-                SizedBox(height: 30.h),
-
-                Row(
-                  children: [
-                    const OrDivider(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8).w,
-                      child: Text(
-                        'Or continue with',
-                        style: AppTextStyles.t_14w400.copyWith(color: darkblue),
-                      ),
-                    ),
-                    const OrDivider(),
-                  ],
-                ),
-
-                SizedBox(height: 20.h),
-
-                Row(
-                  children: [
-                    SocialButton(
-                      text: 'Google',
-                      icon: Icons.g_mobiledata,
-                      onTap: () {
-                        final state = context.read<AuthCubit>().state;
-                        if (state is! AuthLoading) {
-                          context.read<AuthCubit>().signInWithGoogle();
-                        }
-                      },
-                    ),
-                    SizedBox(width: 10.h),
-                  ],
                 ),
 
                 SizedBox(height: 30.h),

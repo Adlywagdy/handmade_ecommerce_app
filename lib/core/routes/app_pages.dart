@@ -26,13 +26,13 @@ import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/sc
 import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 
-import 'package:handmade_ecommerce_app/features/home/presentation/screens/Decider_screen.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_bottom_nav.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_pending_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 
@@ -62,9 +62,6 @@ class AppPages {
       name: AppRoutes.resetPassword,
       page: () => const ResetPasswordScreen(),
     ),
-
-    // decider
-    GetPage(name: AppRoutes.decider, page: () => const DeciderScreen()),
 
     // customer
     GetPage(name: AppRoutes.customerlayout, page: () => const CustomerLayout()),
@@ -290,6 +287,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.sellerregisteation,
       page: () => const SellerRegistrationScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.sellerPending,
+      page: () => const SellerPendingScreen(),
     ),
 
     // admin

@@ -26,6 +26,8 @@ void main() async {
   await Hive.openBox(HiveHelper.onboardingBox);
   await Hive.openBox(HiveHelper.login);
   await Hive.openBox(HiveHelper.email);
+  await Hive.openBox(HiveHelper.role);
+  await Hive.openBox(HiveHelper.status);
 
   //////////////////////////// Crashlytics ///////////////////////////////////
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -72,7 +74,6 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: initialRoute,
-
             getPages: AppPages.pages,
           ),
         );

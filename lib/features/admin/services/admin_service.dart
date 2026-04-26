@@ -31,13 +31,34 @@ class AdminFirestoreService {
   Stream<SettingsModel> streamSettings() => _db.doc('settings/platform').snapshots().map((d) => SettingsModel.fromJson(d.data() ?? {}));
 
   /////////////////////// Writes /////////////////////
-  Future<void> approveSeller(String id) =>_db.collection('sellers').doc(id).update({
-        'status': 'approved',
-        'isActive': true,
-        'approvedAt': FieldValue.serverTimestamp(),
-      });
+  Future<void> approveSeller(String id) async {
+    final batch = _db.batch();
+    batch.update(_db.collection('sellers').doc(id), {
+      'status': 'approved',
+      'isActive': true,
+      'approvedAt': FieldValue.serverTimestamp(),
+    });
+    batch.set(
+      _db.collection('users').doc(id),
+      {'status': 'approved'},
+      SetOptions(merge: true),
+    );
+    await batch.commit();
+  }
 
-  Future<void> rejectSeller(String id) => _db.collection('sellers').doc(id).update({'status': 'rejected'});
+  Future<void> rejectSeller(String id) async {
+    final batch = _db.batch();
+    batch.update(
+      _db.collection('sellers').doc(id),
+      {'status': 'rejected', 'isActive': false},
+    );
+    batch.set(
+      _db.collection('users').doc(id),
+      {'status': 'rejected'},
+      SetOptions(merge: true),
+    );
+    await batch.commit();
+  }
 
   Future<void> approveProduct(String id) =>
       _db.collection('products').doc(id).update({

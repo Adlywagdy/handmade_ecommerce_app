@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:handmade_ecommerce_app/core/constants/seller_status.dart';
+import 'package:handmade_ecommerce_app/core/constants/user_roles.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/auth_session.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -20,7 +24,7 @@ class AuthService {
     _googleInitialized = true;
   }
 
-  Future<String> login({
+  Future<AuthSession> login({
     required String email,
     required String password,
   }) async {
@@ -51,10 +55,10 @@ class AuthService {
       );
     }
 
-    return role;
+    return AuthSession(role: role, status: data?['status'] as String?);
   }
 
-  Future<String> signInWithGoogle() async {
+  Future<AuthSession> signInWithGoogle() async {
     await _initGoogleSignIn();
 
     try {
@@ -94,7 +98,7 @@ class AuthService {
         );
       }
 
-      return role;
+      return AuthSession(role: role, status: data?['status'] as String?);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(
@@ -129,6 +133,31 @@ class AuthService {
       'email': email,
       'role': role,
       'provider': 'email',
+      if (role == UserRoles.seller) 'status': SellerStatus.pending,
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+
+    if (role == UserRoles.seller) {
+      await _writeSellerProfile(
+        uid: user.uid,
+        name: fullName,
+        email: email,
+      );
+    }
+  }
+
+  Future<void> _writeSellerProfile({
+    required String uid,
+    required String name,
+    required String email,
+  }) async {
+    await _firestore.collection('sellers').doc(uid).set({
+      'uid': uid,
+      'name': name,
+      'email': email,
+      'status': SellerStatus.pending,
+      'isActive': false,
+      'submittedAt': FieldValue.serverTimestamp(),
       'createdAt': FieldValue.serverTimestamp(),
     });
   }
@@ -167,8 +196,17 @@ class AuthService {
         'email': user.email ?? '',
         'role': selectedRole,
         'provider': 'google',
+        if (selectedRole == UserRoles.seller) 'status': SellerStatus.pending,
         'createdAt': FieldValue.serverTimestamp(),
       });
+
+      if (selectedRole == UserRoles.seller) {
+        await _writeSellerProfile(
+          uid: user.uid,
+          name: user.displayName ?? '',
+          email: user.email ?? '',
+        );
+      }
 
       return selectedRole;
     } on GoogleSignInException catch (e) {
@@ -189,6 +227,8 @@ class AuthService {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
+    HiveHelper.clearRoleBox();
+    HiveHelper.clearStatusBox();
   }
 
   Future<void> sendPasswordReset({required String email}) async {
