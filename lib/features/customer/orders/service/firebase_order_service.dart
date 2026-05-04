@@ -13,6 +13,14 @@ class FirebaseOrderService {
     return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
+  int? _extractNumeric(dynamic raw) {
+    final s = raw?.toString() ?? '';
+    final direct = int.tryParse(s);
+    if (direct != null) return direct;
+    final m = RegExp(r"(\d+)").firstMatch(s);
+    return m != null ? int.tryParse(m.group(1)!) : null;
+  }
+
   List<CustomerOrderModel> _sortOrders(
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
   ) {
@@ -82,30 +90,45 @@ class FirebaseOrderService {
     try {
       final user = _auth.currentUser;
       if (user == null) return null;
-
+      // 1) Try direct doc lookup (doc id)
       final rootDoc = await _firestore.collection('orders').doc(orderId).get();
       if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
         return _orderFromSnapshot(rootDoc);
       }
 
-      final userQuery = await _getOrdersSnapshot(
-        user.uid,
-        orderNumber: orderId,
-        limit: 1,
-      );
-      if (userQuery.docs.isNotEmpty) {
-        return _orderFromSnapshot(userQuery.docs.first);
+      // 2) Try numeric `orderNumber` match (if orderId contains digits)
+      final parsedNum = _extractNumeric(orderId);
+      if (parsedNum != null) {
+        final snap = await _firestore
+            .collection('orders')
+            .where('customerId', isEqualTo: user.uid)
+            .where('orderNumber', isEqualTo: parsedNum)
+            .limit(1)
+            .get();
+        if (snap.docs.isNotEmpty) return _orderFromSnapshot(snap.docs.first);
       }
 
-      final docs = await _getOrdersSnapshot(
-        user.uid,
-        orderNumber: orderId,
-        limit: 1,
-      );
+      // 3) Try exact string match on `orderid` (the prefixed/display id)
+      final byOrderId = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderid', isEqualTo: orderId)
+          .limit(1)
+          .get();
+      if (byOrderId.docs.isNotEmpty)
+        return _orderFromSnapshot(byOrderId.docs.first);
 
-      if (docs.docs.isEmpty) return null;
+      // 4) Fallback: try legacy string-stored orderNumber
+      final byOrderNumberString = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderNumber', isEqualTo: orderId)
+          .limit(1)
+          .get();
+      if (byOrderNumberString.docs.isNotEmpty)
+        return _orderFromSnapshot(byOrderNumberString.docs.first);
 
-      return _orderFromSnapshot(docs.docs.first);
+      return null;
     } catch (e) {
       rethrow;
     }
@@ -161,14 +184,36 @@ class FirebaseOrderService {
         await rootDocRef.update(cancelPayload);
       }
 
-      final userByOrderNumber = await _getOrdersSnapshot(
-        user.uid,
-        orderNumber: orderId,
-        limit: 1,
-      );
-      if (userByOrderNumber.docs.isNotEmpty) {
-        await userByOrderNumber.docs.first.reference.update(cancelPayload);
+      // Try numeric `orderNumber`, then string `orderid`, then legacy string `orderNumber`
+      final parsedNum = _extractNumeric(orderId);
+      if (parsedNum != null) {
+        final snap = await _firestore
+            .collection('orders')
+            .where('customerId', isEqualTo: user.uid)
+            .where('orderNumber', isEqualTo: parsedNum)
+            .limit(1)
+            .get();
+        if (snap.docs.isNotEmpty)
+          await snap.docs.first.reference.update(cancelPayload);
       }
+
+      final byOrderId = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderid', isEqualTo: orderId)
+          .limit(1)
+          .get();
+      if (byOrderId.docs.isNotEmpty)
+        await byOrderId.docs.first.reference.update(cancelPayload);
+
+      final byOrderNumberString = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderNumber', isEqualTo: orderId)
+          .limit(1)
+          .get();
+      if (byOrderNumberString.docs.isNotEmpty)
+        await byOrderNumberString.docs.first.reference.update(cancelPayload);
     } catch (e) {
       rethrow;
     }
@@ -201,5 +246,66 @@ class FirebaseOrderService {
 
   String _statusToString(OrderStatus status) {
     return status.name;
+  }
+
+  /// Get next order ID by fetching the last order and incrementing
+  Future<int> getNextOrderID() async {
+    try {
+      // Prefer a numeric `orderNumber` field if present and indexed.
+      try {
+        final byNumber = await _firestore
+            .collection('orders')
+            .orderBy('orderNumber', descending: true)
+            .limit(1)
+            .get();
+
+        if (byNumber.docs.isNotEmpty) {
+          final data = byNumber.docs.first.data();
+          final val = data['orderNumber'];
+          if (val is num) return val.toInt() + 1;
+          final valStr = val?.toString() ?? '';
+          final parsedDirect = int.tryParse(valStr);
+          if (parsedDirect != null) return parsedDirect + 1;
+          final m = RegExp(r"(\d+)").firstMatch(valStr);
+          if (m != null) return int.parse(m.group(1)!) + 1;
+        }
+      } catch (_) {
+        // ignore and fall back to scanning recent orders by createdAt
+      }
+
+      // Fallback: fetch recent orders by createdAt and compute the max numeric portion
+      final snapshot = await _firestore
+          .collection('orders')
+          .orderBy('createdAt', descending: true)
+          .limit(50)
+          .get();
+
+      if (snapshot.docs.isEmpty) return 10001;
+
+      var maxNumeric = 10000;
+      for (final doc in snapshot.docs) {
+        final lastOrder = doc.data();
+        final raw =
+            lastOrder['orderNumber'] ??
+            lastOrder['orderid'] ??
+            lastOrder['orderId'];
+        final rawStr = raw?.toString() ?? '';
+
+        var parsed = int.tryParse(rawStr);
+        if (parsed == null) {
+          final m = RegExp(r"(\d+)").firstMatch(rawStr);
+          parsed = m != null ? int.tryParse(m.group(1)!) : null;
+        }
+
+        if (parsed != null && parsed > maxNumeric) {
+          maxNumeric = parsed;
+        }
+      }
+
+      return maxNumeric + 1;
+    } catch (e) {
+      print('Failed to generate order ID: $e');
+      return 10001;
+    }
   }
 }

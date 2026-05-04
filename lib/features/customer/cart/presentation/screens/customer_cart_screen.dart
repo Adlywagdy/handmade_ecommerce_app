@@ -329,13 +329,15 @@ class CheckoutButton extends StatelessWidget {
                       paymentMethod: cartCubit.selectedPaymentMethod,
                     );
 
+                    // fetch a new numeric order ID and set display id
+                    orderCubit.orderID = await orderCubit.getNewOrderID();
                     await orderCubit.placeNewOrder(
                       CustomerOrderModel(
                         customer: customerCubit.customerData,
                         products: cartCubit.cartProductsList,
-                        status: .pending,
+                        status: OrderStatus.pending,
                         address: effectiveAddress,
-                        orderid: "#AY-${orderCubit.orderID++}",
+                        orderid: "#AY-${orderCubit.orderID}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),
                       ),

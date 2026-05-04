@@ -16,7 +16,7 @@ class OrderCubit extends Cubit<OrderState> {
   List<CustomerOrderModel> allordersList = [];
   List<CustomerOrderModel> displayedordersList = [];
   OrderStatus? selectedStatus;
-  int orderID = 10050;
+  int orderID = 1;
 
   void _syncDisplayedOrders(List<CustomerOrderModel> orders) {
     displayedordersList = orders;
@@ -110,4 +110,12 @@ class OrderCubit extends Cubit<OrderState> {
   }
 
   /*------------------------------------------- */
+
+  Future<int> getNewOrderID() async {
+    try {
+      return await _orderService.getNextOrderID();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

@@ -123,8 +123,14 @@ class CustomerOrderModel {
   }
 
   Map<String, dynamic> toMap() {
+    // try to extract numeric part from prefixed id (e.g. '#AY-10004')
+    final match = RegExp(r"(\d+)").firstMatch(orderid);
+    final numeric = match != null ? int.tryParse(match.group(1)!) : null;
+
     return {
-      'orderNumber': orderid,
+      'orderid': orderid,
+      // store numeric `orderNumber` when available to enable numeric ordering
+      'orderNumber': numeric,
       'items': products
           .map(
             (product) => {
