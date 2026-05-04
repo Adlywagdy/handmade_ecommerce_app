@@ -39,12 +39,6 @@ class FirebaseProductService {
       return product;
     }
 
-    final currentTitle = productCategory?.categorytitle.trim() ?? '';
-    if (currentTitle.isNotEmpty &&
-        currentTitle.toLowerCase() != categoryId.toLowerCase()) {
-      return product;
-    }
-
     return product.copyWith(category: resolvedCategory);
   }
 

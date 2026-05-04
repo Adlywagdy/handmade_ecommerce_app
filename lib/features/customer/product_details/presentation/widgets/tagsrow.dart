@@ -12,23 +12,20 @@ class TagsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 33.h,
-      child: Wrap(
-        spacing: 8.w,
-        runSpacing: 8.h,
-        children: List.generate(product.tags!.length, (index) {
-          return CustomTextContainer(
-            text: product.tags![index],
-            backGroundColor: customerbackGroundColor,
-            bordercolor: commonColor.withValues(alpha: 0.1),
-            verticalpadding: 4.h,
-            horizontalpadding: 12,
-            textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
-            borderRadius: 200.r,
-          );
-        }),
-      ),
+    return Wrap(
+      spacing: 8.w,
+      runSpacing: 8.h,
+      children: List.generate(product.tags!.length, (index) {
+        return CustomTextContainer(
+          text: product.tags![index],
+          backGroundColor: customerbackGroundColor,
+          bordercolor: commonColor.withValues(alpha: 0.1),
+          verticalpadding: 4.h,
+          horizontalpadding: 12,
+          textstyle: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
+          borderRadius: 200.r,
+        );
+      }),
     );
   }
 }

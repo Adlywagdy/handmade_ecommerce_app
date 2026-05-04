@@ -52,26 +52,38 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
               spacing: 8.h,
               children: [
                 CircleAvatar(
-                  radius: 35.r,
+                  radius: 39.r,
                   backgroundColor: selectedIndex == index
                       ? commonColor
                       : commonColor.withValues(alpha: 0.1),
-                  child: iconPath == null || iconPath.isEmpty
-                      ? Icon(
-                          Icons.category_outlined,
-                          color: selectedIndex == index
-                              ? Colors.white
-                              : commonColor,
-                        )
-                      : Image.network(
-                          iconPath,
-                          errorBuilder: (context, error, stackTrace) => Icon(
+                  child: CircleAvatar(
+                    radius: 35.r,
+                    backgroundColor: commonColor.withValues(alpha: 0.01),
+                    child: iconPath == null || iconPath.isEmpty
+                        ? Icon(
                             Icons.category_outlined,
                             color: selectedIndex == index
                                 ? Colors.white
                                 : commonColor,
+                          )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.circular(35.r),
+                            child: Image.network(
+                              alignment: .center,
+                              height: 70.r,
+                              width: 70.r,
+                              iconPath,
+                              fit: BoxFit.fill,
+                              errorBuilder: (context, error, stackTrace) =>
+                                  Icon(
+                                    Icons.category_outlined,
+                                    color: selectedIndex == index
+                                        ? Colors.white
+                                        : commonColor,
+                                  ),
+                            ),
                           ),
-                        ),
+                  ),
                 ),
                 Text(
                   category.categorytitle,

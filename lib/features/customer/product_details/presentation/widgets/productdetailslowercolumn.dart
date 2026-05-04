@@ -54,19 +54,12 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
         widget.product.tags != null && widget.product.tags!.isNotEmpty
             ? TagsRow(product: widget.product)
             : SizedBox(height: 16.h),
-        SizedBox(height: 12.h),
+        SizedBox(height: 20.h),
         BlocBuilder<ReviewsCubit, ReviewsState>(
           buildWhen: (previous, current) {
-            if (current is ReviewsLoadingState) {
-              return current.productId == productId;
-            }
-            if (current is ReviewsLoadedState) {
-              return current.productId == productId;
-            }
-            if (current is ReviewsErrorState) {
-              return current.productId == productId;
-            }
-            return false;
+            return current is ReviewsLoadingState ||
+                current is ReviewsLoadedState ||
+                current is ReviewsErrorState;
           },
           builder: (context, state) {
             final reviewsCubit = context.read<ReviewsCubit>();

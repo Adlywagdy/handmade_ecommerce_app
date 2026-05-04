@@ -5,12 +5,15 @@ import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_
 class ProductModel {
   final String id;
   final String name;
+  final String? nameAR;
   final String description;
+  final String? descriptionAR;
   final double price;
   final double? discountedPrice;
   final String currency;
   final double? totalrate;
   final int? salesCount;
+  final int? reviewsCount;
   final String? status;
   final bool isActive;
   final DateTime? createdAt;
@@ -26,12 +29,15 @@ class ProductModel {
   ProductModel({
     required this.id,
     required this.name,
+    this.nameAR,
     required this.description,
+    this.descriptionAR,
     required this.price,
     this.discountedPrice,
     this.currency = 'EGP',
     this.totalrate,
     this.salesCount,
+    this.reviewsCount,
     this.status,
     this.isActive = true,
     this.createdAt,
@@ -47,12 +53,15 @@ class ProductModel {
   ProductModel copyWith({
     String? id,
     String? name,
+    String? nameAR,
     String? description,
+    String? descriptionAR,
     double? price,
     double? discountedPrice,
     String? currency,
     double? totalrate,
     int? salesCount,
+    int? reviewsCount,
     String? status,
     bool? isActive,
     DateTime? createdAt,
@@ -67,12 +76,15 @@ class ProductModel {
     return ProductModel(
       id: id ?? this.id,
       name: name ?? this.name,
+      nameAR: nameAR ?? this.nameAR,
       description: description ?? this.description,
+      descriptionAR: descriptionAR ?? this.descriptionAR,
       price: price ?? this.price,
       discountedPrice: discountedPrice ?? this.discountedPrice,
       currency: currency ?? this.currency,
       totalrate: totalrate ?? this.totalrate,
       salesCount: salesCount ?? this.salesCount,
+      reviewsCount: reviewsCount ?? this.reviewsCount,
       status: status ?? this.status,
       isActive: isActive ?? this.isActive,
       createdAt: createdAt ?? this.createdAt,
@@ -149,12 +161,16 @@ class ProductModel {
           map['productName']?.toString() ??
           map['title']?.toString() ??
           '',
+      nameAR: map['nameAR']?.toString() ?? map['name_ar']?.toString(),
       description: map['description']?.toString() ?? '',
+      descriptionAR:
+          map['descriptionAR']?.toString() ?? map['description_ar']?.toString(),
       price: parsedPrice,
       discountedPrice: parsedDiscountedPrice,
       currency: map['currency']?.toString() ?? 'EGP',
       totalrate: parsedRating,
       salesCount: _parseInt(map['salesCount']),
+      reviewsCount: _parseInt(map['reviewsCount']),
       status: map['status']?.toString(),
       isActive: map['isActive'] as bool? ?? true,
       createdAt: _parseDateTime(map['createdAt']),
@@ -166,7 +182,6 @@ class ProductModel {
       tags: map['tags'] is List
           ? (map['tags'] as List).map((e) => e.toString()).toList()
           : null,
-      reviews: null,
     );
   }
 
@@ -174,10 +189,13 @@ class ProductModel {
     final data = <String, dynamic>{
       'productId': id,
       'name': name,
+      'nameAR': nameAR,
       'description': description,
+      'descriptionAR': descriptionAR,
       'price': price,
       'currency': currency,
       'rating': totalrate ?? 0,
+      'reviewsCount': reviewsCount ?? 0,
       'stock': quantity,
       'images': images,
       'productImage': image,
@@ -191,11 +209,7 @@ class ProductModel {
       'updatedAt': updatedAt ?? DateTime.now(),
     };
 
-    if (discountedPrice != null) {
-      data['discountedPrice'] = discountedPrice;
-    } else {
-      data['discountedPrice'] = null;
-    }
+    data['discountedPrice'] = discountedPrice;
 
     return data;
   }
