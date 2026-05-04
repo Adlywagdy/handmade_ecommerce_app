@@ -9,513 +9,234 @@ class AppLocalizationsAr extends AppLocalizations {
   AppLocalizationsAr([String locale = 'ar']) : super(locale);
 
   @override
-  String get skip => intl.Intl.message(
-        'تخطي',
-        name: 'skip',
-        locale: localeName,
-      );
+  String get skip => 'تخطي';
 
   @override
-  String get next => intl.Intl.message(
-        'التالي',
-        name: 'next',
-        locale: localeName,
-      );
+  String get next => 'التالي';
 
   @override
-  String get getStarted => intl.Intl.message(
-        'ابدأ الآن',
-        name: 'getStarted',
-        locale: localeName,
-      );
+  String get getStarted => 'ابدأ الآن';
 
   @override
-  String get discoverUniqueHandmadeItems => intl.Intl.message(
-        'اكتشف منتجات يدوية فريدة',
-        name: 'discoverUniqueHandmadeItems',
-        locale: localeName,
-      );
+  String get discoverUniqueHandmadeItems => 'اكتشف منتجات يدوية فريدة';
 
   @override
-  String get supportLocalArtisans => intl.Intl.message(
-        'ادعم الحرفيين المحليين',
-        name: 'supportLocalArtisans',
-        locale: localeName,
-      );
+  String get supportLocalArtisans => 'ادعم الحرفيين المحليين';
 
   @override
-  String get shopWithConfidence => intl.Intl.message(
-        'تسوق بثقة',
-        name: 'shopWithConfidence',
-        locale: localeName,
-      );
+  String get shopWithConfidence => 'تسوق بثقة';
 
   @override
-  String get exploreThousandsHandcraftedProducts => intl.Intl.message(
-        'استكشف آلاف المنتجات المصنوعة يدوياً من حرفيين موهوبين من حول العالم.',
-        name: 'exploreThousandsHandcraftedProducts',
-        locale: localeName,
-      );
+  String get exploreThousandsHandcraftedProducts =>
+      'استكشف آلاف المنتجات المصنوعة يدوياً من حرفيين موهوبين من حول العالم.';
 
   @override
-  String get connectDirectlyWithMakers => intl.Intl.message(
-        'تواصل مباشرة مع الصانعين وادعم حرفتهم. كل عملية شراء تُحدث فرقاً.',
-        name: 'connectDirectlyWithMakers',
-        locale: localeName,
-      );
+  String get connectDirectlyWithMakers =>
+      'تواصل مباشرة مع الصانعين وادعم حرفتهم. كل عملية شراء تُحدث فرقاً.';
 
   @override
-  String get securePaymentsVerifiedSellers => intl.Intl.message(
-        'مدفوعات آمنة، بائعون موثوقون، وتقييمات حقيقية. رضاك مضمون.',
-        name: 'securePaymentsVerifiedSellers',
-        locale: localeName,
-      );
+  String get securePaymentsVerifiedSellers =>
+      'مدفوعات آمنة، بائعون موثوقون، وتقييمات حقيقية. رضاك مضمون.';
 
   @override
-  String get filterAndSort => intl.Intl.message(
-        'فرز وتصفية',
-        name: 'filterAndSort',
-        locale: localeName,
-      );
+  String get filterAndSort => 'فرز وتصفية';
 
   @override
-  String get rating => intl.Intl.message(
-        'التقييم',
-        name: 'rating',
-        locale: localeName,
-      );
+  String get rating => 'التقييم';
 
   @override
-  String get priceSort => intl.Intl.message(
-        'فرز السعر',
-        name: 'priceSort',
-        locale: localeName,
-      );
+  String get priceSort => 'فرز السعر';
 
   @override
-  String get any => intl.Intl.message(
-        'أي',
-        name: 'any',
-        locale: localeName,
-      );
+  String get any => 'أي';
 
   @override
-  String get to => intl.Intl.message(
-        'إلى',
-        name: 'to',
-        locale: localeName,
-      );
+  String get to => 'إلى';
 
   @override
-  String get min => intl.Intl.message(
-        'الحد الأدنى',
-        name: 'min',
-        locale: localeName,
-      );
+  String get min => 'الحد الأدنى';
 
   @override
-  String get max => intl.Intl.message(
-        'الحد الأقصى',
-        name: 'max',
-        locale: localeName,
-      );
+  String get max => 'الحد الأقصى';
 
   @override
-  String get cancel => intl.Intl.message(
-        'إلغاء',
-        name: 'cancel',
-        locale: localeName,
-      );
+  String get cancel => 'إلغاء';
 
   @override
-  String get apply => intl.Intl.message(
-        'تطبيق',
-        name: 'apply',
-        locale: localeName,
-      );
+  String get apply => 'تطبيق';
 
   @override
-  String get mustBePositive => intl.Intl.message(
-        'يجب أن يكون الرقم موجباً',
-        name: 'mustBePositive',
-        locale: localeName,
-      );
+  String get mustBePositive => 'يجب أن يكون الرقم موجباً';
 
   @override
-  String get updateRequired => intl.Intl.message(
-        'التحديث مطلوب',
-        name: 'updateRequired',
-        locale: localeName,
-      );
+  String get updateRequired => 'التحديث مطلوب';
 
   @override
-  String get pleaseUpdateAppToContinue => intl.Intl.message(
-        'يرجى تحديث التطبيق للمتابعة.',
-        name: 'pleaseUpdateAppToContinue',
-        locale: localeName,
-      );
+  String get pleaseUpdateAppToContinue => 'يرجى تحديث التطبيق للمتابعة.';
 
   @override
-  String get update => intl.Intl.message(
-        'تحديث',
-        name: 'update',
-        locale: localeName,
-      );
+  String get update => 'تحديث';
 
   @override
-  String get somethingWentWrong => intl.Intl.message(
-        'حدث خطأ ما',
-        name: 'somethingWentWrong',
-        locale: localeName,
-      );
+  String get somethingWentWrong => 'حدث خطأ ما';
 
   @override
-  String get technicalDifficulties => intl.Intl.message(
-        'نواجه صعوبات تقنية من جانبنا. فريقنا يعمل على حلها.',
-        name: 'technicalDifficulties',
-        locale: localeName,
-      );
+  String get technicalDifficulties =>
+      'نواجه صعوبات تقنية من جانبنا. فريقنا يعمل على حلها.';
 
   @override
-  String get goBack => intl.Intl.message(
-        'العودة',
-        name: 'goBack',
-        locale: localeName,
-      );
+  String get goBack => 'العودة';
 
   @override
-  String get noInternetConnection => intl.Intl.message(
-        'لا يوجد اتصال بالإنترنت',
-        name: 'noInternetConnection',
-        locale: localeName,
-      );
+  String get noInternetConnection => 'لا يوجد اتصال بالإنترنت';
 
   @override
-  String get offlineMessage => intl.Intl.message(
-        'يبدو أنك غير متصل. يرجى التحقق من إعدادات الشبكة والمحاولة مرة أخرى.',
-        name: 'offlineMessage',
-        locale: localeName,
-      );
+  String get offlineMessage =>
+      'يبدو أنك غير متصل. يرجى التحقق من إعدادات الشبكة والمحاولة مرة أخرى.';
 
   @override
-  String get retryConnection => intl.Intl.message(
-        'إعادة المحاولة',
-        name: 'retryConnection',
-        locale: localeName,
-      );
+  String get retryConnection => 'إعادة المحاولة';
 
   @override
-  String get welcomeToAyady => intl.Intl.message(
-        'مرحبًا بك في أيادي',
-        name: 'welcomeToAyady',
-        locale: localeName,
-      );
+  String get welcomeToAyady => 'مرحبًا بك في أيادي';
 
   @override
-  String get pleaseEnterYourDetailsToContinue => intl.Intl.message(
-        'يرجى إدخال بياناتك للمتابعة',
-        name: 'pleaseEnterYourDetailsToContinue',
-        locale: localeName,
-      );
+  String get pleaseEnterYourDetailsToContinue => 'يرجى إدخال بياناتك للمتابعة';
 
   @override
-  String get emailAddress => intl.Intl.message(
-        'البريد الإلكتروني',
-        name: 'emailAddress',
-        locale: localeName,
-      );
+  String get emailAddress => 'البريد الإلكتروني';
 
   @override
-  String get emailIsntValid => intl.Intl.message(
-        'البريد الإلكتروني غير صالح',
-        name: 'emailIsntValid',
-        locale: localeName,
-      );
+  String get emailIsntValid => 'البريد الإلكتروني غير صالح';
 
   @override
-  String get password => intl.Intl.message(
-        'كلمة المرور',
-        name: 'password',
-        locale: localeName,
-      );
+  String get password => 'كلمة المرور';
 
   @override
-  String get forgotPassword => intl.Intl.message(
-        'نسيت كلمة المرور؟',
-        name: 'forgotPassword',
-        locale: localeName,
-      );
+  String get forgotPassword => 'نسيت كلمة المرور؟';
 
   @override
-  String get loginSuccess => intl.Intl.message(
-        'تم تسجيل الدخول بنجاح',
-        name: 'loginSuccess',
-        locale: localeName,
-      );
+  String get loginSuccess => 'تم تسجيل الدخول بنجاح';
 
   @override
-  String get googleSignInSuccess => intl.Intl.message(
-        'تم تسجيل الدخول بواسطة جوجل بنجاح',
-        name: 'googleSignInSuccess',
-        locale: localeName,
-      );
+  String get googleSignInSuccess => 'تم تسجيل الدخول بواسطة جوجل بنجاح';
 
   @override
-  String get signIn => intl.Intl.message(
-        'تسجيل الدخول',
-        name: 'signIn',
-        locale: localeName,
-      );
+  String get signIn => 'تسجيل الدخول';
 
   @override
-  String get orContinueWith => intl.Intl.message(
-        'أو المتابعة باستخدام',
-        name: 'orContinueWith',
-        locale: localeName,
-      );
+  String get orContinueWith => 'أو المتابعة باستخدام';
 
   @override
-  String get google => intl.Intl.message(
-        'جوجل',
-        name: 'google',
-        locale: localeName,
-      );
+  String get google => 'جوجل';
 
   @override
-  String get dontHaveAnAccount => intl.Intl.message(
-        'ليس لديك حساب؟',
-        name: 'dontHaveAnAccount',
-        locale: localeName,
-      );
+  String get dontHaveAnAccount => 'ليس لديك حساب؟';
 
   @override
-  String get signUp => intl.Intl.message(
-        'إنشاء حساب',
-        name: 'signUp',
-        locale: localeName,
-      );
+  String get signUp => 'إنشاء حساب';
 
   @override
-  String get createAccount => intl.Intl.message(
-        'إنشاء حساب',
-        name: 'createAccount',
-        locale: localeName,
-      );
+  String get joinAyady => 'انضم إلى أيادي';
 
   @override
-  String get experienceTheEleganceOfHandcraftedItems => intl.Intl.message(
-        'اكتشف أناقة المنتجات المصنوعة يدويًا',
-        name: 'experienceTheEleganceOfHandcraftedItems',
-        locale: localeName,
-      );
+  String get createAccount => 'إنشاء حساب';
 
   @override
-  String get fullName => intl.Intl.message(
-        'الاسم الكامل',
-        name: 'fullName',
-        locale: localeName,
-      );
+  String get experienceTheEleganceOfHandcraftedItems =>
+      'اكتشف أناقة المنتجات المصنوعة يدويًا';
 
   @override
-  String get johnDoe => intl.Intl.message(
-        'John Doe',
-        name: 'johnDoe',
-        locale: localeName,
-      );
+  String get fullName => 'الاسم الكامل';
 
   @override
-  String get nameIsRequired => intl.Intl.message(
-        'الاسم مطلوب',
-        name: 'nameIsRequired',
-        locale: localeName,
-      );
+  String get johnDoe => 'John Doe';
 
   @override
-  String get emailIsRequired => intl.Intl.message(
-        'البريد الإلكتروني مطلوب',
-        name: 'emailIsRequired',
-        locale: localeName,
-      );
+  String get nameIsRequired => 'الاسم مطلوب';
 
   @override
-  String get passwordIsRequired => intl.Intl.message(
-        'كلمة المرور مطلوبة',
-        name: 'passwordIsRequired',
-        locale: localeName,
-      );
+  String get emailIsRequired => 'البريد الإلكتروني مطلوب';
 
   @override
-  String get passwordShouldBeMoreThan5Letters => intl.Intl.message(
-        'يجب أن تكون كلمة المرور أكثر من 5 أحرف',
-        name: 'passwordShouldBeMoreThan5Letters',
-        locale: localeName,
-      );
+  String get passwordIsRequired => 'كلمة المرور مطلوبة';
 
   @override
-  String get registerAs => intl.Intl.message(
-        'التسجيل كـ:',
-        name: 'registerAs',
-        locale: localeName,
-      );
+  String get passwordShouldBeMoreThan5Letters =>
+      'يجب أن تكون كلمة المرور أكثر من 5 أحرف';
 
   @override
-  String get customer => intl.Intl.message(
-        'عميل',
-        name: 'customer',
-        locale: localeName,
-      );
+  String get registerAs => 'التسجيل كـ:';
 
   @override
-  String get seller => intl.Intl.message(
-        'بائع',
-        name: 'seller',
-        locale: localeName,
-      );
+  String get customer => 'عميل';
 
   @override
-  String get agreeToTerms => intl.Intl.message(
-        'أوافق على شروط الخدمة وسياسة الخصوصية.',
-        name: 'agreeToTerms',
-        locale: localeName,
-      );
+  String get seller => 'بائع';
 
   @override
-  String get accountCreatedSuccessfully => intl.Intl.message(
-        'تم إنشاء الحساب بنجاح',
-        name: 'accountCreatedSuccessfully',
-        locale: localeName,
-      );
+  String get agreeToTerms => 'أوافق على شروط الخدمة وسياسة الخصوصية.';
 
   @override
-  String get youMustAgreeToTheTermsFirst => intl.Intl.message(
-        'يجب الموافقة على الشروط أولاً',
-        name: 'youMustAgreeToTheTermsFirst',
-        locale: localeName,
-      );
+  String get accountCreatedSuccessfully => 'تم إنشاء الحساب بنجاح';
 
   @override
-  String get pleaseChooseCustomerOrSellerFirst => intl.Intl.message(
-        'يرجى اختيار عميل أو بائع أولاً',
-        name: 'pleaseChooseCustomerOrSellerFirst',
-        locale: localeName,
-      );
+  String get youMustAgreeToTheTermsFirst => 'يجب الموافقة على الشروط أولاً';
 
   @override
-  String get alreadyHaveAnAccount => intl.Intl.message(
-        'هل لديك حساب؟',
-        name: 'alreadyHaveAnAccount',
-        locale: localeName,
-      );
+  String get pleaseChooseCustomerOrSellerFirst =>
+      'يرجى اختيار عميل أو بائع أولاً';
 
   @override
-  String get logIn => intl.Intl.message(
-        'تسجيل الدخول',
-        name: 'logIn',
-        locale: localeName,
-      );
+  String get alreadyHaveAnAccount => 'هل لديك حساب؟';
 
   @override
-  String get joinAyady => intl.Intl.message(
-        'انضم إلى أيادي',
-        name: 'joinAyady',
-        locale: localeName,
-      );
+  String get logIn => 'تسجيل الدخول';
 
   @override
-  String get passwordRecovery => intl.Intl.message(
-        'استعادة كلمة المرور',
-        name: 'passwordRecovery',
-        locale: localeName,
-      );
+  String get passwordRecovery => 'استعادة كلمة المرور';
 
   @override
-  String get passwordRecoveryDescription => intl.Intl.message(
-        'يرجى إدخال بريدك الإلكتروني لإرسال رسالة استعادة كلمة المرور.',
-        name: 'passwordRecoveryDescription',
-        locale: localeName,
-      );
+  String get passwordRecoveryDescription =>
+      'يرجى إدخال بريدك الإلكتروني لإرسال رسالة استعادة كلمة المرور.';
 
   @override
-  String get sendCode => intl.Intl.message(
-        'إرسال الكود',
-        name: 'sendCode',
-        locale: localeName,
-      );
+  String get sendCode => 'إرسال الكود';
 
   @override
-  String get createNewPassword => intl.Intl.message(
-        'إنشاء كلمة مرور جديدة',
-        name: 'createNewPassword',
-        locale: localeName,
-      );
+  String get verifyItsYou => 'تحقق من هويتك';
 
   @override
-  String get createNewPasswordDescription => intl.Intl.message(
-        'يرجى إنشاء كلمة مرور آمنة لحسابك لحماية الحساب.',
-        name: 'createNewPasswordDescription',
-        locale: localeName,
-      );
+  String get verificationCodeSentToEmail =>
+      'تم إرسال رمز التحقق إلى بريدك الإلكتروني. الرجاء إدخاله أدناه.';
 
   @override
-  String get verifyItsYou => intl.Intl.message(
-        'تحقق من هويتك',
-        name: 'verifyItsYou',
-        locale: localeName,
-      );
+  String get youCanResendCodeAfterOneMinute =>
+      'يمكنك إعادة إرسال الكود بعد دقيقة واحدة.';
 
   @override
-  String get verificationCodeSentToEmail => intl.Intl.message(
-        'تم إرسال رمز التحقق إلى بريدك الإلكتروني. الرجاء إدخاله أدناه.',
-        name: 'verificationCodeSentToEmail',
-        locale: localeName,
-      );
+  String get confirm => 'تأكيد';
 
   @override
-  String get youCanResendCodeAfterOneMinute => intl.Intl.message(
-        'يمكنك إعادة إرسال الكود بعد دقيقة واحدة.',
-        name: 'youCanResendCodeAfterOneMinute',
-        locale: localeName,
-      );
+  String get createNewPassword => 'إنشاء كلمة مرور جديدة';
 
   @override
-  String get confirm => intl.Intl.message(
-        'تأكيد',
-        name: 'confirm',
-        locale: localeName,
-      );
+  String get createNewPasswordDescription =>
+      'يرجى إنشاء كلمة مرور آمنة لحسابك لحماية الحساب.';
 
   @override
-  String get retypePassword => intl.Intl.message(
-        'إعادة كتابة كلمة المرور',
-        name: 'retypePassword',
-        locale: localeName,
-      );
+  String get retypePassword => 'إعادة كتابة كلمة المرور';
 
   @override
-  String get passwordMustBeAtLeast6Characters => intl.Intl.message(
-        'يجب أن تكون كلمة المرور 6 أحرف على الأقل',
-        name: 'passwordMustBeAtLeast6Characters',
-        locale: localeName,
-      );
+  String get passwordMustBeAtLeast6Characters =>
+      'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
 
   @override
-  String get pleaseConfirmYourPassword => intl.Intl.message(
-        'يرجى تأكيد كلمة المرور',
-        name: 'pleaseConfirmYourPassword',
-        locale: localeName,
-      );
+  String get pleaseConfirmYourPassword => 'يرجى تأكيد كلمة المرور';
 
   @override
-  String get passwordsDoNotMatch => intl.Intl.message(
-        'كلمتا المرور غير متطابقتين',
-        name: 'passwordsDoNotMatch',
-        locale: localeName,
-      );
+  String get passwordsDoNotMatch => 'كلمتا المرور غير متطابقتين';
 
   @override
-  String get setPassword => intl.Intl.message(
-        'تعيين كلمة المرور',
-        name: 'setPassword',
-        locale: localeName,
-      );
+  String get setPassword => 'تعيين كلمة المرور';
 }
