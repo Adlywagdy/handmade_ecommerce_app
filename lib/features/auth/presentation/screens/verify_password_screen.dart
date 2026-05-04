@@ -45,14 +45,22 @@ class VerifyPasswordScreen extends StatelessWidget {
             SizedBox(height: 12.h),
             Text(
               email.isNotEmpty
-                  ? 'We sent a password reset link to\n$email\nPlease open your email and follow the instructions.'
-                  : 'We sent a password reset link to your email.\nPlease open your email and follow the instructions.',
+                  ? 'We sent a password reset link to\n$email'
+                  : 'We sent a password reset link to your email.',
               style: AppTextStyles.t_12w500.copyWith(
                 color: primaryColor.withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),
-            SizedBox(height: 24.h),
+            SizedBox(height: 20.h),
+            Text(
+              'Open the link in your email to reset your password in the browser, then return to the app and sign in.',
+              style: AppTextStyles.t_12w500.copyWith(
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 16.h),
             Text(
               'If you don’t see the email, check your spam or junk folder.',
               style: AppTextStyles.t_12w500.copyWith(
@@ -63,16 +71,19 @@ class VerifyPasswordScreen extends StatelessWidget {
           ],
         ),
       ),
-      bottomNavigationBar: Padding(
-        padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
-        child: CustomElevatedButton(
-          onPressed: () {
-            Get.offAllNamed(AppRoutes.login);
-          },
-          buttoncolor: primaryColor,
-          child: Text(
-            'Back to Login',
-            style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
+      bottomNavigationBar: SafeArea(
+        top: false,
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
+          child: CustomElevatedButton(
+            onPressed: () {
+              Get.offAllNamed(AppRoutes.login);
+            },
+            buttoncolor: primaryColor,
+            child: Text(
+              'Back to Login',
+              style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
+            ),
           ),
         ),
       ),
