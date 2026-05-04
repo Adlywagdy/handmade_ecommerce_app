@@ -1,12 +1,16 @@
+import 'package:flutter/widgets.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+
 abstract class OnboardingTitleDescription {
-  static List<String> titles = [
-    'Discover Unique Handmade Items',
-    'Support Local Artisans',
-    'Shop with Confidence',
+  static List<String> titles(BuildContext context) => [
+    context.l10n.discoverUniqueHandmadeItems,
+    context.l10n.supportLocalArtisans,
+    context.l10n.shopWithConfidence,
   ];
-  static List<String> subTitle = [
-    'Explore thousands of handcrafted products made by talented artisans from around the world.',
-    'Connect directly with makers and support their craft. Every purchase makes a difference.',
-    'Secure payments, verified sellers, and authentic reviews. Your satisfaction guaranteed.',
+
+  static List<String> subTitle(BuildContext context) => [
+    context.l10n.exploreThousandsHandcraftedProducts,
+    context.l10n.connectDirectlyWithMakers,
+    context.l10n.securePaymentsVerifiedSellers,
   ];
 }

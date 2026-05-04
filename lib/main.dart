@@ -16,6 +16,7 @@ import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -71,6 +72,17 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: initialRoute,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localeResolutionCallback: (locale, supportedLocales) {
+              if (locale == null) return supportedLocales.first;
+              for (final supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale.languageCode) {
+                  return supportedLocale;
+                }
+              }
+              return supportedLocales.first;
+            },
 
             getPages: AppPages.pages,
           ),
