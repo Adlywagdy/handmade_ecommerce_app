@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -57,11 +58,11 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Password recovery',
+                  context.l10n.passwordRecovery,
                   style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
                 ),
                 Text(
-                  'Please enter your email address to send to a password recovery email.',
+                  context.l10n.passwordRecoveryDescription,
                   style: AppTextStyles.t_12w500.copyWith(
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
@@ -70,15 +71,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                 SizedBox(height: 20),
                 Customtextfield(
                   controller: _emailController,
-                  label: 'EMAIL ADDRESS',
-                  hintText: 'example@mail.com',
+                  label: context.l10n.emailAddress,
+                  hintText:"example@mail.com",
                   prefixIcon: Icon(
                     Icons.email,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
                     if (!value!.emailValid()) {
-                      return "email isn't valid";
+                      return context.l10n.emailIsntValid;
                     }
                     return null;
                   },
@@ -101,7 +102,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
 
           buttoncolor: primaryColor,
           child: Text(
-            'Send Code',
+            context.l10n.sendCode,
             style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
           ),
         ),

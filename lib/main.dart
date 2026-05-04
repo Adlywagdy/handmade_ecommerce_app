@@ -14,6 +14,7 @@ import 'package:handmade_ecommerce_app/features/customer/orders/cubit/order_cubi
 import 'package:handmade_ecommerce_app/features/customer/search/cubit/search_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/cubit/reviews_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
@@ -107,6 +108,17 @@ class HandcraftedEcommerceApp extends StatelessWidget {
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: initialRoute,
+            localizationsDelegates: AppLocalizations.localizationsDelegates,
+            supportedLocales: AppLocalizations.supportedLocales,
+            localeResolutionCallback: (locale, supportedLocales) {
+              if (locale == null) return supportedLocales.first;
+              for (final supportedLocale in supportedLocales) {
+                if (supportedLocale.languageCode == locale.languageCode) {
+                  return supportedLocale;
+                }
+              }
+              return supportedLocales.first;
+            },
 
             getPages: AppPages.pages,
           ),

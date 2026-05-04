@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -32,17 +33,16 @@ class VerifytPasswordScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Text(
-              'Verify it’s you',
+              context.l10n.verifyItsYou,
               style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
             ),
             Text(
-              'We have send a verifiction code to your email please enter the code below.',
+              context.l10n.verificationCodeSentToEmail,
               style: AppTextStyles.t_12w500.copyWith(
                 color: primaryColor.withValues(alpha: 0.6),
               ),
             ),
 
-            
             PinInput(
               keyboardType: TextInputType.number,
 
@@ -78,7 +78,7 @@ class VerifytPasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              "You can resend the code after 1 minute ( 00:56 )", // counter logic
+              context.l10n.youCanResendCodeAfterOneMinute,
               style: AppTextStyles.t_12w500.copyWith(
                 color: primaryColor.withValues(alpha: 0.6),
               ),
@@ -95,7 +95,7 @@ class VerifytPasswordScreen extends StatelessWidget {
           },
           buttoncolor: primaryColor,
           child: Text(
-            'Confirm',
+            context.l10n.confirm,
             style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
           ),
         ),
