@@ -7,6 +7,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/models/onboarding_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -29,7 +30,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               Get.offAllNamed(AppRoutes.login);
             },
             child: Text(
-              'Skip',
+              context.l10n.skip,
               style: AppTextStyles.t_16w500.copyWith(color: subtitlesplash),
             ),
           ),
@@ -49,7 +50,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 305.w,
               child: Text(
                 textAlign: TextAlign.center,
-                OnboardingTitleDescription.titles[count - 1],
+                OnboardingTitleDescription.titles(context)[count - 1],
                 style: AppTextStyles.t_24w500.copyWith(color: subtitlesplash),
               ),
             ),
@@ -58,7 +59,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               width: 312.w,
               child: Text(
                 textAlign: TextAlign.center,
-                OnboardingTitleDescription.subTitle[count - 1],
+                OnboardingTitleDescription.subTitle(context)[count - 1],
                 style: AppTextStyles.t_16w500.copyWith(color: subtitlesplash),
               ),
             ),
@@ -85,7 +86,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    count < 3 ? 'Next' : 'Get Started',
+                    count < 3 ? context.l10n.next : context.l10n.getStarted,
                     style: AppTextStyles.t_16w600.copyWith(color: Colors.white),
                   ),
                   if (count < 3) Icon(Icons.navigate_next, color: Colors.white),

@@ -1,0 +1,218 @@
+{
+  "@@locale": "ar",
+  "skip": "تخطي",
+  "next": "التالي",
+  "getStarted": "ابدأ الآن",
+  "discoverUniqueHandmadeItems": "اكتشف منتجات يدوية فريدة",
+  "supportLocalArtisans": "ادعم الحرفيين المحليين",
+  "shopWithConfidence": "تسوق بثقة",
+  "exploreThousandsHandcraftedProducts": "استكشف آلاف المنتجات المصنوعة يدوياً من حرفيين موهوبين من حول العالم.",
+  "connectDirectlyWithMakers": "تواصل مباشرة مع الصانعين وادعم حرفتهم. كل عملية شراء تُحدث فرقاً.",
+  "securePaymentsVerifiedSellers": "مدفوعات آمنة، بائعون موثوقون، وتقييمات حقيقية. رضاك مضمون.",
+  "filterAndSort": "فرز وتصفية",
+  "rating": "التقييم",
+  "priceSort": "فرز السعر",
+  "any": "أي",
+  "to": "إلى",
+  "min": "الحد الأدنى",
+  "max": "الحد الأقصى",
+  "cancel": "إلغاء",
+  "apply": "تطبيق",
+  "mustBePositive": "يجب أن يكون الرقم موجباً",
+  "updateRequired": "التحديث مطلوب",
+  "pleaseUpdateAppToContinue": "يرجى تحديث التطبيق للمتابعة.",
+  "update": "تحديث",
+  "somethingWentWrong": "حدث خطأ ما",
+  "technicalDifficulties": "نواجه صعوبات تقنية من جانبنا. فريقنا يعمل على حلها.",
+  "goBack": "العودة",
+  "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+  "offlineMessage": "يبدو أنك غير متصل. يرجى التحقق من إعدادات الشبكة والمحاولة مرة أخرى.",
+  "@offlineMessage": {
+    "description": "Message shown when the user is offline."
+  },
+  "retryConnection": "إعادة المحاولة",
+  "@retryConnection": {
+    "description": "Button label to retry a failed network request."
+  },
+  "welcomeToAyady": "مرحبًا بك في أيادي",
+  "@welcomeToAyady": {
+    "description": "Welcome message shown on the login screen."
+  },
+  "pleaseEnterYourDetailsToContinue": "يرجى إدخال بياناتك للمتابعة",
+  "@pleaseEnterYourDetailsToContinue": {
+    "description": "Hint text shown on the login screen explaining how to proceed."
+  },
+  "emailAddress": "البريد الإلكتروني",
+  "@emailAddress": {
+    "description": "Label text for the email input field."
+  },
+  
+  "emailIsntValid": "البريد الإلكتروني غير صالح",
+  "@emailIsntValid": {
+    "description": "Validation message shown when the email input is invalid."
+  },
+  "password": "كلمة المرور",
+  "@password": {
+    "description": "Label text for the password input field."
+  },
+  "forgotPassword": "نسيت كلمة المرور؟",
+  "@forgotPassword": {
+    "description": "Link text used to navigate to password recovery."
+  },
+  "loginSuccess": "تم تسجيل الدخول بنجاح",
+  "@loginSuccess": {
+    "description": "Snack bar message shown after successful login."
+  },
+  "googleSignInSuccess": "تم تسجيل الدخول بواسطة جوجل بنجاح",
+  "@googleSignInSuccess": {
+    "description": "Snack bar message shown after successful Google login."
+  },
+  "signIn": "تسجيل الدخول",
+  "@signIn": {
+    "description": "Button text used to sign in."
+  },
+  "orContinueWith": "أو المتابعة باستخدام",
+  "@orContinueWith": {
+    "description": "Text shown between a divider and social login buttons."
+  },
+  "google": "جوجل",
+  "@google": {
+    "description": "Label for Google sign-in button."
+  },
+  "dontHaveAnAccount": "ليس لديك حساب؟",
+  "@dontHaveAnAccount": {
+    "description": "Text shown before the sign up link on the login screen."
+  },
+  "signUp": "إنشاء حساب",
+  "@signUp": {
+    "description": "Text used for the sign up action."
+  },
+  "joinAyady": "انضم إلى أيادي",
+  "@joinAyady": {
+    "description": "Title text shown on the register screen."
+  },
+  "createAccount": "إنشاء حساب",
+  "@createAccount": {
+    "description": "Button text for the register screen."
+  },
+  "experienceTheEleganceOfHandcraftedItems": "اكتشف أناقة المنتجات المصنوعة يدويًا",
+  "@experienceTheEleganceOfHandcraftedItems": {
+    "description": "Subtitle text shown on the register screen."
+  },
+  "fullName": "الاسم الكامل",
+  "@fullName": {
+    "description": "Label text for the full name input field."
+  },
+  "johnDoe": "John Doe",
+  "@johnDoe": {
+    "description": "Placeholder text for the full name input field."
+  },
+  "nameIsRequired": "الاسم مطلوب",
+  "@nameIsRequired": {
+    "description": "Validation message shown when the name field is empty."
+  },
+  "emailIsRequired": "البريد الإلكتروني مطلوب",
+  "@emailIsRequired": {
+    "description": "Validation message shown when the email field is empty."
+  },
+  "passwordIsRequired": "كلمة المرور مطلوبة",
+  "@passwordIsRequired": {
+    "description": "Validation message shown when the password field is empty."
+  },
+  "passwordShouldBeMoreThan5Letters": "يجب أن تكون كلمة المرور أكثر من 5 أحرف",
+  "@passwordShouldBeMoreThan5Letters": {
+    "description": "Validation message shown when the password is too short."
+  },
+  "registerAs": "التسجيل كـ:",
+  "@registerAs": {
+    "description": "Label text shown before choices of customer or seller during registration."
+  },
+  "customer": "عميل",
+  "@customer": {
+    "description": "Role selection option text for customer registration."
+  },
+  "seller": "بائع",
+  "@seller": {
+    "description": "Role selection option text for seller registration."
+  },
+  "agreeToTerms": "أوافق على شروط الخدمة وسياسة الخصوصية.",
+  "@agreeToTerms": {
+    "description": "Text shown next to the terms and privacy checkbox."
+  },
+  "accountCreatedSuccessfully": "تم إنشاء الحساب بنجاح",
+  "@accountCreatedSuccessfully": {
+    "description": "Snack bar text shown after successful account creation."
+  },
+  "youMustAgreeToTheTermsFirst": "يجب الموافقة على الشروط أولاً",
+  "@youMustAgreeToTheTermsFirst": {
+    "description": "Error message shown when terms are not accepted."
+  },
+  "pleaseChooseCustomerOrSellerFirst": "يرجى اختيار عميل أو بائع أولاً",
+  "@pleaseChooseCustomerOrSellerFirst": {
+    "description": "Error message shown when a registration role is not selected."
+  },
+  "alreadyHaveAnAccount": "هل لديك حساب؟",
+  "@alreadyHaveAnAccount": {
+    "description": "Text shown before the login link on the register screen."
+  },
+  "logIn": "تسجيل الدخول",
+  "@logIn": {
+    "description": "Text used for the login action."
+  },
+  "passwordRecovery": "استعادة كلمة المرور",
+  "@passwordRecovery": {
+    "description": "Title text for the password recovery screen."
+  },
+  "passwordRecoveryDescription": "يرجى إدخال بريدك الإلكتروني لإرسال رسالة استعادة كلمة المرور.",
+  "@passwordRecoveryDescription": {
+    "description": "Subtitle text for the password recovery screen."
+  },
+  "sendCode": "إرسال الكود",
+  "@sendCode": {
+    "description": "Button text used to request a password reset code."
+  },
+  "verifyItsYou": "تحقق من هويتك",
+  "@verifyItsYou": {
+    "description": "Title text shown on the verification code screen."
+  },
+  "verificationCodeSentToEmail": "تم إرسال رمز التحقق إلى بريدك الإلكتروني. الرجاء إدخاله أدناه.",
+  "@verificationCodeSentToEmail": {
+    "description": "Explanation text shown above the verification code field."
+  },
+  "youCanResendCodeAfterOneMinute": "يمكنك إعادة إرسال الكود بعد دقيقة واحدة.",
+  "@youCanResendCodeAfterOneMinute": {
+    "description": "Notice text shown when the verification code has been sent."
+  },
+  "confirm": "تأكيد",
+  "@confirm": {
+    "description": "Button text used to confirm the verification code."
+  },
+  "createNewPassword": "إنشاء كلمة مرور جديدة",
+  "@createNewPassword": {
+    "description": "Title text for the reset password screen."
+  },
+  "createNewPasswordDescription": "يرجى إنشاء كلمة مرور آمنة لحسابك لحماية الحساب.",
+  "@createNewPasswordDescription": {
+    "description": "Subtitle text for the reset password screen."
+  },
+  "retypePassword": "إعادة كتابة كلمة المرور",
+  "@retypePassword": {
+    "description": "Label text for the confirm password field."
+  },
+  "passwordMustBeAtLeast6Characters": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "@passwordMustBeAtLeast6Characters": {
+    "description": "Validation message shown when the password is too short during reset."
+  },
+  "pleaseConfirmYourPassword": "يرجى تأكيد كلمة المرور",
+  "@pleaseConfirmYourPassword": {
+    "description": "Validation message shown when the confirm password field is empty."
+  },
+  "passwordsDoNotMatch": "كلمتا المرور غير متطابقتين",
+  "@passwordsDoNotMatch": {
+    "description": "Validation message shown when password and confirm password do not match."
+  },
+  "setPassword": "تعيين كلمة المرور",
+  "@setPassword": {
+    "description": "Button text used to save the new password."
+  }
+}

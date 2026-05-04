@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -67,7 +68,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           icon: Icon(Icons.arrow_back_ios, color: primaryColor),
         ),
         title: Text(
-          'Create Account',
+          context.l10n.createAccount,
           style: AppTextStyles.t_16w700.copyWith(color: primaryColor),
         ),
         centerTitle: true,
@@ -80,21 +81,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Join Ayady', style: AppTextStyles.t_30w700.copyWith()),
+                Text(
+                  context.l10n.joinAyady,
+                  style: AppTextStyles.t_30w700.copyWith(),
+                ),
                 SizedBox(height: 12.h),
                 Text(
-                  'Experience the elegance of handcrafted items',
+                  context.l10n.experienceTheEleganceOfHandcraftedItems,
                   style: AppTextStyles.t_14w400.copyWith(color: blackDegree),
                 ),
                 SizedBox(height: 12.h),
 
                 Customtextfield(
                   controller: _nameController,
-                  label: 'Full Name',
-                  hintText: 'John Doe',
+                  label: context.l10n.fullName,
+                  hintText: context.l10n.johnDoe,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Name is required";
+                      return context.l10n.nameIsRequired;
                     }
                     return null;
                   },
@@ -104,18 +108,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Customtextfield(
                   controller: _emailController,
-                  label: 'EMAIL ADDRESS',
-                  hintText: 'example@mail.com',
+                  label: context.l10n.emailAddress,
+                  hintText: "example@mail.com",
                   prefixIcon: Icon(
                     Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Email is required";
+                      return context.l10n.emailIsRequired;
                     }
                     if (!value.emailValid()) {
-                      return "Email isn't valid";
+                      return context.l10n.emailIsntValid;
                     }
                     return null;
                   },
@@ -130,13 +134,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icons.lock_outline_rounded,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
-                  label: 'Password',
+                  label: context.l10n.password,
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Password is required";
+                      return context.l10n.passwordIsRequired;
                     }
                     if (value.length < 6) {
-                      return "Password should be more than 5 letters";
+                      return context.l10n.passwordShouldBeMoreThan5Letters;
                     }
                     return null;
                   },
@@ -145,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 15.h),
 
                 Text(
-                  'Register as:',
+                  context.l10n.registerAs,
                   style: AppTextStyles.t_12w400.copyWith(
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
@@ -177,7 +181,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                'Customer',
+                                context.l10n.customer,
                                 style: AppTextStyles.t_16w700.copyWith(
                                   color: primaryColor,
                                 ),
@@ -203,7 +207,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                'Seller',
+                                context.l10n.seller,
                                 style: AppTextStyles.t_16w700.copyWith(
                                   color: primaryColor,
                                 ),
@@ -232,7 +236,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        'I agree to the Terms of Service and Privacy Policy.',
+                        context.l10n.agreeToTerms,
                         style: AppTextStyles.t_12w400.copyWith(
                           color: primaryColor.withValues(alpha: 0.6),
                         ),
@@ -246,27 +250,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is RegisterSuccessState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Account created successfully'),
-                         ),
-                          );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.l10n.accountCreatedSuccessfully,
+                          ),
+                        ),
+                      );
 
-                       _goToNextScreenByRole(state.role);
-                         } else if (state is RegisterErrorState) {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(content: Text(state.message)),
-                               );
+                      _goToNextScreenByRole(state.role);
+                    } else if (state is RegisterErrorState) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
 
-                         if (state.message.contains('already registered')) {
-                           Future.delayed(const Duration(seconds: 1), () {
-                            if (!mounted) return;
-                               Get.offAllNamed(AppRoutes.login);
-                               });
-                                }
-                                   }
-                    },
-              
+                      if (state.message.contains('already registered')) {
+                        Future.delayed(const Duration(seconds: 1), () {
+                          if (!mounted) return;
+                          Get.offAllNamed(AppRoutes.login);
+                        });
+                      }
+                    }
+                  },
+
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 
@@ -276,9 +282,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           : () {
                               if (!_isChecked) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                      'You must agree to the terms first',
+                                      context.l10n.youMustAgreeToTheTermsFirst,
                                     ),
                                   ),
                                 );
@@ -287,9 +293,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                               if (_selectedRole == null) {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                      'Please choose Customer or Seller first',
+                                      context
+                                          .l10n
+                                          .pleaseChooseCustomerOrSellerFirst,
                                     ),
                                   ),
                                 );
@@ -310,7 +318,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              'Create Account',
+                              context.l10n.createAccount,
                               style: AppTextStyles.t_16w500.copyWith(
                                 color: Colors.white,
                               ),
@@ -327,7 +335,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8).w,
                       child: Text(
-                        'Or continue with',
+                        context.l10n.orContinueWith,
                         style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                       ),
                     ),
@@ -340,7 +348,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   children: [
                     SocialButton(
-                      text: 'Google',
+                      text: context.l10n.google,
                       icon: Icons.g_mobiledata,
                       onTap: () {
                         final state = context.read<AuthCubit>().state;
@@ -348,9 +356,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         if (!_isChecked) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
-                                'You must agree to the terms first',
+                                context.l10n.youMustAgreeToTheTermsFirst,
                               ),
                             ),
                           );
@@ -359,9 +367,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                         if (_selectedRole == null) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
+                            SnackBar(
                               content: Text(
-                                'Please choose Customer or Seller first',
+                                context.l10n.pleaseChooseCustomerOrSellerFirst,
                               ),
                             ),
                           );
@@ -382,14 +390,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Already have an account?',
+                      context.l10n.alreadyHaveAnAccount,
                       style: AppTextStyles.t_12w400.copyWith(
                         color: primaryColor.withValues(alpha: 0.6),
                       ),
                     ),
                     SizedBox(width: 10.w),
                     ButtomText(
-                      text: 'Log In',
+                      text: context.l10n.logIn,
                       onTap: () {
                         Get.back();
                       },
