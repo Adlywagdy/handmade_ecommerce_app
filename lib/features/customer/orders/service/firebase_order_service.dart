@@ -262,7 +262,7 @@ class FirebaseOrderService {
       }
 
       final doc = querySnapshot.docs.first;
-      final data = doc.data() as Map<String, dynamic>;
+      final data = doc.data();
 
       final String orderNumber = data['orderNumber'];
 
