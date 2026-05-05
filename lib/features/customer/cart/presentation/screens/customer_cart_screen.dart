@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -331,13 +333,15 @@ class CheckoutButton extends StatelessWidget {
 
                     // fetch a new numeric order ID and set display id
                     orderCubit.orderID = await orderCubit.getNewOrderID();
+
+                    log(orderCubit.orderID.toString());
                     await orderCubit.placeNewOrder(
                       CustomerOrderModel(
                         customer: customerCubit.customerData,
                         products: cartCubit.cartProductsList,
                         status: OrderStatus.pending,
                         address: effectiveAddress,
-                        orderid: "#AY-${orderCubit.orderID}",
+                        orderid: "#AY-${orderCubit.orderID + 1}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),
                       ),

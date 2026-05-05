@@ -251,61 +251,26 @@ class FirebaseOrderService {
   /// Get next order ID by fetching the last order and incrementing
   Future<int> getNextOrderID() async {
     try {
-      // Prefer a numeric `orderNumber` field if present and indexed.
-      try {
-        final byNumber = await _firestore
-            .collection('orders')
-            .orderBy('orderNumber', descending: true)
-            .limit(1)
-            .get();
-
-        if (byNumber.docs.isNotEmpty) {
-          final data = byNumber.docs.first.data();
-          final val = data['orderNumber'];
-          if (val is num) return val.toInt() + 1;
-          final valStr = val?.toString() ?? '';
-          final parsedDirect = int.tryParse(valStr);
-          if (parsedDirect != null) return parsedDirect + 1;
-          final m = RegExp(r"(\d+)").firstMatch(valStr);
-          if (m != null) return int.parse(m.group(1)!) + 1;
-        }
-      } catch (_) {
-        // ignore and fall back to scanning recent orders by createdAt
-      }
-
-      // Fallback: fetch recent orders by createdAt and compute the max numeric portion
-      final snapshot = await _firestore
+      final querySnapshot = await _firestore
           .collection('orders')
-          .orderBy('createdAt', descending: true)
-          .limit(50)
+          .orderBy('orderNumber', descending: true)
+          .limit(1)
           .get();
 
-      if (snapshot.docs.isEmpty) return 10001;
-
-      var maxNumeric = 10000;
-      for (final doc in snapshot.docs) {
-        final lastOrder = doc.data();
-        final raw =
-            lastOrder['orderNumber'] ??
-            lastOrder['orderid'] ??
-            lastOrder['orderId'];
-        final rawStr = raw?.toString() ?? '';
-
-        var parsed = int.tryParse(rawStr);
-        if (parsed == null) {
-          final m = RegExp(r"(\d+)").firstMatch(rawStr);
-          parsed = m != null ? int.tryParse(m.group(1)!) : null;
-        }
-
-        if (parsed != null && parsed > maxNumeric) {
-          maxNumeric = parsed;
-        }
+      if (querySnapshot.docs.isEmpty) {
+        return 10000;
       }
 
-      return maxNumeric + 1;
+      final doc = querySnapshot.docs.first;
+      final data = doc.data() as Map<String, dynamic>;
+
+      final String orderNumber = data['orderNumber'];
+
+      final int lastOrderNum = int.parse(orderNumber.split('-').last);
+
+      return lastOrderNum;
     } catch (e) {
-      print('Failed to generate order ID: $e');
-      return 10001;
+      throw Exception('Failed to get next order ID: $e');
     }
   }
 }
