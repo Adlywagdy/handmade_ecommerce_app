@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../../../../core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import '../../../../models/sellers_model.dart';
 import '../../../widgets/custom_action_button.dart';
 
@@ -117,7 +117,7 @@ class _SellerInfo extends StatelessWidget {
         ),
         SizedBox(height: 4.h),
         Text(
-          'Submitted: ${seller.submittedDate}',
+          context.l10n.submittedOn(seller.submittedDate),
           style: TextStyle(fontSize: 11.sp, color: greyTextColor),
         ),
       ],
@@ -169,14 +169,14 @@ class _SellerCardActions extends StatelessWidget {
     return Row(
       children: [
         ActionButton(
-          label: 'Approve',
+          label: context.l10n.approve,
           color: greenDegree,
           onTap: onApprove,
           isLoading: isProcessing,
         ),
         SizedBox(width: 12.w),
         ActionButton(
-          label: 'Reject',
+          label: context.l10n.reject,
           color: redDegree,
           style: ActionButtonStyle.outlined,
           onTap: onReject,

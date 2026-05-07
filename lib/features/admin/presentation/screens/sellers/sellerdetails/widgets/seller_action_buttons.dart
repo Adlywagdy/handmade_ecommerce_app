@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../../core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import '../../../../widgets/custom_action_button.dart';
 
 // The Approve / Reject row shown at the bottom of the seller details page.
@@ -22,14 +23,14 @@ class SellerActionButtons extends StatelessWidget {
     return Row(
       children: [
         ActionButton(
-          label: 'Approve',
+          label: context.l10n.approve,
           color: greenDegree,
           isLoading: isBusy,
           onTap: onApprove,
         ),
         SizedBox(width: 12.w),
         ActionButton(
-          label: 'Reject',
+          label: context.l10n.reject,
           color: redDegree,
           style: ActionButtonStyle.outlined,
           isLoading: isBusy,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../cubit/admin_cubit.dart';
 import '../../../../models/orders_model.dart';
@@ -18,7 +19,7 @@ class OrdersList extends StatelessWidget {
     if (orders.isEmpty) {
       return Center(
         child: Text(
-          'No orders found',
+          context.l10n.noOrdersFound,
           style: TextStyle(fontSize: 14.sp, color: subTitleColor),
         ),
       );
@@ -31,10 +32,12 @@ class OrdersList extends StatelessWidget {
         final order = orders[i];
         return OrderCard(
           order: order,
-          onTap: () => Get.to(() => BlocProvider.value(
-            value: cubit,
-            child: OrderDetailsScreen(orderId: order.id),
-          )),
+          onTap: () => Get.to(
+            () => BlocProvider.value(
+              value: cubit,
+              child: OrderDetailsScreen(orderId: order.id),
+            ),
+          ),
         );
       },
     );

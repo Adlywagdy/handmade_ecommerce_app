@@ -2,6 +2,7 @@ import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/utils/time_formatter.dart';
@@ -42,7 +43,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
             : null,
         centerTitle: true,
         title: Text(
-          'Earnings',
+          context.l10n.earnings,
           style: TextStyle(
             color: commonColor,
             fontSize: 20.sp,
@@ -139,7 +140,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     children: [
                       Expanded(
                         child: _buildQuickStatCard(
-                          title: 'Orders Processed',
+                          title: context.l10n.ordersProcessed,
                           value: completedOrdersCount.toString(),
                           icon: Icons.shopping_cart_outlined,
                           iconColor: commonColor,
@@ -149,8 +150,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       SizedBox(width: 12.w),
                       Expanded(
                         child: _buildQuickStatCard(
-                          title: 'Avg. Order Value',
-                          value: 'EGP $avgOrderValue',
+                          title: context.l10n.avgOrderValue,
+                          value: '${context.l10n.egp} $avgOrderValue',
                           icon: Icons.bar_chart_rounded,
                           iconColor: primaryColor,
                           iconBgColor: primaryColor.withValues(alpha: 0.1),
@@ -165,7 +166,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Recent Transactions',
+                        context.l10n.recentTransactions,
                         style: TextStyle(
                           color: const Color(0xFF0F172A),
                           fontSize: 16.sp,
@@ -178,7 +179,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                           // TODO: Navigate to all transactions
                         },
                         child: Text(
-                          'View All ›',
+                          context.l10n.viewAll,
                           style: TextStyle(
                             color: commonColor,
                             fontSize: 13.sp,
@@ -197,7 +198,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(20.w),
                         child: Text(
-                          'No recent transactions',
+                          context.l10n.noRecentTransactions,
                           style: TextStyle(
                             color: const Color(0xFF94A3B8),
                             fontSize: 14.sp,
@@ -243,7 +244,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
       child: Column(
         children: [
           Text(
-            'TOTAL BALANCE',
+            context.l10n.totalBalance,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.7),
               fontSize: 11.sp,
@@ -254,7 +255,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           ),
           SizedBox(height: 8.h),
           Text(
-            'EGP ${stats.totalRevenue}',
+            '${context.l10n.egp} ${stats.totalRevenue}',
             style: TextStyle(
               color: Colors.white,
               fontSize: 32.sp,
@@ -286,7 +287,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                   ),
                   SizedBox(width: 8.w),
                   Text(
-                    'Withdraw Funds',
+                    context.l10n.withdrawFunds,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 13.sp,
@@ -309,7 +310,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Revenue Statistics',
+          context.l10n.revenueStatistics,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 16.sp,
@@ -326,8 +327,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           padding: EdgeInsets.all(3.w),
           child: Row(
             children: [
-              _buildToggleButton('Weekly', 0),
-              _buildToggleButton('Monthly', 1),
+              _buildToggleButton(context.l10n.weekly, 0),
+              _buildToggleButton(context.l10n.monthly, 1),
             ],
           ),
         ),
@@ -635,7 +636,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                             fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w600,
                           ),
-                          hintText: '0.00',
+                          hintText: context.l10n.zeroPointZeroZero,
                           hintStyle: TextStyle(
                             color: const Color(0xFFCBD5E1),
                             fontSize: 18.sp,
@@ -904,7 +905,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
             ),
             SizedBox(height: 16.h),
             Text(
-              'Withdrawal Requested!',
+              context.l10n.withdrawalRequested,
               style: TextStyle(
                 color: const Color(0xFF0F172A),
                 fontSize: 18.sp,
@@ -914,7 +915,9 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
             ),
             SizedBox(height: 8.h),
             Text(
-              'EGP ${amount.toStringAsFixed(2)} will be transferred to your account within 2-3 business days.',
+              context.l10n.withdrawalMessage(
+                'EGP ${amount.toStringAsFixed(2)}',
+              ),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: const Color(0xFF64748B),
@@ -955,7 +958,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
   }
 }
 
-/// Mock transaction data
+/// Mock transaction data type
 class _Transaction {
   final String orderId;
   final String amount;
@@ -969,39 +972,6 @@ class _Transaction {
     this.isCompleted = true,
   });
 }
-
-final _mockTransactions = [
-  _Transaction(
-    orderId: '#29841',
-    amount: '124.00',
-    date: DateTime.now().subtract(const Duration(hours: 3)),
-    isCompleted: true,
-  ),
-  _Transaction(
-    orderId: '#29839',
-    amount: '45.50',
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-    isCompleted: false,
-  ),
-  _Transaction(
-    orderId: '#29835',
-    amount: '89.00',
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 8)),
-    isCompleted: true,
-  ),
-  _Transaction(
-    orderId: '#29830',
-    amount: '210.00',
-    date: DateTime.now().subtract(const Duration(days: 2)),
-    isCompleted: true,
-  ),
-  _Transaction(
-    orderId: '#29825',
-    amount: '67.50',
-    date: DateTime.now().subtract(const Duration(days: 3)),
-    isCompleted: true,
-  ),
-];
 
 // ─── Earnings Chart (embedded) ───
 
@@ -1079,7 +1049,6 @@ class _EarningsChartState extends State<_EarningsChart> {
 
     final totalValue = data.reduce((a, b) => a + b);
     final defaultTotal = '+EGP ${totalValue.toStringAsFixed(2)}';
-    final percentage = isW ? '12%' : '8%';
 
     return Container(
       padding: EdgeInsets.all(16.w),
@@ -1104,7 +1073,7 @@ class _EarningsChartState extends State<_EarningsChart> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isW ? 'Weekly Earnings' : 'Monthly Earnings',
+                    isW ? context.l10n.weeklyEarnings : context.l10n.monthlyEarnings,
                     style: TextStyle(
                       color: const Color(0xFF0F172A),
                       fontSize: 15.sp,
@@ -1117,7 +1086,7 @@ class _EarningsChartState extends State<_EarningsChart> {
                     duration: const Duration(milliseconds: 200),
                     child: Text(
                       _touchedIndex >= 0
-                          ? 'EGP ${data[_touchedIndex].toInt()} — ${labels[_touchedIndex]}'
+                          ? '${context.l10n.egp} ${data[_touchedIndex].toInt()} — ${labels[_touchedIndex]}'
                           : defaultTotal,
                       key: ValueKey(_touchedIndex),
                       style: TextStyle(
@@ -1196,7 +1165,7 @@ class _EarningsChartState extends State<_EarningsChart> {
                     ),
                     getTooltipItem: (group, gi, rod, ri) {
                       return BarTooltipItem(
-                        'EGP ${rod.toY.toInt()}',
+                        '${context.l10n.egp} ${rod.toY.toInt()}',
                         TextStyle(
                           color: Colors.white,
                           fontFamily: 'Plus Jakarta Sans',

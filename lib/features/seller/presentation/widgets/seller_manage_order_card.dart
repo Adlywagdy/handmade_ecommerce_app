@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class SellerManageOrderCard extends StatelessWidget {
@@ -76,11 +77,17 @@ class SellerManageOrderCard extends StatelessWidget {
                         ? Image.network(
                             imageUrl!,
                             fit: BoxFit.cover,
-                            errorBuilder: (c, e, s) => Icon(Icons.image_outlined,
-                                color: Colors.grey, size: 24.w),
+                            errorBuilder: (c, e, s) => Icon(
+                              Icons.image_outlined,
+                              color: Colors.grey,
+                              size: 24.w,
+                            ),
                           )
-                        : Icon(Icons.image_outlined,
-                            color: Colors.grey, size: 24.w),
+                        : Icon(
+                            Icons.image_outlined,
+                            color: Colors.grey,
+                            size: 24.w,
+                          ),
                   ),
                 ),
                 SizedBox(width: 12.w),
@@ -107,7 +114,9 @@ class SellerManageOrderCard extends StatelessWidget {
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
-                                horizontal: 10.w, vertical: 4.h),
+                              horizontal: 10.w,
+                              vertical: 4.h,
+                            ),
                             decoration: BoxDecoration(
                               color: _getStatusBgColor(),
                               borderRadius: BorderRadius.circular(100.r),
@@ -126,7 +135,7 @@ class SellerManageOrderCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        'Customer: $customerName',
+                        '${context.l10n.customerLabel} $customerName',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -140,7 +149,7 @@ class SellerManageOrderCard extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           text:
-                              '$itemCount item${itemCount > 1 ? 's' : ''} • Total: ',
+                              '$itemCount ${itemCount > 1 ? context.l10n.items : context.l10n.item} • ${context.l10n.totalLabel} ',
                           style: TextStyle(
                             color: const Color(0xFF64748B),
                             fontSize: 13.sp,
@@ -149,7 +158,7 @@ class SellerManageOrderCard extends StatelessWidget {
                           ),
                           children: [
                             TextSpan(
-                              text: 'EGP $totalAmount',
+                              text: '${context.l10n.egp} $totalAmount',
                               style: TextStyle(
                                 color: commonColor,
                                 fontWeight: FontWeight.w700,
@@ -170,8 +179,9 @@ class SellerManageOrderCard extends StatelessWidget {
             padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
             decoration: BoxDecoration(
               color: const Color(0xFFFCF8F5), // Light warm beige
-              borderRadius:
-                  BorderRadius.vertical(bottom: Radius.circular(11.r)),
+              borderRadius: BorderRadius.vertical(
+                bottom: Radius.circular(11.r),
+              ),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,8 +199,10 @@ class SellerManageOrderCard extends StatelessWidget {
                   onTap: onButtonPressed,
                   borderRadius: BorderRadius.circular(8.r),
                   child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 8.h,
+                    ),
                     decoration: BoxDecoration(
                       color: isButtonFilled ? commonColor : Colors.transparent,
                       borderRadius: BorderRadius.circular(8.r),

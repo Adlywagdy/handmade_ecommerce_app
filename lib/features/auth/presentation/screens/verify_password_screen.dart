@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -38,15 +39,15 @@ class VerifyPasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 20.h),
             Text(
-              'Check your email',
+              context.l10n.checkYourEmail,
               style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
               textAlign: TextAlign.center,
             ),
             SizedBox(height: 12.h),
             Text(
               email.isNotEmpty
-                  ? 'We sent a password reset link to\n$email\nPlease open your email and follow the instructions.'
-                  : 'We sent a password reset link to your email.\nPlease open your email and follow the instructions.',
+                  ? '${context.l10n.weSentAPasswordResetLinkTo}\n$email\n${context.l10n.pleaseOpenYourEmailAndFollowTheInstructions}'
+                  : '${context.l10n.weSentAPasswordResetLinkTo} ${context.l10n.pleaseOpenYourEmailAndFollowTheInstructions}',
               style: AppTextStyles.t_12w500.copyWith(
                 color: primaryColor.withValues(alpha: 0.6),
               ),
@@ -54,7 +55,7 @@ class VerifyPasswordScreen extends StatelessWidget {
             ),
             SizedBox(height: 24.h),
             Text(
-              'If you don’t see the email, check your spam or junk folder.',
+              context.l10n.ifYouDontSeeTheEmailCheckYourSpamOrJunkFolder,
               style: AppTextStyles.t_12w500.copyWith(
                 color: primaryColor.withValues(alpha: 0.6),
               ),
@@ -71,7 +72,7 @@ class VerifyPasswordScreen extends StatelessWidget {
           },
           buttoncolor: primaryColor,
           child: Text(
-            'Back to Login',
+            context.l10n.backToLogin,
             style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
           ),
         ),

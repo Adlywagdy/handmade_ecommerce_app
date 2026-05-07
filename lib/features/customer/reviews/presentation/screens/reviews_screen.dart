@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_model.dart';
@@ -25,7 +26,7 @@ class ReviewsScreen extends StatelessWidget {
         centerTitle: true,
         scrolledUnderElevation: 0,
         backgroundColor: customerbackGroundColor,
-        title: Text('All Reviews', style: AppTextStyles.t_18w700),
+        title: Text(context.l10n.allReviews, style: AppTextStyles.t_18w700),
       ),
       body: Padding(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),

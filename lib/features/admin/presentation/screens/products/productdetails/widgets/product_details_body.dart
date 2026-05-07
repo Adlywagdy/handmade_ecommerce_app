@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../cubit/admin_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/features/admin/cubit/admin_cubit.dart';
 import '../../../../../models/products_model.dart';
 import 'info_row.dart';
 import 'product_action_buttons.dart';
@@ -31,20 +32,35 @@ class ProductDetailsBody extends StatelessWidget {
         SizedBox(height: 12.h),
 
         SectionWidget(
-          title: 'Inventory',
+          title: context.l10n.inventory,
           rows: [
-            InfoRow(label: 'Stock', value: product.stock.toString()),
-            InfoRow(label: 'Category', value: product.categoryId.isNotEmpty ? product.categoryId : '—'),
-            InfoRow(label: 'Active', value: product.isActive ? 'Yes' : 'No'),
+            InfoRow(label: context.l10n.stock, value: product.stock.toString()),
+            InfoRow(
+              label: context.l10n.category,
+              value: product.categoryId.isNotEmpty ? product.categoryId : '—',
+            ),
+            InfoRow(
+              label: context.l10n.active,
+              value: product.isActive ? context.l10n.yes : context.l10n.no,
+            ),
           ],
         ),
         SizedBox(height: 12.h),
         SectionWidget(
-          title: 'Stats',
+          title: context.l10n.stats,
           rows: [
-            InfoRow(label: 'Rating', value: product.rating.toStringAsFixed(1)),
-            InfoRow(label: 'Reviews', value: product.reviewsCount.toString()),
-            InfoRow(label: 'Sales', value: product.salesCount.toString()),
+            InfoRow(
+              label: context.l10n.rating,
+              value: product.rating.toStringAsFixed(1),
+            ),
+            InfoRow(
+              label: context.l10n.reviews,
+              value: product.reviewsCount.toString(),
+            ),
+            InfoRow(
+              label: context.l10n.sales,
+              value: product.salesCount.toString(),
+            ),
           ],
         ),
         SizedBox(height: 12.h),

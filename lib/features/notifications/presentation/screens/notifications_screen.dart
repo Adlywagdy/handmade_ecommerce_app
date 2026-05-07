@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/services/notification_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/utils/time_formatter.dart';
@@ -60,7 +61,7 @@ class NotificationsScreen extends StatelessWidget {
       ),
       centerTitle: true,
       title: Text(
-        'Notifications',
+        context.l10n.notifications,
         style: TextStyle(
           color: const Color(0xFF0F172A),
           fontSize: 18.sp,
@@ -71,7 +72,8 @@ class NotificationsScreen extends StatelessWidget {
       actions: [
         BlocBuilder<NotificationsCubit, NotificationsState>(
           builder: (context, state) {
-            if (state is NotificationsLoaded && state.notifications.isNotEmpty) {
+            if (state is NotificationsLoaded &&
+                state.notifications.isNotEmpty) {
               return PopupMenuButton<String>(
                 icon: Icon(
                   Icons.more_vert_rounded,
@@ -99,7 +101,7 @@ class NotificationsScreen extends StatelessWidget {
                         Icon(Icons.done_all, color: commonColor, size: 18.w),
                         SizedBox(width: 10.w),
                         Text(
-                          'Mark all as read',
+                          context.l10n.markAllAsRead,
                           style: TextStyle(
                             color: const Color(0xFF334155),
                             fontSize: 14.sp,
@@ -114,10 +116,14 @@ class NotificationsScreen extends StatelessWidget {
                     value: 'clear_all',
                     child: Row(
                       children: [
-                        Icon(Icons.delete_outline, color: redDegree, size: 18.w),
+                        Icon(
+                          Icons.delete_outline,
+                          color: redDegree,
+                          size: 18.w,
+                        ),
                         SizedBox(width: 10.w),
                         Text(
-                          'Clear all',
+                          context.l10n.clearAll,
                           style: TextStyle(
                             color: redDegree,
                             fontSize: 14.sp,
@@ -143,27 +149,27 @@ class NotificationsScreen extends StatelessWidget {
     final filters = [
       _FilterTabData(
         filter: NotificationFilter.all,
-        label: 'All',
+        label: context.l10n.all,
         icon: Icons.all_inbox_outlined,
       ),
       _FilterTabData(
         filter: NotificationFilter.unread,
-        label: 'Unread',
+        label: context.l10n.unread,
         icon: Icons.mark_email_unread_outlined,
       ),
       _FilterTabData(
         filter: NotificationFilter.orders,
-        label: 'Orders',
+        label: context.l10n.orders,
         icon: Icons.shopping_bag_outlined,
       ),
       _FilterTabData(
         filter: NotificationFilter.messages,
-        label: 'Messages',
+        label: context.l10n.messages,
         icon: Icons.chat_bubble_outline,
       ),
       _FilterTabData(
         filter: NotificationFilter.offers,
-        label: 'Offers',
+        label: context.l10n.offers,
         icon: Icons.local_offer_outlined,
       ),
     ];
@@ -221,8 +227,9 @@ class NotificationsScreen extends StatelessWidget {
                               : const Color(0xFF64748B),
                           fontSize: 12.sp,
                           fontFamily: 'Plus Jakarta Sans',
-                          fontWeight:
-                              isActive ? FontWeight.w600 : FontWeight.w500,
+                          fontWeight: isActive
+                              ? FontWeight.w600
+                              : FontWeight.w500,
                         ),
                       ),
                     ],
@@ -244,7 +251,7 @@ class NotificationsScreen extends StatelessWidget {
     final notifications = state.filteredNotifications;
 
     // Group notifications by date
-    final grouped = _groupNotificationsByDate(notifications);
+    final grouped = _groupNotificationsByDate(context, notifications);
 
     return CupertinoScrollbar(
       child: RefreshIndicator(
@@ -287,21 +294,21 @@ class NotificationsScreen extends StatelessWidget {
                   return NotificationCard(
                     notification: notification,
                     onTap: () {
-                      context
-                          .read<NotificationsCubit>()
-                          .markAsRead(notification.id);
+                      context.read<NotificationsCubit>().markAsRead(
+                        notification.id,
+                      );
                       // Smart navigation based on notification type
                       NotificationService.handleNotificationTap(notification);
                     },
                     onDismissed: () {
-                      context
-                          .read<NotificationsCubit>()
-                          .deleteNotification(notification.id);
+                      context.read<NotificationsCubit>().deleteNotification(
+                        notification.id,
+                      );
 
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Notification deleted',
+                            context.l10n.notificationDeleted,
                             style: TextStyle(
                               fontFamily: 'Plus Jakarta Sans',
                               fontSize: 13.sp,
@@ -332,6 +339,7 @@ class NotificationsScreen extends StatelessWidget {
 
   /// Group notifications into Today, Yesterday, and Earlier
   List<_NotificationGroup> _groupNotificationsByDate(
+    BuildContext context,
     List<NotificationModel> notifications,
   ) {
     final todayList = <NotificationModel>[];
@@ -350,16 +358,24 @@ class NotificationsScreen extends StatelessWidget {
 
     final groups = <_NotificationGroup>[];
     if (todayList.isNotEmpty) {
-      groups.add(_NotificationGroup(label: 'TODAY', notifications: todayList));
+      groups.add(
+        _NotificationGroup(label: context.l10n.today, notifications: todayList),
+      );
     }
     if (yesterdayList.isNotEmpty) {
       groups.add(
-        _NotificationGroup(label: 'YESTERDAY', notifications: yesterdayList),
+        _NotificationGroup(
+          label: context.l10n.yesterday,
+          notifications: yesterdayList,
+        ),
       );
     }
     if (earlierList.isNotEmpty) {
       groups.add(
-        _NotificationGroup(label: 'EARLIER', notifications: earlierList),
+        _NotificationGroup(
+          label: context.l10n.earlier,
+          notifications: earlierList,
+        ),
       );
     }
 
@@ -376,7 +392,7 @@ class NotificationsScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
         ),
         title: Text(
-          'Clear All Notifications',
+          context.l10n.clearAllNotifications,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 17.sp,
@@ -385,7 +401,7 @@ class NotificationsScreen extends StatelessWidget {
           ),
         ),
         content: Text(
-          'Are you sure you want to delete all notifications? This action cannot be undone.',
+          context.l10n.clearAllNotificationsMessage,
           style: TextStyle(
             color: const Color(0xFF64748B),
             fontSize: 14.sp,
@@ -398,7 +414,7 @@ class NotificationsScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
-              'Cancel',
+              context.l10n.cancel,
               style: TextStyle(
                 color: const Color(0xFF94A3B8),
                 fontSize: 14.sp,
@@ -413,7 +429,7 @@ class NotificationsScreen extends StatelessWidget {
               Navigator.of(dialogContext).pop();
             },
             child: Text(
-              'Clear All',
+              context.l10n.clearAll,
               style: TextStyle(
                 color: redDegree,
                 fontSize: 14.sp,
@@ -433,10 +449,7 @@ class _NotificationGroup {
   final String label;
   final List<NotificationModel> notifications;
 
-  const _NotificationGroup({
-    required this.label,
-    required this.notifications,
-  });
+  const _NotificationGroup({required this.label, required this.notifications});
 }
 
 /// Internal model for filter tab data

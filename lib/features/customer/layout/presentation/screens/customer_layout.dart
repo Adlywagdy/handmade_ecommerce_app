@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
@@ -80,12 +81,12 @@ class _CustomerLayoutState extends State<CustomerLayout> {
           items: [
             BottomNavigationBarItem(
               icon: const Icon(Icons.home_outlined),
-              label: 'Home',
+              label: context.l10n.home,
               activeIcon: const Icon(Icons.home),
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.favorite_border),
-              label: 'Wishlist',
+              label: context.l10n.wishlist,
               activeIcon: const Icon(
                 Icons.favorite,
                 fontWeight: FontWeight.w700,
@@ -116,17 +117,17 @@ class _CustomerLayoutState extends State<CustomerLayout> {
                   );
                 },
               ),
-              label: 'Cart',
+              label: context.l10n.cart,
               activeIcon: const Icon(Icons.shopping_cart),
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.shopping_bag_outlined),
-              label: 'Orders',
+              label: context.l10n.orders,
               activeIcon: const Icon(Icons.shopping_bag),
             ),
             BottomNavigationBarItem(
               icon: const Icon(Icons.person_outline),
-              label: 'Profile',
+              label: context.l10n.profile,
               activeIcon: const Icon(Icons.person),
             ),
           ],

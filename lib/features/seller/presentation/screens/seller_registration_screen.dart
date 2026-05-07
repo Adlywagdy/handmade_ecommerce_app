@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
@@ -58,7 +59,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
           },
         ),
         title: Text(
-          'Seller Registration',
+          context.l10n.sellerRegistration,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -77,116 +78,129 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Info Cards
-              _buildInfoCard(
-                icon: Icons.language,
-                title: 'Global Reach',
-                subtitle: 'Sell to customers worldwide',
-              ),
-              _buildInfoCard(
-                icon: Icons.verified_user_outlined,
-                title: 'Secure Sales',
-                subtitle: 'Guaranteed safe payments',
-              ),
-              _buildInfoCard(
-                icon: Icons.support_agent_outlined,
-                title: '24/7 Support',
-                subtitle: 'Dedicated artisan assistance',
-              ),
-
-              SizedBox(height: 24.h),
-
-              // Account Details Section
-              Text(
-                'Account Details',
-                style: TextStyle(
-                  color: const Color(0xFF0F172A),
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w800,
-                  fontFamily: 'Plus Jakarta Sans',
+                _buildInfoCard(
+                  icon: Icons.language,
+                  title: 'Global Reach',
+                  subtitle: 'Sell to customers worldwide',
                 ),
-              ),
-              SizedBox(height: 16.h),
-              
-              _buildLabel('Email Address'),
-              _buildTextField(hint: 'e.g. seller@mail.com', controller: _emailController),
-              SizedBox(height: 16.h),
-              
-              _buildLabel('Password'),
-              _buildTextField(hint: 'Min 6 characters', isPassword: true, controller: _passwordController),
-              SizedBox(height: 24.h),
-
-              // Shop Profile Section
-              Text(
-                'Shop Profile',
-                style: TextStyle(
-                  color: const Color(0xFF0F172A),
-                  fontSize: 18.sp,
-                  fontWeight: FontWeight.w800,
-                  fontFamily: 'Plus Jakarta Sans',
+                _buildInfoCard(
+                  icon: Icons.verified_user_outlined,
+                  title: 'Secure Sales',
+                  subtitle: 'Guaranteed safe payments',
                 ),
-              ),
-              SizedBox(height: 20.h),
+                _buildInfoCard(
+                  icon: Icons.support_agent_outlined,
+                  title: context.l10n.support247,
+                  subtitle: context.l10n.dedicatedArtisanAssistance,
+                ),
 
-              // Shop Name
-              _buildLabel('Shop Name'),
-              _buildTextField(hint: 'e.g. Damascus Woodcrafts', controller: _shopNameController),
-              SizedBox(height: 16.h),
+                SizedBox(height: 24.h),
 
-              // Craft Specialty
-              _buildLabel('Craft Specialty'),
-              _buildTextField(
-                hint: 'Select your primary craft',
-                controller: _specialtyController,
-                suffixIcon: Icon(Icons.keyboard_arrow_down,
-                    color: commonColor, size: 24.w),
-              ),
-              SizedBox(height: 16.h),
+                // Account Details Section
+                Text(
+                  context.l10n.accountDetails,
+                  style: TextStyle(
+                    color: const Color(0xFF0F172A),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                ),
+                SizedBox(height: 16.h),
 
-              // Artisan Bio
-              _buildLabel('Artisan Bio'),
-              _buildTextField(
-                hint:
-                    'Tell us about your journey, your craft, and\nwhat makes your products unique...',
-                maxLines: 4,
-                controller: _bioController,
-              ),
-              SizedBox(height: 16.h),
+                _buildLabel('Email Address'),
+                _buildTextField(
+                  hint: 'e.g. seller@mail.com',
+                  controller: _emailController,
+                ),
+                SizedBox(height: 16.h),
 
-              // Portfolio
-              _buildLabel('Portfolio & Product Samples'),
-              _buildUploadBox(),
-              _buildThumbnailsRow(),
+                _buildLabel('Password'),
+                _buildTextField(
+                  hint: 'Min 6 characters',
+                  isPassword: true,
+                  controller: _passwordController,
+                ),
+                SizedBox(height: 24.h),
 
-              SizedBox(height: 24.h),
+                // Shop Profile Section
+                Text(
+                  context.l10n.shopProfile,
+                  style: TextStyle(
+                    color: const Color(0xFF0F172A),
+                    fontSize: 18.sp,
+                    fontWeight: FontWeight.w800,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                ),
+                SizedBox(height: 20.h),
 
-              // Terms & Conditions
-              _buildTermsCheckbox(),
+                // Shop Name
+                _buildLabel(context.l10n.shopName),
+                _buildTextField(
+                  hint: 'e.g. Damascus Woodcrafts',
+                  controller: _shopNameController,
+                ),
+                SizedBox(height: 16.h),
 
-              SizedBox(height: 24.h),
+                // Craft Specialty
+                _buildLabel('Craft Specialty'),
+                _buildTextField(
+                  hint: 'Select your primary craft',
+                  controller: _specialtyController,
+                  suffixIcon: Icon(
+                    Icons.keyboard_arrow_down,
+                    color: commonColor,
+                    size: 24.w,
+                  ),
+                ),
+                SizedBox(height: 16.h),
 
-              // Submit Button
-              _buildSubmitButton(),
+                // Artisan Bio
+                _buildLabel('Artisan Bio'),
+                _buildTextField(
+                  hint:
+                      'Tell us about your journey, your craft, and\nwhat makes your products unique...',
+                  maxLines: 4,
+                  controller: _bioController,
+                ),
+                SizedBox(height: 16.h),
 
-              // Footer Config
-              Center(
-                child: Padding(
-                  padding: EdgeInsets.symmetric(vertical: 16.h),
-                  child: Text(
-                    'Our curation team will review your application within 3–5\nbusiness days.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      color: const Color(0xFFC6A18C),
-                      fontSize: 11.sp,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Plus Jakarta Sans',
-                      height: 1.4,
+                // Portfolio
+                _buildLabel('Portfolio & Product Samples'),
+                _buildUploadBox(),
+                _buildThumbnailsRow(),
+
+                SizedBox(height: 24.h),
+
+                // Terms & Conditions
+                _buildTermsCheckbox(),
+
+                SizedBox(height: 24.h),
+
+                // Submit Button
+                _buildSubmitButton(),
+
+                // Footer Config
+                Center(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(vertical: 16.h),
+                    child: Text(
+                      context.l10n.curationTeamReview,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: const Color(0xFFC6A18C),
+                        fontSize: 11.sp,
+                        fontWeight: FontWeight.w400,
+                        fontFamily: 'Plus Jakarta Sans',
+                        height: 1.4,
+                      ),
                     ),
                   ),
                 ),
-              ),
-              SizedBox(height: 20.h),
-            ],
-          ),
+                SizedBox(height: 20.h),
+              ],
+            ),
           ),
         ),
       ),
@@ -371,10 +385,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
       height: 56.w,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(8.r),
-        image: DecorationImage(
-          image: NetworkImage(url),
-          fit: BoxFit.cover,
-        ),
+        image: DecorationImage(image: NetworkImage(url), fit: BoxFit.cover),
         border: Border.all(color: const Color(0xFFE2E8F0)),
       ),
       child: Align(
@@ -435,7 +446,8 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                   ),
                 ),
                 const TextSpan(
-                  text: ' and acknowledge\nthe platform commission rates on sales.',
+                  text:
+                      ' and acknowledge\nthe platform commission rates on sales.',
                 ),
               ],
             ),
@@ -450,8 +462,8 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
       listener: (context, state) {
         if (state is RegisterSuccessState) {
           Get.snackbar(
-            'Success',
-            'Registration complete! Awaiting admin approval.',
+            context.l10n.success,
+            context.l10n.registrationCompleteAwaitingApproval,
             backgroundColor: Colors.green,
             colorText: Colors.white,
           );
@@ -459,7 +471,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
           Get.offAllNamed(AppRoutes.sellerdashboard);
         } else if (state is RegisterErrorState) {
           Get.snackbar(
-            'Error',
+            context.l10n.error,
             state.message,
             backgroundColor: Colors.redAccent,
             colorText: Colors.white,
@@ -482,7 +494,10 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                   role: 'seller',
                 );
               } else if (!_agreedToTerms) {
-                Get.snackbar('Error', 'Please agree to the Terms of Service');
+                Get.snackbar(
+                  context.l10n.error,
+                  context.l10n.pleaseAgreeToTermsOfService,
+                );
               }
             },
             style: ElevatedButton.styleFrom(
@@ -540,9 +555,12 @@ class _DashedBorderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(
+      ..addRRect(
+        RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(radius)));
+          Radius.circular(radius),
+        ),
+      );
 
     final dashPath = Path();
     for (final metric in path.computeMetrics()) {
