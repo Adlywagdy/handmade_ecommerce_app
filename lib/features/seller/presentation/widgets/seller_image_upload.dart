@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerImageUpload extends StatelessWidget {
   final VoidCallback? onTap;
@@ -35,12 +36,12 @@ class SellerImageUpload extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
         ],
-        if (images.isEmpty) _buildUploadArea(),
+        if (images.isEmpty) _buildUploadArea(context),
       ],
     );
   }
 
-  Widget _buildUploadArea() {
+  Widget _buildUploadArea(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -72,7 +73,7 @@ class SellerImageUpload extends StatelessWidget {
             ),
             SizedBox(height: 12.h),
             Text(
-              'Click to upload or drag and drop',
+              context.l10n.clickToUploadOrDragAndDrop,
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
@@ -100,7 +101,9 @@ class SellerImageUpload extends StatelessWidget {
     ImageProvider imageProvider;
     if (imagePath.startsWith('http')) {
       imageProvider = NetworkImage(imagePath);
-    } else if (imagePath.startsWith('/') || imagePath.contains('Users/') || imagePath.contains('data/')) {
+    } else if (imagePath.startsWith('/') ||
+        imagePath.contains('Users/') ||
+        imagePath.contains('data/')) {
       imageProvider = FileImage(File(imagePath));
     } else {
       imageProvider = AssetImage(imagePath);
@@ -114,9 +117,7 @@ class SellerImageUpload extends StatelessWidget {
           margin: EdgeInsets.only(right: 12.w, top: 8.h),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(10.r),
-            border: Border.all(
-              color: const Color(0xFFE2E8F0),
-            ),
+            border: Border.all(color: const Color(0xFFE2E8F0)),
           ),
           clipBehavior: Clip.antiAlias,
           child: Image(
@@ -124,10 +125,7 @@ class SellerImageUpload extends StatelessWidget {
             fit: BoxFit.cover,
             errorBuilder: (context, error, stackTrace) => Container(
               color: const Color(0xFFF1F5F9),
-              child: Icon(
-                Icons.image_outlined,
-                color: const Color(0xFF94A3B8),
-              ),
+              child: Icon(Icons.image_outlined, color: const Color(0xFF94A3B8)),
             ),
           ),
         ),
@@ -143,11 +141,7 @@ class SellerImageUpload extends StatelessWidget {
                   color: Color(0xffD32F2F),
                   shape: BoxShape.circle,
                 ),
-                child: Icon(
-                  Icons.close,
-                  color: Colors.white,
-                  size: 14.sp,
-                ),
+                child: Icon(Icons.close, color: Colors.white, size: 14.sp),
               ),
             ),
           ),
@@ -165,15 +159,9 @@ class SellerImageUpload extends StatelessWidget {
         decoration: BoxDecoration(
           color: const Color(0xFFF8FAFC),
           borderRadius: BorderRadius.circular(10.r),
-          border: Border.all(
-            color: const Color(0xFFE2E8F0),
-          ),
+          border: Border.all(color: const Color(0xFFE2E8F0)),
         ),
-        child: Icon(
-          Icons.add,
-          color: const Color(0xff8B4513),
-          size: 28.sp,
-        ),
+        child: Icon(Icons.add, color: const Color(0xff8B4513), size: 28.sp),
       ),
     );
   }

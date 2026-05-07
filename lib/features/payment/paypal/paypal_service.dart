@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_paypal_payment/flutter_paypal_payment.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/features/payment/paypal/paypal_models.dart';
 
 class PayPAlService {
@@ -32,11 +33,11 @@ class PayPAlService {
           transactions: [
             {
               "amount": amount.toJson(),
-              "description": "The payment transaction description.",
+              "description": context.l10n.paymentTransactionDescription,
               "item_list": orderItems.toJson(),
             },
           ],
-          note: "Contact us for any questions on your order.",
+          note: context.l10n.contactUsForQuestions,
           onSuccess: (Map params) async {
             log("onSuccess: $params");
             completeAndClose(true);

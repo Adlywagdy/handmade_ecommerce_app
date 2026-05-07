@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
@@ -56,7 +57,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
           icon: Icon(Icons.arrow_back, color: commonColor, size: 24.w),
         ),
         title: Text(
-          'Manage Products',
+          context.l10n.manageProducts,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -127,7 +128,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
               ],
             );
           }
-          return const Center(child: Text('No products found'));
+          return Center(child: Text(context.l10n.noProductsFound));
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -167,10 +168,10 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
           fontWeight: FontWeight.w500,
           fontFamily: 'Plus Jakarta Sans',
         ),
-        tabs: const [
-          Tab(text: 'All'),
-          Tab(text: 'Active'),
-          Tab(text: 'Pending'),
+        tabs: [
+          Tab(text: context.l10n.all),
+          Tab(text: context.l10n.active),
+          Tab(text: context.l10n.pending),
         ],
       ),
     );
@@ -189,7 +190,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
             ),
             SizedBox(height: 16.h),
             Text(
-              'No products found',
+              context.l10n.noProductsFound,
               style: TextStyle(
                 color: const Color(0xFF64748B),
                 fontSize: 16.sp,
@@ -287,7 +288,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Stock: ${product.stock} units',
+                        '${context.l10n.stock}: ${product.stock} ${context.l10n.units}',
                         style: TextStyle(
                           color: const Color(0xFF64748B),
                           fontSize: 12.sp,
@@ -338,13 +339,16 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                 }
               },
               itemBuilder: (BuildContext context) => [
-                const PopupMenuItem<String>(
+                PopupMenuItem<String>(
                   value: 'edit',
-                  child: Text('Edit Product'),
+                  child: Text(context.l10n.editProduct),
                 ),
-                const PopupMenuItem<String>(
+                PopupMenuItem<String>(
                   value: 'delete',
-                  child: Text('Delete', style: TextStyle(color: Colors.red)),
+                  child: Text(
+                    context.l10n.delete,
+                    style: TextStyle(color: Colors.red),
+                  ),
                 ),
               ],
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import '../../../../../../../core/theme/colors.dart';
 import '../../../../../models/products_model.dart';
 import 'product_status_pill.dart';
@@ -81,7 +82,7 @@ class _ProductInfoCard extends StatelessWidget {
           ),
           SizedBox(height: 4.h),
           Text(
-            'by $vendorName',
+            context.l10n.byVendor(vendorName),
             style: TextStyle(
               fontSize: 13.sp,
               color: commonColor,

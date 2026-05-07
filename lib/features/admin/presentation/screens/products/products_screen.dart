@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import '../../../../../core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/products_model.dart';
@@ -22,7 +23,7 @@ class AdminProductsScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Approve Products',
+            context.l10n.approveProducts,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
@@ -38,32 +39,30 @@ class AdminProductsScreen extends StatelessWidget {
               Colors.grey.withValues(alpha: 0.15),
             ),
             indicatorWeight: 3,
-            labelStyle: TextStyle(
-              fontSize: 15.sp,
-              fontWeight: FontWeight.w700,
-            ),
+            labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
             unselectedLabelStyle: TextStyle(
               fontSize: 15.sp,
               fontWeight: FontWeight.w500,
             ),
-            tabs: const [
-              Tab(text: 'Pending'),
-              Tab(text: 'Approved'),
-              Tab(text: 'Rejected'),
+            tabs: [
+              Tab(text: context.l10n.pending),
+              Tab(text: context.l10n.approved),
+              Tab(text: context.l10n.rejected),
             ],
           ),
         ),
         body: Column(
           children: [
             CustomSearchBar(
-              hintText: 'Search products...',
+              hintText: context.l10n.searchProducts,
               onChanged: (v) => context.read<AdminCubit>().setProductsQuery(v),
             ),
             Expanded(
               child: BlocBuilder<AdminCubit, AdminState>(
                 builder: (context, state) {
                   final cubit = context.read<AdminCubit>();
-                  if (cubit.productsList.isEmpty && state is GetProductsLoading) {
+                  if (cubit.productsList.isEmpty &&
+                      state is GetProductsLoading) {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (cubit.productsList.isEmpty && state is GetProductsError) {
@@ -105,7 +104,7 @@ class _ProductsGrid extends StatelessWidget {
     if (products.isEmpty) {
       return Center(
         child: Text(
-          'No products found',
+          context.l10n.noProductsFound,
           style: TextStyle(fontSize: 14.sp, color: subTitleColor),
         ),
       );

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import '../../../../../../core/theme/colors.dart';
-import '../../../../models/products_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/admin/models/products_model.dart';
 import 'action_button.dart';
 
 class ProductCard extends StatelessWidget {
@@ -88,7 +89,10 @@ class _ProductImage extends StatelessWidget {
               ? child
               : Center(
                   child: CircularProgressIndicator(
-                    value: progress.expectedTotalBytes != null ? progress.cumulativeBytesLoaded / progress.expectedTotalBytes! : null,
+                    value: progress.expectedTotalBytes != null
+                        ? progress.cumulativeBytesLoaded /
+                              progress.expectedTotalBytes!
+                        : null,
                     color: commonColor,
                     strokeWidth: 2,
                   ),
@@ -125,7 +129,7 @@ class _ProductInfo extends StatelessWidget {
           ),
           SizedBox(height: 2.h),
           Text(
-            'by $vendorName',
+            context.l10n.byVendor(vendorName),
             style: TextStyle(
               fontSize: 11.sp,
               fontWeight: FontWeight.w400,
@@ -169,7 +173,7 @@ class _ProductCardActions extends StatelessWidget {
         children: [
           Expanded(
             child: ProductActionButton(
-              label: 'APPROVE',
+              label: context.l10n.approveCaps,
               color: greenDegree,
               onTap: onApprove,
               isLoading: isProcessing,
@@ -178,7 +182,7 @@ class _ProductCardActions extends StatelessWidget {
           SizedBox(width: 6.w),
           Expanded(
             child: ProductActionButton(
-              label: 'REJECT',
+              label: context.l10n.rejectCaps,
               color: redDegree,
               onTap: onReject,
               isLoading: isProcessing,

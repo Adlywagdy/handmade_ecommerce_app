@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import '../../../../../core/theme/colors.dart';
-import '../../../../../core/widgets/custom_searc_bar.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/sellers_model.dart';
 import 'sellerdetails/seller_details_screen.dart';
@@ -23,7 +23,7 @@ class AdminSellersScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Seller Approvals',
+            context.l10n.sellerApprovals,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
@@ -35,23 +35,26 @@ class AdminSellersScreen extends StatelessWidget {
             labelColor: commonColor,
             unselectedLabelColor: subTitleColor,
             indicatorColor: commonColor,
-            overlayColor:
-                WidgetStateProperty.all(Colors.grey.withValues(alpha: 0.15)),
+            overlayColor: WidgetStateProperty.all(
+              Colors.grey.withValues(alpha: 0.15),
+            ),
             indicatorWeight: 3,
             labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
-            unselectedLabelStyle:
-                TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
-            tabs: const [
-              Tab(text: 'Pending'),
-              Tab(text: 'Approved'),
-              Tab(text: 'Rejected'),
+            unselectedLabelStyle: TextStyle(
+              fontSize: 15.sp,
+              fontWeight: FontWeight.w500,
+            ),
+            tabs: [
+              Tab(text: context.l10n.pending),
+              Tab(text: context.l10n.approved),
+              Tab(text: context.l10n.rejected),
             ],
           ),
         ),
         body: Column(
           children: [
             CustomSearchBar(
-              hintText: 'Search sellers...',
+              hintText: context.l10n.searchSellers,
               onChanged: (v) => context.read<AdminCubit>().setSellersQuery(v),
             ),
             Expanded(
@@ -88,6 +91,7 @@ class AdminSellersScreen extends StatelessWidget {
     );
   }
 }
+
 //////////////////////////////////////////////////////////////////
 class _SellersList extends StatelessWidget {
   final List<SellerData> sellers;
@@ -100,7 +104,7 @@ class _SellersList extends StatelessWidget {
     if (sellers.isEmpty) {
       return Center(
         child: Text(
-          'No sellers found',
+          context.l10n.noSellersFound,
           style: TextStyle(fontSize: 14.sp, color: subTitleColor),
         ),
       );
@@ -117,7 +121,12 @@ class _SellersList extends StatelessWidget {
           isProcessing: cubit.isProcessing(seller.id),
           onApprove: () => cubit.approveSeller(seller.id),
           onReject: () => cubit.rejectSeller(seller.id),
-          onPreview: () => Get.to(() => BlocProvider.value(value: cubit, child: SellerDetailsScreen(sellerId: seller.id))),
+          onPreview: () => Get.to(
+            () => BlocProvider.value(
+              value: cubit,
+              child: SellerDetailsScreen(sellerId: seller.id),
+            ),
+          ),
         );
       },
     );

@@ -2,6 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -18,16 +19,19 @@ class SellerProfileScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
+          title: Text(context.l10n.logout),
+          content: Text(context.l10n.areYouSureYouWantToLogout),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             TextButton(
               onPressed: () => Navigator.of(context).pop(true),
-              child: Text('Logout', style: TextStyle(color: redDegree)),
+              child: Text(
+                context.l10n.logout,
+                style: TextStyle(color: redDegree),
+              ),
             ),
           ],
         );
@@ -53,7 +57,7 @@ class SellerProfileScreen extends StatelessWidget {
         scrolledUnderElevation: 0,
         elevation: 0,
         centerTitle: true,
-        title: Text('Profile', style: AppTextStyles.t_18w700),
+        title: Text(context.l10n.profile, style: AppTextStyles.t_18w700),
       ),
       body: SingleChildScrollView(
         padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 24.h),
@@ -89,7 +93,10 @@ class SellerProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            Text(user?.displayName ?? 'Seller', style: AppTextStyles.t_20w700),
+            Text(
+              user?.displayName ?? context.l10n.seller,
+              style: AppTextStyles.t_20w700,
+            ),
             SizedBox(height: 4.h),
             if (user?.email != null)
               Text(
@@ -99,20 +106,20 @@ class SellerProfileScreen extends StatelessWidget {
             SizedBox(height: 28.h),
             _ProfileMenuTile(
               icon: Icons.storefront_outlined,
-              title: 'Shop Settings',
-              subtitle: 'View your shop information',
+              title: context.l10n.shopSettings,
+              subtitle: context.l10n.viewYourShopInformation,
               onTap: () {},
             ),
             _ProfileMenuTile(
               icon: Icons.notifications_none_rounded,
-              title: 'Notifications',
-              subtitle: 'Open your notifications center',
+              title: context.l10n.notifications,
+              subtitle: context.l10n.openYourNotificationsCenter,
               onTap: () => Get.toNamed(AppRoutes.notifications),
             ),
             _ProfileMenuTile(
               icon: Icons.help_outline_rounded,
-              title: 'Help & Support',
-              subtitle: 'Contact support and review help info',
+              title: context.l10n.helpAndSupport,
+              subtitle: context.l10n.contactSupportAndReviewHelpInfo,
               onTap: () {},
             ),
             SizedBox(height: 24.h),
@@ -127,7 +134,7 @@ class SellerProfileScreen extends StatelessWidget {
                   Icon(Icons.logout_rounded, color: redDegree, size: 22.r),
                   SizedBox(width: 8.w),
                   Text(
-                    'Logout',
+                    context.l10n.logout,
                     style: AppTextStyles.t_16w600.copyWith(color: redDegree),
                   ),
                 ],

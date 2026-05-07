@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../cubit/seller_cubit.dart';
 import '../../models/seller_model.dart';
@@ -33,14 +34,16 @@ class _SellerAddEditProductScreenState
   @override
   void initState() {
     super.initState();
-    _nameController =
-        TextEditingController(text: widget.product.name);
+    _nameController = TextEditingController(text: widget.product.name);
     _priceController = TextEditingController(
-        text: widget.product.price.toStringAsFixed(2));
-    _stockController =
-        TextEditingController(text: widget.product.stock.toString());
-    _descriptionController =
-        TextEditingController(text: widget.product.description);
+      text: widget.product.price.toStringAsFixed(2),
+    );
+    _stockController = TextEditingController(
+      text: widget.product.stock.toString(),
+    );
+    _descriptionController = TextEditingController(
+      text: widget.product.description,
+    );
     _selectedCategory = widget.product.category;
     _images = widget.product.images.toList();
   }
@@ -81,7 +84,9 @@ class _SellerAddEditProductScreenState
         price: double.tryParse(_priceController.text) ?? 0,
         stock: stock,
         category: _selectedCategory ?? 'Ceramics',
-        images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
+        images: _images.isNotEmpty
+            ? _images
+            : ['https://via.placeholder.com/150'],
         isActive: stock > 0,
         status: status,
       );
@@ -90,10 +95,12 @@ class _SellerAddEditProductScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Product updated successfully'),
+            content: Text(context.l10n.productUpdatedSuccessfully),
             backgroundColor: const Color(0xff07880E),
             behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
         );
         Get.back();
@@ -102,7 +109,7 @@ class _SellerAddEditProductScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error saving product: $e'),
+            content: Text(context.l10n.errorSavingProduct),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -114,12 +121,14 @@ class _SellerAddEditProductScreenState
 
   Future<void> _pickImage() async {
     final ImagePicker picker = ImagePicker();
-    final XFile? pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() {
         _newImages.add(File(pickedFile.path));
         // We add it to _images so the UI updates
-        _images.add(pickedFile.path); 
+        _images.add(pickedFile.path);
       });
     }
   }
@@ -146,7 +155,7 @@ class _SellerAddEditProductScreenState
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Edit Product',
+          context.l10n.editProduct,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -161,8 +170,7 @@ class _SellerAddEditProductScreenState
           children: [
             Expanded(
               child: SingleChildScrollView(
-                padding:
-                    EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
+                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
                 child: Form(
                   key: _formKey,
                   child: Column(
@@ -170,7 +178,7 @@ class _SellerAddEditProductScreenState
                     children: [
                       // Product Images
                       Text(
-                        'Product Images',
+                        context.l10n.productImages,
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
@@ -188,12 +196,12 @@ class _SellerAddEditProductScreenState
 
                       // Product Name
                       SellerInputField(
-                        label: 'Product Name',
-                        hintText: 'Enter product name',
+                        label: context.l10n.productName,
+                        hintText: context.l10n.enterProductName,
                         controller: _nameController,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Product name is required';
+                            return context.l10n.productNameIsRequired;
                           }
                           return null;
                         },
@@ -205,18 +213,19 @@ class _SellerAddEditProductScreenState
                         children: [
                           Expanded(
                             child: SellerInputField(
-                              label: 'Price (\$)',
-                              hintText: '0.00',
+                              label: context.l10n.price,
+                              hintText: context.l10n.pricePlaceholder,
                               controller: _priceController,
                               keyboardType:
                                   const TextInputType.numberWithOptions(
-                                      decimal: true),
+                                    decimal: true,
+                                  ),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Price is required';
+                                  return context.l10n.priceIsRequired;
                                 }
                                 if (double.tryParse(value) == null) {
-                                  return 'Invalid price';
+                                  return context.l10n.invalidPrice;
                                 }
                                 return null;
                               },
@@ -225,16 +234,16 @@ class _SellerAddEditProductScreenState
                           SizedBox(width: 12.w),
                           Expanded(
                             child: SellerInputField(
-                              label: 'Stock',
-                              hintText: '0',
+                              label: context.l10n.stock,
+                              hintText: context.l10n.stockPlaceholder,
                               controller: _stockController,
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Stock is required';
+                                  return context.l10n.stockIsRequired;
                                 }
                                 if (int.tryParse(value) == null) {
-                                  return 'Invalid number';
+                                  return context.l10n.invalidNumber;
                                 }
                                 return null;
                               },
@@ -249,7 +258,7 @@ class _SellerAddEditProductScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Category',
+                            context.l10n.category,
                             style: TextStyle(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
@@ -271,7 +280,7 @@ class _SellerAddEditProductScreenState
                               fontFamily: 'Plus Jakarta Sans',
                             ),
                             decoration: InputDecoration(
-                              hintText: 'Select category',
+                              hintText: context.l10n.selectCategory,
                               hintStyle: TextStyle(
                                 fontSize: 13.sp,
                                 color: const Color(0xFF94A3B8),
@@ -305,13 +314,15 @@ class _SellerAddEditProductScreenState
                             ),
                             validator: (value) {
                               if (value == null) {
-                                return 'Please select a category';
+                                return context.l10n.pleaseSelectCategory;
                               }
                               return null;
                             },
                             items: sellerCategories.map((cat) {
                               return DropdownMenuItem<String>(
-                                  value: cat, child: Text(cat));
+                                value: cat,
+                                child: Text(cat),
+                              );
                             }).toList(),
                             onChanged: (val) {
                               setState(() => _selectedCategory = val);
@@ -323,13 +334,13 @@ class _SellerAddEditProductScreenState
 
                       // Description
                       SellerInputField(
-                        label: 'Description',
-                        hintText: 'Describe your product...',
+                        label: context.l10n.description,
+                        hintText: context.l10n.describeYourProduct,
                         controller: _descriptionController,
                         maxLines: 4,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Description is required';
+                            return context.l10n.descriptionIsRequired;
                           }
                           return null;
                         },
@@ -346,11 +357,7 @@ class _SellerAddEditProductScreenState
               padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 16.h),
               decoration: BoxDecoration(
                 color: Colors.white,
-                border: Border(
-                  top: BorderSide(
-                    color: const Color(0xFFE2E8F0),
-                  ),
-                ),
+                border: Border(top: BorderSide(color: const Color(0xFFE2E8F0))),
               ),
               child: SafeArea(
                 top: false,
@@ -363,15 +370,13 @@ class _SellerAddEditProductScreenState
                         child: OutlinedButton(
                           onPressed: () => Get.back(),
                           style: OutlinedButton.styleFrom(
-                            side: const BorderSide(
-                              color: Color(0xFFE2E8F0),
-                            ),
+                            side: const BorderSide(color: Color(0xFFE2E8F0)),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                           ),
                           child: Text(
-                            'Discard',
+                            context.l10n.discard,
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
@@ -393,26 +398,31 @@ class _SellerAddEditProductScreenState
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff8B4513),
                             foregroundColor: Colors.white,
-                            disabledBackgroundColor: const Color(0xff8B4513).withOpacity(0.5),
+                            disabledBackgroundColor: const Color(
+                              0xff8B4513,
+                            ).withOpacity(0.5),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),
                             elevation: 0,
                           ),
-                          child: _isLoading 
-                            ? SizedBox(
-                                width: 20.w,
-                                height: 20.w,
-                                child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                              )
-                            : Text(
-                                'Save Product',
-                                style: TextStyle(
-                                  fontSize: 14.sp,
-                                  fontWeight: FontWeight.w700,
-                                  fontFamily: 'Plus Jakarta Sans',
+                          child: _isLoading
+                              ? SizedBox(
+                                  width: 20.w,
+                                  height: 20.w,
+                                  child: const CircularProgressIndicator(
+                                    color: Colors.white,
+                                    strokeWidth: 2,
+                                  ),
+                                )
+                              : Text(
+                                  context.l10n.saveProduct,
+                                  style: TextStyle(
+                                    fontSize: 14.sp,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Plus Jakarta Sans',
+                                  ),
                                 ),
-                              ),
                         ),
                       ),
                     ),

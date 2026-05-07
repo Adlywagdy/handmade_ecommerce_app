@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_manage_order_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
@@ -64,7 +65,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
           ),
         ),
         title: Text(
-          'Orders',
+          context.l10n.orders,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 20.sp,
@@ -104,7 +105,9 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
               builder: (context, state) {
                 int pendingCount = 0;
                 if (state is SellerLoaded) {
-                  pendingCount = state.orders.where((o) => o.status.toLowerCase() == 'pending').length;
+                  pendingCount = state.orders
+                      .where((o) => o.status.toLowerCase() == 'pending')
+                      .length;
                 }
                 return TabBar(
                   controller: _tabController,
@@ -125,12 +128,17 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                   indicatorColor: commonColor,
                   indicatorWeight: 2,
                   indicatorSize: TabBarIndicatorSize.tab,
-                  dividerColor: Colors.transparent, // manually added border below
+                  dividerColor:
+                      Colors.transparent, // manually added border below
                   tabs: [
-                    Tab(text: pendingCount > 0 ? 'Pending ($pendingCount)' : 'Pending'),
-                    const Tab(text: 'Shipped'),
-                    const Tab(text: 'Completed'),
-                    const Tab(text: 'Cancelled'),
+                    Tab(
+                      text: pendingCount > 0
+                          ? '${context.l10n.pending} ($pendingCount)'
+                          : context.l10n.pending,
+                    ),
+                     Tab(text: context.l10n.shipped),
+                     Tab(text: context.l10n.completed),
+                     Tab(text: context.l10n.cancelled),
                   ],
                 );
               },
@@ -143,24 +151,36 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
           if (state is SellerLoading) {
             return const Center(child: CircularProgressIndicator());
           }
-          
+
           if (state is SellerLoaded) {
-            final pendingOrders = state.orders.where((o) => o.status.toLowerCase() == 'pending').toList();
-            final shippedOrders = state.orders.where((o) => o.status.toLowerCase() == 'shipped').toList();
-            final completedOrders = state.orders.where((o) => o.status.toLowerCase() == 'completed' || o.status.toLowerCase() == 'delivered').toList();
-            final cancelledOrders = state.orders.where((o) => o.status.toLowerCase() == 'cancelled').toList();
+            final pendingOrders = state.orders
+                .where((o) => o.status.toLowerCase() == 'pending')
+                .toList();
+            final shippedOrders = state.orders
+                .where((o) => o.status.toLowerCase() == 'shipped')
+                .toList();
+            final completedOrders = state.orders
+                .where(
+                  (o) =>
+                      o.status.toLowerCase() == 'completed' ||
+                      o.status.toLowerCase() == 'delivered',
+                )
+                .toList();
+            final cancelledOrders = state.orders
+                .where((o) => o.status.toLowerCase() == 'cancelled')
+                .toList();
 
             return TabBarView(
               controller: _tabController,
               children: [
-                _buildOrdersList(pendingOrders, 'Pending'),
-                _buildOrdersList(shippedOrders, 'Shipped'),
-                _buildOrdersList(completedOrders, 'Completed'),
-                _buildOrdersList(cancelledOrders, 'Cancelled'),
+                _buildOrdersList(pendingOrders, context.l10n.pending),
+                _buildOrdersList(shippedOrders, context.l10n.shipped),
+                _buildOrdersList(completedOrders, context.l10n.completed),
+                _buildOrdersList(cancelledOrders, context.l10n.cancelled),
               ],
             );
           }
-          
+
           return const SizedBox.shrink();
         },
       ),
@@ -180,7 +200,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
             ),
             SizedBox(height: 12.h),
             Text(
-              'No $tabName Orders',
+              context.l10n.noTapnameOrders(tabName), 
               style: TextStyle(
                 color: const Color(0xFF64748B),
                 fontSize: 16.sp,
@@ -205,13 +225,16 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
           totalAmount: order.totalAmount.toString(),
           status: order.status.toUpperCase(),
           timeAgo: order.orderDate,
-          buttonText: order.status.toLowerCase() == 'pending' 
-              ? 'Mark as Shipped' 
+          buttonText: order.status.toLowerCase() == 'pending'
+              ? context.l10n.markAsShipped
               : order.status.toLowerCase() == 'shipped'
-                  ? 'Mark as Completed'
-                  : 'Order Completed',
-          isButtonFilled: order.status.toLowerCase() == 'pending' || order.status.toLowerCase() == 'shipped',
-          imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop', // Provide an actual image if order items have images
+              ? context.l10n.markAsCompleted
+              : context.l10n.orderCompleted,
+          isButtonFilled:
+              order.status.toLowerCase() == 'pending' ||
+              order.status.toLowerCase() == 'shipped',
+          imageUrl:
+              'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop', // Provide an actual image if order items have images
           onButtonPressed: () {
             String newStatus = '';
             if (order.status.toLowerCase() == 'pending') {
@@ -219,12 +242,20 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
             } else if (order.status.toLowerCase() == 'shipped') {
               newStatus = 'Completed';
             }
-            
+
             if (newStatus.isNotEmpty) {
-              context.read<SellerCubit>().updateOrderStatus(order.orderId, newStatus);
+              final updatedStatusLabel = newStatus == 'Shipped'
+                  ? context.l10n.shipped
+                  : context.l10n.completed;
+              context.read<SellerCubit>().updateOrderStatus(
+                order.orderId,
+                newStatus,
+              );
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text('Order status updated to $newStatus'),
+                  content: Text(
+                    context.l10n.orderStatusUpdatedTo(updatedStatusLabel),
+                  ),
                   backgroundColor: const Color(0xff07880E),
                   behavior: SnackBarBehavior.floating,
                 ),

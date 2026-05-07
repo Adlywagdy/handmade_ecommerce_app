@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -42,7 +43,7 @@ class _PaymentWebViewState extends State<PaymentWebView> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text("Complete Payment"),
+        title: Text(context.l10n.completePayment),
         leading: Icon(Icons.payment),
         backgroundColor: customerbackGroundColor,
       ),
