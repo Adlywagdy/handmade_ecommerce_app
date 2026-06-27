@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -102,24 +103,24 @@ class _ShopDetailsBody extends StatelessWidget {
           _SellerHeroCard(seller: seller),
           SizedBox(height: 16.h),
           _SectionCard(
-            title: 'Contact',
+            title: context.l10n.contact,
             child: Column(
               children: [
                 _InfoRow(
                   icon: Icons.mail_outline_rounded,
-                  label: 'Email',
+                  label: context.l10n.email,
                   value: seller.email,
                 ),
                 SizedBox(height: 12.h),
                 _InfoRow(
                   icon: Icons.phone_outlined,
-                  label: 'Phone',
+                  label: context.l10n.phone,
                   value: seller.displayPhone,
                 ),
                 SizedBox(height: 12.h),
                 _InfoRow(
                   icon: Icons.location_on_outlined,
-                  label: 'Location',
+                  label: context.l10n.location,
                   value: seller.displayLocation,
                 ),
               ],
@@ -127,15 +128,27 @@ class _ShopDetailsBody extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           _SectionCard(
-            title: 'Shop Info',
+            title: context.l10n.shopInfo,
             child: Column(
               children: [
-                _DetailTile(label: 'Owner', value: seller.displayOwnerName),
-                _DetailTile(label: 'Specialty', value: seller.displaySpecialty),
-                _DetailTile(label: 'Badge', value: seller.displayBadge),
-                _DetailTile(label: 'Status', value: seller.displayStatus),
                 _DetailTile(
-                  label: 'Submitted',
+                  label: context.l10n.owner,
+                  value: seller.displayOwnerName,
+                ),
+                _DetailTile(
+                  label: context.l10n.specialty,
+                  value: seller.displaySpecialty,
+                ),
+                _DetailTile(
+                  label: context.l10n.badge,
+                  value: seller.displayBadge,
+                ),
+                _DetailTile(
+                  label: context.l10n.status,
+                  value: seller.displayStatus,
+                ),
+                _DetailTile(
+                  label: context.l10n.submitted,
                   value: seller.displaySubmittedDate,
                   showDivider: false,
                 ),
@@ -168,7 +181,7 @@ class _ShopDetailsBody extends StatelessWidget {
               ),
               icon: Icon(Icons.email_outlined, size: 20.r),
               label: Text(
-                'Email Seller',
+                context.l10n.emailSeller,
                 style: AppTextStyles.t_16w600.copyWith(color: Colors.white),
               ),
             ),
@@ -425,10 +438,11 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
   @override
   void initState() {
     super.initState();
-    _subjectController = TextEditingController(text: 'Custom order request');
+    _subjectController = TextEditingController(
+      text: context.l10n.customOrderRequestSubject,
+    );
     _messageController = TextEditingController(
-      text:
-          'Hello ${widget.seller.displayName},\n\nI would like to request a customized order.\n\nDetails:\n',
+      text: context.l10n.customOrderRequestMessage(widget.seller.displayName),
     );
   }
 
@@ -445,7 +459,7 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
       listener: (context, state) {
         if (state is ContactSellerSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Email app opened successfully')),
+            SnackBar(content: Text(context.l10n.emailAppOpenedSuccessfully)),
           );
           Navigator.of(context).pop();
           context.read<ContactSellerCubit>().reset();
@@ -485,12 +499,12 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
             ),
             SizedBox(height: 18.h),
             Text(
-              'Send Email',
+              context.l10n.sendEmail,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
             SizedBox(height: 6.h),
             Text(
-              'Write your custom request and continue in your email app.',
+              context.l10n.writeYourCustomRequestAndContinueInYourEmailApp,
               style: AppTextStyles.t_12w500.copyWith(color: subTitleColor),
             ),
             SizedBox(height: 18.h),

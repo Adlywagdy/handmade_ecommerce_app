@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/image_picker_helper.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
@@ -47,7 +48,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          response.exception?.message ?? 'Failed to recover image.',
+          response.exception?.message ?? context.l10n.failedToRecoverImage,
         ),
         backgroundColor: redDegree,
       ),
@@ -75,9 +76,9 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
     } on PlatformException {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Image picker is unavailable now. Restart the app and try again.',
+            context.l10n.imagePickerIsUnavailableNowRestartTheAppAndTryAgain,
           ),
         ),
       );

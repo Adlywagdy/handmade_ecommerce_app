@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import '../../../../../core/routes/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/colors.dart';
@@ -23,7 +23,7 @@ class AdminSettingsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Settings',
+          context.l10n.settings,
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
@@ -54,28 +54,28 @@ class _SettingsBody extends StatelessWidget {
       children: [
         _SettingsTile(
           icon: Icons.percent,
-          label: 'Platform Commission',
+          label: context.l10n.platformCommission,
           value: '${(settings.commissionRate * 100).toStringAsFixed(1)}%',
           onTap: () => showCommissionEditor(context, settings.commissionRate),
         ),
         SizedBox(height: 12.h),
         _SettingsTile(
           icon: Icons.local_shipping_outlined,
-          label: 'Delivery Fee',
+          label: context.l10n.deliveryFee,
           value:
               '${settings.currency} ${settings.deliveryFee.toStringAsFixed(0)}',
         ),
         SizedBox(height: 12.h),
         _SettingsTile(
           icon: Icons.shopping_bag_outlined,
-          label: 'Minimum Order Value',
+          label: context.l10n.minimumOrderValue,
           value:
               '${settings.currency} ${settings.minOrderValue.toStringAsFixed(0)}',
         ),
         SizedBox(height: 12.h),
         _SettingsTile(
           icon: Icons.support_agent_outlined,
-          label: 'Support Email',
+          label: context.l10n.supportEmail,
           value: settings.supportEmail.isNotEmpty ? settings.supportEmail : '—',
         ),
         SizedBox(height: 12.h),
@@ -86,19 +86,22 @@ class _SettingsBody extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('Logout'),
-                  content: const Text('Are you sure you want to logout?'),
+                  title: Text(context.l10n.logout),
+                  content: Text(context.l10n.areYouSureYouWantToLogout),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.cancel),
                     ),
                     TextButton(
-                      onPressed: ()async{
-                          await AuthService().signOut();
-                          Get.offAllNamed(AppRoutes.login);
+                      onPressed: () async {
+                        await AuthService().signOut();
+                        Get.offAllNamed(AppRoutes.login);
                       },
-                      child: Text('Logout', style: TextStyle(color: redDegree)),
+                      child: Text(
+                        context.l10n.logout,
+                        style: TextStyle(color: redDegree),
+                      ),
                     ),
                   ],
                 );
@@ -113,7 +116,7 @@ class _SettingsBody extends StatelessWidget {
               Icon(Icons.logout_rounded, color: redDegree, size: 22.r),
               SizedBox(width: 8.w),
               Text(
-                'Logout',
+                context.l10n.logout,
                 style: AppTextStyles.t_16w600.copyWith(color: redDegree),
               ),
             ],

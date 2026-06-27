@@ -4,6 +4,7 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/cubit/admin_cubit.dart';
 import 'package:handmade_ecommerce_app/features/admin/models/next_status_action.dart';
 import 'package:handmade_ecommerce_app/features/admin/models/orders_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'no_more_actions.dart';
 import 'status_action_button.dart';
 
@@ -52,7 +53,7 @@ class _StatusActionsButtonsState extends State<StatusActionsButtons> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Update status',
+          context.l10n.updateStatus,
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w700,
@@ -67,9 +68,29 @@ class _StatusActionsButtonsState extends State<StatusActionsButtons> {
   }
 
   Widget _buildStatusButton(NextStatusAction action) {
+    String localizedLabel;
+    switch (action.label) {
+      case 'Confirm':
+        localizedLabel = context.l10n.confirm;
+        break;
+      case 'Cancel':
+        localizedLabel = context.l10n.cancel;
+        break;
+      case 'Prepare':
+        localizedLabel = context.l10n.prepare;
+        break;
+      case 'Ship':
+        localizedLabel = context.l10n.ship;
+        break;
+      case 'Deliver':
+        localizedLabel = context.l10n.deliver;
+        break;
+      default:
+        localizedLabel = action.label;
+    }
     return StatusActionButton(
       nextStatus: action.status,
-      label: action.label,
+      label: localizedLabel,
       isLoading: widget.isBusy && _lastStatus == action.status,
       isEnabled: !widget.isBusy,
       onPressed: () => _onButtonPressed(action.status),

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
@@ -29,7 +30,7 @@ class CustomerNotificationsScreen extends StatelessWidget {
             ),
             centerTitle: true,
             title: Text(
-              'Notifications',
+              context.l10n.notifications,
               style: AppTextStyles.t_20w700.copyWith(color: commonColor),
             ),
           ),
@@ -64,14 +65,16 @@ class CustomerNotificationsScreen extends StatelessWidget {
                             ),
                             SizedBox(height: 12.h),
                             Text(
-                              'No notifications yet',
+                              context.l10n.noNotificationsYet,
                               style: AppTextStyles.t_16w600.copyWith(
                                 color: blackDegree,
                               ),
                             ),
                             SizedBox(height: 6.h),
                             Text(
-                              'We will notify you about orders, offers and updates.',
+                              context
+                                  .l10n
+                                  .weWillNotifyYouAboutOrdersOffersAndUpdates,
                               textAlign: TextAlign.center,
                               style: AppTextStyles.t_12w400.copyWith(
                                 color: darkblue.withValues(alpha: .75),
@@ -107,7 +110,7 @@ class CustomerNotificationsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Failed to load notifications',
+                            context.l10n.failedToLoadNotifications,
                             style: AppTextStyles.t_16w600.copyWith(
                               color: blackDegree,
                             ),
@@ -180,7 +183,7 @@ class NotificationItem extends StatelessWidget {
                 ),
                 SizedBox(height: 6.h),
                 Text(
-                  'Just now',
+                  context.l10n.justNow,
                   style: AppTextStyles.t_12w400.copyWith(
                     color: darkblue.withValues(alpha: .6),
                   ),

@@ -348,7 +348,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   children: [
                     SocialButton(
-                      text: context.l10n.google,
+                      text: 'Google',
                       icon: Icons.g_mobiledata,
                       onTap: () {
                         final state = context.read<AuthCubit>().state;

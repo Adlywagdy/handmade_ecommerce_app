@@ -89,7 +89,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Email is required";
+                      return context.l10n.emailIsRequired;
                     }
                     if (!value.emailValid()) {
                       return context.l10n.emailIsntValid;
@@ -109,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Password is required";
+                      return context.l10n.passwordIsRequired;
                     }
                     if (value.length < 6) {
                       return context.l10n.passwordShouldBeMoreThan5Letters;

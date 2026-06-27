@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import '../../../../core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import '../../cubit/admin_cubit.dart';
 
 /// Opens a dialog that lets an admin edit the platform commission rate.
 /// Shows a spinner on Save while the Firestore write is in flight.
-Future<void> showCommissionEditor(
-  BuildContext context,
-  double currentRate,
-) {
+Future<void> showCommissionEditor(BuildContext context, double currentRate) {
   final cubit = context.read<AdminCubit>();
   return showDialog<void>(
     context: context,
@@ -54,21 +51,20 @@ class _CommissionEditorDialogState extends State<_CommissionEditorDialog> {
       builder: (context, state) {
         final saving = context.read<AdminCubit>().savingCommission;
         return AlertDialog(
-          title: const Text('Platform Commission'),
+          title: Text(context.l10n.platformCommission),
           content: TextField(
             controller: _controller,
             enabled: !saving,
-            keyboardType:
-                const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(
+            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+            decoration: InputDecoration(
               suffixText: '%',
-              hintText: 'e.g. 15',
+              hintText: context.l10n.eg15,
             ),
           ),
           actions: [
             TextButton(
               onPressed: saving ? null : () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             TextButton(
               onPressed: saving ? null : () => _save(context),
@@ -78,11 +74,10 @@ class _CommissionEditorDialogState extends State<_CommissionEditorDialog> {
                       height: 16.w,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor:
-                            AlwaysStoppedAnimation<Color>(commonColor),
+                        valueColor: AlwaysStoppedAnimation<Color>(commonColor),
                       ),
                     )
-                  : const Text('Save'),
+                  : Text(context.l10n.save),
             ),
           ],
         );

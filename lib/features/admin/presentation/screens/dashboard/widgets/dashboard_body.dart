@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/cubit/admin_cubit.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/products/products_screen.dart';
@@ -30,7 +31,7 @@ class DashboardBody extends StatelessWidget {
           const DashboardHeader(),
           SizedBox(height: 20.h),
           Text(
-            'Good morning, Admin',
+            context.l10n.goodMorningAdmin,
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
@@ -42,35 +43,35 @@ class DashboardBody extends StatelessWidget {
             status: [
               StatusItem(
                 iconPath: 'assets/images/total_users_icon.svg',
-                label: 'TOTAL USERS',
+                label: context.l10n.totalUsers,
                 value: "${stats?.users ?? 0}",
               ),
               StatusItem(
                 iconPath: 'assets/images/sellers.svg',
-                label: 'TOTAL SELLERS',
+                label: context.l10n.totalSellers,
                 value: "${stats?.sellers ?? 0}",
               ),
               StatusItem(
                 iconPath: 'assets/images/total_orders_icon.svg',
-                label: 'TOTAL ORDERS',
-                value:  "${stats?.orders ?? 0}",
+                label: context.l10n.totalOrders,
+                value: "${stats?.orders ?? 0}",
               ),
               StatusItem(
                 iconPath: 'assets/images/revenue_icon.svg',
-                label: 'REVENUE',
+                label: context.l10n.revenue,
                 value: "${stats?.revenue ?? 0}",
               ),
             ],
           ),
           SizedBox(height: 12.h),
           DashboardCommissionCard(
-            label: 'Platform Commission',
+            label: context.l10n.platformCommission,
             value: '${(rate * 100).toStringAsFixed(1)}%',
             onEditTap: () => showCommissionEditor(context, rate),
           ),
           SizedBox(height: 24.h),
           Text(
-            'Pending Actions',
+            context.l10n.pendingActions,
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
@@ -80,22 +81,32 @@ class DashboardBody extends StatelessWidget {
           SizedBox(height: 12.h),
           DashboardPendingActionCard(
             icon: Icons.warning_amber_rounded,
-            title: '${cubit.pendingSellersCount} Sellers awaiting approval',
-            subtitle: 'New artisan registrations',
-            onButtonTap: () => Get.to( () => BlocProvider.value(
-                  value: cubit,
-                  child: const AdminSellersScreen(),
-                )),
+            title: context.l10n.sellersAwaitingApproval(
+              cubit.pendingSellersCount,
+            ),
+            subtitle: context.l10n.newArtisanRegistrations,
+            buttonText: context.l10n.review,
+            onButtonTap: () => Get.to(
+              () => BlocProvider.value(
+                value: cubit,
+                child: const AdminSellersScreen(),
+              ),
+            ),
           ),
           SizedBox(height: 10.h),
           DashboardPendingActionCard(
             icon: Icons.inventory_2_outlined,
-            title: '${cubit.pendingProductsCount} Products awaiting review',
-            subtitle: 'Quality control check required',
-            onButtonTap: () => Get.to(() => BlocProvider.value(
-                  value: cubit,
-                  child: const AdminProductsScreen(),
-                )),
+            title: context.l10n.productsAwaitingReview(
+              cubit.pendingProductsCount,
+            ),
+            subtitle: context.l10n.qualityControlCheckRequired,
+            buttonText: context.l10n.review,
+            onButtonTap: () => Get.to(
+              () => BlocProvider.value(
+                value: cubit,
+                child: const AdminProductsScreen(),
+              ),
+            ),
           ),
         ],
       ),

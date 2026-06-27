@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
-import '../../../../../core/widgets/custom_bottom_bar.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_bottom_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../services/admin_service.dart';
 import '../dashboard/dashboard_screen.dart';
@@ -17,31 +17,31 @@ class AdminBottomBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AdminCubit(AdminFirestoreService())..init(),
-      child: const CustomBottomBar(
+      child: CustomBottomBar(
         items: [
           BottomNavItem(
             iconPath: 'assets/images/dashboard.svg',
-            label: 'Dashboard',
+            label: context.l10n.dashboard,
             page: AdminDashboardScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/sellers.svg',
-            label: 'Sellers',
+            label: context.l10n.sellers,
             page: AdminSellersScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/orders.svg',
-            label: 'Orders',
+            label: context.l10n.orders,
             page: AdminOrdersScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/products.svg',
-            label: 'Products',
+            label: context.l10n.products,
             page: AdminProductsScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/settings.svg',
-            label: 'Settings',
+            label: context.l10n.settings,
             page: AdminSettingsScreen(),
           ),
         ],

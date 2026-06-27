@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
@@ -22,7 +23,9 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   bool _isActive = true;
 
   final TextEditingController _titleController = TextEditingController();
-  final TextEditingController _categoryController = TextEditingController(text: 'Ceramics');
+  final TextEditingController _categoryController = TextEditingController(
+    text: 'Ceramics',
+  );
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
@@ -30,7 +33,9 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   final ImagePicker _picker = ImagePicker();
 
   Future<void> _pickImage() async {
-    final XFile? pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final XFile? pickedFile = await _picker.pickImage(
+      source: ImageSource.gallery,
+    );
     if (pickedFile != null) {
       setState(() {
         _selectedImages.add(File(pickedFile.path));
@@ -64,7 +69,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           },
         ),
         title: Text(
-          'Add Product',
+          context.l10n.addProduct,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -94,9 +99,9 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 SizedBox(height: 24.h),
 
                 // Product Title
-                _buildLabel('Product Title'),
+                _buildLabel(context.l10n.productTitle),
                 _buildTextField(
-                  hint: 'e.g. Hand-painted Ceramic Serving Dish',
+                  hint: context.l10n.hintHandPaintedCeramicServingDish,
                   controller: _titleController,
                 ),
                 SizedBox(height: 20.h),
@@ -109,12 +114,17 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Category'),
+                          _buildLabel(context.l10n.category),
                           DropdownButtonFormField<String>(
-                            value: _categoryController.text.isEmpty ? 'Ceramics' : _categoryController.text,
+                            initialValue: _categoryController.text.isEmpty
+                                ? 'Ceramics'
+                                : _categoryController.text,
                             dropdownColor: Colors.white,
-                            icon: Icon(Icons.keyboard_arrow_down,
-                                color: const Color(0xFF64748B), size: 20.w),
+                            icon: Icon(
+                              Icons.keyboard_arrow_down,
+                              color: const Color(0xFF64748B),
+                              size: 20.w,
+                            ),
                             decoration: InputDecoration(
                               fillColor: Colors.white,
                               filled: true,
@@ -124,11 +134,15 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                               ),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.r),
-                                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
                               ),
                               enabledBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.r),
-                                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                                borderSide: const BorderSide(
+                                  color: Color(0xFFE2E8F0),
+                                ),
                               ),
                               focusedBorder: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(8.r),
@@ -162,11 +176,11 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Price (EGP)'),
+                          _buildLabel(context.l10n.priceEgp),
                           _buildTextField(
                             hint: '450.00',
                             controller: _priceController,
-                            prefixText: 'EGP',
+                            prefixText: context.l10n.egp,
                             keyboardType: TextInputType.number,
                           ),
                         ],
@@ -177,9 +191,9 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 SizedBox(height: 20.h),
 
                 // Description
-                _buildLabel('Description'),
+                _buildLabel(context.l10n.description),
                 _buildTextField(
-                  hint: 'Describe your product...',
+                  hint: context.l10n.describeYourProduct,
                   controller: _descriptionController,
                   maxLines: 5,
                 ),
@@ -208,7 +222,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Product Images',
+              context.l10n.productImages,
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
@@ -231,7 +245,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                   fontFamily: 'Plus Jakarta Sans',
                 ),
               ),
-            )
+            ),
           ],
         ),
         SizedBox(height: 16.h),
@@ -240,15 +254,14 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           clipBehavior: Clip.none,
           child: Row(
             children: [
-              ..._selectedImages.map((file) => Padding(
-                padding: EdgeInsets.only(right: 12.w),
-                child: _buildImageCard(file),
-              )),
-              if (_selectedImages.length < 5)
-                GestureDetector(
-                  onTap: _pickImage,
-                  child: _buildAddPhotoCard(),
+              ..._selectedImages.map(
+                (file) => Padding(
+                  padding: EdgeInsets.only(right: 12.w),
+                  child: _buildImageCard(file),
                 ),
+              ),
+              if (_selectedImages.length < 5)
+                GestureDetector(onTap: _pickImage, child: _buildAddPhotoCard()),
             ],
           ),
         ),
@@ -265,10 +278,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           decoration: BoxDecoration(
             color: const Color(0xFFF1F5F9),
             borderRadius: BorderRadius.circular(8.r),
-            image: DecorationImage(
-              image: FileImage(file),
-              fit: BoxFit.cover,
-            ),
+            image: DecorationImage(image: FileImage(file), fit: BoxFit.cover),
           ),
         ),
         Positioned(
@@ -307,7 +317,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
         width: 90.w,
         height: 90.w,
         decoration: BoxDecoration(
-          color: const Color(0xFFFDF8F4), 
+          color: const Color(0xFFFDF8F4),
           borderRadius: BorderRadius.circular(8.r),
         ),
         child: Column(
@@ -316,7 +326,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
             Icon(Icons.add_a_photo_outlined, color: commonColor, size: 24.w),
             SizedBox(height: 6.h),
             Text(
-              'ADD PHOTO',
+              context.l10n.addPhoto,
               style: TextStyle(
                 color: commonColor,
                 fontSize: 10.sp,
@@ -359,7 +369,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
       keyboardType: keyboardType,
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'This field is required';
+          return context.l10n.thisFieldIsRequired;
         }
         return null;
       },
@@ -375,7 +385,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
         hintText: hint,
         prefixText: prefixText != null ? '$prefixText ' : null,
         prefixStyle: TextStyle(
-          color: const Color(0xFF94A3B8), 
+          color: const Color(0xFF94A3B8),
           fontSize: 14.sp,
           fontFamily: 'Plus Jakarta Sans',
         ),
@@ -386,7 +396,9 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
-          borderSide: const BorderSide(color: Color(0xFFE2E8F0)), // Light border
+          borderSide: const BorderSide(
+            color: Color(0xFFE2E8F0),
+          ), // Light border
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.r),
@@ -415,7 +427,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Active Listing',
+                  context.l10n.activeListing,
                   style: TextStyle(
                     color: const Color(0xFF0F172A),
                     fontSize: 15.sp,
@@ -425,7 +437,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Visible to customers in the marketplace',
+                  context.l10n.visibleToCustomersInTheMarketplace,
                   style: TextStyle(
                     color: const Color(0xFF64748B),
                     fontSize: 12.sp,
@@ -457,7 +469,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
       listener: (context, state) {
         if (state is SellerError) {
           Get.snackbar(
-            'Error',
+            context.l10n.error,
             state.message,
             backgroundColor: Colors.redAccent,
             colorText: Colors.white,
@@ -478,12 +490,17 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     if (_selectedImages.isEmpty) {
-                      Get.snackbar('Error', 'Please add at least one product image', backgroundColor: Colors.redAccent, colorText: Colors.white);
+                      Get.snackbar(
+                        context.l10n.error,
+                        context.l10n.pleaseAddAtLeastOneProductImage,
+                        backgroundColor: Colors.redAccent,
+                        colorText: Colors.white,
+                      );
                       return;
                     }
 
                     double price = double.tryParse(_priceController.text) ?? 0;
-                    
+
                     await context.read<SellerCubit>().addProductWithImages(
                       name: _titleController.text,
                       description: _descriptionController.text,
@@ -492,22 +509,26 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       category: _categoryController.text,
                       imageFiles: _selectedImages,
                     );
-                    
+
                     // Check if the operation succeeded
                     if (context.read<SellerCubit>().state is! SellerError) {
                       Get.back(); // Return to previous screen only on success
                       Get.snackbar(
-                        'Success',
-                        'Product added successfully!',
+                        context.l10n.success,
+                        context.l10n.productAddedSuccessfully,
                         backgroundColor: Colors.green,
                         colorText: Colors.white,
                       );
                     }
                   }
                 },
-                icon: Icon(Icons.save_outlined, color: Colors.white, size: 20.w),
+                icon: Icon(
+                  Icons.save_outlined,
+                  color: Colors.white,
+                  size: 20.w,
+                ),
                 label: Text(
-                  'Save Product',
+                  context.l10n.saveProduct,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -540,7 +561,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                   ),
                 ),
                 child: Text(
-                  'Discard Changes',
+                  context.l10n.discardChanges,
                   style: TextStyle(
                     color: commonColor,
                     fontSize: 16.sp,
@@ -581,9 +602,12 @@ class _DashedBorderPainter extends CustomPainter {
       ..style = PaintingStyle.stroke;
 
     final path = Path()
-      ..addRRect(RRect.fromRectAndRadius(
+      ..addRRect(
+        RRect.fromRectAndRadius(
           Rect.fromLTWH(0, 0, size.width, size.height),
-          Radius.circular(radius)));
+          Radius.circular(radius),
+        ),
+      );
 
     final dashPath = Path();
     for (final metric in path.computeMetrics()) {

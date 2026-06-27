@@ -13,6 +13,7 @@ import 'package:handmade_ecommerce_app/features/customer/models/customer_model.d
 import 'package:handmade_ecommerce_app/features/customer/profile/presentation/widgets/becomesellercard.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/presentation/widgets/customerdetailsitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/presentation/widgets/userpofiledetails.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerProfilesScreen extends StatelessWidget {
   final ValueChanged<int>? onNavigateToTab;
@@ -50,13 +51,13 @@ class CustomerProfilesScreen extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text('Edit Profile', style: AppTextStyles.t_18w700),
+              Text(context.l10n.editProfile, style: AppTextStyles.t_18w700),
               SizedBox(height: 12.h),
               TextField(
                 controller: nameController,
                 cursorColor: commonColor,
-                decoration: const InputDecoration(
-                  labelText: 'Name',
+                decoration: InputDecoration(
+                  labelText: context.l10n.name,
                   labelStyle: TextStyle(color: subTitleColor),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.all(Radius.circular(8)),
@@ -92,7 +93,7 @@ class CustomerProfilesScreen extends StatelessWidget {
                     foregroundColor: Colors.white,
                     padding: EdgeInsets.symmetric(vertical: 14.h),
                   ),
-                  child: const Text('Save Changes'),
+                  child: Text(context.l10n.saveChanges),
                 ),
               ),
             ],
@@ -107,12 +108,12 @@ class CustomerProfilesScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
+          title: Text(context.l10n.logout),
+          content: Text(context.l10n.areYouSureYouWantToLogout),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -120,7 +121,7 @@ class CustomerProfilesScreen extends StatelessWidget {
                 HiveHelper.clearEmailBox();
                 Navigator.of(context).pop(true);
               },
-              child: Text('Logout', style: TextStyle(color: redDegree)),
+              child: Text(context.l10n.logout, style: TextStyle(color: redDegree)),
             ),
           ],
         );
@@ -149,7 +150,7 @@ class CustomerProfilesScreen extends StatelessWidget {
         ],
 
         title: Text(
-          'Profile',
+          context.l10n.profile,
           textAlign: TextAlign.center,
           style: AppTextStyles.t_18w700,
         ),
@@ -195,10 +196,10 @@ class CustomerProfilesScreen extends StatelessWidget {
                   UserProfileDetails(customer: customer),
                   BecomeSellerCard(),
                   Column(
-                    children: List.generate(_customerDetails.length, (index) {
-                      final title = _customerDetails[index]['title'] as String;
+                    children: List.generate(_getCustomerDetails(context).length, (index) {
+                      final title = _getCustomerDetails(context)[index]['title'] as String;
                       return CustomerDetailsItem(
-                        item: _customerDetails[index],
+                        item: _getCustomerDetails(context)[index],
                         onTap: () {
                           if (title == 'Edit Profile') {
                             _showEditBottomSheet(context, customer);
@@ -251,7 +252,7 @@ class CustomerProfilesScreen extends StatelessWidget {
                         ),
                         SizedBox(width: 8.w),
                         Text(
-                          'Logout',
+                          context.l10n.logout,
                           style: AppTextStyles.t_16w600.copyWith(
                             color: redDegree,
                           ),
@@ -270,25 +271,25 @@ class CustomerProfilesScreen extends StatelessWidget {
   }
 }
 
-List<Map<String, dynamic>> _customerDetails = [
-  {
-    'title': 'Edit Profile',
-    'subtitle': 'Name, bio ',
-    'icon': Icons.edit_outlined,
-  },
-  {
-    'title': 'My Orders',
-    'subtitle': 'Track and manage your purchases',
-    'icon': Icons.shopping_bag_outlined,
-  },
-  {
-    'title': 'Favorites',
-    'subtitle': 'Items you\'ve saved for later',
-    'icon': Icons.favorite_border,
-  },
-  {
-    'title': 'Settings',
-    'subtitle': 'Notifications and privacy',
-    'icon': Icons.settings_outlined,
-  },
-];
+  List<Map<String, dynamic>> _getCustomerDetails(BuildContext context) => [
+    {
+      'title': context.l10n.editProfile,
+      'subtitle': context.l10n.nameBio,
+      'icon': Icons.edit_outlined,
+    },
+    {
+      'title': context.l10n.myOrders,
+      'subtitle': context.l10n.trackAndManageYourPurchases,
+      'icon': Icons.shopping_bag_outlined,
+    },
+    {
+      'title': context.l10n.favorites,
+      'subtitle': context.l10n.itemsYouHaveSavedForLater,
+      'icon': Icons.favorite_border,
+    },
+    {
+      'title': context.l10n.settings,
+      'subtitle': context.l10n.notificationsAndPrivacy,
+      'icon': Icons.settings_outlined,
+    },
+  ];

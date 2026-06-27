@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import '../../../../models/orders_model.dart';
 import 'orders_status_badge.dart';
 
@@ -107,7 +108,11 @@ class _StatusIcon extends StatelessWidget {
         color: _bgColorForStatus(status),
         borderRadius: BorderRadius.circular(10.r),
       ),
-      child: Icon(_iconForStatus(status), color: _colorForStatus(status), size: 22.sp),
+      child: Icon(
+        _iconForStatus(status),
+        color: _colorForStatus(status),
+        size: 22.sp,
+      ),
     );
   }
 }
@@ -160,7 +165,7 @@ class _OrderInfo extends StatelessWidget {
               ),
             ),
             Text(
-              'Seller: ${order.sellerName ?? ''}',
+              context.l10n.sellerLabel(order.sellerName ?? ''),
               style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade500),
             ),
           ],

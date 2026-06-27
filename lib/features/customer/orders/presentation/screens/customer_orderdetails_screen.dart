@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -42,7 +43,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
   Future<void> _cancelOrder(BuildContext context) async {
     if (order.status != OrderStatus.pending) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Only pending orders can be cancelled.')),
+        SnackBar(content: Text(context.l10n.onlyPendingOrdersCanBeCancelled)),
       );
       return;
     }

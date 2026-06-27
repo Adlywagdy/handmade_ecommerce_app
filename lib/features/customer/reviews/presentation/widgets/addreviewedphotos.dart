@@ -5,6 +5,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/models/image_picker_helper.dart';
@@ -89,7 +90,7 @@ class _AddReviewedPhotosState extends State<AddReviewedPhotos> {
       child: Column(
         spacing: 12.h,
         children: [
-          Text('Add Photos', style: AppTextStyles.t_14w600),
+          Text(context.l10n.addPhotos, style: AppTextStyles.t_14w600),
           GestureDetector(
             onTap: _pickImage,
             child: CustomPaint(

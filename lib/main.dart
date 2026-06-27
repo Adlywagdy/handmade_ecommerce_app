@@ -74,6 +74,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
             initialRoute: initialRoute,
             localizationsDelegates: AppLocalizations.localizationsDelegates,
             supportedLocales: AppLocalizations.supportedLocales,
+            locale: Locale('ar'),
             localeResolutionCallback: (locale, supportedLocales) {
               if (locale == null) return supportedLocales.first;
               for (final supportedLocale in supportedLocales) {

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -44,7 +45,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
         CustomSellerListTile(product: widget.product),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 14.0),
-          child: Text('Description', style: AppTextStyles.t_18w700),
+          child: Text(context.l10n.description, style: AppTextStyles.t_18w700),
         ),
         Text(
           widget.product.description,

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -50,7 +51,7 @@ class _CopounRowState extends State<CopounRow> {
               fillColor: Colors.white,
               filled: true,
               hint: Text(
-                'Promo code',
+                context.l10n.promoCode,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               ),
               focusedBorder: OutlineInputBorder(
