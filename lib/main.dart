@@ -37,7 +37,6 @@ void main() async {
   };
 
   await RemoteConfigService.instance.init();
-
   final initialRoute = await getInitialRoute();
 
   runApp(HandcraftedEcommerceApp(initialRoute: initialRoute));

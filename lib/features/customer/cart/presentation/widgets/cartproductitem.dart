@@ -3,11 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/checkout/presentation/widgets/amountcontainerbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/shop_details/services/customer_seller_profile_service.dart';
 
 class CartProductItem extends StatelessWidget {
   const CartProductItem({super.key, required this.product});
@@ -89,16 +91,28 @@ class CartProductItem extends StatelessWidget {
                   ],
                 ),
                 SizedBox(height: 4.h),
-                Text(
-                  "By ${product.seller.specialty}${product.seller.name}",
-                  style: AppTextStyles.t_12w500.copyWith(color: commonColor),
+                FutureBuilder<SellerModel>(
+                  future: getsellerdata(product.sellerId),
+                  builder: (context, snapshot) {
+                    final seller = snapshot.data;
+                    if (seller == null) {
+                      return const SizedBox.shrink();
+                    }
+
+                    return Text(
+                      'By ${seller.displaySpecialty} ${seller.displayName}',
+                      style: AppTextStyles.t_12w500.copyWith(
+                        color: commonColor,
+                      ),
+                    );
+                  },
                 ),
                 SizedBox(height: 8.h),
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      '\$${product.price.toString()}',
+                      '${product.currency} ${product.price.toString()}',
                       style: AppTextStyles.t_18w700,
                     ),
 
