@@ -7,21 +7,40 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/cubit/contact_seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/cubit/seller_profile_cubit.dart';
 
-class CustomerShopDetailsScreen extends StatelessWidget {
+class CustomerShopDetailsScreen extends StatefulWidget {
   const CustomerShopDetailsScreen({super.key, required this.sellerId});
 
   final String sellerId;
 
   @override
+  State<CustomerShopDetailsScreen> createState() =>
+      _CustomerShopDetailsScreenState();
+}
+
+class _CustomerShopDetailsScreenState extends State<CustomerShopDetailsScreen> {
+  late final SellerProfileCubit _sellerProfileCubit;
+
+  @override
+  void initState() {
+    super.initState();
+    _sellerProfileCubit = SellerProfileCubit()
+      ..getSellerProfileById(widget.sellerId);
+  }
+
+  @override
+  void dispose() {
+    _sellerProfileCubit.close();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) =>
-              SellerProfileCubit()..getSellerProfileById(sellerId),
-        ),
+        BlocProvider.value(value: _sellerProfileCubit),
         BlocProvider(create: (context) => ContactSellerCubit()),
       ],
+
       child: Scaffold(
         backgroundColor: customerbackGroundColor,
         appBar: AppBar(

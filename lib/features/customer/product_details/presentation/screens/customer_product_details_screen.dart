@@ -129,124 +129,115 @@ class CustomerProductDetailsScreen extends StatelessWidget {
 
           SliverFillRemaining(
             hasScrollBody: false,
-            child: Column(
-              children: [
-                Container(
-                  color: Colors.white,
-                  padding: EdgeInsets.symmetric(
-                    vertical: 16.h,
-                    horizontal: 16.w,
-                  ),
-                  child: Row(
-                    spacing: 5.w,
-                    children: [
-                      Expanded(
-                        flex: 1,
-                        child: CustomElevatedButton(
-                          onPressed: () {
-                            final cartCubit = BlocProvider.of<CartCubit>(
-                              context,
-                            );
-                            OrderCubit? orderCubit;
-                            CustomerCubit? customerCubit;
+            child: Container(
+              color: Colors.white,
+              padding: EdgeInsets.symmetric(vertical: 16.h, horizontal: 16.w),
+              child: Row(
+                spacing: 5.w,
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: CustomElevatedButton(
+                      onPressed: () {
+                        final cartCubit = BlocProvider.of<CartCubit>(context);
+                        OrderCubit? orderCubit;
+                        CustomerCubit? customerCubit;
 
-                            try {
-                              orderCubit = context.read<OrderCubit>();
-                            } catch (_) {}
+                        try {
+                          orderCubit = context.read<OrderCubit>();
+                        } catch (_) {}
 
-                            try {
-                              customerCubit = context.read<CustomerCubit>();
-                            } catch (_) {}
+                        try {
+                          customerCubit = context.read<CustomerCubit>();
+                        } catch (_) {}
 
-                            cartCubit.addCartProducts(product);
-                            Get.toNamed(
-                              AppRoutes.customerCart,
-                              arguments: {
-                                'cartCubit': cartCubit,
-                                'orderCubit': orderCubit,
-                                'customerCubit': customerCubit,
-                              },
-                            );
+                        cartCubit.addCartProducts(product);
+                        Get.toNamed(
+                          AppRoutes.customerCart,
+                          arguments: {
+                            'cartCubit': cartCubit,
+                            'orderCubit': orderCubit,
+                            'customerCubit': customerCubit,
                           },
-                          buttoncolor: commonColor,
-                          child: Text(
-                            'Buy Now',
-                            textAlign: TextAlign.center,
-                            style: AppTextStyles.t_16w600.copyWith(
-                              color: Colors.white,
-                            ),
-                          ),
+                        );
+                      },
+                      buttoncolor: commonColor,
+                      child: Text(
+                        'Buy Now',
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.t_16w600.copyWith(
+                          color: Colors.white,
                         ),
                       ),
-                      Expanded(
-                        flex: 1,
-                        child: CustomElevatedButton(
-                          buttoncolor: Colors.white,
-                          bordercolor: commonColor.withValues(alpha: .35),
-                          onPressed: () {
-                            BlocProvider.of<CartCubit>(
-                              context,
-                            ).addCartProducts(product);
-                          },
-                          child: BlocBuilder<CartCubit, CartState>(
-                            buildWhen: (previous, current) {
-                              return current is AddcartproductSuccessedstate ||
-                                  current is AddcartproductFailedstate ||
-                                  current is AddcartproductLoadingstate;
-                            },
-                            builder: (context, state) {
-                              if (state is AddcartproductLoadingstate) {
-                                return CircularProgressIndicator(
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: CustomElevatedButton(
+                      buttoncolor: Colors.white,
+                      bordercolor: commonColor.withValues(alpha: .35),
+                      onPressed: () {
+                        BlocProvider.of<CartCubit>(
+                          context,
+                        ).addCartProducts(product);
+                      },
+                      child: BlocBuilder<CartCubit, CartState>(
+                        buildWhen: (previous, current) {
+                          return current is AddcartproductSuccessedstate ||
+                              current is AddcartproductFailedstate ||
+                              current is AddcartproductLoadingstate;
+                        },
+                        builder: (context, state) {
+                          if (state is AddcartproductLoadingstate) {
+                            return CircularProgressIndicator(
+                              color: commonColor,
+                              strokeWidth: 1.5,
+                            );
+                          }
+                          if (state is AddcartproductSuccessedstate) {
+                            return Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.check,
                                   color: commonColor,
-                                  strokeWidth: 1.5,
-                                );
-                              }
-                              if (state is AddcartproductSuccessedstate) {
-                                return Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Icon(
-                                      Icons.check,
-                                      color: commonColor,
-                                      size: 16.r,
-                                    ),
-                                    SizedBox(width: 8.w),
-                                    Text(
-                                      'Added',
-                                      textAlign: TextAlign.center,
-                                      style: AppTextStyles.t_16w600.copyWith(
-                                        color: commonColor,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              }
-                              return Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Icon(
-                                    Icons.shopping_bag_outlined,
+                                  size: 16.r,
+                                ),
+                                SizedBox(width: 8.w),
+                                Text(
+                                  'Added',
+                                  textAlign: TextAlign.center,
+                                  style: AppTextStyles.t_16w600.copyWith(
                                     color: commonColor,
-                                    size: 16.r,
                                   ),
-                                  SizedBox(width: 8.w),
-                                  Text(
-                                    'Add to Cart',
-                                    textAlign: TextAlign.center,
-                                    style: AppTextStyles.t_16w600.copyWith(
-                                      color: commonColor,
-                                    ),
-                                  ),
-                                ],
-                              );
-                            },
-                          ),
-                        ),
+                                ),
+                              ],
+                            );
+                          }
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.shopping_bag_outlined,
+                                color: commonColor,
+                                size: 16.r,
+                              ),
+                              SizedBox(width: 8.w),
+                              Text(
+                                'Add to Cart',
+                                textAlign: TextAlign.center,
+                                style: AppTextStyles.t_16w600.copyWith(
+                                  color: commonColor,
+                                ),
+                              ),
+                            ],
+                          );
+                        },
                       ),
-                    ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -62,9 +63,9 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               arguments: _emailController.text.trim(),
             );
           } else if (state is ForgotPasswordErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
@@ -79,13 +80,13 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Text(
-                      'Password recovery',
+                      context.l10n.passwordRecovery,
                       style: AppTextStyles.t_30w700.copyWith(
                         color: primaryColor,
                       ),
                     ),
                     Text(
-                      'Please enter your email address to receive a password reset link.',
+                      context.l10n.passwordRecoveryDescription,
                       style: AppTextStyles.t_12w500.copyWith(
                         color: primaryColor.withValues(alpha: 0.6),
                       ),
@@ -94,7 +95,7 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                     SizedBox(height: 20.h),
                     Customtextfield(
                       controller: _emailController,
-                      label: 'EMAIL ADDRESS',
+                      label: context.l10n.emailAddress,
                       hintText: 'example@mail.com',
                       prefixIcon: Icon(
                         Icons.email,
@@ -102,10 +103,10 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return "Email is required";
+                          return context.l10n.emailIsRequired;
                         }
                         if (!value.emailValid()) {
-                          return "Email isn't valid";
+                          return context.l10n.emailIsntValid;
                         }
                         return null;
                       },
@@ -129,15 +130,15 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
                   : () {
                       if (_formKey.currentState!.validate()) {
                         context.read<AuthCubit>().forgotPassword(
-                              email: _emailController.text.trim(),
-                            );
+                          email: _emailController.text.trim(),
+                        );
                       }
                     },
               buttoncolor: primaryColor,
               child: isLoading
                   ? const CircularProgressIndicator(color: Colors.white)
                   : Text(
-                      'Send reset link',
+                      context.l10n.sendCode,
                       style: AppTextStyles.t_16w500.copyWith(
                         color: Colors.white,
                       ),

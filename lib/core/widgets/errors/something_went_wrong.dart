@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SomethingWentWrong extends StatelessWidget {
   const SomethingWentWrong({super.key});
@@ -17,12 +18,12 @@ class SomethingWentWrong extends StatelessWidget {
             SvgPicture.asset('assets/icons/something_went_wrong.svg'),
             SizedBox(height: 35),
             Text(
-              'Something went wrong',
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
+              context.l10n.somethingWentWrong,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
             ),
             Text(
-              "We're experiencing technical difficulties on our end.\nOur team is working on it.",
-              style: TextStyle(
+              context.l10n.technicalDifficulties,
+              style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w400,
                 color: Color(0xff64748B),
@@ -44,8 +45,8 @@ class SomethingWentWrong extends StatelessWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Go Back',
-                    style: TextStyle(
+                    context.l10n.goBack,
+                    style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
                       color: commonColor,
