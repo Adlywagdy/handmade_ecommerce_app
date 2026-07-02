@@ -116,10 +116,16 @@ void _openAddressBottomSheet(BuildContext context) {
     isScrollControlled: true,
     backgroundColor: Colors.transparent,
     builder: (_) {
-      return _AddressInputBottomSheet(
-        initialAddress:
-            cartCubit.selectedOrderAddress ??
-            customerCubit.customerData.address,
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider<CartCubit>.value(value: cartCubit),
+          BlocProvider<CustomerCubit>.value(value: customerCubit),
+        ],
+        child: _AddressInputBottomSheet(
+          initialAddress:
+              cartCubit.selectedOrderAddress ??
+              customerCubit.customerData.address,
+        ),
       );
     },
   );
@@ -364,9 +370,9 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                               : _country.text.trim(),
                           zipCode: int.tryParse(_zip.text.trim()) ?? 0,
                         );
-                        await BlocProvider.of<CartCubit>(
-                          context,
-                        ).getOrderaddress(address: addressData);
+                        await context.read<CartCubit>().getOrderaddress(
+                          address: addressData,
+                        );
 
                         if (_setAsDefault) {
                           await BlocProvider.of<CustomerCubit>(
