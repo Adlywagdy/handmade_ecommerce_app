@@ -153,7 +153,6 @@ class CustomerOrdersScreen extends StatelessWidget {
                                     AppRoutes.customerOrderDetails,
                                     arguments: {
                                       'order': orders[index],
-                                      'orderCubit': orderCubit,
                                     },
                                   );
                                 },

@@ -48,7 +48,7 @@ class AmountContainerButton extends StatelessWidget {
         children: [
           InkWell(
             onTap: () {
-              BlocProvider.of<CartCubit>(context).deleteCartProducts(product);
+              context.read<CartCubit>().deleteCartProducts(product);
             },
             child: Icon(Icons.remove, color: iconscolor, size: 22.r),
           ),
@@ -82,8 +82,8 @@ class AmountContainerButton extends StatelessWidget {
             },
           ),
           InkWell(
-            onTap: () {
-              BlocProvider.of<CartCubit>(context).addCartProducts(product);
+            onTap: () async {
+              await context.read<CartCubit>().addCartProducts(product);
             },
             child: Icon(Icons.add, color: iconscolor, size: 22.r),
           ),

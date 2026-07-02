@@ -2,8 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -12,8 +11,6 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/orders/cubit/order_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/widgets/productdetailslowercolumn.dart';
 import 'package:share_plus/share_plus.dart';
 
@@ -138,28 +135,13 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   Expanded(
                     flex: 1,
                     child: CustomElevatedButton(
-                      onPressed: () {
-                        final cartCubit = BlocProvider.of<CartCubit>(context);
-                        OrderCubit? orderCubit;
-                        CustomerCubit? customerCubit;
-
-                        try {
-                          orderCubit = context.read<OrderCubit>();
-                        } catch (_) {}
-
-                        try {
-                          customerCubit = context.read<CustomerCubit>();
-                        } catch (_) {}
-
-                        cartCubit.addCartProducts(product);
-                        Get.toNamed(
-                          AppRoutes.customerCart,
-                          arguments: {
-                            'cartCubit': cartCubit,
-                            'orderCubit': orderCubit,
-                            'customerCubit': customerCubit,
-                          },
+                      onPressed: () async {
+                        await context.read<CartCubit>().addCartProducts(
+                          product,
                         );
+                        if (context.mounted) {
+                          Get.toNamed(AppRoutes.customerCart);
+                        }
                       },
                       buttoncolor: commonColor,
                       child: Text(
@@ -176,10 +158,10 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                     child: CustomElevatedButton(
                       buttoncolor: Colors.white,
                       bordercolor: commonColor.withValues(alpha: .35),
-                      onPressed: () {
-                        BlocProvider.of<CartCubit>(
-                          context,
-                        ).addCartProducts(product);
+                      onPressed: () async {
+                        await context.read<CartCubit>().addCartProducts(
+                          product,
+                        );
                       },
                       child: BlocBuilder<CartCubit, CartState>(
                         buildWhen: (previous, current) {

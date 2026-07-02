@@ -18,14 +18,13 @@ import 'package:handmade_ecommerce_app/features/customer/home/presentation/widge
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/topratedproductitemlowercolumn.dart';
-import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
+
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
 
   void _openAllCategoriesSheet(BuildContext context) {
     final searchCubit = context.read<SearchCubit>();
-    final wishListCubit = context.read<WishListCubit>();
     final categories = searchCubit.categoriesList;
 
     showModalBottomSheet(
@@ -72,13 +71,7 @@ class CustomerHomeScreen extends StatelessWidget {
                           categoryname: category.categorytitle,
                         );
                         Get.back();
-                        Get.toNamed(
-                          AppRoutes.customerSearch,
-                          arguments: {
-                            'searchCubit': searchCubit,
-                            'wishListCubit': wishListCubit,
-                          },
-                        );
+                        Get.toNamed(AppRoutes.customerSearch);
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -134,14 +127,8 @@ class CustomerHomeScreen extends StatelessWidget {
                   icon: Icons.notifications_none,
                   iconcolor: darkblue,
                   onPressed: () {
-                    final customerCubit = BlocProvider.of<CustomerCubit>(
-                      context,
-                    );
-                    customerCubit.getNotifications();
-                    Get.toNamed(
-                      AppRoutes.customerNotifications,
-                      arguments: customerCubit,
-                    );
+                    context.read<CustomerCubit>().getNotifications();
+                    Get.toNamed(AppRoutes.customerNotifications);
                   },
                 ),
               ],
@@ -180,18 +167,8 @@ class CustomerHomeScreen extends StatelessWidget {
                   ),
                   readOnly: true,
                   onTap: () {
-                    final searchCubit = BlocProvider.of<SearchCubit>(context);
-                    final wishListCubit = BlocProvider.of<WishListCubit>(
-                      context,
-                    );
-                    searchCubit.resetSearchState();
-                    Get.toNamed(
-                      AppRoutes.customerSearch,
-                      arguments: {
-                        'searchCubit': searchCubit,
-                        'wishListCubit': wishListCubit,
-                      },
-                    );
+                    context.read<SearchCubit>().resetSearchState();
+                    Get.toNamed(AppRoutes.customerSearch);
                   },
                 ),
               ),
@@ -319,18 +296,8 @@ class CustomerHomeScreen extends StatelessWidget {
                   title: "Top Rated",
                   buttontext: 'Explore All',
                   onTap: () {
-                    final searchCubit = BlocProvider.of<SearchCubit>(context);
-                    final wishListCubit = BlocProvider.of<WishListCubit>(
-                      context,
-                    );
-                    searchCubit.filterproducts(rating: 4);
-                    Get.toNamed(
-                      AppRoutes.customerSearch,
-                      arguments: {
-                        'searchCubit': searchCubit,
-                        'wishListCubit': wishListCubit,
-                      },
-                    );
+                    context.read<SearchCubit>().filterproducts(rating: 4);
+                    Get.toNamed(AppRoutes.customerSearch);
                   },
                   buttontextstyle: AppTextStyles.t_14w600.copyWith(
                     color: commonColor,

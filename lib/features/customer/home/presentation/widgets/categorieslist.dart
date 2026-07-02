@@ -6,7 +6,6 @@ import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/cubit/search_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
 
 class HomeCategoriesList extends StatefulWidget {
   const HomeCategoriesList({super.key});
@@ -21,7 +20,6 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
   @override
   Widget build(BuildContext context) {
     final searchCubit = context.read<SearchCubit>();
-    final wishListCubit = context.read<WishListCubit>();
 
     return ListView.builder(
       scrollDirection: Axis.horizontal,
@@ -40,13 +38,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
 
               searchCubit.selectedCategory = category;
               searchCubit.filterproducts(categoryname: category.categorytitle);
-              Get.toNamed(
-                AppRoutes.customerSearch,
-                arguments: {
-                  'searchCubit': searchCubit,
-                  'wishListCubit': wishListCubit,
-                },
-              );
+              Get.toNamed(AppRoutes.customerSearch);
             },
             child: Column(
               spacing: 8.h,
