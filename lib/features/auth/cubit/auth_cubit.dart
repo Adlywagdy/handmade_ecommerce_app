@@ -5,6 +5,7 @@ import 'package:handmade_ecommerce_app/core/constants/seller_status.dart';
 import 'package:handmade_ecommerce_app/core/constants/user_roles.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/models/auth_session.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/seller_application.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 part 'auth_state.dart';
 
@@ -17,8 +18,7 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
-      final AuthSession session =
-          await authService.login(email: email, password: password);
+      final AuthSession session = await authService.login(email: email, password: password);
       _persistSession(email: email, session: session);
       emit(LoginSuccessState(session.role));
     } on FirebaseAuthException catch (e) {
@@ -61,6 +61,7 @@ class AuthCubit extends Cubit<AuthState> {
     required String email,
     required String password,
     required String role,
+    SellerApplication? sellerApplication,
   }) async {
     emit(AuthLoading());
 
@@ -70,8 +71,8 @@ class AuthCubit extends Cubit<AuthState> {
         email: email,
         password: password,
         role: role,
+        sellerApplication: sellerApplication,
       );
-
       _persistSession(
         email: email,
         session: AuthSession(

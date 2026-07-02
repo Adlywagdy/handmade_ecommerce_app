@@ -11,7 +11,7 @@ class CustomStarsRatingRow extends StatelessWidget {
   const CustomStarsRatingRow({
     super.key,
     required this.product,
-    this.mainAxisAlignment = .start,
+    this.mainAxisAlignment = MainAxisAlignment.start,
     this.spacing = 0,
     this.size = 15,
     this.color,

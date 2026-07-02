@@ -239,4 +239,400 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get setPassword => 'تعيين كلمة المرور';
+
+  @override
+  String get admGreetingMorning => 'مرحبا بعودتك!';
+
+  @override
+  String get admStatLabelTotalUsers => 'إجمالي المستخدمين';
+
+  @override
+  String get admStatLabelTotalSellers => 'إجمالي البائعين';
+
+  @override
+  String get admStatLabelTotalOrders => 'إجمالي الطلبات';
+
+  @override
+  String get admStatLabelRevenue => 'الإيرادات';
+
+  @override
+  String get admLabelPlatformCommission => 'عمولة المنصة';
+
+  @override
+  String get admSectionPendingActions => 'إجراءات معلّقة';
+
+  @override
+  String admPendingSellersTitle(int count) {
+    return '$count بائعين في انتظار الموافقة';
+  }
+
+  @override
+  String get admPendingSellersSubtitle => 'تسجيلات حرفيين جديدة';
+
+  @override
+  String admPendingProductsTitle(int count) {
+    return '$count منتجات في انتظار المراجعة';
+  }
+
+  @override
+  String get admPendingProductsSubtitle => 'مطلوب فحص لمراقبة الجودة';
+
+  @override
+  String get admButtonReview => 'مراجعة';
+
+  @override
+  String get admDialogTitleCommission => 'عمولة المنصة';
+
+  @override
+  String get admCommissionHintText => 'مثال: 15';
+
+  @override
+  String get admButtonCancel => 'إلغاء';
+
+  @override
+  String get admButtonSave => 'حفظ';
+
+  @override
+  String get admSellerApprovals => 'موافقات البائعين';
+
+  @override
+  String get admStatusPending => 'قيد الانتظار';
+
+  @override
+  String get admStatusApproved => 'مقبول';
+
+  @override
+  String get admStatusRejected => 'مرفوض';
+
+  @override
+  String get admSearchSellersHint => 'ابحث عن البائعين...';
+
+  @override
+  String get admNoSellersFound => 'لا يوجد بائعون';
+
+  @override
+  String admSubmittedLabel(String date) {
+    return 'تاريخ التقديم: $date';
+  }
+
+  @override
+  String get admApproveBtn => 'قبول';
+
+  @override
+  String get admRejectBtn => 'رفض';
+
+  @override
+  String get admSeller => 'بائع';
+
+  @override
+  String get admSellerNotFound => 'لم يتم العثور على البائع';
+
+  @override
+  String get admSellerDetails => 'تفاصيل البائع';
+
+  @override
+  String get admContactSectionTitle => 'جهة الاتصال';
+
+  @override
+  String get admBusinessSectionTitle => 'النشاط التجاري';
+
+  @override
+  String get admTimelineSectionTitle => 'المخطط الزمني';
+
+  @override
+  String get admEmailLabel => 'البريد الإلكتروني';
+
+  @override
+  String get admPhoneLabel => 'الهاتف';
+
+  @override
+  String get admLocationLabel => 'الموقع';
+
+  @override
+  String get admSpecialtyLabel => 'التخصص';
+
+  @override
+  String get admRatingLabel => 'التقييم';
+
+  @override
+  String get admTotalSalesLabel => 'إجمالي المبيعات';
+
+  @override
+  String get admTotalProductsLabel => 'إجمالي المنتجات';
+
+  @override
+  String get admWalletBalanceLabel => 'رصيد المحفظة';
+
+  @override
+  String get admCommissionRateLabel => 'نسبة العمولة';
+
+  @override
+  String get admSubmittedDateLabel => 'تاريخ التقديم';
+
+  @override
+  String get admApprovedDateLabel => 'تاريخ الموافقة';
+
+  @override
+  String get admStatusLabel => 'الحالة';
+
+  @override
+  String get admApproveProducts => 'الموافقة على المنتجات';
+
+  @override
+  String get admPending => 'قيد الانتظار';
+
+  @override
+  String get admApproved => 'مقبول';
+
+  @override
+  String get admRejected => 'مرفوض';
+
+  @override
+  String get admSearchProductsHint => 'ابحث عن المنتجات...';
+
+  @override
+  String get admNoProductsFound => 'لا توجد منتجات';
+
+  @override
+  String get admApproveAction => 'قبول';
+
+  @override
+  String get admRejectAction => 'رفض';
+
+  @override
+  String get admProduct => 'منتج';
+
+  @override
+  String get admProductNotFound => 'لم يتم العثور على المنتج';
+
+  @override
+  String get admProductDetails => 'تفاصيل المنتج';
+
+  @override
+  String get admInventory => 'المخزون';
+
+  @override
+  String get admStock => 'الكمية';
+
+  @override
+  String get admCategory => 'الفئة';
+
+  @override
+  String get admActive => 'نشط';
+
+  @override
+  String get admYes => 'نعم';
+
+  @override
+  String get admNo => 'لا';
+
+  @override
+  String get admStats => 'الإحصائيات';
+
+  @override
+  String get admRating => 'التقييم';
+
+  @override
+  String get admReviews => 'المراجعات';
+
+  @override
+  String get admSales => 'المبيعات';
+
+  @override
+  String get admDescription => 'الوصف';
+
+  @override
+  String get admApproveButtonLabel => 'قبول';
+
+  @override
+  String get admRejectButtonLabel => 'رفض';
+
+  @override
+  String get admOrders => 'الطلبات';
+
+  @override
+  String get admOrdersTabAll => 'الكل';
+
+  @override
+  String get admOrdersTabPending => 'قيد الانتظار';
+
+  @override
+  String get admOrdersTabActive => 'نشطة';
+
+  @override
+  String get admOrdersTabDelivered => 'تم التوصيل';
+
+  @override
+  String get admOrdersTabCancelled => 'ملغاة';
+
+  @override
+  String get admSearchOrderPlaceholder => 'ابحث برقم الطلب أو الاسم';
+
+  @override
+  String get admNoOrdersFound => 'لا توجد طلبات';
+
+  @override
+  String admSellerLabel(String sellerName) {
+    return 'البائع: $sellerName';
+  }
+
+  @override
+  String get admOrderTitle => 'طلب';
+
+  @override
+  String get admOrderNotFound => 'لم يتم العثور على الطلب';
+
+  @override
+  String get admSectionParties => 'الأطراف';
+
+  @override
+  String get admCustomerLabel => 'العميل';
+
+  @override
+  String get admSellerLabelDetails => 'البائع';
+
+  @override
+  String get admCreatedLabel => 'تاريخ الإنشاء';
+
+  @override
+  String get admLastUpdateLabel => 'آخر تحديث';
+
+  @override
+  String get admSectionTotals => 'الإجماليات';
+
+  @override
+  String get admSubtotalLabel => 'المجموع الفرعي';
+
+  @override
+  String get admDeliveryFeeLabel => 'رسوم التوصيل';
+
+  @override
+  String get admCommissionLabel => 'العمولة';
+
+  @override
+  String get admSellerEarningLabel => 'أرباح البائع';
+
+  @override
+  String get admTotalLabel => 'الإجمالي';
+
+  @override
+  String get admSectionPayment => 'الدفع';
+
+  @override
+  String get admPaymentMethodLabel => 'طريقة الدفع';
+
+  @override
+  String get admPaymentStatusLabel => 'الحالة';
+
+  @override
+  String get admSectionShipping => 'الشحن';
+
+  @override
+  String get admStreetLabel => 'الشارع';
+
+  @override
+  String get admCityLabel => 'المدينة';
+
+  @override
+  String get admGovernorateLabel => 'المحافظة';
+
+  @override
+  String get admCountryLabel => 'الدولة';
+
+  @override
+  String get admZipLabel => 'الرمز البريدي';
+
+  @override
+  String admItemsLabel(int count) {
+    return 'العناصر ($count)';
+  }
+
+  @override
+  String get admNoLineItems => 'لا توجد عناصر';
+
+  @override
+  String admStatusHeaderSubtitle(String price, int count) {
+    return '$price • $count عناصر';
+  }
+
+  @override
+  String get admUpdateStatusLabel => 'تحديث الحالة';
+
+  @override
+  String admNoFurtherActions(String status) {
+    return 'لا توجد إجراءات أخرى — $status';
+  }
+
+  @override
+  String get admSettings => 'الإعدادات';
+
+  @override
+  String get admPlatformCommission => 'عمولة المنصة';
+
+  @override
+  String get admDeliveryFee => 'رسوم التوصيل';
+
+  @override
+  String get admMinimumOrderValue => 'الحد الأدنى لقيمة الطلب';
+
+  @override
+  String get admSupportEmail => 'بريد الدعم';
+
+  @override
+  String get admLanguageRegion => 'اللغة والمنطقة';
+
+  @override
+  String get admLogoutTitle => 'تسجيل الخروج';
+
+  @override
+  String get admLogoutConfirmation => 'هل أنت متأكد من تسجيل الخروج؟';
+
+  @override
+  String get admCancel => 'إلغاء';
+
+  @override
+  String get admLogout => 'تسجيل الخروج';
+
+  @override
+  String get admDashboard => 'لوحة التحكم';
+
+  @override
+  String get admSellers => 'البائعون';
+
+  @override
+  String get admProducts => 'المنتجات';
+
+  @override
+  String get admSettingsNav => 'الإعدادات';
+
+  @override
+  String get sellerDetailsSectionTitle => 'بيانات البائع';
+
+  @override
+  String get sellerDetailsSectionHint =>
+      'أكمل بياناتك حتى نتمكن من مراجعة طلبك.';
+
+  @override
+  String get specialtyLabel => 'التخصص / الحرفة';
+
+  @override
+  String get specialtyHint => 'مثال: فخار يدوي';
+
+  @override
+  String get specialtyIsRequired => 'التخصص مطلوب';
+
+  @override
+  String get phoneNumberLabel => 'رقم الهاتف';
+
+  @override
+  String get phoneNumberHint => '+20 1XX XXX XXXX';
+
+  @override
+  String get phoneIsRequired => 'رقم الهاتف مطلوب';
+
+  @override
+  String get cityLabelOptional => 'المدينة (اختياري)';
+
+  @override
+  String get countryLabelOptional => 'الدولة (اختياري)';
 }

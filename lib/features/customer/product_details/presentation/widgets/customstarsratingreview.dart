@@ -18,7 +18,7 @@ class CustomStarsRatingReview extends StatelessWidget {
     return Column(
       children: [
         Row(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
 
           children: List.generate(5, (rateindex) {
             final starValue = rateindex + 1;

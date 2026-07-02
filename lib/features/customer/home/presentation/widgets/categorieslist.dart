@@ -69,7 +69,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
                         : ClipRRect(
                             borderRadius: BorderRadius.circular(35.r),
                             child: Image.network(
-                              alignment: .center,
+                              alignment: Alignment.center,
                               height: 70.r,
                               width: 70.r,
                               iconPath,

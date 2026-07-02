@@ -154,7 +154,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                     child: Center(
                       child: Text(
                         'Your wishlist is empty. \nStart adding your favorite products!',
-                        textAlign: .center,
+                        textAlign: TextAlign.center,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: subTitleColor,
                         ),
@@ -172,7 +172,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0).w,
                         child: ProductItem(
-                          cardclipBehavior: .antiAlias,
+                          cardclipBehavior: Clip.antiAlias,
                           product: state.wishlistproducts[index],
                           imageflex: 2,
                           lowercolumnflex: 1,

@@ -11,6 +11,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/seller_application.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/buttom_text.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_textfield.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/divider.dart';
@@ -28,9 +29,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   late TextEditingController _nameController;
   late TextEditingController _emailController;
   late TextEditingController _passwordController;
+  late TextEditingController _specialtyController;
+  late TextEditingController _phoneController;
+  late TextEditingController _cityController;
+  late TextEditingController _countryController;
 
   String? _selectedRole;
   bool _isChecked = false;
+
+  bool get _isSeller => _selectedRole == 'seller';
 
   @override
   void initState() {
@@ -38,6 +45,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _nameController = TextEditingController();
     _emailController = TextEditingController();
     _passwordController = TextEditingController();
+    _specialtyController = TextEditingController();
+    _phoneController = TextEditingController();
+    _cityController = TextEditingController();
+    _countryController = TextEditingController();
     super.initState();
   }
 
@@ -46,6 +57,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
     _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
+    _specialtyController.dispose();
+    _phoneController.dispose();
+    _cityController.dispose();
+    _countryController.dispose();
     super.dispose();
   }
 
@@ -223,6 +238,73 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                 ),
 
+                if (_isSeller) ...[
+                  SizedBox(height: 20.h),
+                  Text(
+                    context.l10n.sellerDetailsSectionTitle,
+                    style: AppTextStyles.t_16w700.copyWith(color: primaryColor),
+                  ),
+                  SizedBox(height: 6.h),
+                  Text(
+                    context.l10n.sellerDetailsSectionHint,
+                    style: AppTextStyles.t_12w400.copyWith(
+                      color: primaryColor.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Customtextfield(
+                    controller: _specialtyController,
+                    label: context.l10n.specialtyLabel,
+                    hintText: context.l10n.specialtyHint,
+                    prefixIcon: Icon(
+                      Icons.handyman_outlined,
+                      color: primaryColor.withValues(alpha: 0.6),
+                    ),
+                    validator: (value) {
+                      if (_isSeller && (value == null || value.trim().isEmpty)) {
+                        return context.l10n.specialtyIsRequired;
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  Customtextfield(
+                    controller: _phoneController,
+                    label: context.l10n.phoneNumberLabel,
+                    hintText: context.l10n.phoneNumberHint,
+                    prefixIcon: Icon(
+                      Icons.phone_outlined,
+                      color: primaryColor.withValues(alpha: 0.6),
+                    ),
+                    validator: (value) {
+                      if (_isSeller && (value == null || value.trim().isEmpty)) {
+                        return context.l10n.phoneIsRequired;
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(height: 12.h),
+                  Customtextfield(
+                    controller: _cityController,
+                    label: context.l10n.cityLabelOptional,
+                    hintText: context.l10n.cityLabelOptional,
+                    prefixIcon: Icon(
+                      Icons.location_city_outlined,
+                      color: primaryColor.withValues(alpha: 0.6),
+                    ),
+                  ),
+                  SizedBox(height: 12.h),
+                  Customtextfield(
+                    controller: _countryController,
+                    label: context.l10n.countryLabelOptional,
+                    hintText: context.l10n.countryLabelOptional,
+                    prefixIcon: Icon(
+                      Icons.public_outlined,
+                      color: primaryColor.withValues(alpha: 0.6),
+                    ),
+                  ),
+                ],
+
                 SizedBox(height: 20.h),
 
                 Row(
@@ -313,6 +395,16 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   email: _emailController.text.trim(),
                                   password: _passwordController.text,
                                   role: _selectedRole!,
+                                  sellerApplication: _isSeller
+                                      ? SellerApplication(
+                                          specialty:
+                                              _specialtyController.text.trim(),
+                                          phone: _phoneController.text.trim(),
+                                          city: _cityController.text.trim(),
+                                          country:
+                                              _countryController.text.trim(),
+                                        )
+                                      : null,
                                 );
                               }
                             },

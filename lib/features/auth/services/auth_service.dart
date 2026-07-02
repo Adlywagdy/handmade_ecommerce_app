@@ -5,6 +5,7 @@ import 'package:handmade_ecommerce_app/core/constants/seller_status.dart';
 import 'package:handmade_ecommerce_app/core/constants/user_roles.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/models/auth_session.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/seller_application.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -119,6 +120,7 @@ class AuthService {
     required String email,
     required String password,
     required String role,
+    SellerApplication? sellerApplication,
   }) async {
     final UserCredential credential = await _firebaseAuth
         .createUserWithEmailAndPassword(email: email, password: password);
@@ -134,6 +136,8 @@ class AuthService {
       'role': role,
       'provider': 'email',
       if (role == UserRoles.seller) 'status': SellerStatus.pending,
+      if (role == UserRoles.seller && (sellerApplication?.phone.isNotEmpty ?? false))
+        'phone': sellerApplication!.phone,
       'createdAt': FieldValue.serverTimestamp(),
     });
 
@@ -142,6 +146,7 @@ class AuthService {
         uid: user.uid,
         name: fullName,
         email: email,
+        application: sellerApplication,
       );
     }
   }
@@ -150,6 +155,7 @@ class AuthService {
     required String uid,
     required String name,
     required String email,
+    SellerApplication? application,
   }) async {
     await _firestore.collection('sellers').doc(uid).set({
       'uid': uid,
@@ -157,6 +163,13 @@ class AuthService {
       'email': email,
       'status': SellerStatus.pending,
       'isActive': false,
+      if (application != null) 'specialty': application.specialty,
+      if (application != null && application.phone.isNotEmpty)
+        'phone': application.phone,
+      if (application != null && application.city.isNotEmpty)
+        'city': application.city,
+      if (application != null && application.country.isNotEmpty)
+        'country': application.country,
       'submittedAt': FieldValue.serverTimestamp(),
       'createdAt': FieldValue.serverTimestamp(),
     });

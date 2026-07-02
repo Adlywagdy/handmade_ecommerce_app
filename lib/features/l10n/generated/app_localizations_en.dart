@@ -241,4 +241,400 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setPassword => 'Set Password';
+
+  @override
+  String get admGreetingMorning => 'Welcome back!';
+
+  @override
+  String get admStatLabelTotalUsers => 'TOTAL USERS';
+
+  @override
+  String get admStatLabelTotalSellers => 'TOTAL SELLERS';
+
+  @override
+  String get admStatLabelTotalOrders => 'TOTAL ORDERS';
+
+  @override
+  String get admStatLabelRevenue => 'REVENUE';
+
+  @override
+  String get admLabelPlatformCommission => 'Platform Commission';
+
+  @override
+  String get admSectionPendingActions => 'Pending Actions';
+
+  @override
+  String admPendingSellersTitle(int count) {
+    return '$count Sellers awaiting approval';
+  }
+
+  @override
+  String get admPendingSellersSubtitle => 'New artisan registrations';
+
+  @override
+  String admPendingProductsTitle(int count) {
+    return '$count Products awaiting review';
+  }
+
+  @override
+  String get admPendingProductsSubtitle => 'Quality control check required';
+
+  @override
+  String get admButtonReview => 'Review';
+
+  @override
+  String get admDialogTitleCommission => 'Platform Commission';
+
+  @override
+  String get admCommissionHintText => 'e.g. 15';
+
+  @override
+  String get admButtonCancel => 'Cancel';
+
+  @override
+  String get admButtonSave => 'Save';
+
+  @override
+  String get admSellerApprovals => 'Seller Approvals';
+
+  @override
+  String get admStatusPending => 'Pending';
+
+  @override
+  String get admStatusApproved => 'Approved';
+
+  @override
+  String get admStatusRejected => 'Rejected';
+
+  @override
+  String get admSearchSellersHint => 'Search sellers...';
+
+  @override
+  String get admNoSellersFound => 'No sellers found';
+
+  @override
+  String admSubmittedLabel(String date) {
+    return 'Submitted: $date';
+  }
+
+  @override
+  String get admApproveBtn => 'Approve';
+
+  @override
+  String get admRejectBtn => 'Reject';
+
+  @override
+  String get admSeller => 'Seller';
+
+  @override
+  String get admSellerNotFound => 'Seller not found';
+
+  @override
+  String get admSellerDetails => 'Seller Details';
+
+  @override
+  String get admContactSectionTitle => 'Contact';
+
+  @override
+  String get admBusinessSectionTitle => 'Business';
+
+  @override
+  String get admTimelineSectionTitle => 'Timeline';
+
+  @override
+  String get admEmailLabel => 'Email';
+
+  @override
+  String get admPhoneLabel => 'Phone';
+
+  @override
+  String get admLocationLabel => 'Location';
+
+  @override
+  String get admSpecialtyLabel => 'Specialty';
+
+  @override
+  String get admRatingLabel => 'Rating';
+
+  @override
+  String get admTotalSalesLabel => 'Total sales';
+
+  @override
+  String get admTotalProductsLabel => 'Total products';
+
+  @override
+  String get admWalletBalanceLabel => 'Wallet balance';
+
+  @override
+  String get admCommissionRateLabel => 'Commission rate';
+
+  @override
+  String get admSubmittedDateLabel => 'Submitted';
+
+  @override
+  String get admApprovedDateLabel => 'Approved';
+
+  @override
+  String get admStatusLabel => 'Status';
+
+  @override
+  String get admApproveProducts => 'Approve Products';
+
+  @override
+  String get admPending => 'Pending';
+
+  @override
+  String get admApproved => 'Approved';
+
+  @override
+  String get admRejected => 'Rejected';
+
+  @override
+  String get admSearchProductsHint => 'Search products...';
+
+  @override
+  String get admNoProductsFound => 'No products found';
+
+  @override
+  String get admApproveAction => 'APPROVE';
+
+  @override
+  String get admRejectAction => 'REJECT';
+
+  @override
+  String get admProduct => 'Product';
+
+  @override
+  String get admProductNotFound => 'Product not found';
+
+  @override
+  String get admProductDetails => 'Product Details';
+
+  @override
+  String get admInventory => 'Inventory';
+
+  @override
+  String get admStock => 'Stock';
+
+  @override
+  String get admCategory => 'Category';
+
+  @override
+  String get admActive => 'Active';
+
+  @override
+  String get admYes => 'Yes';
+
+  @override
+  String get admNo => 'No';
+
+  @override
+  String get admStats => 'Stats';
+
+  @override
+  String get admRating => 'Rating';
+
+  @override
+  String get admReviews => 'Reviews';
+
+  @override
+  String get admSales => 'Sales';
+
+  @override
+  String get admDescription => 'Description';
+
+  @override
+  String get admApproveButtonLabel => 'Approve';
+
+  @override
+  String get admRejectButtonLabel => 'Reject';
+
+  @override
+  String get admOrders => 'Orders';
+
+  @override
+  String get admOrdersTabAll => 'All';
+
+  @override
+  String get admOrdersTabPending => 'Pending';
+
+  @override
+  String get admOrdersTabActive => 'Active';
+
+  @override
+  String get admOrdersTabDelivered => 'Delivered';
+
+  @override
+  String get admOrdersTabCancelled => 'Cancelled';
+
+  @override
+  String get admSearchOrderPlaceholder => 'Search order ID or name';
+
+  @override
+  String get admNoOrdersFound => 'No orders found';
+
+  @override
+  String admSellerLabel(String sellerName) {
+    return 'Seller: $sellerName';
+  }
+
+  @override
+  String get admOrderTitle => 'Order';
+
+  @override
+  String get admOrderNotFound => 'Order not found';
+
+  @override
+  String get admSectionParties => 'Parties';
+
+  @override
+  String get admCustomerLabel => 'Customer';
+
+  @override
+  String get admSellerLabelDetails => 'Seller';
+
+  @override
+  String get admCreatedLabel => 'Created';
+
+  @override
+  String get admLastUpdateLabel => 'Last update';
+
+  @override
+  String get admSectionTotals => 'Totals';
+
+  @override
+  String get admSubtotalLabel => 'Subtotal';
+
+  @override
+  String get admDeliveryFeeLabel => 'Delivery fee';
+
+  @override
+  String get admCommissionLabel => 'Commission';
+
+  @override
+  String get admSellerEarningLabel => 'Seller earning';
+
+  @override
+  String get admTotalLabel => 'Total';
+
+  @override
+  String get admSectionPayment => 'Payment';
+
+  @override
+  String get admPaymentMethodLabel => 'Method';
+
+  @override
+  String get admPaymentStatusLabel => 'Status';
+
+  @override
+  String get admSectionShipping => 'Shipping';
+
+  @override
+  String get admStreetLabel => 'Street';
+
+  @override
+  String get admCityLabel => 'City';
+
+  @override
+  String get admGovernorateLabel => 'Governorate';
+
+  @override
+  String get admCountryLabel => 'Country';
+
+  @override
+  String get admZipLabel => 'Zip';
+
+  @override
+  String admItemsLabel(int count) {
+    return 'Items ($count)';
+  }
+
+  @override
+  String get admNoLineItems => 'No line items';
+
+  @override
+  String admStatusHeaderSubtitle(String price, int count) {
+    return '$price • $count items';
+  }
+
+  @override
+  String get admUpdateStatusLabel => 'Update status';
+
+  @override
+  String admNoFurtherActions(String status) {
+    return 'No further actions — $status';
+  }
+
+  @override
+  String get admSettings => 'Settings';
+
+  @override
+  String get admPlatformCommission => 'Platform Commission';
+
+  @override
+  String get admDeliveryFee => 'Delivery Fee';
+
+  @override
+  String get admMinimumOrderValue => 'Minimum Order Value';
+
+  @override
+  String get admSupportEmail => 'Support Email';
+
+  @override
+  String get admLanguageRegion => 'Language & Region';
+
+  @override
+  String get admLogoutTitle => 'Logout';
+
+  @override
+  String get admLogoutConfirmation => 'Are you sure you want to logout?';
+
+  @override
+  String get admCancel => 'Cancel';
+
+  @override
+  String get admLogout => 'Logout';
+
+  @override
+  String get admDashboard => 'Dashboard';
+
+  @override
+  String get admSellers => 'Sellers';
+
+  @override
+  String get admProducts => 'Products';
+
+  @override
+  String get admSettingsNav => 'Settings';
+
+  @override
+  String get sellerDetailsSectionTitle => 'Seller details';
+
+  @override
+  String get sellerDetailsSectionHint =>
+      'Complete your details so we can review your application.';
+
+  @override
+  String get specialtyLabel => 'Specialty / Craft';
+
+  @override
+  String get specialtyHint => 'e.g. Handmade pottery';
+
+  @override
+  String get specialtyIsRequired => 'Specialty is required';
+
+  @override
+  String get phoneNumberLabel => 'Phone Number';
+
+  @override
+  String get phoneNumberHint => '+20 1XX XXX XXXX';
+
+  @override
+  String get phoneIsRequired => 'Phone number is required';
+
+  @override
+  String get cityLabelOptional => 'City (optional)';
+
+  @override
+  String get countryLabelOptional => 'Country (optional)';
 }

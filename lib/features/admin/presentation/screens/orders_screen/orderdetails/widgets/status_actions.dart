@@ -4,6 +4,7 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/cubit/admin_cubit.dart';
 import 'package:handmade_ecommerce_app/features/admin/models/next_status_action.dart';
 import 'package:handmade_ecommerce_app/features/admin/models/orders_model.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import 'no_more_actions.dart';
 import 'status_action_button.dart';
 
@@ -52,7 +53,7 @@ class _StatusActionsButtonsState extends State<StatusActionsButtons> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Update status',
+          AppLocalizations.of(context)!.admUpdateStatusLabel,
           style: TextStyle(
             fontSize: 14.sp,
             fontWeight: FontWeight.w700,

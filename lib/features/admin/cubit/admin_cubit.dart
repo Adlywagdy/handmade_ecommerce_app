@@ -156,11 +156,11 @@ class AdminCubit extends Cubit<AdminState> {
     emit(UpdateSettingsLoading());
     try {
       await action();
-      processingIds = {...processingIds}..remove(id);
       emit(UpdateSettingsSuccess());
     } catch (e) {
-      processingIds = {...processingIds}..remove(id);
       emit(UpdateSettingsError(e.toString()));
+    } finally {
+      processingIds = {...processingIds}..remove(id);
     }
   }
 

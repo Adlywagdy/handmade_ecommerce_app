@@ -164,10 +164,7 @@ class OrderModel {
       orderNumber: json['orderNumber']?.toString() ?? '',
       customerId: json['customerId']?.toString() ?? '',
       sellerId: json['sellerId']?.toString() ?? '',
-      items: rawItems
-          .whereType<Map<String, dynamic>>()
-          .map(OrderItemModel.fromJson)
-          .toList(),
+      items: rawItems.whereType<Map<String, dynamic>>().map(OrderItemModel.fromJson).toList(),
       subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
       deliveryFee: (json['deliveryFee'] as num?)?.toDouble() ?? 0.0,
       totalPrice: (json['totalPrice'] as num?)?.toDouble() ?? 0.0,
@@ -175,10 +172,7 @@ class OrderModel {
       commission: (json['commission'] as num?)?.toDouble() ?? 0.0,
       sellerEarning: (json['sellerEarning'] as num?)?.toDouble() ?? 0.0,
       currency: json['currency']?.toString() ?? 'EGP',
-      status: OrderStatus.values.firstWhere(
-        (e) => e.name == json['status'],
-        orElse: () => OrderStatus.pending,
-      ),
+      status: OrderStatus.values.firstWhere((e) => e.name == json['status'], orElse: () => OrderStatus.pending, ),
       paymentMethod: json['paymentMethod']?.toString() ?? 'cash_on_delivery',
       paymentStatus: json['paymentStatus']?.toString() ?? 'pending',
       shippingAddress: json['shippingAddress'] is Map<String, dynamic>

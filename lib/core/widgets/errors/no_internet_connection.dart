@@ -12,7 +12,7 @@ class NoInternetConnection extends StatelessWidget {
       backgroundColor: Color(0xFFFFFFFF),
       body: Center(
         child: Column(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset('assets/icons/no_internet_connection.svg'),
             SizedBox(height: 35),
@@ -27,7 +27,7 @@ class NoInternetConnection extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 color: Color(0xff64748B),
               ),
-              textAlign: .center,
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 50),
             InkWell(
@@ -40,7 +40,7 @@ class NoInternetConnection extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Row(
-                  mainAxisAlignment: .center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Icon(Icons.refresh_sharp, color: Colors.white),
                     Text(
