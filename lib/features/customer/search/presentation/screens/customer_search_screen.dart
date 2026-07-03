@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/functions/filter_sheet_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
+import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -32,10 +33,14 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
   void initState() {
     super.initState();
     controller = TextEditingController();
-    final selectedCategory = _searchCubit.selectedCategory;
-    if (selectedCategory != null) {
-      controller.text = selectedCategory.categorytitle;
-      _searchCubit.filterproducts(categoryname: selectedCategory.categorytitle);
+    final args = Get.arguments;
+    if (args is CategoryModel) {
+      final cubit = _searchCubit;
+      cubit.selectedCategory = args;
+      controller.text = args.categorytitle;
+      cubit.filterproducts(categoryname: args.categorytitle);
+    } else if (args is Map && args['rating'] != null) {
+      _searchCubit.filterproducts(rating: (args['rating'] as num).toDouble());
     }
   }
 
@@ -129,13 +134,6 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                   );
                 },
           ),
-          SliverToBoxAdapter(
-            child: Container(
-              height: 67.h,
-              constraints: BoxConstraints(minHeight: 65.h, maxHeight: 68.h),
-              child: Searchcategorieslist(),
-            ),
-          ),
 
           SliverToBoxAdapter(
             child: Divider(color: commonColor.withValues(alpha: .1)),
@@ -188,21 +186,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                   current is FilterProductsFailedstate;
             },
             builder: (context, state) {
-              if (state is SearchInitial) {
-                return SliverToBoxAdapter(
-                  child: SizedBox(
-                    height: 220.h,
-                    child: Center(
-                      child: Text(
-                        'Start typing to see matching products',
-                        style: AppTextStyles.t_14w500.copyWith(
-                          color: commonColor.withValues(alpha: .6),
-                        ),
-                      ),
-                    ),
-                  ),
-                );
-              } else if (state is SearchProductsSuccessedstate ||
+              if (state is SearchProductsSuccessedstate ||
                   state is FilterProductsSuccessedstate) {
                 final List<ProductModel> products =
                     state is SearchProductsSuccessedstate
@@ -243,7 +227,8 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     : (state as FilterProductsFailedstate).errorMessage;
                 showSnack(title: "Error", message: errorMessage);
                 return SliverToBoxAdapter(child: SizedBox(height: 200.h));
-              } else {
+              } else if (state is SearchProductsLoadingstate ||
+                  state is FilterProductsLoadingstate) {
                 return SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -254,6 +239,20 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     (context, index) => Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
                       child: SvgPicture.asset("assets/images/loadingCard.svg"),
+                    ),
+                  ),
+                );
+              } else {
+                return SliverToBoxAdapter(
+                  child: SizedBox(
+                    height: 220.h,
+                    child: Center(
+                      child: Text(
+                        'Start typing to see matching products',
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: commonColor.withValues(alpha: .6),
+                        ),
+                      ),
                     ),
                   ),
                 );

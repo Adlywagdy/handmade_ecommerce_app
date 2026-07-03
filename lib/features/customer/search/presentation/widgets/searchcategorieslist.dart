@@ -138,12 +138,12 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
                   ).selectedCategory = BlocProvider.of<SearchCubit>(
                     context,
                   ).categoriesList[index];
-                  BlocProvider.of<SearchCubit>(context).filterproducts(
-                    categoryname: BlocProvider.of<SearchCubit>(
-                      context,
-                    ).categoriesList[index].categorytitle,
-                  );
                 });
+                BlocProvider.of<SearchCubit>(context).filterproducts(
+                  categoryname: BlocProvider.of<SearchCubit>(
+                    context,
+                  ).categoriesList[index].categorytitle,
+                );
               },
               child: Container(
                 margin: EdgeInsets.all(8),

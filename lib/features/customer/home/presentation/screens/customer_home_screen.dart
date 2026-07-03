@@ -19,7 +19,6 @@ import 'package:handmade_ecommerce_app/features/customer/home/presentation/widge
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/topratedproductitemlowercolumn.dart';
 
-
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
 
@@ -65,13 +64,16 @@ class CustomerHomeScreen extends StatelessWidget {
                   children: List.generate(categories.length, (index) {
                     final category = categories[index];
                     return GestureDetector(
-                      onTap: () {
+                      onTap: () async {
                         searchCubit.selectedCategory = category;
-                        searchCubit.filterproducts(
+                        await searchCubit.filterproducts(
                           categoryname: category.categorytitle,
                         );
                         Get.back();
-                        Get.toNamed(AppRoutes.customerSearch);
+                        Get.toNamed(
+                          AppRoutes.customerSearch,
+                          arguments: category,
+                        );
                       },
                       child: Container(
                         padding: const EdgeInsets.symmetric(
@@ -126,8 +128,8 @@ class CustomerHomeScreen extends StatelessWidget {
                   backgroundColor: customerbackGroundColor,
                   icon: Icons.notifications_none,
                   iconcolor: darkblue,
-                  onPressed: () {
-                    context.read<CustomerCubit>().getNotifications();
+                  onPressed: () async {
+                    await context.read<CustomerCubit>().getNotifications();
                     Get.toNamed(AppRoutes.customerNotifications);
                   },
                 ),
@@ -166,8 +168,8 @@ class CustomerHomeScreen extends StatelessWidget {
                     color: commonColor.withValues(alpha: .6),
                   ),
                   readOnly: true,
-                  onTap: () {
-                    context.read<SearchCubit>().resetSearchState();
+                  onTap: () async {
+                    await context.read<SearchCubit>().resetSearchState();
                     Get.toNamed(AppRoutes.customerSearch);
                   },
                 ),
@@ -296,8 +298,10 @@ class CustomerHomeScreen extends StatelessWidget {
                   title: "Top Rated",
                   buttontext: 'Explore All',
                   onTap: () {
-                    context.read<SearchCubit>().filterproducts(rating: 4);
-                    Get.toNamed(AppRoutes.customerSearch);
+                    Get.toNamed(
+                      AppRoutes.customerSearch,
+                      arguments: {'rating': 4},
+                    );
                   },
                   buttontextstyle: AppTextStyles.t_14w600.copyWith(
                     color: commonColor,

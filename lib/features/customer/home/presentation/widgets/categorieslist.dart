@@ -19,13 +19,11 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
 
   @override
   Widget build(BuildContext context) {
-    final searchCubit = context.read<SearchCubit>();
-
     return ListView.builder(
       scrollDirection: Axis.horizontal,
-      itemCount: searchCubit.categoriesList.length,
+      itemCount: context.read<SearchCubit>().categoriesList.length,
       itemBuilder: (context, index) {
-        final category = searchCubit.categoriesList[index];
+        final category = context.read<SearchCubit>().categoriesList[index];
         final iconPath = category.categoryiconpath;
 
         return Padding(
@@ -36,9 +34,7 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
                 selectedIndex = index;
               });
 
-              searchCubit.selectedCategory = category;
-              searchCubit.filterproducts(categoryname: category.categorytitle);
-              Get.toNamed(AppRoutes.customerSearch);
+              Get.toNamed(AppRoutes.customerSearch, arguments: category);
             },
             child: Column(
               spacing: 8.h,
