@@ -3,13 +3,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_dashboard_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_earnings_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
 
 class SellerBottomNav extends StatefulWidget {
   const SellerBottomNav({super.key});
@@ -72,63 +76,75 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
       onAddProduct: () => Get.toNamed(AppRoutes.selleraddproduct),
       onViewProducts: () => _switchTab(1),
       onViewOrders: () => _switchTab(2),
+      onOpenProfile: () => _switchTab(3),
     ),
     SellerManageProductsScreen(onBackPressed: () => _switchTab(0)),
     SellerOrdersScreen(onBackPressed: () => _switchTab(0)),
-    SellerRegistrationScreen(onBackPressed: () => _switchTab(0)),
-    const _PlaceholderScreen(title: 'Earnings'),
+    const SellerProfileScreen(),
+    SellerEarningsScreen(onBackPressed: () => _switchTab(0)),
   ];
 
   Widget _buildBottomNav() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceAround,
-      children: [
-        _buildNavIcon(
-          Icons.dashboard_outlined,
-          Icons.dashboard_rounded,
-          'Home',
-          _activeScreenIndex == 0,
-          () => _switchTab(0),
-          false,
-          false,
-        ),
-        _buildNavIcon(
-          Icons.inventory_2_outlined,
-          Icons.inventory_2_rounded,
-          'Products',
-          _activeScreenIndex == 1,
-          () => _switchTab(1),
-          false,
-          false,
-        ),
-        _buildNavIcon(
-          Icons.shopping_bag_outlined,
-          Icons.shopping_bag_rounded,
-          'Orders',
-          _activeScreenIndex == 2,
-          () => _switchTab(2),
-          true,
-          false,
-        ),
-        _buildNavIcon(
-          Icons.payments_outlined,
-          Icons.payments_rounded,
-          'Earnings',
-          _activeScreenIndex == 4,
-          () => _switchTab(4),
-          false,
-          false,
-        ),
-        _buildNavIcon(
-          Icons.person_outline_rounded,
-          Icons.person_rounded,
-          'Profile',
-          _activeScreenIndex == 3,
-          () => _switchTab(3),
-          false,
-          false,
-        ),
-      ],
+    return BlocBuilder<SellerCubit, SellerState>(
+      builder: (context, state) {
+        bool hasPendingOrders = false;
+        if (state is SellerLoaded) {
+          hasPendingOrders = state.orders.any(
+            (o) => o.status.toLowerCase() == 'pending',
+          );
+        }
+
+        return Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavIcon(
+              Icons.dashboard_outlined,
+              Icons.dashboard_rounded,
+              'Home',
+              _activeScreenIndex == 0,
+              () => _switchTab(0),
+              false,
+              false,
+            ),
+            _buildNavIcon(
+              Icons.inventory_2_outlined,
+              Icons.inventory_2_rounded,
+              'Products',
+              _activeScreenIndex == 1,
+              () => _switchTab(1),
+              false,
+              false,
+            ),
+            _buildNavIcon(
+              Icons.shopping_bag_outlined,
+              Icons.shopping_bag_rounded,
+              'Orders',
+              _activeScreenIndex == 2,
+              () => _switchTab(2),
+              hasPendingOrders, // Now dynamic!
+              false,
+            ),
+            _buildNavIcon(
+              Icons.payments_outlined,
+              Icons.payments_rounded,
+              'Earnings',
+              _activeScreenIndex == 4,
+              () => _switchTab(4),
+              false,
+              false,
+            ),
+            _buildNavIcon(
+              Icons.person_outline_rounded,
+              Icons.person_rounded,
+              'Profile',
+              _activeScreenIndex == 3,
+              () => _switchTab(3),
+              false,
+              false,
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -174,42 +190,6 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-/// Placeholder screen for tabs not yet implemented
-class _PlaceholderScreen extends StatelessWidget {
-  final String title;
-
-  const _PlaceholderScreen({required this.title});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: customerbackGroundColor,
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.construction_outlined,
-              color: commonColor.withValues(alpha: 0.5),
-              size: 48.w,
-            ),
-            SizedBox(height: 16.h),
-            Text(
-              '$title - Coming Soon',
-              style: TextStyle(
-                color: const Color(0xFF64748B),
-                fontSize: 16.sp,
-                fontFamily: 'Plus Jakarta Sans',
-                fontWeight: FontWeight.w600,
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -72,57 +73,55 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
               arguments: _emailController.text.trim().toLowerCase(),
             );
           } else if (state is ForgotPasswordErrorState) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(state.message)),
-            );
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(state.message)));
           }
         },
         builder: (context, state) {
           return SingleChildScrollView(
-            padding: EdgeInsets.only(
-              left: 16.w,
-              right: 16.w,
-              top: 16.h,
-              bottom: 16.h,
-            ),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    'Password recovery',
-                    style: AppTextStyles.t_30w700.copyWith(
-                      color: primaryColor,
+            child: Padding(
+              padding: const EdgeInsets.all(16),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      context.l10n.passwordRecovery,
+                      style: AppTextStyles.t_30w700.copyWith(
+                        color: primaryColor,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Please enter your email address to receive a password reset link.',
-                    style: AppTextStyles.t_12w500.copyWith(
-                      color: primaryColor.withValues(alpha: 0.6),
+                    Text(
+                      context.l10n.passwordRecoveryDescription,
+                      style: AppTextStyles.t_12w500.copyWith(
+                        color: primaryColor.withValues(alpha: 0.6),
+                      ),
+                      textAlign: TextAlign.center,
                     ),
-                    textAlign: TextAlign.center,
-                  ),
-                  SizedBox(height: 20.h),
-                  Customtextfield(
-                    controller: _emailController,
-                    label: 'EMAIL ADDRESS',
-                    hintText: 'example@mail.com',
-                    prefixIcon: Icon(
-                      Icons.email,
-                      color: primaryColor.withValues(alpha: 0.6),
+                    SizedBox(height: 20.h),
+                    Customtextfield(
+                      controller: _emailController,
+                      label: context.l10n.emailAddress,
+                      hintText: 'example@mail.com',
+                      prefixIcon: Icon(
+                        Icons.email,
+                        color: primaryColor.withValues(alpha: 0.6),
+                      ),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return context.l10n.emailIsRequired;
+                        }
+                        if (!value.emailValid()) {
+                          return context.l10n.emailIsntValid;
+                        }
+                        return null;
+                      },
                     ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return "Email is required";
-                      }
-                      if (!value.emailValid()) {
-                        return "Email isn't valid";
-                      }
-                      return null;
-                    },
-                  ),
-                ],
+                    
+                  ],),
+                
               ),
             ),
           );
@@ -134,33 +133,23 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           builder: (context, state) {
             final bool isLoading = state is AuthLoading;
 
-            return AnimatedPadding(
-              duration: const Duration(milliseconds: 250),
-              curve: Curves.easeOut,
-              padding: EdgeInsets.only(
-                left: 16.w,
-                right: 16.w,
-                bottom: keyboardHeight > 0
-                    ? keyboardHeight + 12.h
-                    : 16.h,
-              ),
-              child: CustomElevatedButton(
-                onPressed: isLoading ? null : _submitForgotPassword,
-                buttoncolor: primaryColor,
-                child: isLoading
-                    ? SizedBox(
-                        height: 22.h,
-                        width: 22.h,
-                        child: const CircularProgressIndicator(
-                          color: Colors.white,
-                          strokeWidth: 2.5,
-                        ),
-                      )
-                    : Text(
-                        'Send reset link',
-                        style: AppTextStyles.t_16w500.copyWith(
-                          color: Colors.white,
-                        ),
+            return CustomElevatedButton(
+              onPressed: isLoading
+                  ? null
+                  : () {
+                      if (_formKey.currentState!.validate()) {
+                        context.read<AuthCubit>().forgotPassword(
+                          email: _emailController.text.trim(),
+                        );
+                      }
+                    },
+              buttoncolor: primaryColor,
+              child: isLoading
+                  ? const CircularProgressIndicator(color: Colors.white)
+                  : Text(
+                      context.l10n.sendCode,
+                      style: AppTextStyles.t_16w500.copyWith(
+                        color: Colors.white,
                       ),
               ),
             );

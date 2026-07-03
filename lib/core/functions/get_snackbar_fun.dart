@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
-import 'package:get/get_navigation/src/snackbar/snackbar.dart';
+import 'package:get/get.dart';
 
 void showSnack({
   required String title,
@@ -9,15 +7,21 @@ void showSnack({
   Color bgColor = Colors.black,
   IconData icon = Icons.info,
 }) {
-  Get.snackbar(
-    title,
-    message,
-    backgroundColor: bgColor,
-    colorText: Colors.white,
-    icon: Icon(icon, color: Colors.white),
-    snackStyle: SnackStyle.FLOATING,
-    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-    margin: EdgeInsets.all(16),
-    borderRadius: 12,
-  );
+  WidgetsBinding.instance.addPostFrameCallback((_) {
+    if (Get.isSnackbarOpen) {
+      Get.closeCurrentSnackbar();
+    }
+
+    Get.snackbar(
+      title,
+      message,
+      backgroundColor: bgColor,
+      colorText: Colors.white,
+      icon: Icon(icon, color: Colors.white),
+      snackStyle: SnackStyle.FLOATING,
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+      margin: const EdgeInsets.all(16),
+      borderRadius: 12,
+    );
+  });
 }

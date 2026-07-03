@@ -39,7 +39,7 @@ class SellerInputField extends StatelessWidget {
           style: TextStyle(
             fontSize: 13.sp,
             fontWeight: FontWeight.w600,
-            color: Colors.white.withValues(alpha: 0.8),
+            color: const Color(0xFF0F172A),
             fontFamily: 'Plus Jakarta Sans',
           ),
         ),
@@ -54,7 +54,7 @@ class SellerInputField extends StatelessWidget {
           onTap: onTap,
           style: TextStyle(
             fontSize: 14.sp,
-            color: Colors.white,
+            color: const Color(0xFF0F172A),
             fontFamily: 'Plus Jakarta Sans',
           ),
           onTapOutside: (event) {
@@ -65,11 +65,11 @@ class SellerInputField extends StatelessWidget {
             hintText: hintText,
             hintStyle: TextStyle(
               fontSize: 13.sp,
-              color: Colors.white.withValues(alpha: 0.3),
+              color: const Color(0xFF94A3B8),
               fontFamily: 'Plus Jakarta Sans',
             ),
             filled: true,
-            fillColor: const Color(0xFF16213E),
+            fillColor: const Color(0xFFF8FAFC),
             suffixIcon: suffixIcon,
             prefixIcon: prefixIcon,
             contentPadding: EdgeInsets.symmetric(
@@ -78,14 +78,14 @@ class SellerInputField extends StatelessWidget {
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.1),
+              borderSide: const BorderSide(
+                color: Color(0xFFE2E8F0),
               ),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12.r),
-              borderSide: BorderSide(
-                color: Colors.white.withValues(alpha: 0.1),
+              borderSide: const BorderSide(
+                color: Color(0xFFE2E8F0),
               ),
             ),
             focusedBorder: OutlineInputBorder(

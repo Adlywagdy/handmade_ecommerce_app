@@ -6,7 +6,10 @@ const SellerDashboardStats mockDashboardStats = SellerDashboardStats(
   totalOrders: '1,240',
   totalRevenue: '\$28,400',
   totalProducts: '45',
-  weeklySales: [1200, 1800, 1400, 2200, 1900, 2500, 2100],
+  weeklySales: [1200.0, 1800.0, 1400.0, 2200.0, 1900.0, 2500.0, 2100.0],
+  monthlySales: [1800.0, 2100.0, 2850.0, 2400.0, 1950.0, 2520.0],
+  revenueGrowth: '+12.5%',
+  ordersGrowth: '+5.4%',
 );
 
 // Mock seller products
