@@ -348,13 +348,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       ScaffoldMessenger.of(
                         context,
                       ).showSnackBar(SnackBar(content: Text(state.message)));
-
-                      if (state.message.contains('already registered')) {
-                        Future.delayed(const Duration(seconds: 1), () {
-                          if (!mounted) return;
-                          Get.offAllNamed(AppRoutes.login);
-                        });
-                      }
                     }
                   },
 

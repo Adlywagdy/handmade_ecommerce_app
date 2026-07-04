@@ -281,7 +281,7 @@ abstract class AppLocalizations {
   /// Label text for the email input field.
   ///
   /// In en, this message translates to:
-  /// **'EMAIL ADDRESS'**
+  /// **'Email'**
   String get emailAddress;
 
   /// Validation message shown when the email input is invalid.

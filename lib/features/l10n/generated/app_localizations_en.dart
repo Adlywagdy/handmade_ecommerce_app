@@ -105,7 +105,7 @@ class AppLocalizationsEn extends AppLocalizations {
       'Please enter your details to continue';
 
   @override
-  String get emailAddress => 'EMAIL ADDRESS';
+  String get emailAddress => 'Email';
 
   @override
   String get emailIsntValid => 'Email isn\'t valid';

@@ -42,7 +42,7 @@
   "@pleaseEnterYourDetailsToContinue": {
     "description": "Hint text shown on the login screen explaining how to proceed."
   },
-  "emailAddress": "EMAIL ADDRESS",
+  "emailAddress": "Email",
   "@emailAddress": {
     "description": "Label text for the email input field."
   },
