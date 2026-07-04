@@ -37,10 +37,6 @@ class DashboardBody extends StatelessWidget {
               color: blackDegree,
             ),
           ),
-           TextButton(
-            onPressed: () => throw Exception('Test Crash'),
-            child: const Text('Throw Test Exception'),
-          ),
           SizedBox(height: 20.h),
           DashboardStatsGrid(
             status: [

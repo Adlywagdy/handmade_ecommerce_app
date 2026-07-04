@@ -50,19 +50,33 @@ class AuthService {
     final UserCredential credential = await _firebaseAuth
         .signInWithEmailAndPassword(email: email, password: password);
 
-    final uid = credential.user!.uid;
-    await _updateFCMToken(uid);
+    final User user = credential.user!;
 
-    final doc = await _firestore.collection('users').doc(uid).get();
+    final docSnapshot = await _firestore
+        .collection('users')
+        .doc(user.uid)
+        .get();
 
-    if (doc.exists && doc.data()?['role'] != null) {
-      return doc.data()!['role'].toString().toLowerCase();
+    if (!docSnapshot.exists) {
+      throw FirebaseAuthException(
+        code: 'user-data-not-found',
+        message: 'User data not found',
+      );
     }
 
-    final sellerDoc = await _firestore.collection('sellers').doc(uid).get();
-    if (sellerDoc.exists) return 'seller';
+    final data = docSnapshot.data();
+    final role = data?['role'];
 
-    return 'customer';
+    if (role is! String || role.isEmpty) {
+      throw FirebaseAuthException(
+        code: 'invalid-user-role',
+        message: 'User role not found',
+      );
+    }
+    
+    await _updateFCMToken(user.uid);
+
+    return role;
   }
 
   Future<String> signInWithGoogle() async {
@@ -85,23 +99,37 @@ class AuthService {
         idToken: googleAuth.idToken,
       );
 
-      final userCredential = await _firebaseAuth.signInWithCredential(
-        credential,
-      );
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithCredential(credential);
 
-      final uid = userCredential.user!.uid;
-      await _updateFCMToken(uid);
+      final User user = userCredential.user!;
 
-      final doc = await _firestore.collection('users').doc(uid).get();
+      final docSnapshot = await _firestore
+          .collection('users')
+          .doc(user.uid)
+          .get();
 
-      if (doc.exists && doc.data()?['role'] != null) {
-        return doc.data()!['role'].toString().toLowerCase();
+      if (!docSnapshot.exists) {
+        await signOut();
+        throw FirebaseAuthException(
+          code: 'user-data-not-found',
+          message: 'You are not registered yet. Please sign up first.',
+        );
       }
 
-      final sellerDoc = await _firestore.collection('sellers').doc(uid).get();
-      if (sellerDoc.exists) return 'seller';
+      final data = docSnapshot.data();
+      final role = data?['role'];
 
-      return 'customer';
+      if (role is! String || role.isEmpty) {
+        throw FirebaseAuthException(
+          code: 'invalid-user-role',
+          message: 'User role not found',
+        );
+      }
+      
+      await _updateFCMToken(user.uid);
+
+      return role;
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(
@@ -156,37 +184,31 @@ class AuthService {
 
       final UserCredential userCredential = await _firebaseAuth
           .signInWithCredential(credential);
+      final bool isNewUser =
+          userCredential.additionalUserInfo?.isNewUser ?? false;
 
       final User user = userCredential.user!;
-      final DocumentReference<Map<String, dynamic>> userDoc = _firestore
-          .collection('users')
-          .doc(user.uid);
 
-      final docSnapshot = await userDoc.get();
-
-      String finalRole = selectedRole;
-
-      if (docSnapshot.exists) {
-        final data = docSnapshot.data();
-        final existingRole = data?['role'];
-
-        if (existingRole is String && existingRole.isNotEmpty) {
-          finalRole = existingRole;
-        }
+      if (!isNewUser) {
+        await signOut();
+        throw FirebaseAuthException(
+          code: 'account-already-exists',
+          message: 'You are already registered. Please log in instead.',
+        );
       }
 
-      await userDoc.set({
+      await _firestore.collection('users').doc(user.uid).set({
         'uid': user.uid,
         'fullName': user.displayName ?? '',
         'email': user.email ?? '',
-        'role': finalRole,
+        'role': selectedRole,
         'provider': 'google',
         'createdAt': FieldValue.serverTimestamp(),
-      }, SetOptions(merge: true));
+      });
 
       await _updateFCMToken(user.uid);
 
-      return finalRole;
+      return selectedRole;
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(
@@ -205,5 +227,34 @@ class AuthService {
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
+  }
+
+
+  Future<void> sendPasswordReset({required String email}) async {
+    final querySnapshot = await _firestore
+        .collection('users')
+        .where('email', isEqualTo: email.trim())
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isEmpty) {
+      throw FirebaseAuthException(
+        code: 'user-not-found',
+        message: 'No account found with this email.',
+      );
+    }
+
+    final data = querySnapshot.docs.first.data();
+    final provider = data['provider'];
+
+    if (provider == 'google') {
+      throw FirebaseAuthException(
+        code: 'google-account',
+        message:
+            'This account was created with Google. Please sign in with Google.',
+      );
+    }
+
+    await _firebaseAuth.sendPasswordResetEmail(email: email.trim());
   }
 }

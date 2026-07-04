@@ -97,7 +97,9 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
       builder: (context, state) {
         bool hasPendingOrders = false;
         if (state is SellerLoaded) {
-          hasPendingOrders = state.orders.any((o) => o.status.toLowerCase() == 'pending');
+          hasPendingOrders = state.orders.any(
+            (o) => o.status.toLowerCase() == 'pending',
+          );
         }
 
         return Row(

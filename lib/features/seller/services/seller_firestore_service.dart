@@ -60,7 +60,6 @@ class SellerFirestoreService {
       for (var image in images) {
         String fileName = '${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
         Reference ref = _storage.ref().child('product_images/$currentSellerId/$fileName');
-        
         UploadTask uploadTask = ref.putFile(image);
         TaskSnapshot snapshot = await uploadTask;
         String downloadUrl = await snapshot.ref.getDownloadURL();
@@ -78,7 +77,7 @@ class SellerFirestoreService {
       final map = product.toMap();
       map['sellerId'] = currentSellerId; // Link product to seller
       map['createdAt'] = FieldValue.serverTimestamp();
-      
+
       await _db.collection('products').add(map);
     } catch (e) {
       throw Exception('Failed to add product: $e');
@@ -276,6 +275,7 @@ class SellerFirestoreService {
     int productCount = 0,
   }) async {
     try {
+
       double totalRevenue = 0;
       int completedOrders = 0;
       double currentWeekRevenue = 0;
@@ -284,15 +284,16 @@ class SellerFirestoreService {
       int previousWeekOrders = 0;
       List<double> weeklySales = List.filled(7, 0.0);
       List<double> monthlySales = List.filled(6, 0.0);
-      
+
       final now = DateTime.now();
 
       for (var order in orders) {
         // Only count completed/delivered orders as revenue
-        if (order.status.toLowerCase() == 'completed' || order.status.toLowerCase() == 'delivered') {
+        if (order.status.toLowerCase() == 'completed' ||
+            order.status.toLowerCase() == 'delivered') {
           totalRevenue += order.totalAmount;
           completedOrders++;
-          
+
           try {
             final date = DateTime.parse(order.orderDate);
             final diffInDays = now.difference(date).inDays;
@@ -301,7 +302,7 @@ class SellerFirestoreService {
             if (diffInDays >= 0 && diffInDays < 7) {
               currentWeekRevenue += order.totalAmount;
               currentWeekOrders++;
-              
+
               // Weekly chart index
               final index = 6 - diffInDays;
               weeklySales[index] += order.totalAmount;
@@ -336,7 +337,10 @@ class SellerFirestoreService {
         weeklySales: weeklySales,
         monthlySales: monthlySales,
         revenueGrowth: calculateGrowth(currentWeekRevenue, previousWeekRevenue),
-        ordersGrowth: calculateGrowth(currentWeekOrders.toDouble(), previousWeekOrders.toDouble()),
+        ordersGrowth: calculateGrowth(
+          currentWeekOrders.toDouble(),
+          previousWeekOrders.toDouble(),
+        ),
       );
     } catch (e) {
       throw Exception('Failed to load dashboard stats: $e');

@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/cubit/search_cubit/search_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/search/cubit/search_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
-void openFilterSheet(BuildContext context) {
+void openFilterSheet(
+  BuildContext context, {
+  required SearchCubit searchCubit,
+  String? selectedCategory,
+}) {
   showModalBottomSheet(
     context: context,
     backgroundColor: customerbackGroundColor,
@@ -17,14 +21,22 @@ void openFilterSheet(BuildContext context) {
       borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
     ),
     builder: (sheetContext) {
-      return FilterSheet();
+      return FilterSheet(
+        searchCubit: searchCubit,
+        selectedcategory: selectedCategory,
+      );
     },
   );
 }
 
 class FilterSheet extends StatefulWidget {
+  final SearchCubit searchCubit;
   final String? selectedcategory;
-  const FilterSheet({super.key, this.selectedcategory});
+  const FilterSheet({
+    super.key,
+    required this.searchCubit,
+    this.selectedcategory,
+  });
 
   @override
   State<FilterSheet> createState() => _FilterSheetState();
@@ -80,12 +92,12 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Filter & Sort',
+                context.l10n.filterAndSort,
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
               SizedBox(height: 14.h),
               Text(
-                'rating',
+                context.l10n.rating,
                 style: AppTextStyles.t_14w600.copyWith(color: blackDegree),
               ),
               SizedBox(height: 8.h),
@@ -101,7 +113,7 @@ class _FilterSheetState extends State<FilterSheet> {
 
                     label: Text(
                       ratingOptions[index] == null
-                          ? 'Any'
+                          ? context.l10n.any
                           : '${ratingOptions[index]}+',
                       style: AppTextStyles.t_14w500.copyWith(
                         color: blackDegree,
@@ -120,7 +132,7 @@ class _FilterSheetState extends State<FilterSheet> {
               ),
               SizedBox(height: 16.h),
               Text(
-                'Price sort',
+                context.l10n.priceSort,
                 style: AppTextStyles.t_14w600.copyWith(color: blackDegree),
               ),
               SizedBox(height: 8.h),
@@ -130,17 +142,17 @@ class _FilterSheetState extends State<FilterSheet> {
                   Expanded(
                     child: PriceTextField(
                       controller: mincontroller,
-                      hint: 'Min',
+                      hint: context.l10n.min,
                     ),
                   ),
                   Text(
-                    "to",
+                    context.l10n.to,
                     style: AppTextStyles.t_14w500.copyWith(color: blackDegree),
                   ),
                   Expanded(
                     child: PriceTextField(
                       controller: maxcontroller,
-                      hint: 'Max',
+                      hint: context.l10n.max,
                     ),
                   ),
                 ],
@@ -159,7 +171,7 @@ class _FilterSheetState extends State<FilterSheet> {
                       onPressed: () {
                         Get.close(1);
                       },
-                      child: const Text('Cancel'),
+                      child: Text(context.l10n.cancel),
                     ),
                   ),
                   SizedBox(width: 12.w),
@@ -170,11 +182,18 @@ class _FilterSheetState extends State<FilterSheet> {
                         foregroundColor: Colors.white,
                       ),
                       onPressed: () {
-                        setState(() {});
+                        if (!(formkey.currentState?.validate() ?? false)) {
+                          return;
+                        }
+
+                        final effectiveCategory =
+                            widget.selectedcategory ??
+                            widget.searchCubit.selectedCategory?.categorytitle;
+
                         Get.close(1);
 
-                        BlocProvider.of<SearchCubit>(context).filterproducts(
-                          categoryname: widget.selectedcategory,
+                        widget.searchCubit.filterproducts(
+                          categoryname: effectiveCategory,
                           minprice:
                               mincontroller?.text != null &&
                                   mincontroller!.text.isNotEmpty
@@ -188,7 +207,7 @@ class _FilterSheetState extends State<FilterSheet> {
                           rating: selectedrating,
                         );
                       },
-                      child: const Text('Apply'),
+                      child: Text(context.l10n.apply),
                     ),
                   ),
                 ],
@@ -219,7 +238,7 @@ class PriceTextField extends StatelessWidget {
       validator: (value) {
         if (value != null && value.isNotEmpty) {
           if (value.contains('-')) {
-            return 'must be positive';
+            return context.l10n.mustBePositive;
           }
         }
 

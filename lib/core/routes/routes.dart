@@ -1,7 +1,6 @@
 abstract class AppRoutes {
   AppRoutes._();
 
-  static const String splash = '/splash';
   static const String onboarding = '/onboarding';
 
   static const String login = '/login';
@@ -10,12 +9,15 @@ abstract class AppRoutes {
   static const String verifyPassword = '/verifyPassword';
   static const String resetPassword = '/resetPassword';
 
+  static const String decider = '/decider';
+
   static const String customerlayout = '/customer/layout';
 
   static const String customerSearch = '/customer/search';
   static const String customerNotifications = '/customer/notifications';
   static const String customerCart = '/customer/cart';
   static const String customerProductDetails = '/customer/product-details';
+  static const String customerShopDetails = '/customer/shop-details';
   static const String customerOrderDetails = '/customer/order-details';
   static const String customerWriteReview = '/customer/write-review';
 

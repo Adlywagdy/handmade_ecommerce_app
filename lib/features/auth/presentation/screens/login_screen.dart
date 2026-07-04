@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -68,26 +68,31 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Image.asset('assets/icons/Icon1.png'),
                 ),
                 SizedBox(height: 20.h),
-                Text('Welcome to Ayady', style: AppTextStyles.t_30w700),
-                SizedBox(height: 16.h),
-
                 Text(
-                  'Please enter your details to continue',
+                  context.l10n.welcomeToAyady,
+                  style: AppTextStyles.t_30w700,
+                ),
+                SizedBox(height: 16.h),
+                Text(
+                  context.l10n.pleaseEnterYourDetailsToContinue,
                   style: AppTextStyles.t_16w400.copyWith(color: darkblue),
                 ),
                 SizedBox(height: 30.h),
 
                 Customtextfield(
                   controller: _emailController,
-                  label: 'EMAIL ADDRESS',
+                  label: context.l10n.emailAddress,
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
                     Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
-                    if (!value!.emailValid()) {
-                      return "email isn't valid";
+                    if (value == null || value.isEmpty) {
+                      return "Email is required";
+                    }
+                    if (!value.emailValid()) {
+                      return context.l10n.emailIsntValid;
                     }
                     return null;
                   },
@@ -103,22 +108,24 @@ class _LoginScreenState extends State<LoginScreen> {
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
-                    if (value!.length < 6) {
-                      return "Password should be more than 5 letters";
+                    if (value == null || value.isEmpty) {
+                      return "Password is required";
+                    }
+                    if (value.length < 6) {
+                      return context.l10n.passwordShouldBeMoreThan5Letters;
                     }
                     return null;
                   },
-
-                  label: 'Password',
+                  label: context.l10n.password,
                 ),
 
                 SizedBox(height: 10.h),
+
                 ButtomText(
                   onTap: () {
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
-
-                  text: 'Forgot Password?',
+                  text: context.l10n.forgotPassword,
                 ),
 
                 SizedBox(height: 20.h),
@@ -127,7 +134,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   listener: (context, state) {
                     if (state is LoginSuccessState) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Login Success')),
+                        SnackBar(content: Text(context.l10n.loginSuccess)),
                       );
                       final role = state.role.toLowerCase();
                       if (role == 'seller') {
@@ -143,7 +150,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ).showSnackBar(SnackBar(content: Text(state.message)));
                     } else if (state is GoogleLoginSuccessState) {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google Sign In Success')),
+                        SnackBar(
+                          content: Text(context.l10n.googleSignInSuccess),
+                        ),
                       );
                       final role = state.role.toLowerCase();
                       if (role == 'seller') {
@@ -159,27 +168,25 @@ class _LoginScreenState extends State<LoginScreen> {
                       ).showSnackBar(SnackBar(content: Text(state.message)));
                     }
                   },
-
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
+
                     return CustomElevatedButton(
                       onPressed: isLoading
                           ? null
                           : () {
                               if (_formkey.currentState!.validate()) {
-                                _formkey.currentState!.save();
                                 context.read<AuthCubit>().login(
-                                  email: _emailController.text,
+                                  email: _emailController.text.trim(),
                                   password: _passwordController.text,
                                 );
                               }
                             },
-
                       buttoncolor: primaryColor,
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              'Sign In',
+                              context.l10n.signIn,
                               style: AppTextStyles.t_16w700.copyWith(
                                 color: Colors.white,
                               ),
@@ -187,22 +194,25 @@ class _LoginScreenState extends State<LoginScreen> {
                     );
                   },
                 ),
+
                 SizedBox(height: 30.h),
 
                 Row(
                   children: [
-                    OrDivider(),
+                    const OrDivider(),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8).w,
                       child: Text(
-                        'Or continue with',
+                        context.l10n.orContinueWith,
                         style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                       ),
                     ),
-                    OrDivider(),
+                    const OrDivider(),
                   ],
                 ),
+
                 SizedBox(height: 20.h),
+
                 Row(
                   children: [
                     SocialButton(
@@ -225,7 +235,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Don\'t have an account? ',
+                      '${context.l10n.dontHaveAnAccount} ',
                       style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                     ),
                     SizedBox(width: 10.h),
@@ -233,8 +243,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         Get.toNamed(AppRoutes.register);
                       },
-
-                      text: 'Sign Up',
+                      text: context.l10n.signUp,
                     ),
                   ],
                 ),

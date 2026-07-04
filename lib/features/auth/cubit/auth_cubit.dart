@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
-
 part 'auth_state.dart';
 
 class AuthCubit extends Cubit<AuthState> {
@@ -9,18 +9,18 @@ class AuthCubit extends Cubit<AuthState> {
 
   AuthCubit(this.authService) : super(AuthInitial());
 
-  void login({
-    required String email,
-    required String password,
-  }) async {
+  void login({required String email, required String password}) async {
     emit(AuthLoading());
 
     try {
+      await authService.login(email: email, password: password);
       final String role = await authService.login(
         email: email,
         password: password,
       );
 
+      HiveHelper.setLoginBox(value: true);
+      HiveHelper.setEmailBoxValue(email);
       emit(LoginSuccessState(role));
     } on FirebaseAuthException catch (e) {
       emit(LoginErrorState(e.message ?? 'Login failed'));
@@ -33,6 +33,15 @@ class AuthCubit extends Cubit<AuthState> {
     emit(AuthLoading());
 
     try {
+      await authService.signInWithGoogle();
+      final user = FirebaseAuth.instance.currentUser;
+      final email = user?.email;
+
+      HiveHelper.setLoginBox(value: true);
+
+      if (email != null) {
+        HiveHelper.setEmailBoxValue(email);
+      }
       final String role = await authService.signInWithGoogle();
       emit(GoogleLoginSuccessState(role));
     } on FirebaseAuthException catch (e) {
@@ -69,11 +78,17 @@ class AuthCubit extends Cubit<AuthState> {
       );
 
       emit(RegisterSuccessState(role));
+      HiveHelper.setLoginBox(value: true);
+      HiveHelper.setEmailBoxValue(email);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         emit(RegisterErrorState('Password is too weak'));
       } else if (e.code == 'email-already-in-use') {
-        emit(RegisterErrorState('Email is already in use'));
+        emit(
+          RegisterErrorState(
+            'You are already registered with this email. Please log in instead.',
+          ),
+        );
       } else if (e.code == 'network-request-failed') {
         emit(
           RegisterErrorState(
@@ -88,9 +103,7 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void registerWithGoogle({
-    required String selectedRole,
-  }) async {
+  void registerWithGoogle({required String selectedRole}) async {
     emit(AuthLoading());
 
     try {
@@ -98,7 +111,15 @@ class AuthCubit extends Cubit<AuthState> {
         selectedRole: selectedRole,
       );
 
+      final user = FirebaseAuth.instance.currentUser;
+      final email = user?.email;
+
       emit(RegisterSuccessState(finalRole));
+      HiveHelper.setLoginBox(value: true);
+
+      if (email != null) {
+        HiveHelper.setEmailBoxValue(email);
+      }
     } on FirebaseAuthException catch (e) {
       if (e.code == 'network-request-failed') {
         emit(
@@ -108,6 +129,12 @@ class AuthCubit extends Cubit<AuthState> {
         );
       } else if (e.code == 'google-sign-in-cancelled') {
         emit(RegisterErrorState('Google sign-in was cancelled'));
+      } else if (e.code == 'account-already-exists') {
+        emit(
+          RegisterErrorState(
+            'You are already registered. Please log in instead.',
+          ),
+        );
       } else {
         emit(RegisterErrorState(e.message ?? 'Google register failed'));
       }
@@ -116,10 +143,16 @@ class AuthCubit extends Cubit<AuthState> {
     }
   }
 
-  void otp({
-    required String email,
-    required String password,
-  }) async {
+  void forgotPassword({required String email}) async {
     emit(AuthLoading());
+
+    try {
+      await authService.sendPasswordReset(email: email);
+      emit(ForgotPasswordSuccessState());
+    } on FirebaseAuthException catch (e) {
+      emit(ForgotPasswordErrorState('${e.code} - ${e.message}'));
+    } catch (e) {
+      emit(ForgotPasswordErrorState(e.toString()));
+    }
   }
 }

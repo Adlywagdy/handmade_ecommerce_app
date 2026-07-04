@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -58,11 +59,11 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 Text(
-                  'Create new password',
+                  context.l10n.createNewPassword,
                   style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
                 ),
                 Text(
-                  'Please create a secure password for your account to ensure security of the account.',
+                  context.l10n.createNewPasswordDescription,
                   style: AppTextStyles.t_12w500.copyWith(
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
@@ -71,13 +72,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                 SizedBox(height: 20),
                 Customtextfield(
                   controller: _passwordController,
-                  label: 'Password',
+                  label: context.l10n.password,
                   validator: (password) {
                     if (password == null || password.isEmpty) {
-                      return "Password is required";
+                      return context.l10n.passwordIsRequired;
                     }
                     if (password.length < 6) {
-                      return "Password must be at least 6 characters";
+                      return context.l10n.passwordMustBeAtLeast6Characters;
                     }
                     return null;
                   },
@@ -95,13 +96,13 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
 
                 Customtextfield(
                   controller: _confirmPasswordController,
-                  label: 'Re-type Password',
+                  label: context.l10n.retypePassword,
                   validator: (confirmPassword) {
                     if (confirmPassword == null || confirmPassword.isEmpty) {
-                      return "Please confirm your password";
+                      return context.l10n.pleaseConfirmYourPassword;
                     }
                     if (confirmPassword != _passwordController.text) {
-                      return "Passwords do not match";
+                      return context.l10n.passwordsDoNotMatch;
                     }
                     return null;
                   },
@@ -130,7 +131,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
           },
           buttoncolor: primaryColor,
           child: Text(
-            'Set Password',
+            context.l10n.setPassword,
             style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
           ),
         ),

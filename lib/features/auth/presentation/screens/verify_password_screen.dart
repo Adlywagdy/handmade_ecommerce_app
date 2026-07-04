@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_core/src/get_main.dart';
-import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:pin_code_fields/pin_code_fields.dart';
 
-class VerifytPasswordScreen extends StatelessWidget {
-  const VerifytPasswordScreen({super.key});
+class VerifyPasswordScreen extends StatelessWidget {
+  const VerifyPasswordScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final String email = Get.arguments ?? '';
+
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: backGroundColor,
@@ -25,77 +25,53 @@ class VerifytPasswordScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back_ios, color: primaryColor),
         ),
       ),
-
       body: Padding(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(16),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Text(
-              'Verify it’s you',
-              style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
-            ),
-            Text(
-              'We have send a verifiction code to your email please enter the code below.',
-              style: AppTextStyles.t_12w500.copyWith(
-                color: primaryColor.withValues(alpha: 0.6),
-              ),
-            ),
-
-            
-            PinInput(
-              keyboardType: TextInputType.number,
-
-              length: 4,
-              builder: (context, cells) {
-                return Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: cells.map((cell) {
-                    return Container(
-                      width: 45.r,
-                      height: 45.r,
-                      margin: const EdgeInsets.symmetric(horizontal: 8).w,
-
-                      decoration: BoxDecoration(
-                        shape: BoxShape.rectangle,
-                        borderRadius: BorderRadius.circular(5.r),
-                        color: cell.isFocused
-                            ? primaryColor.withValues(alpha: 0.6)
-                            : Colors.grey[200],
-                      ),
-                      child: Center(
-                        child: Text(
-                          cell.character ?? '',
-                          style: TextStyle(fontSize: 24),
-                        ),
-                      ),
-                    );
-                  }).toList(),
-                );
-              },
-              onCompleted: (pin) =>
-                  print('PIN: $pin'), // handle completed pin input
+            SizedBox(height: 30.h),
+            Icon(
+              Icons.mark_email_read_outlined,
+              size: 90.r,
+              color: primaryColor,
             ),
             SizedBox(height: 20.h),
             Text(
-              "You can resend the code after 1 minute ( 00:56 )", // counter logic
+              'Check your email',
+              style: AppTextStyles.t_30w700.copyWith(color: primaryColor),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 12.h),
+            Text(
+              email.isNotEmpty
+                  ? 'We sent a password reset link to\n$email\nPlease open your email and follow the instructions.'
+                  : 'We sent a password reset link to your email.\nPlease open your email and follow the instructions.',
               style: AppTextStyles.t_12w500.copyWith(
                 color: primaryColor.withValues(alpha: 0.6),
               ),
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 24.h),
+            Text(
+              'If you don’t see the email, check your spam or junk folder.',
+              style: AppTextStyles.t_12w500.copyWith(
+                color: primaryColor.withValues(alpha: 0.6),
+              ),
+              textAlign: TextAlign.center,
             ),
           ],
         ),
       ),
-
       bottomNavigationBar: Padding(
         padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
         child: CustomElevatedButton(
           onPressed: () {
-            Get.toNamed(AppRoutes.resetPassword);
+            Get.offAllNamed(AppRoutes.login);
           },
           buttoncolor: primaryColor,
           child: Text(
-            'Confirm',
+            'Back to Login',
             style: AppTextStyles.t_16w500.copyWith(color: Colors.white),
           ),
         ),
