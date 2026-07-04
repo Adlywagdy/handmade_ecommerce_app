@@ -5,9 +5,6 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
 
-import '../../../../core/widgets/force_update_dialog.dart';
-import '../../../../main.dart';
-
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});
 

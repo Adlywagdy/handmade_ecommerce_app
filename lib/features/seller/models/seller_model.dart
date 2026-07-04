@@ -1,3 +1,5 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 /// Represents a product from the seller's perspective with stock management
 class SellerProductModel {
   final String id;
@@ -151,15 +153,46 @@ class SellerOrderModel {
     };
   }
 
-  factory SellerOrderModel.fromMap(Map<String, dynamic> map, String documentId) {
+      factory SellerOrderModel.fromMap(Map<String, dynamic> map, String documentId) {
+    String parsedCustomerName = map['customerName']?.toString() ?? '';
+    if (parsedCustomerName.isEmpty) {
+      if (map['customer'] is Map) {
+        parsedCustomerName = map['customer']['name']?.toString() ?? '';
+      }
+    }
+    if (parsedCustomerName.isEmpty) {
+      parsedCustomerName = map['customerId']?.toString() ?? 'Customer';
+    }
+
+    final rawTotal = map['totalAmount'] ?? map['totalPrice'] ?? 0;
+    double parsedTotalAmount = 0.0;
+    if (rawTotal is num) {
+      parsedTotalAmount = rawTotal.toDouble();
+    } else if (rawTotal is String) {
+      parsedTotalAmount = double.tryParse(rawTotal) ?? 0.0;
+    }
+
+    final rawDate = map['orderDate'] ?? map['createdAt'];
+    String parsedDate = '';
+    if (rawDate is Timestamp) {
+      parsedDate = rawDate.toDate().toIso8601String();
+    } else if (rawDate is DateTime) {
+      parsedDate = rawDate.toIso8601String();
+    } else {
+      parsedDate = rawDate?.toString() ?? '';
+    }
+
     return SellerOrderModel(
       orderId: documentId,
-      customerName: map['customerName'] ?? '',
-      orderDate: map['orderDate'] ?? '',
-      totalAmount: (map['totalAmount'] ?? 0).toDouble(),
+      customerName: parsedCustomerName,
+      orderDate: parsedDate,
+      totalAmount: parsedTotalAmount,
       status: map['status'] ?? 'Pending',
       items: List<SellerOrderItemModel>.from(
-        (map['items'] ?? []).map((x) => SellerOrderItemModel.fromMap(x)),
+        (map['items'] as List? ?? []).map((x) {
+          final itemMap = x is Map ? Map<String, dynamic>.from(x) : <String, dynamic>{};
+          return SellerOrderItemModel.fromMap(itemMap);
+        }),
       ),
     );
   }

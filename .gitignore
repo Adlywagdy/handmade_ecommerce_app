@@ -46,3 +46,7 @@ app.*.map.json
 
 # FVM Version Cache
 .fvm/
+
+# Node modules
+firebase_functions/functions/node_modules/
+node_modules/

@@ -7,7 +7,6 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_product_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
@@ -28,8 +27,6 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
   void initState() {
     super.initState();
     _tabController = TabController(length: 3, vsync: this);
-    // Trigger load of dashboard if not loaded yet
-    context.read<SellerCubit>().loadDashboard();
   }
 
   @override
@@ -309,7 +306,43 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                 if (value == 'edit') {
                   Get.to(() => SellerAddEditProductScreen(product: product));
                 } else if (value == 'delete') {
-                  context.read<SellerCubit>().deleteProduct(product.id);
+                  showDialog(
+                    context: context,
+                    builder: (ctx) => AlertDialog(
+                      backgroundColor: Colors.white,
+                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
+                      title: const Text('Delete Product'),
+                      content: const Text('Are you sure you want to delete this product? This action cannot be undone.'),
+                      actions: [
+                        TextButton(
+                          onPressed: () => Navigator.pop(ctx),
+                          child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B))),
+                        ),
+                        TextButton(
+                          onPressed: () async {
+                            Navigator.pop(ctx);
+                            try {
+                              await context.read<SellerCubit>().deleteProduct(product.id);
+                              Get.snackbar(
+                                'Success',
+                                'Product deleted successfully',
+                                backgroundColor: Colors.green,
+                                colorText: Colors.white,
+                              );
+                            } catch (e) {
+                              Get.snackbar(
+                                'Error',
+                                'Failed to delete product: $e',
+                                backgroundColor: Colors.redAccent,
+                                colorText: Colors.white,
+                              );
+                            }
+                          },
+                          child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                        ),
+                      ],
+                    ),
+                  );
                 }
               },
               itemBuilder: (BuildContext context) => [

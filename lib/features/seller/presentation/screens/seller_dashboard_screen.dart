@@ -14,6 +14,7 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_quick_action.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_order_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_order_details_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
 class SellerDashboardScreen extends StatelessWidget {
@@ -37,7 +38,7 @@ class SellerDashboardScreen extends StatelessWidget {
       body: SafeArea(
         child: BlocBuilder<SellerCubit, SellerState>(
           builder: (context, state) {
-            if (state is SellerLoading) {
+            if (state is SellerLoading || state is SellerInitial) {
               return const Center(child: CircularProgressIndicator());
             } else if (state is SellerError) {
               return Center(
@@ -227,13 +228,26 @@ class SellerDashboardScreen extends StatelessWidget {
                       )
                     else
                       ...state.orders.take(3).map((order) {
+                        final shortOrderId = order.orderId.length > 6 
+                            ? order.orderId.substring(0, 6).toUpperCase() 
+                            : order.orderId.toUpperCase();
+                            
+                        String formattedDate = order.orderDate;
+                        try {
+                          final dt = DateTime.parse(order.orderDate).toLocal();
+                          formattedDate = '${dt.day}/${dt.month}/${dt.year}';
+                        } catch (_) {}
+
                         return Padding(
                           padding: EdgeInsets.only(bottom: 10.h),
                           child: SellerOrderCard(
-                            orderId: order.orderId,
+                            onTap: () {
+                              Get.to(() => SellerOrderDetailsScreen(order: order));
+                            },
+                            orderId: 'Order #$shortOrderId',
                             status: order.status.toUpperCase(),
                             productName: order.items.isNotEmpty ? order.items.first.productName : 'Order Item',
-                            timeAgo: order.orderDate,
+                            timeAgo: formattedDate,
                             price: 'EGP ${order.totalAmount}',
                           ),
                         );
@@ -341,7 +355,7 @@ class SellerDashboardScreen extends StatelessWidget {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.05),
+                            color: Colors.black.withValues(alpha: 0.05),
                         blurRadius: 6,
                         offset: const Offset(0, 2),
                       ),

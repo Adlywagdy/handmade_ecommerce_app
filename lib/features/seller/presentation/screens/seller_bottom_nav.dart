@@ -13,7 +13,6 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_earnings_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
 
 class SellerBottomNav extends StatefulWidget {
@@ -25,6 +24,14 @@ class SellerBottomNav extends StatefulWidget {
 
 class _SellerBottomNavState extends State<SellerBottomNav> {
   int _activeScreenIndex = 0; // Default to Dashboard
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SellerCubit>().loadDashboard();
+    });
+  }
 
   void _switchTab(int index) {
     FocusManagementTips.clearFocusBeforeNavigation(null);

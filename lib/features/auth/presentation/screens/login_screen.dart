@@ -176,12 +176,14 @@ class _LoginScreenState extends State<LoginScreen> {
                             },
 
                       buttoncolor: primaryColor,
-                      child: Text(
-                        'Sign In',
-                        style: AppTextStyles.t_16w700.copyWith(
-                          color: Colors.white,
-                        ),
-                      ),
+                      child: isLoading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : Text(
+                              'Sign In',
+                              style: AppTextStyles.t_16w700.copyWith(
+                                color: Colors.white,
+                              ),
+                            ),
                     );
                   },
                 ),

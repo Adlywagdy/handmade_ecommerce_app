@@ -224,7 +224,25 @@ class FirebaseOrderService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
+
+
+      // Validate stock before proceeding
+      for (final product in order.products) {
+        if (product.id.isNotEmpty) {
+          final productRef = _firestore.collection('products').doc(product.id);
+          final productDoc = await productRef.get();
+          if (productDoc.exists) {
+            final currentStock = (productDoc.data()?['stock'] as num?)?.toInt() ?? 0;
+            if (currentStock < product.quantity) {
+              throw Exception('Product "${product.name}" has insufficient stock. Only $currentStock left.');
+            }
+          }
+        }
+      }
+
+      final batch = _firestore.batch();
       final rootOrderRef = _firestore.collection('orders').doc();
+      
       final subtotal = _toDouble(order.payment.subtotalPrice);
       final deliveryFee = _toDouble(order.payment.deliveryFee);
       final totalPrice = _toDouble(order.payment.totalPrice);
@@ -232,25 +250,41 @@ class FirebaseOrderService {
       final orderPayload = {
         ...order.toMap(),
         'customerId': user.uid,
+        'customerName': order.customer.name,
+        'sellerId': order.products.isNotEmpty ? order.products.first.sellerId : '',
         'commissionRate': _commissionRate,
         'commission': commission,
         'sellerEarning': subtotal - commission,
         'subtotal': subtotal,
         'deliveryFee': deliveryFee,
         'totalPrice': totalPrice > 0 ? totalPrice : subtotal + deliveryFee,
+        'totalAmount': totalPrice > 0 ? totalPrice : subtotal + deliveryFee,
         'status': _statusToString(order.status),
         'createdAt': FieldValue.serverTimestamp(),
         'updatedAt': FieldValue.serverTimestamp(),
       };
 
-      await rootOrderRef.set(orderPayload);
+      batch.set(rootOrderRef, orderPayload);
 
-      await _firestore
+      final customerOrderRef = _firestore
           .collection('customers')
           .doc(user.uid)
           .collection('orders')
-          .doc(rootOrderRef.id)
-          .set(orderPayload, SetOptions(merge: true));
+          .doc(rootOrderRef.id);
+      batch.set(customerOrderRef, orderPayload, SetOptions(merge: true));
+
+      // Decrement stock for each product
+      for (final product in order.products) {
+        if (product.id.isNotEmpty) {
+          final productRef = _firestore.collection('products').doc(product.id);
+          batch.update(productRef, {
+            'stock': FieldValue.increment(-product.quantity),
+            'quantity': FieldValue.increment(-product.quantity),
+          });
+        }
+      }
+
+      await batch.commit();
 
       return rootOrderRef.id;
     } catch (e) {
@@ -264,6 +298,9 @@ class FirebaseOrderService {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
 
+      final batch = _firestore.batch();
+      List<dynamic> productsData = [];
+
       final customerDocRef = _firestore
           .collection('customers')
           .doc(user.uid)
@@ -271,7 +308,8 @@ class FirebaseOrderService {
           .doc(orderId);
       final customerDoc = await customerDocRef.get();
       if (customerDoc.exists) {
-        await customerDocRef.update({
+        productsData = customerDoc.data()?['products'] ?? [];
+        batch.update(customerDocRef, {
           'status': _statusToString(OrderStatus.cancelled),
           'updatedAt': FieldValue.serverTimestamp(),
         });
@@ -280,24 +318,48 @@ class FirebaseOrderService {
       final rootDocRef = _firestore.collection('orders').doc(orderId);
       final rootDoc = await rootDocRef.get();
       if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
-        await rootDocRef.update({
+        if (productsData.isEmpty) {
+          productsData = rootDoc.data()?['products'] ?? [];
+        }
+        batch.update(rootDocRef, {
           'status': _statusToString(OrderStatus.cancelled),
           'updatedAt': FieldValue.serverTimestamp(),
         });
-        return;
       }
 
-      final rootByOrderNumber = await _getRootOrdersSnapshot(
-        user.uid,
-        orderNumber: orderId,
-        limit: 1,
-      );
-      if (rootByOrderNumber.docs.isNotEmpty) {
-        await rootByOrderNumber.docs.first.reference.update({
-          'status': _statusToString(OrderStatus.cancelled),
-          'updatedAt': FieldValue.serverTimestamp(),
-        });
+      if (!rootDoc.exists) {
+        final rootByOrderNumber = await _getRootOrdersSnapshot(
+          user.uid,
+          orderNumber: orderId,
+          limit: 1,
+        );
+        if (rootByOrderNumber.docs.isNotEmpty) {
+          if (productsData.isEmpty) {
+            productsData = rootByOrderNumber.docs.first.data()['products'] ?? [];
+          }
+          batch.update(rootByOrderNumber.docs.first.reference, {
+            'status': _statusToString(OrderStatus.cancelled),
+            'updatedAt': FieldValue.serverTimestamp(),
+          });
+        }
       }
+
+      // Increment stock back for each product
+      for (final p in productsData) {
+        if (p is Map<String, dynamic>) {
+          final pId = p['productId'] ?? p['id'];
+          final pQty = p['quantity'] ?? 1;
+          if (pId != null && pId.toString().isNotEmpty) {
+            final productRef = _firestore.collection('products').doc(pId.toString());
+            batch.update(productRef, {
+              'stock': FieldValue.increment(pQty),
+              'quantity': FieldValue.increment(pQty),
+            });
+          }
+        }
+      }
+
+      await batch.commit();
     } catch (e) {
       rethrow;
     }

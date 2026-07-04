@@ -17,19 +17,44 @@ import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:handmade_ecommerce_app/features/notifications/services/fcm_service.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  //await Firebase.initializeApp();
 
   await Hive.initFlutter();
   await Hive.openBox('notifications');
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+
+  // Initialize FCM Services
+  await FCMService.init();
+  final token = await FCMService.getToken();
+  debugPrint("==============");
+  debugPrint("FCM TOKEN: $token");
+  debugPrint("==============");
+  // Sync token if user is already logged in
+  final currentUser = FirebaseAuth.instance.currentUser;
+  if (currentUser != null) {
+    try {
+      final token = await FCMService.getToken();
+      if (token != null) {
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(currentUser.uid)
+            .set({'fcmToken': token}, SetOptions(merge: true));
+        debugPrint('✅ FCM Token synced on app startup for: ${currentUser.uid}');
+      }
+    } catch (e) {
+      debugPrint('❌ Failed to sync FCM Token on app startup: $e');
+    }
+  }
 
   // ─── TEST FIREBASE CONNECTION ───
   try {
@@ -53,7 +78,7 @@ void main() async {
   ///////////////////////////// RemoteConfig //////////////////////////////////
   await RemoteConfigService.instance.init();
   /////////////////////////////////////////////////////////////////////////
-  
+
   runApp(const HandcraftedEcommerceApp());
 }
 
@@ -73,10 +98,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) => AuthCubit(AuthService()),
             ),
             BlocProvider(
-              create: (BuildContext context) => SellerCubit(SellerFirestoreService())..loadDashboard(),
+              create: (BuildContext context) =>
+                  SellerCubit(SellerFirestoreService()),
             ),
             BlocProvider(
-              create: (BuildContext context) => NotificationsCubit()..loadNotifications(),
+              create: (BuildContext context) =>
+                  NotificationsCubit()..loadNotifications(),
             ),
             BlocProvider(create: (BuildContext context) => CustomerCubit()),
             BlocProvider(

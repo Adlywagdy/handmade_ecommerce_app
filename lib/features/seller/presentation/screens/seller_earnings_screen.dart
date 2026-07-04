@@ -61,7 +61,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                   shape: BoxShape.circle,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.05),
+                      color: Colors.black.withValues(alpha: 0.05),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -954,38 +954,6 @@ class _Transaction {
   });
 }
 
-final _mockTransactions = [
-  _Transaction(
-    orderId: '#29841',
-    amount: '124.00',
-    date: DateTime.now().subtract(const Duration(hours: 3)),
-    isCompleted: true,
-  ),
-  _Transaction(
-    orderId: '#29839',
-    amount: '45.50',
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 2)),
-    isCompleted: false,
-  ),
-  _Transaction(
-    orderId: '#29835',
-    amount: '89.00',
-    date: DateTime.now().subtract(const Duration(days: 1, hours: 8)),
-    isCompleted: true,
-  ),
-  _Transaction(
-    orderId: '#29830',
-    amount: '210.00',
-    date: DateTime.now().subtract(const Duration(days: 2)),
-    isCompleted: true,
-  ),
-  _Transaction(
-    orderId: '#29825',
-    amount: '67.50',
-    date: DateTime.now().subtract(const Duration(days: 3)),
-    isCompleted: true,
-  ),
-];
 
 // ─── Earnings Chart (embedded) ───
 
@@ -1040,7 +1008,6 @@ class _EarningsChartState extends State<_EarningsChart> {
 
     final totalValue = data.reduce((a, b) => a + b);
     final defaultTotal = '+EGP ${totalValue.toStringAsFixed(2)}';
-    final percentage = isW ? '12%' : '8%';
 
     return Container(
       padding: EdgeInsets.all(16.w),
