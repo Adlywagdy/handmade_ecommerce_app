@@ -63,10 +63,7 @@ class HandcraftedEcommerceApp extends StatelessWidget {
                   NotificationsCubit()..loadNotifications(),
             ),
           ],
- 
- 
-
-          child: GetMaterialApp(
+           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: AppRoutes.onboarding,
             getPages: AppPages.pages,
