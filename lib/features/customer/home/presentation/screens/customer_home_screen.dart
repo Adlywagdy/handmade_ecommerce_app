@@ -64,11 +64,7 @@ class CustomerHomeScreen extends StatelessWidget {
                   children: List.generate(categories.length, (index) {
                     final category = categories[index];
                     return GestureDetector(
-                      onTap: () async {
-                        searchCubit.selectedCategory = category;
-                        await searchCubit.filterproducts(
-                          categoryname: category.categorytitle,
-                        );
+                      onTap: () {
                         Get.back();
                         Get.toNamed(
                           AppRoutes.customerSearch,
@@ -168,8 +164,7 @@ class CustomerHomeScreen extends StatelessWidget {
                     color: commonColor.withValues(alpha: .6),
                   ),
                   readOnly: true,
-                  onTap: () async {
-                    await context.read<SearchCubit>().resetSearchState();
+                  onTap: () {
                     Get.toNamed(AppRoutes.customerSearch);
                   },
                 ),

@@ -17,6 +17,7 @@ class ReviewsService {
     final snapshot = await _firestore
         .collection(_reviewsCollection)
         .where('productId', isEqualTo: normalizedProductId)
+        .limit(50)
         .get();
 
     final reviews = snapshot.docs

@@ -14,7 +14,6 @@ import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/cubit/search_cubit.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/search/presentation/widgets/searchcategorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/presentation/widgets/searchedproductitemlowercolumn.dart';
 
 class CustomerSearchScreen extends StatefulWidget {

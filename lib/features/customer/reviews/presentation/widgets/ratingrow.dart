@@ -12,15 +12,15 @@ class RatingRow extends StatelessWidget {
   });
 
   final ProductModel product;
-  final double? iconsize;
+  final double iconsize;
 
   final TextStyle? textstyle;
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Icon(Icons.star_border_outlined, color: goldColor, size: iconsize!.r),
-        Text("${product.totalrate!}", style: textstyle),
+        Icon(Icons.star_border_outlined, color: goldColor, size: iconsize.r),
+        Text("${product.rating}", style: textstyle),
       ],
     );
   }

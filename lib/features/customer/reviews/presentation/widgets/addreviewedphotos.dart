@@ -28,27 +28,32 @@ class _AddReviewedPhotosState extends State<AddReviewedPhotos> {
   }
 
   Future<void> _recoverLostData() async {
-    final LostDataResponse response = await imagePickerHelper.recoverLostData();
-    if (response.isEmpty) return;
+    try {
+      final LostDataResponse response =
+          await imagePickerHelper.recoverLostData();
+      if (response.isEmpty) return;
 
-    final XFile? recoveredFile = response.files?.isNotEmpty == true
-        ? response.files!.first
-        : null;
+      final XFile? recoveredFile = response.files?.isNotEmpty == true
+          ? response.files!.first
+          : null;
 
-    if (recoveredFile != null) {
-      await _setSelectedImage(recoveredFile);
-      return;
-    }
+      if (recoveredFile != null) {
+        await _setSelectedImage(recoveredFile);
+        return;
+      }
 
-    if (!mounted) return;
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          response.exception?.message ?? 'Failed to recover image.',
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            response.exception?.message ?? 'Failed to recover image.',
+          ),
+          backgroundColor: redDegree,
         ),
-        backgroundColor: redDegree,
-      ),
-    );
+      );
+    } catch (_) {
+      // silently ignore recovery failures
+    }
   }
 
   Future<void> _setSelectedImage(XFile image) async {
