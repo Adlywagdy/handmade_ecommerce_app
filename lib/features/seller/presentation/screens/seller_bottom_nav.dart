@@ -25,6 +25,14 @@ class SellerBottomNav extends StatefulWidget {
 class _SellerBottomNavState extends State<SellerBottomNav> {
   int _activeScreenIndex = 0; // Default to Dashboard
 
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      context.read<SellerCubit>().loadDashboard();
+    });
+  }
+
   void _switchTab(int index) {
     FocusManagementTips.clearFocusBeforeNavigation(null);
     setState(() {

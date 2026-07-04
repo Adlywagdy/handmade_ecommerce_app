@@ -108,11 +108,37 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               SizedBox(height: 16.h),
               
               _buildLabel('Email Address'),
-              _buildTextField(hint: 'e.g. seller@mail.com', controller: _emailController),
+              _buildTextField(
+                hint: 'e.g. seller@mail.com', 
+                controller: _emailController,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Email is required';
+                  }
+                  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                  if (!emailRegex.hasMatch(value.trim())) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
               SizedBox(height: 16.h),
               
               _buildLabel('Password'),
-              _buildTextField(hint: 'Min 6 characters', isPassword: true, controller: _passwordController),
+              _buildTextField(
+                hint: 'Min 6 characters', 
+                isPassword: true, 
+                controller: _passwordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Password is required';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
               SizedBox(height: 24.h),
 
               // Shop Profile Section
@@ -257,6 +283,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
     Widget? suffixIcon,
     TextEditingController? controller,
     bool isPassword = false,
+    FormFieldValidator<String>? validator,
   }) {
     return TextFormField(
       controller: controller,
@@ -267,7 +294,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
         fontFamily: 'Plus Jakarta Sans',
         color: const Color(0xFF0F172A),
       ),
-      validator: (value) {
+      validator: validator ?? (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required';
         }

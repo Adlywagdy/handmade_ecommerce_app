@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -18,6 +19,28 @@ class AuthService {
     );
 
     _googleInitialized = true;
+  }
+
+  Future<void> _updateFCMToken(String uid) async {
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+
+      print("======== FCM UPDATE ========");
+      print("UID: $uid");
+      print("TOKEN: $token");
+
+      if (token != null) {
+        await _firestore.collection('users').doc(uid).set({
+          'fcmToken': token,
+        }, SetOptions(merge: true));
+
+        print("✅ FCM TOKEN SAVED");
+      } else {
+        print("❌ TOKEN IS NULL");
+      }
+    } catch (e) {
+      print("❌ ERROR: $e");
+    }
   }
 
   Future<String> login({
@@ -50,6 +73,8 @@ class AuthService {
         message: 'User role not found',
       );
     }
+    
+    await _updateFCMToken(user.uid);
 
     return role;
   }
@@ -58,9 +83,17 @@ class AuthService {
     await _initGoogleSignIn();
 
     try {
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
+      if (googleUser == null) {
+        throw FirebaseAuthException(
+          code: 'google-sign-in-cancelled',
+          message: 'Google sign-in cancelled',
+        );
+      }
 
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+      final GoogleSignInAuthentication googleAuth =
+          googleUser.authentication;
 
       final AuthCredential credential = GoogleAuthProvider.credential(
         idToken: googleAuth.idToken,
@@ -93,6 +126,8 @@ class AuthService {
           message: 'User role not found',
         );
       }
+      
+      await _updateFCMToken(user.uid);
 
       return role;
     } on GoogleSignInException catch (e) {
@@ -131,6 +166,8 @@ class AuthService {
       'provider': 'email',
       'createdAt': FieldValue.serverTimestamp(),
     });
+
+    await _updateFCMToken(user.uid);
   }
 
   Future<String> registerWithGoogle({required String selectedRole}) async {
@@ -147,7 +184,6 @@ class AuthService {
 
       final UserCredential userCredential = await _firebaseAuth
           .signInWithCredential(credential);
-
       final bool isNewUser =
           userCredential.additionalUserInfo?.isNewUser ?? false;
 
@@ -170,6 +206,8 @@ class AuthService {
         'createdAt': FieldValue.serverTimestamp(),
       });
 
+      await _updateFCMToken(user.uid);
+
       return selectedRole;
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
@@ -190,6 +228,7 @@ class AuthService {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
   }
+
 
   Future<void> sendPasswordReset({required String email}) async {
     final querySnapshot = await _firestore

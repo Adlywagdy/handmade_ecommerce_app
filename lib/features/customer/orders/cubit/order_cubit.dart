@@ -4,6 +4,7 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/service/firebase_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/cart_cubit/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
 
 part 'order_state.dart';
 
@@ -16,7 +17,8 @@ class OrderCubit extends Cubit<OrderState> {
   List<CustomerOrderModel> allordersList = [];
   List<CustomerOrderModel> displayedordersList = [];
   OrderStatus? selectedStatus;
-  int orderID = 1;
+  String searchQuery = '';
+  int orderID = 10050;
 
   void _syncDisplayedOrders(List<CustomerOrderModel> orders) {
     displayedordersList = orders;
@@ -80,7 +82,21 @@ class OrderCubit extends Cubit<OrderState> {
       final cartCubit = context.read<CartCubit>();
       await cartCubit.makePayment(newOrder.payment, context);
       await _orderService.placeOrder(newOrder);
+      allordersList.add(newOrder);
       await _refreshByCurrentFilter();
+
+      // Trigger notifications for the seller(s) of the ordered products
+      for (final product in newOrder.products) {
+        final sellerEmail = product.seller.email;
+        if (sellerEmail.isNotEmpty) {
+          NotificationGenerator.onOrderCreated(
+            sellerId: sellerEmail,
+            orderId: newOrder.orderid,
+            customerName: newOrder.customer.name,
+            productName: product.name,
+          );
+        }
+      }
       showSnack(title: "Success", message: "Order placed successfully.");
       emit(PlaceOrderSuccessState());
       await cartCubit.clearCart();

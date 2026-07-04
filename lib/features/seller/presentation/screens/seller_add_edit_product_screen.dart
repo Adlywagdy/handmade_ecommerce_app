@@ -195,6 +195,9 @@ class _SellerAddEditProductScreenState
                           if (value == null || value.trim().isEmpty) {
                             return 'Product name is required';
                           }
+                          if (value.trim().length < 3) {
+                            return 'Name must be at least 3 characters';
+                          }
                           return null;
                         },
                       ),
@@ -215,8 +218,12 @@ class _SellerAddEditProductScreenState
                                 if (value == null || value.trim().isEmpty) {
                                   return 'Price is required';
                                 }
-                                if (double.tryParse(value) == null) {
+                                final parsed = double.tryParse(value);
+                                if (parsed == null) {
                                   return 'Invalid price';
+                                }
+                                if (parsed < 0) {
+                                  return 'Price cannot be negative';
                                 }
                                 return null;
                               },
@@ -233,8 +240,12 @@ class _SellerAddEditProductScreenState
                                 if (value == null || value.trim().isEmpty) {
                                   return 'Stock is required';
                                 }
-                                if (int.tryParse(value) == null) {
+                                final parsed = int.tryParse(value);
+                                if (parsed == null) {
                                   return 'Invalid number';
+                                }
+                                if (parsed < 0) {
+                                  return 'Stock cannot be negative';
                                 }
                                 return null;
                               },
@@ -259,7 +270,7 @@ class _SellerAddEditProductScreenState
                           ),
                           SizedBox(height: 8.h),
                           DropdownButtonFormField<String>(
-                            value: _selectedCategory,
+                            initialValue: _selectedCategory,
                             dropdownColor: Colors.white,
                             icon: Icon(
                               Icons.keyboard_arrow_down,
@@ -331,6 +342,9 @@ class _SellerAddEditProductScreenState
                           if (value == null || value.trim().isEmpty) {
                             return 'Description is required';
                           }
+                          if (value.trim().length < 10) {
+                            return 'Description must be at least 10 characters';
+                          }
                           return null;
                         },
                       ),
@@ -393,7 +407,7 @@ class _SellerAddEditProductScreenState
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xff8B4513),
                             foregroundColor: Colors.white,
-                            disabledBackgroundColor: const Color(0xff8B4513).withOpacity(0.5),
+                            disabledBackgroundColor: const Color(0xff8B4513).withValues(alpha: 0.5),
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(12.r),
                             ),

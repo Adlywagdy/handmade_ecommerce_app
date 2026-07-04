@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../models/seller_model.dart';
 import '../services/seller_firestore_service.dart';
@@ -6,23 +7,76 @@ import 'seller_state.dart';
 
 class SellerCubit extends Cubit<SellerState> {
   final SellerFirestoreService _firestoreService;
+  
+  StreamSubscription? _productsSubscription;
+  StreamSubscription? _ordersSubscription;
+  
+  List<SellerProductModel> _currentProducts = [];
+  List<SellerOrderModel> _currentOrders = [];
+  bool _isListening = false;
 
   SellerCubit(this._firestoreService) : super(const SellerInitial());
 
+  @override
+  Future<void> close() {
+    _productsSubscription?.cancel();
+    _ordersSubscription?.cancel();
+    return super.close();
+  }
+
   // ─── Dashboard ───
-  Future<void> loadDashboard() async {
-    emit(const SellerLoading());
+  Future<void> loadDashboard({bool showLoading = true}) async {
+    if (_isListening) return; // Only initialize listeners once
+    _isListening = true;
+
+    if (showLoading) emit(const SellerLoading());
+
+    _productsSubscription?.cancel();
+    _ordersSubscription?.cancel();
+
+    _productsSubscription = _firestoreService.getProductsStream().listen(
+      (products) async {
+        _currentProducts = products;
+        await _updateStateFromStreams();
+      },
+      onError: (e) {
+        emit(SellerError(e.toString()));
+      },
+    );
+
+    _ordersSubscription = _firestoreService.getOrdersStream().listen(
+      (orders) async {
+        _currentOrders = orders;
+        await _updateStateFromStreams();
+      },
+      onError: (e) {
+        emit(SellerError(e.toString()));
+      },
+    );
+  }
+
+  Future<void> _updateStateFromStreams() async {
+    final current = state;
+    String currentFilter = 'All';
+    String currentQuery = '';
+    
+    if (current is SellerLoaded) {
+      currentFilter = current.activeOrderFilter;
+      currentQuery = current.productSearchQuery;
+    }
+    
     try {
-      final products = await _firestoreService.getProducts();
-      final orders = await _firestoreService.getOrders();
-      final stats = await _firestoreService.getDashboardStats();
+      final stats = await _firestoreService.getDashboardStats(
+        _currentOrders,
+        productCount: _currentProducts.length,
+      );
 
       emit(SellerLoaded(
-        products: products,
-        orders: orders,
+        products: _currentProducts,
+        orders: _currentOrders,
         stats: stats,
-        activeOrderFilter: 'All',
-        productSearchQuery: '',
+        activeOrderFilter: currentFilter,
+        productSearchQuery: currentQuery,
       ));
     } catch (e) {
       emit(SellerError(e.toString()));
@@ -40,6 +94,7 @@ class SellerCubit extends Cubit<SellerState> {
   Future<void> toggleProductActive(String productId) async {
     final current = state;
     if (current is SellerLoaded) {
+      final originalProducts = current.products;
       try {
         final product = current.products.firstWhere((p) => p.id == productId);
         final updatedProduct = product.copyWith(isActive: !product.isActive);
@@ -50,8 +105,9 @@ class SellerCubit extends Cubit<SellerState> {
         // Update in Firestore
         await _firestoreService.updateProduct(updatedProduct);
       } catch (e) {
-        // Handle error (could revert state or show message)
-        emit(SellerError(e.toString()));
+        // Revert optimistic update
+        emit(current.copyWith(products: originalProducts));
+        rethrow;
       }
     }
   }
@@ -59,6 +115,7 @@ class SellerCubit extends Cubit<SellerState> {
   Future<void> deleteProduct(String productId) async {
     final current = state;
     if (current is SellerLoaded) {
+      final originalProducts = current.products;
       try {
         // Optimistic UI update
         final updatedProducts = current.products.where((p) => p.id != productId).toList();
@@ -67,7 +124,9 @@ class SellerCubit extends Cubit<SellerState> {
         // Update in Firestore
         await _firestoreService.deleteProduct(productId);
       } catch (e) {
-        emit(SellerError(e.toString()));
+        // Revert optimistic update
+        emit(current.copyWith(products: originalProducts));
+        rethrow;
       }
     }
   }
@@ -77,9 +136,8 @@ class SellerCubit extends Cubit<SellerState> {
     if (current is SellerLoaded) {
       try {
         await _firestoreService.addProduct(product);
-        await loadDashboard();
       } catch (e) {
-        emit(SellerError(e.toString()));
+        rethrow;
       }
     }
   }
@@ -119,36 +177,27 @@ class SellerCubit extends Cubit<SellerState> {
         
         // 3. Save to Firestore
         await _firestoreService.addProduct(newProduct);
-        
-        // 4. Refresh dashboard to get newly added product with proper ID
-        await loadDashboard();
       } catch (e) {
-        print('⚠️ Storage upload failed, using placeholder images for testing: $e');
-        
-        // Use placeholder images to allow testing Firestore
-        final testProduct = SellerProductModel(
-          id: '', 
-          name: name,
-          description: description,
-          price: price,
-          stock: stock,
-          category: category,
-          images: ['https://via.placeholder.com/400'], // Placeholder image
-          isActive: true,
-          status: stock > 0 ? 'In Stock' : 'Out of Stock',
-        );
-        
-        await _firestoreService.addProduct(testProduct);
-        await loadDashboard();
-        
-        // Show a warning but don't stop the process
-        emit(SellerLoaded(
-          products: (state as SellerLoaded).products,
-          orders: (state as SellerLoaded).orders,
-          stats: (state as SellerLoaded).stats,
-          activeOrderFilter: (state as SellerLoaded).activeOrderFilter,
-          productSearchQuery: (state as SellerLoaded).productSearchQuery,
-        ));
+        // Storage upload failed — try adding with placeholder image
+        try {
+          final testProduct = SellerProductModel(
+            id: '', 
+            name: name,
+            description: description,
+            price: price,
+            stock: stock,
+            category: category,
+            images: ['https://via.placeholder.com/400'],
+            isActive: true,
+            status: stock > 0 ? 'In Stock' : 'Out of Stock',
+          );
+          
+          await _firestoreService.addProduct(testProduct);
+        } catch (fallbackError) {
+          // Both attempts failed — reload previous state and propagate error
+          await _updateStateFromStreams();
+          rethrow;
+        }
       }
     }
   }
@@ -156,6 +205,7 @@ class SellerCubit extends Cubit<SellerState> {
   Future<void> updateProduct(SellerProductModel product) async {
     final current = state;
     if (current is SellerLoaded) {
+      final originalProducts = current.products;
       try {
         // Optimistic UI update
         _updateProductsInState(current, product);
@@ -163,7 +213,9 @@ class SellerCubit extends Cubit<SellerState> {
         // Update in Firestore
         await _firestoreService.updateProduct(product);
       } catch (e) {
-        emit(SellerError(e.toString()));
+        // Revert optimistic update
+        emit(current.copyWith(products: originalProducts));
+        rethrow;
       }
     }
   }
@@ -187,6 +239,7 @@ class SellerCubit extends Cubit<SellerState> {
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
     final current = state;
     if (current is SellerLoaded) {
+      final originalOrders = current.orders;
       try {
         // Optimistic UI update
         final updatedOrders = current.orders.map((o) {
@@ -200,7 +253,28 @@ class SellerCubit extends Cubit<SellerState> {
         // Update in Firestore
         await _firestoreService.updateOrderStatus(orderId, newStatus);
       } catch (e) {
-        emit(SellerError(e.toString()));
+        // Revert optimistic update
+        emit(current.copyWith(orders: originalOrders));
+        rethrow;
+      }
+    }
+  }
+
+  Future<void> archiveOrder(String orderId) async {
+    final current = state;
+    if (current is SellerLoaded) {
+      final originalOrders = current.orders;
+      try {
+        // Optimistic UI update — remove from list
+        final updatedOrders = current.orders.where((o) => o.orderId != orderId).toList();
+        emit(current.copyWith(orders: updatedOrders));
+
+        // Archive in Firestore
+        await _firestoreService.archiveOrder(orderId);
+      } catch (e) {
+        // Revert optimistic update
+        emit(current.copyWith(orders: originalOrders));
+        rethrow;
       }
     }
   }
