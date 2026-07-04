@@ -62,7 +62,7 @@ class ReviewedProduct extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Sold by ${product.seller.name}',
+                  'Sold by ${product.seller.name.isNotEmpty ? product.seller.name : product.seller.id}',
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w500.copyWith(color: commonColor),

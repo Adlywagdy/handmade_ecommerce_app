@@ -7,7 +7,6 @@ import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/widgets/addreviewedphotos.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/widgets/customreviewdetailstextfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/widgets/customstarsratingreview.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/widgets/reviewedproduct.dart';
@@ -155,14 +154,14 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
                     },
                   ),
                 ),
-                SizedBox(height: 20.h),
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-                  child: GestureDetector(
-                    onTap: () {}, // should open image picker in real app
-                    child: AddReviewedPhotos(),
-                  ),
-                ),
+                // SizedBox(height: 20.h),
+                // Padding(
+                //   padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
+                //   child: GestureDetector(
+                //     onTap: () {}, // should open image picker in real app
+                //     child: AddReviewedPhotos(),
+                //   ),
+                // ),
                 SizedBox(height: 32.h),
                 Divider(color: commonColor.withValues(alpha: .2)),
                 SizedBox(height: 8.h),

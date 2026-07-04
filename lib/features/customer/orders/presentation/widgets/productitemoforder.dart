@@ -60,11 +60,13 @@ class ProductItemOfOrder extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(product.name, style: AppTextStyles.t_16w600),
-                    SizedBox(height: 4.h),
+                    SizedBox(height: 2.h),
                     Text(
-                      'Indigo Blue • Large',
-                      style: AppTextStyles.t_12w400.copyWith(
-                        color: subTitleColor,
+                      'Sold by ${product.seller.id}',
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.t_12w500.copyWith(
+                        color: commonColor,
                       ),
                     ),
                     SizedBox(height: 8.h),
