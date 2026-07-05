@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';

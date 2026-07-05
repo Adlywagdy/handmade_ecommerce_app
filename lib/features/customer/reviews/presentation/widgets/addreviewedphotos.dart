@@ -5,9 +5,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/services/image_picker_helper.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/models/image_picker_helper.dart';
 import 'package:image_picker/image_picker.dart';
 
 class AddReviewedPhotos extends StatefulWidget {
