@@ -5,7 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 
 class CustomerNotificationsScreen extends StatelessWidget {
   const CustomerNotificationsScreen({super.key});
@@ -125,10 +125,43 @@ class CustomerNotificationsScreen extends StatelessWidget {
                     ),
                   ),
                 );
-              } else {
+              } else if (state is NotificationsLoadingstate) {
                 return SliverFillRemaining(
                   child: Center(
                     child: CircularProgressIndicator(color: commonColor),
+                  ),
+                );
+              } else {
+                return SliverToBoxAdapter(
+                  child: Center(
+                    child: Padding(
+                      padding: const EdgeInsets.all(24.0).w,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            Icons.notifications_none,
+                            color: commonColor.withValues(alpha: .8),
+                            size: 34.r,
+                          ),
+                          SizedBox(height: 10.h),
+                          Text(
+                            'Comming soon',
+                            style: AppTextStyles.t_16w600.copyWith(
+                              color: blackDegree,
+                            ),
+                          ),
+                          SizedBox(height: 6.h),
+                          Text(
+                            'Notifications feature is under development.',
+                            textAlign: TextAlign.center,
+                            style: AppTextStyles.t_12w400.copyWith(
+                              color: darkblue.withValues(alpha: .75),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                 );
               }

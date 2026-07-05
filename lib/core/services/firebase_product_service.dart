@@ -181,52 +181,30 @@ class FirebaseProductService {
 
   /// Filter products
   Future<List<ProductModel>> filterProducts({
-    String? categoryId,
-    double? minPrice,
-    double? maxPrice,
-    double? minRating,
+    String? categoryId, double? minPrice, double? maxPrice, double? minRating,
   }) async {
-    final normalizedCategoryId = categoryId?.trim();
+    final catId = categoryId?.trim();
+
+    Future<List<ProductModel>> _fromQuery(Query<Map<String, dynamic>> q) async {
+      final docs = await q.limit(50).get();
+      return docs.docs.map(_productFromSnapshot).where(_isApproved).toList();
+    }
 
     try {
-      Query<Map<String, dynamic>> query = _activeProductsQuery;
-
-      if (normalizedCategoryId != null && normalizedCategoryId.isNotEmpty) {
-        query = query.where('categoryId', isEqualTo: normalizedCategoryId);
-      }
-
-      if (minPrice != null) {
-        query = query.where('price', isGreaterThanOrEqualTo: minPrice);
-      }
-
-      if (maxPrice != null) {
-        query = query.where('price', isLessThanOrEqualTo: maxPrice);
-      }
-
-      if (minRating != null) {
-        query = query.where('rating', isGreaterThanOrEqualTo: minRating);
-      }
-
-      final docs = await query.limit(50).get();
-
-      final products = docs.docs
-          .map(_productFromSnapshot)
-          .where(_isApproved)
-          .toList();
-      return _resolveProductsCategories(products);
+      var query = _activeProductsQuery;
+      if (catId != null && catId.isNotEmpty) query = query.where('categoryId', isEqualTo: catId);
+      if (minPrice != null) query = query.where('price', isGreaterThanOrEqualTo: minPrice);
+      if (maxPrice != null) query = query.where('price', isLessThanOrEqualTo: maxPrice);
+      if (minRating != null) query = query.where('rating', isGreaterThanOrEqualTo: minRating);
+      return _resolveProductsCategories(await _fromQuery(query));
     } catch (_) {
       final docs = await _productsRef.limit(200).get();
-
-      final products = docs.docs.map(_productFromSnapshot).where((product) {
-        if (!product.isActive || !_isApproved(product)) return false;
-        if (normalizedCategoryId != null &&
-            normalizedCategoryId.isNotEmpty &&
-            product.categoryId != normalizedCategoryId) {
-          return false;
-        }
-        if (minPrice != null && product.price < minPrice) return false;
-        if (maxPrice != null && product.price > maxPrice) return false;
-        if (minRating != null && product.rating < minRating) return false;
+      final products = docs.docs.map(_productFromSnapshot).where((p) {
+        if (!p.isActive || p.status != 'approved') return false;
+        if (catId != null && catId.isNotEmpty && p.categoryId != catId) return false;
+        if (minPrice != null && p.price < minPrice) return false;
+        if (maxPrice != null && p.price > maxPrice) return false;
+        if (minRating != null && p.rating < minRating) return false;
         return true;
       }).toList();
       return _resolveProductsCategories(products);
