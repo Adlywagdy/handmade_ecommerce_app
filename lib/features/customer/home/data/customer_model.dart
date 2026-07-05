@@ -7,9 +7,8 @@ class CustomerModel {
   final String phone;
   final String role;
   final String provider;
-  AddressModel? address;
-
   final String? image;
+  AddressModel? address;
 
   CustomerModel({
     required this.id,
@@ -19,20 +18,11 @@ class CustomerModel {
     this.role = 'customer',
     this.provider = '',
     this.address,
-
-    this.image = "",
+    this.image,
   });
 
   factory CustomerModel.empty() {
-    return CustomerModel(
-      id: '',
-      name: '',
-      email: '',
-      phone: '',
-      role: 'customer',
-      provider: '',
-      image: null,
-    );
+    return CustomerModel(id: '', name: '', email: '', phone: '', image: null);
   }
 
   factory CustomerModel.fromMap(Map<String, dynamic> map) {
@@ -43,7 +33,6 @@ class CustomerModel {
       phone: map['phone']?.toString() ?? '',
       role: map['role']?.toString() ?? 'customer',
       provider: map['provider']?.toString() ?? '',
-
       image: map['image']?.toString(),
       address: map['address'] is Map<String, dynamic>
           ? AddressModel.fromMap(map['address'] as Map<String, dynamic>)

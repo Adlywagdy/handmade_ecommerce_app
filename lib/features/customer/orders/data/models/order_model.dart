@@ -22,133 +22,100 @@ class CustomerOrderModel {
   });
 
   double get totalAmount => payment.totalPrice ?? 0;
+  double get subtotalAmount => payment.subtotalPrice ?? totalAmount;
+  double get deliveryFeeAmount => payment.deliveryFee ?? 0;
+  double get commissionRate => 0.1;
+  double get commissionAmount => subtotalAmount * commissionRate;
+  double get sellerEarningAmount => subtotalAmount - commissionAmount;
   String get deliveryAddress => address.addressdescription;
   List<ProductModel> get items => products;
 
-  double get subtotalAmount => payment.subtotalPrice ?? totalAmount;
-
-  double get deliveryFeeAmount => payment.deliveryFee ?? 0;
-
-  double get commissionRate => 0.1;
-
-  double get commissionAmount => subtotalAmount * commissionRate;
-
-  double get sellerEarningAmount => subtotalAmount - commissionAmount;
-
   String get paymentStatus {
-    final method = payment.paymentMethod?.toLowerCase();
-    if (method == 'cash_on_delivery') {
-      return 'pending';
-    }
+    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery') return 'pending';
     return 'paid';
   }
 
   static Map<String, dynamic> _asStringKeyedMap(dynamic value) {
-    if (value is Map<String, dynamic>) {
-      return value;
-    }
+    if (value is Map<String, dynamic>) return value;
     if (value is Map) {
       return value.map((key, val) => MapEntry(key.toString(), val));
     }
     return <String, dynamic>{};
   }
 
-  factory CustomerOrderModel.fromMap(Map<String, dynamic> map, {String? id}) {
-    final productsData = map['products'] ?? map['items'];
-    final products = productsData is List
-        ? productsData
-              .map((item) => _asStringKeyedMap(item))
-              .where((item) => item.isNotEmpty)
-              .map(ProductModel.fromMap)
-              .toList()
-        : <ProductModel>[];
+  static List<ProductModel> _parseProducts(dynamic data) {
+    if (data is! List) return [];
+    return data
+        .map((item) => _asStringKeyedMap(item))
+        .where((item) => item.isNotEmpty)
+        .map(ProductModel.fromMap)
+        .toList();
+  }
 
-    final statusString = (map['status'] ?? 'pending').toString();
+  static DateTime _parseDate(dynamic value) {
+    if (value is DateTime) return value;
+    return DateTime.tryParse(value?.toString() ?? '') ?? DateTime.now();
+  }
+
+  static Map<String, dynamic> _buildCustomerMap(Map<String, dynamic> map, Map<String, dynamic> customerMap) {
+    if (customerMap.isNotEmpty) return customerMap;
+    return {
+      'fullName': map['customerName'] ?? map['fullName'] ?? map['name'] ?? '',
+      'name': map['customerName'] ?? map['name'] ?? '',
+      'email': map['customerEmail'] ?? map['email'] ?? '',
+      'phone': map['customerPhone'] ?? map['phone'] ?? '',
+      'uid': map['customerId'] ?? map['uid'] ?? map['id'] ?? '',
+    };
+  }
+
+  static Map<String, dynamic> _buildPaymentMap(Map<String, dynamic> map, Map<String, dynamic> paymentMap) {
+    return {
+      ...map,
+      ...paymentMap,
+      'subtotalPrice': paymentMap['subtotalPrice'] ?? map['subtotalPrice'] ?? map['subtotal'],
+    };
+  }
+
+  factory CustomerOrderModel.fromMap(Map<String, dynamic> map, {String? id}) {
+    final products = _parseProducts(map['products'] ?? map['items']);
     final orderStatus = OrderStatus.values.firstWhere(
-      (value) => value.name == statusString,
+      (v) => v.name == (map['status'] ?? 'pending').toString(),
       orElse: () => OrderStatus.pending,
     );
-
-    final createdAt = map['orderDate'] ?? map['createdAt'];
-    DateTime orderDate;
-    if (createdAt is DateTime) {
-      orderDate = createdAt;
-    } else {
-      orderDate =
-          DateTime.tryParse(createdAt?.toString() ?? '') ?? DateTime.now();
-    }
-
-    final addressMap = _asStringKeyedMap(
-      map['address'] ?? map['shippingAddress'],
-    );
+    final addressMap = _asStringKeyedMap(map['address'] ?? map['shippingAddress']);
     final paymentMap = _asStringKeyedMap(map['payment']);
     final customerMap = _asStringKeyedMap(map['customer']);
 
     return CustomerOrderModel(
-      customer: CustomerModel.fromMap(
-        customerMap.isNotEmpty
-            ? customerMap
-            : {
-                'fullName':
-                    map['customerName'] ?? map['fullName'] ?? map['name'] ?? '',
-                'name': map['customerName'] ?? map['name'] ?? '',
-                'email': map['customerEmail'] ?? map['email'] ?? '',
-                'phone': map['customerPhone'] ?? map['phone'] ?? '',
-                'uid': map['customerId'] ?? map['uid'] ?? map['id'] ?? '',
-              },
-      ),
+      customer: CustomerModel.fromMap(_buildCustomerMap(map, customerMap)),
       products: products,
       status: orderStatus,
-      orderid:
-          (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '')
-              .toString(),
-      orderDate: orderDate,
-      payment: PaymentDetailsModel.fromMap({
-        ...map,
-        ...paymentMap,
-        'subtotalPrice':
-            paymentMap['subtotalPrice'] ??
-            map['subtotalPrice'] ??
-            map['subtotal'],
-      }),
+      orderid: (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '').toString(),
+      orderDate: _parseDate(map['orderDate'] ?? map['createdAt']),
+      payment: PaymentDetailsModel.fromMap(_buildPaymentMap(map, paymentMap)),
       address: addressMap.isNotEmpty
           ? AddressModel.fromMap(addressMap)
           : AddressModel(
               addressdescription: (map['deliveryAddress'] ?? '').toString(),
               zipCode: 0,
-              city: null,
-              country: null,
             ),
     );
   }
 
   Map<String, dynamic> toMap() {
-    // try to extract numeric part from prefixed id (e.g. '#AY-10004')
-    final match = RegExp(r"(\d+)").firstMatch(orderid);
-    final numeric = match != null ? int.tryParse(match.group(1)!) : null;
+    final numMatch = RegExp(r"(\d+)").firstMatch(orderid);
+    final orderNum = numMatch != null ? int.tryParse(numMatch.group(1)!) : null;
+    final items = products.map((p) => {
+      'productId': p.id, 'productName': p.name, 'price': p.price,
+      'quantity': p.quantity, 'sellerId': p.sellerId, 'subtotal': p.price * p.quantity,
+    }).toList();
 
     return {
       'orderid': orderid,
-      // store numeric `orderNumber` when available to enable numeric ordering
-      'orderNumber': numeric,
-      'items': products
-          .map(
-            (product) => {
-              'productId': product.id,
-              'productName': product.name,
-              'price': product.price,
-              'quantity': product.quantity,
-              'sellerId': product.sellerId,
-              'subtotal': product.price * product.quantity,
-            },
-          )
-          .toList(),
+      'orderNumber': orderNum,
+      'items': items,
       'shippingAddress': {
-        'street': address.street,
-        'city': address.city,
-        'governorate': address.city,
-        'country': address.country,
-        'zipCode': address.zipCode,
+        'street': address.street, 'city': address.city, 'zipCode': address.zipCode, 'country': address.country,
       },
       'customerId': customer.id,
       'status': status.name,

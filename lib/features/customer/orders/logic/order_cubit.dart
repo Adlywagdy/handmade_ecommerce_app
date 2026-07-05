@@ -18,48 +18,36 @@ class OrderCubit extends Cubit<OrderState> {
   OrderStatus? selectedStatus;
   int orderID = 1;
 
-  void _syncDisplayedOrders(List<CustomerOrderModel> orders) {
-    displayedordersList = orders;
-  }
-
   Future<void> _refreshByCurrentFilter() async {
-    if (selectedStatus == null) {
-      allordersList = await _orderService.getAllOrders();
-      _syncDisplayedOrders(allordersList);
-      return;
-    }
-
-    final filtered = await _orderService.getFilteredOrders(selectedStatus!);
-    _syncDisplayedOrders(filtered);
+    displayedordersList = selectedStatus == null
+        ? allordersList = await _orderService.getAllOrders()
+        : await _orderService.getFilteredOrders(selectedStatus!);
   }
 
-  /*------------------------------------------- */
   Future<void> getAllOrders() async {
     selectedStatus = null;
     emit(GetAllOrdersLoadingState());
     try {
       allordersList = await _orderService.getAllOrders();
-      _syncDisplayedOrders(allordersList);
-
+      displayedordersList = allordersList;
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {
       emit(GetAllOrdersFailedState(errorMessage: e.toString()));
     }
-  } /*------------------------------------------- */
+  }
 
   Future<void> getFilteredOrders({required OrderStatus status}) async {
     selectedStatus = status;
     emit(GetFilteredOrdersLoadingState());
     try {
-      final fetchedOrders = await _orderService.getFilteredOrders(status);
-      _syncDisplayedOrders(fetchedOrders);
-      emit(GetFilteredOrdersSuccessState(filteredorders: fetchedOrders));
+      final fetched = await _orderService.getFilteredOrders(status);
+      displayedordersList = fetched;
+      emit(GetFilteredOrdersSuccessState(filteredorders: fetched));
     } catch (e) {
       emit(GetFilteredOrdersFailedState(errorMessage: e.toString()));
     }
   }
 
-  /*------------------------------------------- */
   Future<void> getOrderDetails(String orderId) async {
     emit(GetOrderDetailsLoadingState());
     try {
@@ -70,11 +58,7 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
-  /*------------------------------------------- */
-  Future<void> placeNewOrder(
-    CustomerOrderModel newOrder,
-    BuildContext context,
-  ) async {
+  Future<void> placeNewOrder(CustomerOrderModel newOrder, BuildContext context) async {
     emit(PlaceOrderLoadingState());
     try {
       final cartCubit = context.read<CartCubit>();
@@ -89,29 +73,20 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
-  /*------------------------------------------- */
   Future<void> cancelOrder(String orderId) async {
     emit(CancelOrderLoadingState());
     try {
       await _orderService.cancelOrder(orderId);
       await _refreshByCurrentFilter();
-
       emit(CancelOrderSuccessState());
-      if (selectedStatus == null) {
-        emit(GetAllOrdersSuccessState(orders: displayedordersList));
-      } else {
-        emit(
-          GetFilteredOrdersSuccessState(filteredorders: displayedordersList),
-        );
-      }
+      final state = selectedStatus == null
+          ? GetAllOrdersSuccessState(orders: displayedordersList) as OrderState
+          : GetFilteredOrdersSuccessState(filteredorders: displayedordersList);
+      emit(state);
     } catch (e) {
       emit(CancelOrderFailedState(errorMessage: e.toString()));
     }
   }
 
-  /*------------------------------------------- */
-
-  Future<int> getNewOrderID() async {
-    return _orderService.getNextOrderID();
-  }
+  Future<int> getNewOrderID() => _orderService.getNextOrderID();
 }

@@ -49,55 +49,35 @@ class SellerModel {
     this.createdAt,
   });
 
+  static String? _first(Iterable<dynamic> keys, Map<String, dynamic> map, {String? fallback}) {
+    for (final key in keys) {
+      final val = cleanString(map[key]);
+      if (val != null) return val;
+    }
+    return cleanString(fallback);
+  }
+
   factory SellerModel.fromMap(Map<String, dynamic> map, {String? fallbackId}) {
     final submittedAt = parseDateTime(map['submittedAt']);
     final approvedAt = parseDateTime(map['approvedAt']);
     final createdAt = parseDateTime(map['createdAt']);
 
     return SellerModel(
-      id:
-          cleanString(map['id']) ??
-          cleanString(map['uid']) ??
-          cleanString(map['sellerId']) ??
-          cleanString(fallbackId),
-      name:
-          cleanString(map['name']) ??
-          cleanString(map['ownerName']) ??
-          cleanString(map['fullName']) ??
-          '',
-      email:
-          cleanString(map['email']) ??
-          cleanString(map['sellerEmail']) ??
-          cleanString(map['uid']) ??
-          cleanString(map['sellerId']) ??
-          cleanString(fallbackId) ??
-          '',
-      specialty:
-          cleanString(map['specialty']) ??
-          cleanString(map['shopName']) ??
-          cleanString(map['storeName']) ??
-          '',
-      submittedDate:
-          cleanString(map['submittedDate']) ?? _formatDate(submittedAt),
+      id: _first(['id', 'uid', 'sellerId'], map, fallback: fallbackId),
+      name: _first(['name', 'ownerName', 'fullName'], map) ?? '',
+      email: _first(['email', 'sellerEmail', 'uid', 'sellerId'], map, fallback: fallbackId) ?? '',
+      specialty: _first(['specialty', 'shopName', 'storeName'], map) ?? '',
+      submittedDate: cleanString(map['submittedDate']) ?? _formatDate(submittedAt),
       ownerName: cleanString(map['ownerName']),
       phone: cleanString(map['phone']),
       badge: cleanString(map['badge']),
-      image:
-          cleanString(map['avatar']) ??
-          cleanString(map['profileImage']) ??
-          cleanString(map['image']) ??
-          cleanString(map['photoUrl']) ??
-          cleanString(map['sellerImage']),
+      image: _first(['avatar', 'profileImage', 'image', 'photoUrl', 'sellerImage'], map),
       city: cleanString(map['city']),
       country: cleanString(map['country']),
-      location:
-          composeLocation(
-            city: cleanString(map['city']),
-            country: cleanString(map['country']),
-          ) ??
-          cleanString(map['location']) ??
-          cleanString(map['address']) ??
-          cleanString(map['sellerLocation']),
+      location: composeLocation(
+        city: cleanString(map['city']),
+        country: cleanString(map['country']),
+      ) ?? _first(['location', 'address', 'sellerLocation'], map),
       rating: parseDouble(map['rating']),
       totalProducts: parseInt(map['totalProducts']),
       totalSales: parseInt(map['totalSales']),

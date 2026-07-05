@@ -3,27 +3,23 @@ import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/rev
 
 class ReviewsService {
   ReviewsService({FirebaseFirestore? firestore})
-    : _firestore = firestore ?? FirebaseFirestore.instance;
+      : _firestore = firestore ?? FirebaseFirestore.instance;
 
   final FirebaseFirestore _firestore;
-  static const String _reviewsCollection = 'reviews';
 
   Future<List<ReviewsModel>> getProductReviews(String productId) async {
-    final normalizedProductId = productId.trim();
-    if (normalizedProductId.isEmpty) {
-      throw ArgumentError('Product id cannot be empty');
-    }
+    final pid = productId.trim();
+    if (pid.isEmpty) throw ArgumentError('Product id cannot be empty');
 
     final snapshot = await _firestore
-        .collection(_reviewsCollection)
-        .where('productId', isEqualTo: normalizedProductId)
+        .collection('reviews')
+        .where('productId', isEqualTo: pid)
         .limit(50)
         .get();
 
     final reviews = snapshot.docs
         .map((doc) => ReviewsModel.fromMap(doc.data(), id: doc.id))
         .toList();
-
     reviews.sort((a, b) => b.createdAt.compareTo(a.createdAt));
     return reviews;
   }
@@ -35,37 +31,20 @@ class ReviewsService {
     required String comment,
     required int rating,
   }) async {
-    final normalizedProductId = productId.trim();
-    final normalizedSellerId = sellerId.trim();
-    final normalizedUserId = userId.trim();
-    final normalizedComment = comment.trim();
+    final pid = productId.trim();
+    final sid = sellerId.trim();
+    final uid = userId.trim();
+    final msg = comment.trim();
 
-    if (normalizedProductId.isEmpty) {
-      throw ArgumentError('Product id cannot be empty');
-    }
-    if (normalizedSellerId.isEmpty) {
-      throw ArgumentError('Seller id cannot be empty');
-    }
-    if (normalizedUserId.isEmpty) {
-      throw ArgumentError('User id cannot be empty');
-    }
-    if (normalizedComment.isEmpty) {
-      throw ArgumentError('Review comment cannot be empty');
-    }
-    if (rating < 1 || rating > 5) {
-      throw ArgumentError('Rating must be between 1 and 5');
-    }
+    if (pid.isEmpty) throw ArgumentError('Product id cannot be empty');
+    if (sid.isEmpty) throw ArgumentError('Seller id cannot be empty');
+    if (uid.isEmpty) throw ArgumentError('User id cannot be empty');
+    if (msg.isEmpty) throw ArgumentError('Review comment cannot be empty');
+    if (rating < 1 || rating > 5) throw ArgumentError('Rating must be between 1 and 5');
 
-    final review = ReviewsModel(
-      id: '',
-      productId: normalizedProductId,
-      sellerId: normalizedSellerId,
-      userId: normalizedUserId,
-      comment: normalizedComment,
-      rating: rating,
-      createdAt: DateTime.now(),
-    );
-
-    await _firestore.collection(_reviewsCollection).add(review.toMap());
+    await _firestore.collection('reviews').add(ReviewsModel(
+      id: '', productId: pid, sellerId: sid, userId: uid,
+      comment: msg, rating: rating, createdAt: DateTime.now(),
+    ).toMap());
   }
 }

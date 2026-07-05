@@ -76,10 +76,21 @@ class FirebaseOrderService {
     return _sortOrders(docs.docs);
   }
 
+  Future<CustomerOrderModel?> _findOrder(String userId, String field, dynamic value) async {
+    final snap = await _firestore
+        .collection('orders')
+        .where('customerId', isEqualTo: userId)
+        .where(field, isEqualTo: value)
+        .limit(1)
+        .get();
+    return snap.docs.isNotEmpty ? _orderFromSnapshot(snap.docs.first) : null;
+  }
+
   /// Get order details
   Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
     final user = _auth.currentUser;
     if (user == null) return null;
+
     final rootDoc = await _firestore.collection('orders').doc(orderId).get();
     if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
       return _orderFromSnapshot(rootDoc);
@@ -87,34 +98,12 @@ class FirebaseOrderService {
 
     final parsedNum = _extractNumeric(orderId);
     if (parsedNum != null) {
-      final snap = await _firestore
-          .collection('orders')
-          .where('customerId', isEqualTo: user.uid)
-          .where('orderNumber', isEqualTo: parsedNum)
-          .limit(1)
-          .get();
-      if (snap.docs.isNotEmpty) return _orderFromSnapshot(snap.docs.first);
+      final found = await _findOrder(user.uid, 'orderNumber', parsedNum);
+      if (found != null) return found;
     }
 
-    final byOrderId = await _firestore
-        .collection('orders')
-        .where('customerId', isEqualTo: user.uid)
-        .where('orderid', isEqualTo: orderId)
-        .limit(1)
-        .get();
-    if (byOrderId.docs.isNotEmpty)
-      return _orderFromSnapshot(byOrderId.docs.first);
-
-    final byOrderNumberString = await _firestore
-        .collection('orders')
-        .where('customerId', isEqualTo: user.uid)
-        .where('orderNumber', isEqualTo: orderId)
-        .limit(1)
-        .get();
-    if (byOrderNumberString.docs.isNotEmpty)
-      return _orderFromSnapshot(byOrderNumberString.docs.first);
-
-    return null;
+    return await _findOrder(user.uid, 'orderid', orderId)
+        ?? await _findOrder(user.uid, 'orderNumber', orderId);
   }
 
   /// Place new order
@@ -163,33 +152,25 @@ class FirebaseOrderService {
 
     final parsedNum = _extractNumeric(orderId);
     if (parsedNum != null) {
-      final snap = await _firestore
-          .collection('orders')
-          .where('customerId', isEqualTo: user.uid)
-          .where('orderNumber', isEqualTo: parsedNum)
-          .limit(1)
-          .get();
-      if (snap.docs.isNotEmpty)
-        await snap.docs.first.reference.update(cancelPayload);
+      final snap = await _findDoc(user.uid, 'orderNumber', parsedNum);
+      if (snap != null) await snap.reference.update(cancelPayload);
     }
 
-    final byOrderId = await _firestore
-        .collection('orders')
-        .where('customerId', isEqualTo: user.uid)
-        .where('orderid', isEqualTo: orderId)
-        .limit(1)
-        .get();
-    if (byOrderId.docs.isNotEmpty)
-      await byOrderId.docs.first.reference.update(cancelPayload);
+    final byId = await _findDoc(user.uid, 'orderid', orderId);
+    if (byId != null) await byId.reference.update(cancelPayload);
 
-    final byOrderNumberString = await _firestore
+    final byNum = await _findDoc(user.uid, 'orderNumber', orderId);
+    if (byNum != null) await byNum.reference.update(cancelPayload);
+  }
+
+  Future<DocumentSnapshot<Map<String, dynamic>>?> _findDoc(String userId, String field, dynamic value) async {
+    final snap = await _firestore
         .collection('orders')
-        .where('customerId', isEqualTo: user.uid)
-        .where('orderNumber', isEqualTo: orderId)
+        .where('customerId', isEqualTo: userId)
+        .where(field, isEqualTo: value)
         .limit(1)
         .get();
-    if (byOrderNumberString.docs.isNotEmpty)
-      await byOrderNumberString.docs.first.reference.update(cancelPayload);
+    return snap.docs.isNotEmpty ? snap.docs.first : null;
   }
 
   /// Helper to convert Firestore document to OrderModel
