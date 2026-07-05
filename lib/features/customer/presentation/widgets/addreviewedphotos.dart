@@ -85,7 +85,7 @@ class _AddReviewedPhotosState extends State<AddReviewedPhotos> {
   @override
   Widget build(BuildContext context) {
     return Align(
-      alignment: .centerLeft,
+      alignment: Alignment.centerLeft,
       child: Column(
         spacing: 12.h,
         children: [

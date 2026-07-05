@@ -331,7 +331,7 @@ class CheckoutButton extends StatelessWidget {
                       OrderModel(
                         customer: customerCubit.customerData,
                         products: cartCubit.cartProductsList,
-                        status: .pending,
+                        status: OrderStatus.pending,
                         address: cartCubit.selectedOrderAddress!,
                         orderid: "#AY-${orderCubit.orderID++}",
                         payment: orderPayment,

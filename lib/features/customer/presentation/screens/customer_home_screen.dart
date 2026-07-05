@@ -273,7 +273,7 @@ class CustomerHomeScreen extends StatelessWidget {
                               aspectRatio: .83,
                               child: ProductItem(
                                 cardmargin: 5,
-                                cardclipBehavior: .antiAlias,
+                                cardclipBehavior: Clip.antiAlias,
                                 imageflex: 3,
                                 lowercolumnflex: 2,
                                 lowercolumntoppadding: 16.h,
@@ -348,7 +348,7 @@ class CustomerHomeScreen extends StatelessWidget {
                               aspectRatio: .64,
                               child: ProductItem(
                                 cardmargin: 5,
-                                cardclipBehavior: .antiAlias,
+                                cardclipBehavior: Clip.antiAlias,
                                 imageflex: 3,
                                 lowercolumnflex: 2,
                                 lowercolumnleftpadding: 12,

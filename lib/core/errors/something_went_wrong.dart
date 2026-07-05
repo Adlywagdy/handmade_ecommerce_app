@@ -12,7 +12,7 @@ class SomethingWentWrong extends StatelessWidget {
       backgroundColor: Color(0xFFFFFFFF),
       body: Center(
         child: Column(
-          mainAxisAlignment: .center,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             SvgPicture.asset('assets/icons/something_went_wrong.svg'),
             SizedBox(height: 35),
@@ -27,7 +27,7 @@ class SomethingWentWrong extends StatelessWidget {
                 fontWeight: FontWeight.w400,
                 color: Color(0xff64748B),
               ),
-              textAlign: .center,
+              textAlign: TextAlign.center,
             ),
             SizedBox(height: 50),
             InkWell(

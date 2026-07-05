@@ -29,7 +29,7 @@ class OrderStatusSlider extends StatelessWidget {
               ),
               Column(
                 spacing: 8.h,
-                mainAxisSize: .min,
+                mainAxisSize: MainAxisSize.min,
                 children: [
                   CircleAvatar(
                     radius: 20.r,

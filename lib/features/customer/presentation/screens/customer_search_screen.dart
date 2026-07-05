@@ -232,7 +232,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     return Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0).w,
                       child: ProductItem(
-                        cardclipBehavior: .antiAlias,
+                        cardclipBehavior: Clip.antiAlias,
                         product: list[index],
                         imageflex: 2,
                         lowercolumnflex: 1,

@@ -22,7 +22,7 @@ List<OrderModel> ordersListdata = [
       discount: 50.00,
     ),
     orderDate: DateTime.now().subtract(const Duration(days: 2)),
-    status: .delivered,
+    status: OrderStatus.delivered,
     address: AddressModel(
       addressdescription: "addressdescription",
       zipCode: 12345,
@@ -53,6 +53,6 @@ List<OrderModel> ordersListdata = [
       city: "city",
       country: "country",
     ),
-    status: .confirmed,
+    status: OrderStatus.confirmed,
   ),
 ];
