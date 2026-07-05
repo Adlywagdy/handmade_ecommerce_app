@@ -341,7 +341,7 @@ class CheckoutButton extends StatelessWidget {
                         products: cartCubit.cartProductsList,
                         status: OrderStatus.pending,
                         address: effectiveAddress,
-                        orderid: "#AY-${orderCubit.orderID}",
+                        orderid: "#AY-${orderCubit.orderID + 1}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),
                       ),

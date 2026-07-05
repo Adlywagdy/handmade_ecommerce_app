@@ -76,7 +76,11 @@ class CustomerOrderService {
     return _sortOrders(docs.docs);
   }
 
-  Future<CustomerOrderModel?> _findOrder(String userId, String field, dynamic value) async {
+  Future<CustomerOrderModel?> _findOrder(
+    String userId,
+    String field,
+    dynamic value,
+  ) async {
     final snap = await _firestore
         .collection('orders')
         .where('customerId', isEqualTo: userId)
@@ -102,8 +106,8 @@ class CustomerOrderService {
       if (found != null) return found;
     }
 
-    return await _findOrder(user.uid, 'orderid', orderId)
-        ?? await _findOrder(user.uid, 'orderNumber', orderId);
+    return await _findOrder(user.uid, 'orderid', orderId) ??
+        await _findOrder(user.uid, 'orderNumber', orderId);
   }
 
   /// Place new order
@@ -163,7 +167,11 @@ class CustomerOrderService {
     if (byNum != null) await byNum.reference.update(cancelPayload);
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>?> _findDoc(String userId, String field, dynamic value) async {
+  Future<DocumentSnapshot<Map<String, dynamic>>?> _findDoc(
+    String userId,
+    String field,
+    dynamic value,
+  ) async {
     final snap = await _firestore
         .collection('orders')
         .where('customerId', isEqualTo: userId)
