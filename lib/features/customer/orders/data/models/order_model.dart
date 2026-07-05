@@ -1,7 +1,10 @@
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
+import 'package:handmade_ecommerce_app/core/models/order_status.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
+
+export 'package:handmade_ecommerce_app/core/models/order_status.dart';
 
 class CustomerOrderModel {
   final CustomerModel customer;
@@ -133,13 +136,4 @@ class CustomerOrderModel {
       'updatedAt': DateTime.now().toIso8601String(),
     };
   }
-}
-
-enum OrderStatus {
-  pending,
-  confirmed,
-  preparing,
-  shipped,
-  delivered,
-  cancelled,
 }

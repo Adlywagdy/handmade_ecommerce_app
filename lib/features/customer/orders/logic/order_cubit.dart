@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
-import 'package:handmade_ecommerce_app/features/customer/orders/data/service/firebase_order_service.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/data/service/customer_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
@@ -9,14 +9,15 @@ import 'package:handmade_ecommerce_app/features/notifications/services/notificat
 part 'order_state.dart';
 
 class OrderCubit extends Cubit<OrderState> {
-  OrderCubit({FirebaseOrderService? orderService})
-    : _orderService = orderService ?? FirebaseOrderService(),
+  OrderCubit({CustomerOrderService? orderService})
+    : _orderService = orderService ?? CustomerOrderService(),
       super(OrderInitial());
 
-  final FirebaseOrderService _orderService;
+  final CustomerOrderService _orderService;
   List<CustomerOrderModel> allordersList = [];
   List<CustomerOrderModel> displayedordersList = [];
   OrderStatus? selectedStatus;
+  int orderID = 1;
 
   Future<void> _refreshByCurrentFilter() async {
     displayedordersList = selectedStatus == null

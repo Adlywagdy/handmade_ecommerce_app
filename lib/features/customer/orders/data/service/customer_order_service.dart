@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 
-class FirebaseOrderService {
+class CustomerOrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
@@ -222,7 +222,7 @@ class FirebaseOrderService {
 
       final int lastOrderNum = int.parse(orderNumber.split('-').last);
 
-      return lastOrderNum;
+      return lastOrderNum + 1;
     } catch (e) {
       throw Exception('Failed to get next order ID: $e');
     }
