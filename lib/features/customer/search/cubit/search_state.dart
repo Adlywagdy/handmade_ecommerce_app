@@ -17,9 +17,7 @@ final class GetCategoriesFailedstate extends SearchState {
 /* ------------------------------------------- */
 final class SearchProductsLoadingstate extends SearchState {}
 
-final class SearchProductsSuccessedstate extends SearchState {
-  SearchProductsSuccessedstate();
-}
+final class SearchProductsSuccessedstate extends SearchState {}
 
 final class SearchProductsFailedstate extends SearchState {
   final String errorMessage;
@@ -30,9 +28,7 @@ final class SearchProductsFailedstate extends SearchState {
 /* ------------------------------------------- */
 final class FilterProductsLoadingstate extends SearchState {}
 
-final class FilterProductsSuccessedstate extends SearchState {
-  FilterProductsSuccessedstate();
-}
+final class FilterProductsSuccessedstate extends SearchState {}
 
 final class FilterProductsFailedstate extends SearchState {
   final String errorMessage;

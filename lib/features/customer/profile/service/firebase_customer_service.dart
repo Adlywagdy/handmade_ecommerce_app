@@ -6,7 +6,8 @@ import 'package:handmade_ecommerce_app/features/customer/models/customer_model.d
 class FirebaseCustomerService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  late final CollectionReference<Map<String, dynamic>> _usersCollection =
+
+  CollectionReference<Map<String, dynamic>> get _usersCollection =>
       _firestore.collection('users');
 
   /// Get current user's profile data from Firestore

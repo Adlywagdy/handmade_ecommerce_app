@@ -60,163 +60,136 @@ class FirebaseOrderService {
 
   /// Get all orders for current user
   Future<List<CustomerOrderModel>> getAllOrders() async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) return [];
+    final user = _auth.currentUser;
+    if (user == null) return [];
 
-      final docs = await _getOrdersSnapshot(user.uid);
-      return _sortOrders(docs.docs);
-    } catch (e) {
-      rethrow;
-    }
+    final docs = await _getOrdersSnapshot(user.uid);
+    return _sortOrders(docs.docs);
   }
 
   /// Get filtered orders by status
   Future<List<CustomerOrderModel>> getFilteredOrders(OrderStatus status) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) return [];
+    final user = _auth.currentUser;
+    if (user == null) return [];
 
-      final docs = await _getOrdersSnapshot(user.uid, status: status);
-
-      return _sortOrders(docs.docs);
-    } catch (e) {
-      rethrow;
-    }
+    final docs = await _getOrdersSnapshot(user.uid, status: status);
+    return _sortOrders(docs.docs);
   }
 
   /// Get order details
   Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) return null;
-      // 1) Try direct doc lookup (doc id)
-      final rootDoc = await _firestore.collection('orders').doc(orderId).get();
-      if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
-        return _orderFromSnapshot(rootDoc);
-      }
-
-      // 2) Try numeric `orderNumber` match (if orderId contains digits)
-      final parsedNum = _extractNumeric(orderId);
-      if (parsedNum != null) {
-        final snap = await _firestore
-            .collection('orders')
-            .where('customerId', isEqualTo: user.uid)
-            .where('orderNumber', isEqualTo: parsedNum)
-            .limit(1)
-            .get();
-        if (snap.docs.isNotEmpty) return _orderFromSnapshot(snap.docs.first);
-      }
-
-      // 3) Try exact string match on `orderid` (the prefixed/display id)
-      final byOrderId = await _firestore
-          .collection('orders')
-          .where('customerId', isEqualTo: user.uid)
-          .where('orderid', isEqualTo: orderId)
-          .limit(1)
-          .get();
-      if (byOrderId.docs.isNotEmpty)
-        return _orderFromSnapshot(byOrderId.docs.first);
-
-      // 4) Fallback: try legacy string-stored orderNumber
-      final byOrderNumberString = await _firestore
-          .collection('orders')
-          .where('customerId', isEqualTo: user.uid)
-          .where('orderNumber', isEqualTo: orderId)
-          .limit(1)
-          .get();
-      if (byOrderNumberString.docs.isNotEmpty)
-        return _orderFromSnapshot(byOrderNumberString.docs.first);
-
-      return null;
-    } catch (e) {
-      rethrow;
+    final user = _auth.currentUser;
+    if (user == null) return null;
+    final rootDoc = await _firestore.collection('orders').doc(orderId).get();
+    if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
+      return _orderFromSnapshot(rootDoc);
     }
+
+    final parsedNum = _extractNumeric(orderId);
+    if (parsedNum != null) {
+      final snap = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderNumber', isEqualTo: parsedNum)
+          .limit(1)
+          .get();
+      if (snap.docs.isNotEmpty) return _orderFromSnapshot(snap.docs.first);
+    }
+
+    final byOrderId = await _firestore
+        .collection('orders')
+        .where('customerId', isEqualTo: user.uid)
+        .where('orderid', isEqualTo: orderId)
+        .limit(1)
+        .get();
+    if (byOrderId.docs.isNotEmpty)
+      return _orderFromSnapshot(byOrderId.docs.first);
+
+    final byOrderNumberString = await _firestore
+        .collection('orders')
+        .where('customerId', isEqualTo: user.uid)
+        .where('orderNumber', isEqualTo: orderId)
+        .limit(1)
+        .get();
+    if (byOrderNumberString.docs.isNotEmpty)
+      return _orderFromSnapshot(byOrderNumberString.docs.first);
+
+    return null;
   }
 
   /// Place new order
   Future<String> placeOrder(CustomerOrderModel order) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) throw Exception('User not authenticated');
+    final user = _auth.currentUser;
+    if (user == null) throw Exception('User not authenticated');
 
-      final rootOrderRef = _firestore.collection('orders').doc();
-      final subtotal = _toDouble(order.payment.subtotalPrice);
-      final deliveryFee = _toDouble(order.payment.deliveryFee);
-      final totalPrice = _toDouble(order.payment.totalPrice);
-      final commission = subtotal * _commissionRate;
-      final orderPayload = {
-        ...order.toMap(),
-        'customerId': user.uid,
-        'commissionRate': _commissionRate,
-        'commission': commission,
-        'sellerEarning': subtotal - commission,
-        'subtotal': subtotal,
-        'deliveryFee': deliveryFee,
-        'totalPrice': totalPrice > 0 ? totalPrice : subtotal + deliveryFee,
-        'status': _statusToString(order.status),
-        'createdAt': FieldValue.serverTimestamp(),
-        'updatedAt': FieldValue.serverTimestamp(),
-      };
+    final rootOrderRef = _firestore.collection('orders').doc();
+    final subtotal = _toDouble(order.payment.subtotalPrice);
+    final deliveryFee = _toDouble(order.payment.deliveryFee);
+    final totalPrice = _toDouble(order.payment.totalPrice);
+    final commission = subtotal * _commissionRate;
+    final orderPayload = {
+      ...order.toMap(),
+      'customerId': user.uid,
+      'commissionRate': _commissionRate,
+      'commission': commission,
+      'sellerEarning': subtotal - commission,
+      'subtotal': subtotal,
+      'deliveryFee': deliveryFee,
+      'totalPrice': totalPrice > 0 ? totalPrice : subtotal + deliveryFee,
+      'status': _statusToString(order.status),
+      'createdAt': FieldValue.serverTimestamp(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
 
-      await rootOrderRef.set(orderPayload);
-
-      return rootOrderRef.id;
-    } catch (e) {
-      rethrow;
-    }
+    await rootOrderRef.set(orderPayload);
+    return rootOrderRef.id;
   }
 
   /// Cancel order
   Future<void> cancelOrder(String orderId) async {
-    try {
-      final user = _auth.currentUser;
-      if (user == null) throw Exception('User not authenticated');
+    final user = _auth.currentUser;
+    if (user == null) throw Exception('User not authenticated');
 
-      final cancelPayload = {
-        'status': _statusToString(OrderStatus.cancelled),
-        'updatedAt': FieldValue.serverTimestamp(),
-      };
+    final cancelPayload = {
+      'status': _statusToString(OrderStatus.cancelled),
+      'updatedAt': FieldValue.serverTimestamp(),
+    };
 
-      final rootDocRef = _firestore.collection('orders').doc(orderId);
-      final rootDoc = await rootDocRef.get();
-      if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
-        await rootDocRef.update(cancelPayload);
-      }
-
-      // Try numeric `orderNumber`, then string `orderid`, then legacy string `orderNumber`
-      final parsedNum = _extractNumeric(orderId);
-      if (parsedNum != null) {
-        final snap = await _firestore
-            .collection('orders')
-            .where('customerId', isEqualTo: user.uid)
-            .where('orderNumber', isEqualTo: parsedNum)
-            .limit(1)
-            .get();
-        if (snap.docs.isNotEmpty)
-          await snap.docs.first.reference.update(cancelPayload);
-      }
-
-      final byOrderId = await _firestore
-          .collection('orders')
-          .where('customerId', isEqualTo: user.uid)
-          .where('orderid', isEqualTo: orderId)
-          .limit(1)
-          .get();
-      if (byOrderId.docs.isNotEmpty)
-        await byOrderId.docs.first.reference.update(cancelPayload);
-
-      final byOrderNumberString = await _firestore
-          .collection('orders')
-          .where('customerId', isEqualTo: user.uid)
-          .where('orderNumber', isEqualTo: orderId)
-          .limit(1)
-          .get();
-      if (byOrderNumberString.docs.isNotEmpty)
-        await byOrderNumberString.docs.first.reference.update(cancelPayload);
-    } catch (e) {
-      rethrow;
+    final rootDocRef = _firestore.collection('orders').doc(orderId);
+    final rootDoc = await rootDocRef.get();
+    if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
+      await rootDocRef.update(cancelPayload);
     }
+
+    final parsedNum = _extractNumeric(orderId);
+    if (parsedNum != null) {
+      final snap = await _firestore
+          .collection('orders')
+          .where('customerId', isEqualTo: user.uid)
+          .where('orderNumber', isEqualTo: parsedNum)
+          .limit(1)
+          .get();
+      if (snap.docs.isNotEmpty)
+        await snap.docs.first.reference.update(cancelPayload);
+    }
+
+    final byOrderId = await _firestore
+        .collection('orders')
+        .where('customerId', isEqualTo: user.uid)
+        .where('orderid', isEqualTo: orderId)
+        .limit(1)
+        .get();
+    if (byOrderId.docs.isNotEmpty)
+      await byOrderId.docs.first.reference.update(cancelPayload);
+
+    final byOrderNumberString = await _firestore
+        .collection('orders')
+        .where('customerId', isEqualTo: user.uid)
+        .where('orderNumber', isEqualTo: orderId)
+        .limit(1)
+        .get();
+    if (byOrderNumberString.docs.isNotEmpty)
+      await byOrderNumberString.docs.first.reference.update(cancelPayload);
   }
 
   /// Helper to convert Firestore document to OrderModel

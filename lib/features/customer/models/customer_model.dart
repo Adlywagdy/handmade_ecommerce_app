@@ -31,7 +31,6 @@ class CustomerModel {
       phone: '',
       role: 'customer',
       provider: '',
-
       image: null,
     );
   }
@@ -56,7 +55,6 @@ class CustomerModel {
     return {
       'uid': id,
       'fullName': name,
-
       'email': email,
       'phone': phone,
       'role': role,

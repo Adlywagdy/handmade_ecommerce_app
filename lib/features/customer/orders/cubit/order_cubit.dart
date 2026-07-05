@@ -112,10 +112,6 @@ class OrderCubit extends Cubit<OrderState> {
   /*------------------------------------------- */
 
   Future<int> getNewOrderID() async {
-    try {
-      return await _orderService.getNextOrderID();
-    } catch (e) {
-      rethrow;
-    }
+    return _orderService.getNextOrderID();
   }
 }

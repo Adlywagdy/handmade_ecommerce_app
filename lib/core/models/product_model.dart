@@ -1,5 +1,6 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_model.dart';
 
 class ProductModel {
@@ -113,10 +114,10 @@ class ProductModel {
         ? <String>[singleImage]
         : <String>[];
 
-    final parsedPrice = _parseDouble(map['price']) ?? 0;
-    final parsedDiscountedPrice = _parseDouble(map['discountedPrice']);
-    final parsedQuantity = _parseInt(map['stock'] ?? map['quantity']) ?? 0;
-    final parsedRating = _parseDouble(map['rating'] ?? map['totalrate']);
+    final parsedPrice = parseDouble(map['price']) ?? 0;
+    final parsedDiscountedPrice = parseDouble(map['discountedPrice']);
+    final parsedQuantity = parseInt(map['stock'] ?? map['quantity']) ?? 0;
+    final parsedRating = parseDouble(map['rating'] ?? map['totalrate']);
 
     final sellerMap = map['seller'];
     final sellerReferenceId =
@@ -169,12 +170,12 @@ class ProductModel {
       discountedPrice: parsedDiscountedPrice,
       currency: map['currency']?.toString() ?? 'EGP',
       totalrate: parsedRating,
-      salesCount: _parseInt(map['salesCount']),
-      reviewsCount: _parseInt(map['reviewsCount']),
+      salesCount: parseInt(map['salesCount']),
+      reviewsCount: parseInt(map['reviewsCount']),
       status: map['status']?.toString(),
       isActive: map['isActive'] as bool? ?? true,
-      createdAt: _parseDateTime(map['createdAt']),
-      updatedAt: _parseDateTime(map['updatedAt']),
+      createdAt: parseDateTime(map['createdAt']),
+      updatedAt: parseDateTime(map['updatedAt']),
       quantity: parsedQuantity,
       images: normalizedImages,
       category: category,
@@ -214,32 +215,4 @@ class ProductModel {
     return data;
   }
 
-  static double? _parseDouble(dynamic value) {
-    if (value == null) return null;
-    if (value is num) return value.toDouble();
-    return double.tryParse(value.toString());
-  }
-
-  static int? _parseInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    if (value is num) return value.toInt();
-    return int.tryParse(value.toString());
-  }
-
-  static DateTime? _parseDateTime(dynamic value) {
-    if (value == null) return null;
-    if (value is DateTime) return value;
-    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
-    if (value is String) return DateTime.tryParse(value);
-
-    try {
-      final parsed = value.toDate();
-      if (parsed is DateTime) return parsed;
-    } catch (_) {
-      // Ignore unsupported types.
-    }
-
-    return null;
-  }
 }

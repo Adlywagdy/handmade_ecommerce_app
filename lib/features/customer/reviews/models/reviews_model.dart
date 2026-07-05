@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 
 class ReviewsModel {
   final String id;
@@ -26,8 +27,8 @@ class ReviewsModel {
       sellerId: map['sellerId']?.toString() ?? '',
       userId: map['userId']?.toString() ?? '',
       comment: map['comment']?.toString() ?? '',
-      rating: _parseInt(map['rating']) ?? 0,
-      createdAt: _parseDateTime(map['createdAt']) ?? DateTime.now(),
+      rating: parseInt(map['rating']) ?? 0,
+      createdAt: parseDateTime(map['createdAt']) ?? DateTime.now(),
     );
   }
 
@@ -40,21 +41,5 @@ class ReviewsModel {
       'rating': rating,
       'createdAt': Timestamp.fromDate(createdAt),
     };
-  }
-
-  static int? _parseInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    if (value is num) return value.toInt();
-    return int.tryParse(value.toString());
-  }
-
-  static DateTime? _parseDateTime(dynamic value) {
-    if (value == null) return null;
-    if (value is DateTime) return value;
-    if (value is Timestamp) return value.toDate();
-    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
-    if (value is String) return DateTime.tryParse(value);
-    return null;
   }
 }

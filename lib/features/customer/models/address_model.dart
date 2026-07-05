@@ -32,13 +32,9 @@ class AddressModel {
 
   Map<String, dynamic> toMap() {
     return {
-      'addresstitle': addresstitle,
-      'addressdescription': addressdescription,
-      'zipCode': zipCode,
       'street': street,
-      'postalCode': postalCode,
       'city': city,
-      'governorate': city,
+      'zipCode': zipCode,
       'country': country,
     };
   }
