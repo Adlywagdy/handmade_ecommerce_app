@@ -14,13 +14,11 @@ import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handmade_ecommerce_app/features/notifications/services/fcm_service.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
-import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 void main() async {
