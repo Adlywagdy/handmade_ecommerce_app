@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/recommendation_chatbot/services/firestore_chatbot_product_services.dart';
+import 'package:handmade_ecommerce_app/core/recommendation_chatbot/services/firestore_chatbot_product_services.dart';
 
 import '../../models/chatbot_message_model.dart';
 import '../../services/preference_extractor_service.dart';
@@ -31,7 +31,7 @@ class _RecommendationChatbotScreenState
   final FirebaseAIService _firebaseAIService = FirebaseAIService();
 
   final FirestoreChatbotProductsService _firestoreProductsService =
-    FirestoreChatbotProductsService();
+      FirestoreChatbotProductsService();
 
   final List<ChatbotMessageModel> _messages = [
     ChatbotMessageModel(
@@ -54,12 +54,7 @@ class _RecommendationChatbotScreenState
     if (userMessage.isEmpty) return;
 
     setState(() {
-      _messages.add(
-        ChatbotMessageModel(
-          text: userMessage,
-          isUser: true,
-        ),
-      );
+      _messages.add(ChatbotMessageModel(text: userMessage, isUser: true));
       _messageController.clear();
     });
 
@@ -67,59 +62,57 @@ class _RecommendationChatbotScreenState
     _scrollToBottom();
   }
 
- Future<void> _addBotResponse(String userMessage) async {
-  setState(() {
-    _messages.add(
-      ChatbotMessageModel(
-        text: 'Thinking...',
-        isUser: false,
-      ),
+  Future<void> _addBotResponse(String userMessage) async {
+    setState(() {
+      _messages.add(ChatbotMessageModel(text: 'Thinking...', isUser: false));
+    });
+
+    _scrollToBottom();
+
+    final aiPreferences = await _firebaseAIService.extractPreferences(
+      userMessage,
     );
-  });
 
-  _scrollToBottom();
+    final preferences =
+        aiPreferences ?? _preferenceExtractor.extract(userMessage);
 
-  final aiPreferences =
-      await _firebaseAIService.extractPreferences(userMessage);
+    final products = await _firestoreProductsService.getApprovedProducts();
 
-  final preferences =
-      aiPreferences ?? _preferenceExtractor.extract(userMessage);
+    final recommendedProducts = _recommendationService.getRecommendations(
+      preferences,
+      products,
+    );
 
-  final products = await _firestoreProductsService.getApprovedProducts();
+    String botReply;
 
-  final recommendedProducts =
-    _recommendationService.getRecommendations(preferences, products);
-     
-      String botReply;
+    if (!preferences.hasAnyPreference) {
+      botReply =
+          'I need more details. Please tell me the room type, size, colors, or product type you want.';
+    } else if (recommendedProducts.isEmpty) {
+      botReply =
+          'I understood your preferences:\n\n${preferences.summary}\n\n'
+          'Sorry, I could not find an exact matching product right now. '
+          'Try changing the color, room type, or product category.';
+    } else {
+      botReply =
+          'Great! I found 2 handmade products that may match your room:\n\n${preferences.summary}';
+    }
 
-  if (!preferences.hasAnyPreference) {
-    botReply =
-        'I need more details. Please tell me the room type, size, colors, or product type you want.';
-  } else if (recommendedProducts.isEmpty) {
-    botReply =
-        'I understood your preferences:\n\n${preferences.summary}\n\n'
-        'Sorry, I could not find an exact matching product right now. '
-        'Try changing the color, room type, or product category.';
-  } else {
-    botReply =
-        'Great! I found 2 handmade products that may match your room:\n\n${preferences.summary}';
+    if (!mounted) return;
+
+    setState(() {
+      _messages.removeLast();
+      _messages.add(
+        ChatbotMessageModel(
+          text: botReply,
+          isUser: false,
+          recommendedProducts: recommendedProducts,
+        ),
+      );
+    });
+
+    _scrollToBottom();
   }
-
-  if (!mounted) return;
-
-  setState(() {
-    _messages.removeLast();
-    _messages.add(
-      ChatbotMessageModel(
-        text: botReply,
-        isUser: false,
-        recommendedProducts: recommendedProducts,
-      ),
-    );
-  });
-
-  _scrollToBottom();
-}
 
   void _scrollToBottom() {
     Future.delayed(const Duration(milliseconds: 100), () {
@@ -169,9 +162,7 @@ class _RecommendationChatbotScreenState
                       ? CrossAxisAlignment.end
                       : CrossAxisAlignment.start,
                   children: [
-                    ChatbotBubble(
-                      message: message,
-                    ),
+                    ChatbotBubble(message: message),
                     if (message.hasRecommendations)
                       RecommendedProductsWidget(
                         products: message.recommendedProducts,

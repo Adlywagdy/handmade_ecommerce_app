@@ -18,7 +18,7 @@ import 'package:handmade_ecommerce_app/features/customer/home/presentation/widge
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 // import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/topratedproductitemlowercolumn.dart';
-import 'package:handmade_ecommerce_app/features/recommendation_chatbot/presentation/screens/recommendation_chatbot_screen.dart';
+import 'package:handmade_ecommerce_app/core/recommendation_chatbot/presentation/screens/recommendation_chatbot_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/topratedproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
 
@@ -116,28 +116,23 @@ class CustomerHomeScreen extends StatelessWidget {
       backgroundColor: customerbackGroundColor,
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
-floatingActionButton: FloatingActionButton.extended(
-  backgroundColor: commonColor,
-  elevation: 6,
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const RecommendationChatbotScreen(),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: commonColor,
+        elevation: 6,
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => const RecommendationChatbotScreen(),
+            ),
+          );
+        },
+        icon: const Icon(Icons.auto_awesome, color: Colors.white),
+        label: Text(
+          'AI Help',
+          style: AppTextStyles.t_14w600.copyWith(color: Colors.white),
+        ),
       ),
-    );
-  },
-  icon: const Icon(
-    Icons.auto_awesome,
-    color: Colors.white,
-  ),
-  label: Text(
-    'AI Help',
-    style: AppTextStyles.t_14w600.copyWith(
-      color: Colors.white,
-    ),
-  ),
-),
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0).w,
         child: CustomScrollView(
