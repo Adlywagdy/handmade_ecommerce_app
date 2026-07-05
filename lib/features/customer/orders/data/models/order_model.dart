@@ -1,10 +1,7 @@
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
-import 'package:handmade_ecommerce_app/core/models/order_status.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
-
-export 'package:handmade_ecommerce_app/core/models/order_status.dart';
 
 class CustomerOrderModel {
   final CustomerModel customer;
@@ -34,7 +31,8 @@ class CustomerOrderModel {
   List<ProductModel> get items => products;
 
   String get paymentStatus {
-    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery') return 'pending';
+    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery')
+      return 'pending';
     return 'paid';
   }
 
@@ -60,7 +58,10 @@ class CustomerOrderModel {
     return DateTime.tryParse(value?.toString() ?? '') ?? DateTime.now();
   }
 
-  static Map<String, dynamic> _buildCustomerMap(Map<String, dynamic> map, Map<String, dynamic> customerMap) {
+  static Map<String, dynamic> _buildCustomerMap(
+    Map<String, dynamic> map,
+    Map<String, dynamic> customerMap,
+  ) {
     if (customerMap.isNotEmpty) return customerMap;
     return {
       'fullName': map['customerName'] ?? map['fullName'] ?? map['name'] ?? '',
@@ -71,11 +72,17 @@ class CustomerOrderModel {
     };
   }
 
-  static Map<String, dynamic> _buildPaymentMap(Map<String, dynamic> map, Map<String, dynamic> paymentMap) {
+  static Map<String, dynamic> _buildPaymentMap(
+    Map<String, dynamic> map,
+    Map<String, dynamic> paymentMap,
+  ) {
     return {
       ...map,
       ...paymentMap,
-      'subtotalPrice': paymentMap['subtotalPrice'] ?? map['subtotalPrice'] ?? map['subtotal'],
+      'subtotalPrice':
+          paymentMap['subtotalPrice'] ??
+          map['subtotalPrice'] ??
+          map['subtotal'],
     };
   }
 
@@ -85,7 +92,9 @@ class CustomerOrderModel {
       (v) => v.name == (map['status'] ?? 'pending').toString(),
       orElse: () => OrderStatus.pending,
     );
-    final addressMap = _asStringKeyedMap(map['address'] ?? map['shippingAddress']);
+    final addressMap = _asStringKeyedMap(
+      map['address'] ?? map['shippingAddress'],
+    );
     final paymentMap = _asStringKeyedMap(map['payment']);
     final customerMap = _asStringKeyedMap(map['customer']);
 
@@ -93,7 +102,9 @@ class CustomerOrderModel {
       customer: CustomerModel.fromMap(_buildCustomerMap(map, customerMap)),
       products: products,
       status: orderStatus,
-      orderid: (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '').toString(),
+      orderid:
+          (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '')
+              .toString(),
       orderDate: _parseDate(map['orderDate'] ?? map['createdAt']),
       payment: PaymentDetailsModel.fromMap(_buildPaymentMap(map, paymentMap)),
       address: addressMap.isNotEmpty
@@ -108,17 +119,28 @@ class CustomerOrderModel {
   Map<String, dynamic> toMap() {
     final numMatch = RegExp(r"(\d+)").firstMatch(orderid);
     final orderNum = numMatch != null ? int.tryParse(numMatch.group(1)!) : null;
-    final items = products.map((p) => {
-      'productId': p.id, 'productName': p.name, 'price': p.price,
-      'quantity': p.quantity, 'sellerId': p.sellerId, 'subtotal': p.price * p.quantity,
-    }).toList();
+    final items = products
+        .map(
+          (p) => {
+            'productId': p.id,
+            'productName': p.name,
+            'price': p.price,
+            'quantity': p.quantity,
+            'sellerId': p.sellerId,
+            'subtotal': p.price * p.quantity,
+          },
+        )
+        .toList();
 
     return {
       'orderid': orderid,
       'orderNumber': orderNum,
       'items': items,
       'shippingAddress': {
-        'street': address.street, 'city': address.city, 'zipCode': address.zipCode, 'country': address.country,
+        'street': address.street,
+        'city': address.city,
+        'zipCode': address.zipCode,
+        'country': address.country,
       },
       'customerId': customer.id,
       'status': status.name,
@@ -136,4 +158,13 @@ class CustomerOrderModel {
       'updatedAt': DateTime.now().toIso8601String(),
     };
   }
+}
+
+enum OrderStatus {
+  pending,
+  confirmed,
+  preparing,
+  shipped,
+  delivered,
+  cancelled,
 }
