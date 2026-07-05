@@ -13,6 +13,8 @@ class SellerManageOrderCard extends StatelessWidget {
   final String buttonText;
   final bool isButtonFilled;
   final VoidCallback onButtonPressed;
+  final VoidCallback? onCancelPressed;
+  final VoidCallback? onTap;
 
   const SellerManageOrderCard({
     super.key,
@@ -26,23 +28,41 @@ class SellerManageOrderCard extends StatelessWidget {
     required this.buttonText,
     required this.isButtonFilled,
     required this.onButtonPressed,
+    this.onCancelPressed,
+    this.onTap,
   });
 
   Color _getStatusColor() {
     switch (status.toUpperCase()) {
+      case 'PENDING':
+        return const Color(0xFFD97706); // amber text
+      case 'SHIPPED':
       case 'PROCESSING':
         return const Color(0xFF2563EB); // blue text
-      default: // NEW, URGENT
-        return const Color(0xFFD97706); // amber text
+      case 'COMPLETED':
+      case 'DELIVERED':
+        return const Color(0xFF07880E); // green text
+      case 'CANCELLED':
+        return const Color(0xFFD32F2F); // red text
+      default:
+        return const Color(0xFF64748B); // grey text
     }
   }
 
   Color _getStatusBgColor() {
     switch (status.toUpperCase()) {
+      case 'PENDING':
+        return const Color(0xFFFEF3C7); // light amber bg
+      case 'SHIPPED':
       case 'PROCESSING':
         return const Color(0xFFDBEAFE); // light blue bg
-      default: // NEW, URGENT
-        return const Color(0xFFFEF3C7); // light amber bg
+      case 'COMPLETED':
+      case 'DELIVERED':
+        return const Color(0xFFE8F5E9); // light green bg
+      case 'CANCELLED':
+        return const Color(0xFFFFEBEE); // light red bg
+      default:
+        return const Color(0xFFF1F5F9); // light grey bg
     }
   }
 
@@ -55,8 +75,11 @@ class SellerManageOrderCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(12.r),
         border: Border.all(color: const Color(0xFFE2E8F0), width: 1),
       ),
-      child: Column(
-        children: [
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12.r),
+        child: Column(
+          children: [
           // Top Section
           Padding(
             padding: EdgeInsets.all(16.w),
@@ -176,44 +199,79 @@ class SellerManageOrderCard extends StatelessWidget {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
-                  timeAgo,
-                  style: TextStyle(
-                    color: const Color(0xFF64748B),
-                    fontSize: 12.sp,
-                    fontWeight: FontWeight.w400,
-                    fontFamily: 'Plus Jakarta Sans',
+                Expanded(
+                  child: Text(
+                    timeAgo,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: const Color(0xFF64748B),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Plus Jakarta Sans',
+                    ),
                   ),
                 ),
-                InkWell(
-                  onTap: onButtonPressed,
-                  borderRadius: BorderRadius.circular(8.r),
-                  child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
-                    decoration: BoxDecoration(
-                      color: isButtonFilled ? commonColor : Colors.transparent,
+                SizedBox(width: 8.w),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    if (onCancelPressed != null)
+                      Padding(
+                        padding: EdgeInsets.only(right: 8.w),
+                        child: InkWell(
+                          onTap: onCancelPressed,
+                          borderRadius: BorderRadius.circular(8.r),
+                          child: Container(
+                            padding: EdgeInsets.symmetric(horizontal: 14.w, vertical: 8.h),
+                            decoration: BoxDecoration(
+                              color: Colors.transparent,
+                              borderRadius: BorderRadius.circular(8.r),
+                              border: Border.all(color: const Color(0xFFD32F2F), width: 1),
+                            ),
+                            child: Text(
+                              'Cancel',
+                              style: TextStyle(
+                                color: const Color(0xFFD32F2F),
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Plus Jakarta Sans',
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    InkWell(
+                      onTap: onButtonPressed,
                       borderRadius: BorderRadius.circular(8.r),
-                      border: isButtonFilled
-                          ? null
-                          : Border.all(color: commonColor, width: 1),
-                    ),
-                    child: Text(
-                      buttonText,
-                      style: TextStyle(
-                        color: isButtonFilled ? Colors.white : commonColor,
-                        fontSize: 13.sp,
-                        fontWeight: FontWeight.w600,
-                        fontFamily: 'Plus Jakarta Sans',
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+                        decoration: BoxDecoration(
+                          color: isButtonFilled ? commonColor : Colors.transparent,
+                          borderRadius: BorderRadius.circular(8.r),
+                          border: isButtonFilled
+                              ? null
+                              : Border.all(color: commonColor, width: 1),
+                        ),
+                        child: Text(
+                          buttonText,
+                          style: TextStyle(
+                            color: isButtonFilled ? Colors.white : commonColor,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Plus Jakarta Sans',
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
               ],
             ),
           ),
         ],
       ),
-    );
-  }
+    ),
+  );
+}
 }

@@ -24,6 +24,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _categoryController = TextEditingController(text: 'Ceramics');
   final TextEditingController _priceController = TextEditingController();
+  final TextEditingController _stockController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
 
   final List<File> _selectedImages = [];
@@ -43,6 +44,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
     _titleController.dispose();
     _categoryController.dispose();
     _priceController.dispose();
+    _stockController.dispose();
     _descriptionController.dispose();
     super.dispose();
   }
@@ -98,10 +100,67 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 _buildTextField(
                   hint: 'e.g. Hand-painted Ceramic Serving Dish',
                   controller: _titleController,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Product title is required';
+                    }
+                    if (value.trim().length < 3) {
+                      return 'Title must be at least 3 characters';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: 20.h),
 
-                // Category and Price Row
+                // Category dropdown (full-width)
+                _buildLabel('Category'),
+                DropdownButtonFormField<String>(
+                  initialValue: _categoryController.text.isEmpty ? 'Ceramics' : _categoryController.text,
+                  dropdownColor: Colors.white,
+                  icon: Icon(Icons.keyboard_arrow_down,
+                      color: const Color(0xFF64748B), size: 20.w),
+                  decoration: InputDecoration(
+                    fillColor: Colors.white,
+                    filled: true,
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16.w,
+                      vertical: 14.h,
+                    ),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(8.r),
+                      borderSide: BorderSide(color: commonColor),
+                    ),
+                  ),
+                  items: sellerCategories.map((cat) {
+                    return DropdownMenuItem<String>(
+                      value: cat,
+                      child: Text(
+                        cat,
+                        style: TextStyle(
+                          fontSize: 14.sp,
+                          fontFamily: 'Plus Jakarta Sans',
+                          color: const Color(0xFF334155),
+                        ),
+                      ),
+                    );
+                  }).toList(),
+                  onChanged: (val) {
+                    if (val != null) {
+                      _categoryController.text = val;
+                    }
+                  },
+                ),
+                SizedBox(height: 20.h),
+
+                // Price and Stock Row
                 Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -109,49 +168,24 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Category'),
-                          DropdownButtonFormField<String>(
-                            value: _categoryController.text.isEmpty ? 'Ceramics' : _categoryController.text,
-                            dropdownColor: Colors.white,
-                            icon: Icon(Icons.keyboard_arrow_down,
-                                color: const Color(0xFF64748B), size: 20.w),
-                            decoration: InputDecoration(
-                              fillColor: Colors.white,
-                              filled: true,
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 14.h,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                                borderSide: const BorderSide(color: Color(0xFFE2E8F0)),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(8.r),
-                                borderSide: BorderSide(color: commonColor),
-                              ),
-                            ),
-                            items: sellerCategories.map((cat) {
-                              return DropdownMenuItem<String>(
-                                value: cat,
-                                child: Text(
-                                  cat,
-                                  style: TextStyle(
-                                    fontSize: 14.sp,
-                                    fontFamily: 'Plus Jakarta Sans',
-                                    color: const Color(0xFF334155),
-                                  ),
-                                ),
-                              );
-                            }).toList(),
-                            onChanged: (val) {
-                              if (val != null) {
-                                _categoryController.text = val;
+                          _buildLabel('Price (EGP)'),
+                          _buildTextField(
+                            hint: '450.00',
+                            controller: _priceController,
+                            prefixText: 'EGP',
+                            keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Price is required';
                               }
+                              final price = double.tryParse(value);
+                              if (price == null) {
+                                return 'Enter a valid number';
+                              }
+                              if (price < 0) {
+                                return 'Price cannot be negative';
+                              }
+                              return null;
                             },
                           ),
                         ],
@@ -162,12 +196,24 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Price (EGP)'),
+                          _buildLabel('Stock'),
                           _buildTextField(
-                            hint: '450.00',
-                            controller: _priceController,
-                            prefixText: 'EGP',
+                            hint: '10',
+                            controller: _stockController,
                             keyboardType: TextInputType.number,
+                            validator: (value) {
+                              if (value == null || value.trim().isEmpty) {
+                                return 'Stock is required';
+                              }
+                              final stock = int.tryParse(value);
+                              if (stock == null) {
+                                return 'Enter a valid integer';
+                              }
+                              if (stock < 0) {
+                                return 'Stock cannot be negative';
+                              }
+                              return null;
+                            },
                           ),
                         ],
                       ),
@@ -182,6 +228,15 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                   hint: 'Describe your product...',
                   controller: _descriptionController,
                   maxLines: 5,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Description is required';
+                    }
+                    if (value.trim().length < 10) {
+                      return 'Description must be at least 10 characters';
+                    }
+                    return null;
+                  },
                 ),
                 SizedBox(height: 24.h),
 
@@ -352,12 +407,13 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
     String? prefixText,
     TextEditingController? controller,
     TextInputType? keyboardType,
+    FormFieldValidator<String>? validator,
   }) {
     return TextFormField(
       controller: controller,
       maxLines: maxLines,
       keyboardType: keyboardType,
-      validator: (value) {
+      validator: validator ?? (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required';
         }
@@ -483,18 +539,20 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                     }
 
                     double price = double.tryParse(_priceController.text) ?? 0;
+                    int stock = int.tryParse(_stockController.text) ?? 0;
                     
-                    await context.read<SellerCubit>().addProductWithImages(
+                    final cubit = context.read<SellerCubit>();
+                    await cubit.addProductWithImages(
                       name: _titleController.text,
                       description: _descriptionController.text,
                       price: price,
-                      stock: 10,
+                      stock: stock,
                       category: _categoryController.text,
                       imageFiles: _selectedImages,
                     );
                     
                     // Check if the operation succeeded
-                    if (context.read<SellerCubit>().state is! SellerError) {
+                    if (mounted && cubit.state is! SellerError) {
                       Get.back(); // Return to previous screen only on success
                       Get.snackbar(
                         'Success',

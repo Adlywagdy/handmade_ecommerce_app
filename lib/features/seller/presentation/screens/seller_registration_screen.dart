@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 
@@ -108,11 +109,37 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               SizedBox(height: 16.h),
               
               _buildLabel('Email Address'),
-              _buildTextField(hint: 'e.g. seller@mail.com', controller: _emailController),
+              _buildTextField(
+                hint: 'e.g. seller@mail.com', 
+                controller: _emailController,
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Email is required';
+                  }
+                  final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+                  if (!emailRegex.hasMatch(value.trim())) {
+                    return 'Please enter a valid email address';
+                  }
+                  return null;
+                },
+              ),
               SizedBox(height: 16.h),
               
               _buildLabel('Password'),
-              _buildTextField(hint: 'Min 6 characters', isPassword: true, controller: _passwordController),
+              _buildTextField(
+                hint: 'Min 6 characters', 
+                isPassword: true, 
+                controller: _passwordController,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Password is required';
+                  }
+                  if (value.length < 6) {
+                    return 'Password must be at least 6 characters';
+                  }
+                  return null;
+                },
+              ),
               SizedBox(height: 24.h),
 
               // Shop Profile Section
@@ -257,6 +284,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
     Widget? suffixIcon,
     TextEditingController? controller,
     bool isPassword = false,
+    FormFieldValidator<String>? validator,
   }) {
     return TextFormField(
       controller: controller,
@@ -267,7 +295,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
         fontFamily: 'Plus Jakarta Sans',
         color: const Color(0xFF0F172A),
       ),
-      validator: (value) {
+      validator: validator ?? (value) {
         if (value == null || value.isEmpty) {
           return 'This field is required';
         }
@@ -449,14 +477,12 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          Get.snackbar(
-            'Success',
-            'Registration complete! Awaiting admin approval.',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
+          Get.offAllNamed(
+            AuthRedirectService.routeForRoleAndStatus(
+              state.role,
+              HiveHelper.getStatusBoxValue(),
+            ),
           );
-          // Go to dashboard or wait screen
-          Get.offAllNamed(AppRoutes.sellerdashboard);
         } else if (state is RegisterErrorState) {
           Get.snackbar(
             'Error',

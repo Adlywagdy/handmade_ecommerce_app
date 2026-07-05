@@ -76,13 +76,17 @@ class SellerOrderCard extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Text(
-                        orderId,
-                        style: TextStyle(
-                          color: const Color(0xFF0F172A),
-                          fontSize: 14.sp,
-                          fontFamily: 'Plus Jakarta Sans',
-                          fontWeight: FontWeight.w700,
+                      Flexible(
+                        child: Text(
+                          orderId,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: TextStyle(
+                            color: const Color(0xFF0F172A),
+                            fontSize: 14.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                       ),
                       SizedBox(width: 8.w),
@@ -110,6 +114,8 @@ class SellerOrderCard extends StatelessWidget {
                   SizedBox(height: 4.h),
                   Text(
                     '$productName • $timeAgo',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       color: const Color(0xFF94A3B8),
                       fontSize: 12.sp,

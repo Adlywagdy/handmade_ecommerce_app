@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../../core/theme/colors.dart';
 import '../../../../widgets/custom_action_button.dart';
 
@@ -22,14 +23,14 @@ class SellerActionButtons extends StatelessWidget {
     return Row(
       children: [
         ActionButton(
-          label: 'Approve',
+          label: AppLocalizations.of(context)!.admApproveBtn,
           color: greenDegree,
           isLoading: isBusy,
           onTap: onApprove,
         ),
         SizedBox(width: 12.w),
         ActionButton(
-          label: 'Reject',
+          label: AppLocalizations.of(context)!.admRejectBtn,
           color: redDegree,
           style: ActionButtonStyle.outlined,
           isLoading: isBusy,

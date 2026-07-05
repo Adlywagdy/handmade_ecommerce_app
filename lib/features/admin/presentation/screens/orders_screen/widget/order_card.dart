@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../models/orders_model.dart';
 import 'orders_status_badge.dart';
 
@@ -160,7 +161,7 @@ class _OrderInfo extends StatelessWidget {
               ),
             ),
             Text(
-              'Seller: ${order.sellerName ?? ''}',
+              AppLocalizations.of(context)!.admSellerLabel(order.sellerName ?? ''),
               style: TextStyle(fontSize: 11.sp, color: Colors.grey.shade500),
             ),
           ],

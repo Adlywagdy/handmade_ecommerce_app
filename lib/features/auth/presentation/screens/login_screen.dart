@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -41,16 +43,13 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _navigateByRole(String role) {
-    final userRole = role.toLowerCase();
-
-    if (userRole == 'seller') {
-      Get.offAllNamed(AppRoutes.sellerdashboard);
-    } else if (userRole == 'admin') {
-      Get.offAllNamed(AppRoutes.adminBottomBar);
-    } else {
-      Get.offAllNamed(AppRoutes.customerlayout);
-    }
+  void _redirectByRole(String? role) {
+    Get.offAllNamed(
+      AuthRedirectService.routeForRoleAndStatus(
+        role,
+        HiveHelper.getStatusBoxValue(),
+      ),
+    );
   }
 
   @override
@@ -79,16 +78,18 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   child: Image.asset('assets/icons/Icon1.png'),
                 ),
+
                 SizedBox(height: 20.h),
-                Text(
-                  'Welcome To SoulCrafts',
-                  style: AppTextStyles.t_30w700,
-                ),
+
+                Text('Welcome To SoulCrafts', style: AppTextStyles.t_30w700),
+
                 SizedBox(height: 16.h),
+
                 Text(
                   'Please enter your details to continue',
                   style: AppTextStyles.t_16w400.copyWith(color: darkblue),
                 ),
+
                 SizedBox(height: 30.h),
 
                 Customtextfield(
@@ -103,9 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Email is required';
                     }
+
                     if (!value.emailValid()) {
                       return 'Email isn’t valid';
                     }
+
                     return null;
                   },
                 ),
@@ -123,9 +126,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (value == null || value.isEmpty) {
                       return 'Password is required';
                     }
+
                     if (value.length < 6) {
                       return 'Password should be more than 5 letters';
                     }
+
                     return null;
                   },
                   label: 'Password',
@@ -144,100 +149,102 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
+                    if (!context.mounted) return;
+
                     if (state is LoginSuccessState) {
-                      showSnack(
-                      title: 'Welcome Back',
-                      message: 'You logged in successfully.',
-                      bgColor: Colors.green,
-                      icon: Icons.check_circle_outline,
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(context.l10n.loginSuccess)),
                       );
-                      _navigateByRole(state.role);
-                    } else if (state is LoginErrorState) {
-                       showSnack(
-                        title: 'Login Failed',
-                        message: state.message,
-                        bgColor: Colors.redAccent,
-                        icon: Icons.error_outline,
-                       );
 
-
+                      _redirectByRole(state.role);
                     } else if (state is GoogleLoginSuccessState) {
-                      showSnack(
-                        title: 'Google sign_in success',
-                        message: 'You logged in successfully.',
-                        bgColor: Colors.green,
-                        icon: Icons.error_outline,
-                       );
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(context.l10n.googleSignInSuccess),
+                        ),
+                      );
 
-                      _navigateByRole(state.role);
+                      _redirectByRole(state.role);
+                    } else if (state is LoginErrorState) {
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
                     } else if (state is GoogleLoginErrorState) {
-                     showSnack(
-                        title: 'Login Failed',
-                        message: state.message,
-                        bgColor: Colors.redAccent,
-                        icon: Icons.error_outline,
-                       );
+                      ScaffoldMessenger.of(
+                        context,
+                      ).showSnackBar(SnackBar(content: Text(state.message)));
                     }
                   },
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 
-                    return CustomElevatedButton(
-                      onPressed: isLoading
-                          ? null
-                          : () {
-                              if (_formkey.currentState!.validate()) {
-                                context.read<AuthCubit>().login(
+                    return Column(
+                      children: [
+                        CustomElevatedButton(
+                          onPressed: isLoading
+                              ? null
+                              : () {
+                                  if (_formkey.currentState!.validate()) {
+                                    context.read<AuthCubit>().login(
                                       email: _emailController.text.trim(),
                                       password: _passwordController.text,
                                     );
-                              }
-                            },
-                      buttoncolor: primaryColor,
-                      child: isLoading
-                          ? const CircularProgressIndicator(color: Colors.white)
-                          : Text(
-                              'Sign In',
-                              style: AppTextStyles.t_16w700.copyWith(
-                                color: Colors.white,
+                                  }
+                                },
+                          buttoncolor: primaryColor,
+                          child: isLoading
+                              ? const CircularProgressIndicator(
+                                  color: Colors.white,
+                                )
+                              : Text(
+                                  context.l10n.signIn,
+                                  style: AppTextStyles.t_16w700.copyWith(
+                                    color: Colors.white,
+                                  ),
+                                ),
+                        ),
+
+                        SizedBox(height: 30.h),
+
+                        Row(
+                          children: [
+                            const OrDivider(),
+                            Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8,
+                              ).w,
+                              child: Text(
+                                context.l10n.orContinueWith,
+                                style: AppTextStyles.t_14w400.copyWith(
+                                  color: darkblue,
+                                ),
                               ),
                             ),
+                            const OrDivider(),
+                          ],
+                        ),
+
+                        SizedBox(height: 20.h),
+
+                        Row(
+                          children: [
+                            SocialButton(
+                              text: 'Google',
+                              icon: Icons.g_mobiledata,
+                              onTap: isLoading
+                                  ? null
+                                  : () {
+                                      context
+                                          .read<AuthCubit>()
+                                          .signInWithGoogle();
+                                    },
+                            ),
+                            SizedBox(width: 10.w),
+                          ],
+                        ),
+                      ],
                     );
                   },
-                ),
-
-                SizedBox(height: 30.h),
-
-                Row(
-                  children: [
-                    const OrDivider(),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8).w,
-                      child: Text(
-                        'Or continue with',
-                        style: AppTextStyles.t_14w400.copyWith(color: darkblue),
-                      ),
-                    ),
-                    const OrDivider(),
-                  ],
-                ),
-
-                SizedBox(height: 20.h),
-
-                Row(
-                  children: [
-                    SocialButton(
-                      text: 'Google',
-                      icon: Icons.g_mobiledata,
-                      onTap: () {
-                        final state = context.read<AuthCubit>().state;
-                        if (state is! AuthLoading) {
-                          context.read<AuthCubit>().signInWithGoogle();
-                        }
-                      },
-                    ),
-                    SizedBox(width: 10.h),
-                  ],
                 ),
 
                 SizedBox(height: 30.h),
@@ -249,7 +256,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       'Don’t have an account ',
                       style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                     ),
-                    SizedBox(width: 10.h),
+                    SizedBox(width: 10.w),
                     ButtomText(
                       onTap: () {
                         Get.toNamed(AppRoutes.register);

@@ -1,14 +1,14 @@
-import 'package:flutter/widgets.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import '../cubit/notifications_cubit.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/foundation.dart';
 import '../models/notifications_model.dart';
 
-/// Generates notifications from app events and adds them to the Cubit
+/// Generates notifications from app events and writes them directly to the recipient's Firestore collection.
+/// From there, the recipient's app (via NotificationsCubit stream) will receive them reactively.
 ///
 /// Usage example:
 /// ```dart
 /// NotificationGenerator.onOrderCreated(
-///   context: context,
+///   sellerId: 'seller_123',
 ///   orderId: '#ORD-2841',
 ///   customerName: 'Ahmed',
 ///   productName: 'Leather Handbag',
@@ -17,27 +17,69 @@ import '../models/notifications_model.dart';
 class NotificationGenerator {
   NotificationGenerator._();
 
+  static final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
   /// Generate a unique notification ID
   static String _generateId() {
     return 'n-${DateTime.now().millisecondsSinceEpoch}';
   }
 
-  /// Add notification to the cubit
-  static void _emit(BuildContext context, NotificationModel notification) {
-    context.read<NotificationsCubit>().addNotification(notification);
+  /// Get user UID from users collection matching the email
+  static Future<String?> _getUserIdByEmail(String email) async {
+    try {
+      final query = await _firestore
+          .collection('users')
+          .where('email', isEqualTo: email)
+          .limit(1)
+          .get();
+      if (query.docs.isNotEmpty) {
+        return query.docs.first.id;
+      }
+    } catch (e) {
+      debugPrint('Error getting UID by email: $e');
+    }
+    return null;
+  }
+
+  /// Resolve email to UID if needed
+  static Future<String?> _resolveUserId(String idOrEmail) async {
+    if (idOrEmail.contains('@')) {
+      return await _getUserIdByEmail(idOrEmail);
+    }
+    return idOrEmail;
+  }
+
+  /// Write notification to Firestore under the recipient's collection
+  static Future<void> _sendToUser(String idOrEmail, NotificationModel notification) async {
+    try {
+      final userId = await _resolveUserId(idOrEmail);
+      if (userId == null) {
+        debugPrint('❌ Could not resolve user ID for: $idOrEmail');
+        return;
+      }
+      await _firestore
+          .collection('users')
+          .doc(userId)
+          .collection('notifications')
+          .doc(notification.id)
+          .set(notification.toJson());
+      debugPrint('🔔 Notification successfully written to Firestore for user: $userId');
+    } catch (e) {
+      debugPrint('❌ Failed to write notification to Firestore: $e');
+    }
   }
 
   // ─── Seller Notifications ───
 
   /// When a new order is placed → notify the seller
-  static void onOrderCreated({
-    required BuildContext context,
+  static Future<void> onOrderCreated({
+    required String sellerId,
     required String orderId,
     required String customerName,
     required String productName,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      sellerId,
       NotificationModel(
         id: _generateId(),
         title: 'New Order Received! 🛒',
@@ -50,15 +92,15 @@ class NotificationGenerator {
   }
 
   /// When a product review is posted → notify the seller
-  static void onProductReview({
-    required BuildContext context,
+  static Future<void> onProductReview({
+    required String sellerId,
     required String productName,
     required int rating,
     required String reviewerName,
-  }) {
+  }) async {
     final stars = '★' * rating + '☆' * (5 - rating);
-    _emit(
-      context,
+    await _sendToUser(
+      sellerId,
       NotificationModel(
         id: _generateId(),
         title: 'New Review on $productName ⭐',
@@ -70,14 +112,14 @@ class NotificationGenerator {
   }
 
   /// When a payment is received → notify the seller
-  static void onPaymentReceived({
-    required BuildContext context,
+  static Future<void> onPaymentReceived({
+    required String sellerId,
     required String amount,
     required String orderId,
     required String productName,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      sellerId,
       NotificationModel(
         id: _generateId(),
         title: 'Payment Received 💵',
@@ -90,13 +132,13 @@ class NotificationGenerator {
   }
 
   /// When stock is low → notify the seller
-  static void onLowStock({
-    required BuildContext context,
+  static Future<void> onLowStock({
+    required String sellerId,
     required String productName,
     required int remaining,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      sellerId,
       NotificationModel(
         id: _generateId(),
         title: 'Low Stock Alert ⚠️',
@@ -110,11 +152,11 @@ class NotificationGenerator {
   // ─── Customer Notifications ───
 
   /// When an order status changes → notify the customer
-  static void onOrderStatusChanged({
-    required BuildContext context,
+  static Future<void> onOrderStatusChanged({
+    required String customerId,
     required String orderId,
     required String newStatus,
-  }) {
+  }) async {
     final NotificationType type;
     final String title;
     final String body;
@@ -147,8 +189,8 @@ class NotificationGenerator {
         body = 'Order $orderId status changed to "$newStatus".';
     }
 
-    _emit(
-      context,
+    await _sendToUser(
+      customerId,
       NotificationModel(
         id: _generateId(),
         title: title,
@@ -161,15 +203,15 @@ class NotificationGenerator {
   }
 
   /// When a new message is received → notify the other party
-  static void onNewMessage({
-    required BuildContext context,
+  static Future<void> onNewMessage({
+    required String recipientId,
     required String senderName,
     required String messagePreview,
     String? chatId,
     bool isSeller = false,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      recipientId,
       NotificationModel(
         id: _generateId(),
         title: isSeller
@@ -185,14 +227,14 @@ class NotificationGenerator {
     );
   }
 
-  /// When a new coupon is available → notify customers
-  static void onNewCoupon({
-    required BuildContext context,
+  /// When a new coupon is available → notify customer
+  static Future<void> onNewCoupon({
+    required String customerId,
     required String code,
     required String discount,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      customerId,
       NotificationModel(
         id: _generateId(),
         title: 'New Coupon Just for You! 🎟️',
@@ -203,15 +245,34 @@ class NotificationGenerator {
     );
   }
 
-  /// When a product price drops → notify interested customers
-  static void onPriceDrop({
-    required BuildContext context,
+  /// Request customer to review a product
+  static Future<void> onReviewRequest({
+    required String customerId,
+    required String productName,
+    required String productId,
+  }) async {
+    await _sendToUser(
+      customerId,
+      NotificationModel(
+        id: _generateId(),
+        title: 'Review your purchase ⭐',
+        body: 'How was your experience with "$productName"? Tap to leave a review.',
+        type: NotificationType.productReview,
+        createdAt: DateTime.now(),
+        targetId: productId,
+      ),
+    );
+  }
+
+  /// When a product price drops → notify interested customer
+  static Future<void> onPriceDrop({
+    required String customerId,
     required String productName,
     required String oldPrice,
     required String newPrice,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      customerId,
       NotificationModel(
         id: _generateId(),
         title: 'Price Drop Alert! 💰',
@@ -225,13 +286,13 @@ class NotificationGenerator {
   // ─── Admin Notifications ───
 
   /// When a new seller registers → notify admin
-  static void onNewSellerRegistered({
-    required BuildContext context,
+  static Future<void> onNewSellerRegistered({
+    required String adminId,
     required String sellerName,
     String? sellerId,
-  }) {
-    _emit(
-      context,
+  }) async {
+    await _sendToUser(
+      adminId,
       NotificationModel(
         id: _generateId(),
         title: 'New Seller Registration 👤',

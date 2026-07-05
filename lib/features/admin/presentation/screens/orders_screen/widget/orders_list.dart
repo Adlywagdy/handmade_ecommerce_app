@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../cubit/admin_cubit.dart';
 import '../../../../models/orders_model.dart';
@@ -18,7 +19,7 @@ class OrdersList extends StatelessWidget {
     if (orders.isEmpty) {
       return Center(
         child: Text(
-          'No orders found',
+          AppLocalizations.of(context)!.admNoOrdersFound,
           style: TextStyle(fontSize: 14.sp, color: subTitleColor),
         ),
       );

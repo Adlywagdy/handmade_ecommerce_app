@@ -42,15 +42,6 @@ class NotificationsLocalService {
     await saveNotifications(updatedList);
   }
 
-  /// Check if notifications have been seeded (first app launch)
-  static bool isSeeded() {
-    return _box.get('is_seeded', defaultValue: false) as bool;
-  }
-
-  /// Mark as seeded after first-time mock data load
-  static Future<void> markAsSeeded() async {
-    await _box.put('is_seeded', true);
-  }
 
   /// Clear all data from the box
   static Future<void> clearAll() async {

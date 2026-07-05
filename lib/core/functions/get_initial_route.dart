@@ -1,4 +1,5 @@
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 
 Future<String> getInitialRoute() async {
@@ -13,5 +14,8 @@ Future<String> getInitialRoute() async {
     return AppRoutes.login;
   }
 
-  return AppRoutes.decider;
+  return AuthRedirectService.routeForRoleAndStatus(
+    HiveHelper.getRoleBoxValue(),
+    HiveHelper.getStatusBoxValue(),
+  );
 }

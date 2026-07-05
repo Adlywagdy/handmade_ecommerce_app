@@ -8,8 +8,6 @@ abstract class AppRoutes {
   static const String forgotPassword = '/forgotPassword';
   static const String verifyPassword = '/verifyPassword';
 
-  static const String decider = '/decider';
-
   static const String customerlayout = '/customer/layout';
 
   static const String customerSearch = '/customer/search';
@@ -21,6 +19,7 @@ abstract class AppRoutes {
   static const String customerWriteReview = '/customer/write-review';
 
   static const String sellerdashboard = '/sellerdashboard';
+  static const String sellerPending = '/seller/pending';
   static const String selleraddproduct = '/seller/add-product';
   static const String selleraddoreditproduct = '/seller/add-or-edit-product';
   static const String sellerorders = '/seller/orders';

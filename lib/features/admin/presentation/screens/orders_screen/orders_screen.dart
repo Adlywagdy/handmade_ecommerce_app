@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/orders_screen/widget/orders_list.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
@@ -19,7 +20,7 @@ class AdminOrdersScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Orders',
+            AppLocalizations.of(context)!.admOrders,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
@@ -37,19 +38,19 @@ class AdminOrdersScreen extends StatelessWidget {
             indicatorWeight: 3,
             labelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w700),
             unselectedLabelStyle: TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500),
-            tabs: const [
-              Tab(text: 'All'),
-              Tab(text: 'Pending'),
-              Tab(text: 'Active'),
-              Tab(text: 'Delivered'),
-              Tab(text: 'Cancelled'),
+            tabs: [
+              Tab(text: AppLocalizations.of(context)!.admOrdersTabAll),
+              Tab(text: AppLocalizations.of(context)!.admOrdersTabPending),
+              Tab(text: AppLocalizations.of(context)!.admOrdersTabActive),
+              Tab(text: AppLocalizations.of(context)!.admOrdersTabDelivered),
+              Tab(text: AppLocalizations.of(context)!.admOrdersTabCancelled),
             ],
           ),
         ),
         body: Column(
           children: [
             CustomSearchBar(
-              hintText: 'Search order ID or name',
+              hintText: AppLocalizations.of(context)!.admSearchOrderPlaceholder,
               onChanged: (v) => context.read<AdminCubit>().setOrdersQuery(v),
             ),
             Expanded(

@@ -11,6 +11,7 @@ import 'package:handmade_ecommerce_app/features/admin/presentation/widgets/dashb
 import 'package:handmade_ecommerce_app/features/admin/presentation/widgets/dashboard_header.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/widgets/dashboard_pending_action_card.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/widgets/dashboard_stats_grid.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 class DashboardBody extends StatelessWidget {
   final AdminCubit cubit;
@@ -30,7 +31,7 @@ class DashboardBody extends StatelessWidget {
           const DashboardHeader(),
           SizedBox(height: 20.h),
           Text(
-            'Good morning, Admin',
+            AppLocalizations.of(context)!.admGreetingMorning,
             style: TextStyle(
               fontSize: 24.sp,
               fontWeight: FontWeight.bold,
@@ -42,35 +43,35 @@ class DashboardBody extends StatelessWidget {
             status: [
               StatusItem(
                 iconPath: 'assets/images/total_users_icon.svg',
-                label: 'TOTAL USERS',
+                label: AppLocalizations.of(context)!.admStatLabelTotalUsers,
                 value: "${stats?.users ?? 0}",
               ),
               StatusItem(
                 iconPath: 'assets/images/sellers.svg',
-                label: 'TOTAL SELLERS',
+                label: AppLocalizations.of(context)!.admStatLabelTotalSellers,
                 value: "${stats?.sellers ?? 0}",
               ),
               StatusItem(
                 iconPath: 'assets/images/total_orders_icon.svg',
-                label: 'TOTAL ORDERS',
+                label: AppLocalizations.of(context)!.admStatLabelTotalOrders,
                 value:  "${stats?.orders ?? 0}",
               ),
               StatusItem(
                 iconPath: 'assets/images/revenue_icon.svg',
-                label: 'REVENUE',
+                label: AppLocalizations.of(context)!.admStatLabelRevenue,
                 value: "${stats?.revenue ?? 0}",
               ),
             ],
           ),
           SizedBox(height: 12.h),
           DashboardCommissionCard(
-            label: 'Platform Commission',
+            label: AppLocalizations.of(context)!.admLabelPlatformCommission,
             value: '${(rate * 100).toStringAsFixed(1)}%',
             onEditTap: () => showCommissionEditor(context, rate),
           ),
           SizedBox(height: 24.h),
           Text(
-            'Pending Actions',
+            AppLocalizations.of(context)!.admSectionPendingActions,
             style: TextStyle(
               fontSize: 18.sp,
               fontWeight: FontWeight.w700,
@@ -80,8 +81,9 @@ class DashboardBody extends StatelessWidget {
           SizedBox(height: 12.h),
           DashboardPendingActionCard(
             icon: Icons.warning_amber_rounded,
-            title: '${cubit.pendingSellersCount} Sellers awaiting approval',
-            subtitle: 'New artisan registrations',
+            title: AppLocalizations.of(context)!
+                .admPendingSellersTitle(cubit.pendingSellersCount),
+            subtitle: AppLocalizations.of(context)!.admPendingSellersSubtitle,
             onButtonTap: () => Get.to( () => BlocProvider.value(
                   value: cubit,
                   child: const AdminSellersScreen(),
@@ -90,8 +92,9 @@ class DashboardBody extends StatelessWidget {
           SizedBox(height: 10.h),
           DashboardPendingActionCard(
             icon: Icons.inventory_2_outlined,
-            title: '${cubit.pendingProductsCount} Products awaiting review',
-            subtitle: 'Quality control check required',
+            title: AppLocalizations.of(context)!
+                .admPendingProductsTitle(cubit.pendingProductsCount),
+            subtitle: AppLocalizations.of(context)!.admPendingProductsSubtitle,
             onButtonTap: () => Get.to(() => BlocProvider.value(
                   value: cubit,
                   child: const AdminProductsScreen(),

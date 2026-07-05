@@ -61,7 +61,7 @@ class SellerImageUpload extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(12.w),
               decoration: BoxDecoration(
-                color: const Color(0xff8B4513).withOpacity(0.1),
+                color: const Color(0xff8B4513).withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(12.r),
               ),
               child: Icon(

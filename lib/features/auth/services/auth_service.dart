@@ -1,6 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:handmade_ecommerce_app/core/constants/seller_status.dart';
+import 'package:handmade_ecommerce_app/core/constants/user_roles.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/auth_session.dart';
+import 'package:handmade_ecommerce_app/features/auth/models/seller_application.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -20,7 +27,26 @@ class AuthService {
     _googleInitialized = true;
   }
 
-  Future<String> login({
+  Future<void> _updateFCMToken(String uid) async {
+    try {
+      final token = await FirebaseMessaging.instance.getToken();
+      print("======== FCM UPDATE ========");
+      print("UID: $uid");
+      print("TOKEN: $token");
+      if (token != null) {
+        await _firestore.collection('users').doc(uid).set({
+          'fcmToken': token,
+        }, SetOptions(merge: true));
+        print("✅ FCM TOKEN SAVED");
+      } else {
+        print("❌ TOKEN IS NULL");
+      }
+    } catch (e) {
+      print("❌ ERROR: $e");
+    }
+  }
+
+  Future<AuthSession> login({
     required String email,
     required String password,
   }) async {
@@ -51,14 +77,23 @@ class AuthService {
       );
     }
 
-    return role;
+    await _updateFCMToken(user.uid);
+
+    return AuthSession(role: role, status: data?['status'] as String?);
   }
 
-  Future<String> signInWithGoogle() async {
+  Future<AuthSession> signInWithGoogle() async {
     await _initGoogleSignIn();
 
     try {
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+      final GoogleSignInAccount? googleUser = await _googleSignIn
+          .authenticate();
+      if (googleUser == null) {
+        throw FirebaseAuthException(
+          code: 'google-sign-in-cancelled',
+          message: 'Google sign-in cancelled',
+        );
+      }
 
       final GoogleSignInAuthentication googleAuth = googleUser.authentication;
 
@@ -94,7 +129,9 @@ class AuthService {
         );
       }
 
-      return role;
+      await _updateFCMToken(user.uid);
+
+      return AuthSession(role: role, status: data?['status'] as String?);
     } on GoogleSignInException catch (e) {
       if (e.code == GoogleSignInExceptionCode.canceled) {
         throw FirebaseAuthException(
@@ -124,199 +161,150 @@ class AuthService {
   //   await user.updateDisplayName(fullName);
 
   //   await _firestore.collection('users').doc(user.uid).set({
-      
+
   //     'uid': user.uid,
   //     'fullName': fullName,
   //     'email': email,
   //     'role': role,
   //     'provider': 'email',
   //     'createdAt': FieldValue.serverTimestamp(),
-      
+
   //   });
   // }
   Future<void> register({
-  required String fullName,
-  required String email,
-  required String password,
-  required String role,
-}) async {
-  final UserCredential credential =
-      await _firebaseAuth.createUserWithEmailAndPassword(
-    email: email,
-    password: password,
-  );
+    required String fullName,
+    required String email,
+    required String password,
+    required String role,
+    SellerApplication? sellerApplication,
+  }) async {
+    final UserCredential credential = await _firebaseAuth
+        .createUserWithEmailAndPassword(email: email, password: password);
 
-  final User user = credential.user!;
+    final User user = credential.user!;
 
-  await user.updateDisplayName(fullName);
-
-  await _firestore.collection('users').doc(user.uid).set({
-    'uid': user.uid,
-    'fullName': fullName,
-    'email': email,
-    'role': role,
-    'provider': 'email',
-    'createdAt': FieldValue.serverTimestamp(),
-  });
-
-  if (role == 'seller') {
-    await _firestore.collection('sellers').doc(user.uid).set({
-      'name': fullName,
-      'ownerName': fullName,
-      'email': email,
-      'phone': '',
-      'specialty': 'Handmade Products',
-      'city': '',
-      'country': '',
-      'avatar': '',
-      'badge': 'New Seller',
-      'rating': 0.0,
-      'totalSales': 0,
-      'totalProducts': 0,
-      'walletBalance': 0.0,
-      'commissionRate': 0.10,
-      'isActive': false,
-      'status': 'pending',
-      'submittedAt': FieldValue.serverTimestamp(),
-      'createdAt': FieldValue.serverTimestamp(),
-    });
-  }
-}
-
-  // Future<String> registerWithGoogle({required String selectedRole}) async {
-  //   await _initGoogleSignIn();
-
-  //   try {
-  //     final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-
-  //     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-
-  //     final AuthCredential credential = GoogleAuthProvider.credential(
-  //       idToken: googleAuth.idToken,
-  //     );
-
-  //     final UserCredential userCredential = await _firebaseAuth
-  //         .signInWithCredential(credential);
-
-  //     final bool isNewUser =
-  //         userCredential.additionalUserInfo?.isNewUser ?? false;
-
-  //     final User user = userCredential.user!;
-
-  //     if (!isNewUser) {
-  //       await signOut();
-  //       throw FirebaseAuthException(
-  //         code: 'account-already-exists',
-  //         message: 'You are already registered. Please log in instead.',
-  //       );
-  //     }
-
-  //     await _firestore.collection('users').doc(user.uid).set({
-  //       'uid': user.uid,
-  //       'fullName': user.displayName ?? '',
-  //       'email': user.email ?? '',
-  //       'role': selectedRole,
-  //       'provider': 'google',
-  //       'createdAt': FieldValue.serverTimestamp(),
-  //     });
-
-  //     return selectedRole;
-  //   } on GoogleSignInException catch (e) {
-  //     if (e.code == GoogleSignInExceptionCode.canceled) {
-  //       throw FirebaseAuthException(
-  //         code: 'google-sign-in-cancelled',
-  //         message: 'Google sign-in cancelled',
-  //       );
-  //     }
-
-  //     throw FirebaseAuthException(
-  //       code: 'google-sign-in-failed',
-  //       message: e.description ?? 'Google sign-in failed',
-  //     );
-  //   }
-  // }
-  Future<String> registerWithGoogle({required String selectedRole}) async {
-  await _initGoogleSignIn();
-
-  try {
-    final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-
-    final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-
-    final AuthCredential credential = GoogleAuthProvider.credential(
-      idToken: googleAuth.idToken,
-    );
-
-    final UserCredential userCredential =
-        await _firebaseAuth.signInWithCredential(credential);
-
-    final bool isNewUser =
-        userCredential.additionalUserInfo?.isNewUser ?? false;
-
-    final User user = userCredential.user!;
-
-    if (!isNewUser) {
-      await signOut();
-      throw FirebaseAuthException(
-        code: 'account-already-exists',
-        message: 'You are already registered. Please log in instead.',
-      );
-    }
-
-    final fullName = user.displayName ?? '';
-    final email = user.email ?? '';
+    await user.updateDisplayName(fullName);
 
     await _firestore.collection('users').doc(user.uid).set({
       'uid': user.uid,
       'fullName': fullName,
       'email': email,
-      'role': selectedRole,
-      'provider': 'google',
+      'role': role,
+      'provider': 'email',
+      if (role == UserRoles.seller) 'status': SellerStatus.pending,
+      if (role == UserRoles.seller &&
+          (sellerApplication?.phone.isNotEmpty ?? false))
+        'phone': sellerApplication!.phone,
       'createdAt': FieldValue.serverTimestamp(),
     });
 
-    if (selectedRole == 'seller') {
-      await _firestore.collection('sellers').doc(user.uid).set({
-        'name': fullName.isNotEmpty ? fullName : 'Seller',
-        'ownerName': fullName.isNotEmpty ? fullName : 'Seller',
-        'email': email,
-        'phone': user.phoneNumber ?? '',
-        'specialty': 'Handmade Products',
-        'city': '',
-        'country': '',
-        'avatar': user.photoURL ?? '',
-        'badge': 'New Seller',
-        'rating': 0.0,
-        'totalSales': 0,
-        'totalProducts': 0,
-        'walletBalance': 0.0,
-        'commissionRate': 0.10,
-        'isActive': false,
-        'status': 'pending',
-        'submittedAt': FieldValue.serverTimestamp(),
-        'createdAt': FieldValue.serverTimestamp(),
-      });
-    }
-
-    return selectedRole;
-  } on GoogleSignInException catch (e) {
-    if (e.code == GoogleSignInExceptionCode.canceled) {
-      throw FirebaseAuthException(
-        code: 'google-sign-in-cancelled',
-        message: 'Google sign-in cancelled',
+    if (role == UserRoles.seller) {
+      await _writeSellerProfile(
+        uid: user.uid,
+        name: fullName,
+        email: email,
+        application: sellerApplication,
       );
     }
-
-    throw FirebaseAuthException(
-      code: 'google-sign-in-failed',
-      message: e.description ?? 'Google sign-in failed',
-    );
   }
-}
+
+  Future<void> _writeSellerProfile({
+    required String uid,
+    required String name,
+    required String email,
+    SellerApplication? application,
+  }) async {
+    await _firestore.collection('sellers').doc(uid).set({
+      'uid': uid,
+      'name': name,
+      'email': email,
+      'status': SellerStatus.pending,
+      'isActive': false,
+      if (application != null) 'specialty': application.specialty,
+      if (application != null && application.phone.isNotEmpty)
+        'phone': application.phone,
+      if (application != null && application.city.isNotEmpty)
+        'city': application.city,
+      if (application != null && application.country.isNotEmpty)
+        'country': application.country,
+      'submittedAt': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+
+    await _updateFCMToken(uid);
+  }
+
+  Future<String> registerWithGoogle({required String selectedRole}) async {
+    await _initGoogleSignIn();
+
+    try {
+      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+
+      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+      final AuthCredential credential = GoogleAuthProvider.credential(
+        idToken: googleAuth.idToken,
+      );
+
+      final UserCredential userCredential = await _firebaseAuth
+          .signInWithCredential(credential);
+      final bool isNewUser =
+          userCredential.additionalUserInfo?.isNewUser ?? false;
+
+      final User user = userCredential.user!;
+
+      if (!isNewUser) {
+        await signOut();
+        throw FirebaseAuthException(
+          code: 'account-already-exists',
+          message: 'You are already registered. Please log in instead.',
+        );
+      }
+
+      final fullName = user.displayName ?? '';
+      final email = user.email ?? '';
+
+      await _firestore.collection('users').doc(user.uid).set({
+        'uid': user.uid,
+        'fullName': user.displayName ?? '',
+        'email': user.email ?? '',
+        'role': selectedRole,
+        'provider': 'google',
+        if (selectedRole == UserRoles.seller) 'status': SellerStatus.pending,
+        'createdAt': FieldValue.serverTimestamp(),
+      });
+
+      await _updateFCMToken(user.uid);
+
+      if (selectedRole == UserRoles.seller) {
+        await _writeSellerProfile(
+          uid: user.uid,
+          name: user.displayName ?? '',
+          email: user.email ?? '',
+        );
+      }
+
+      return selectedRole;
+    } on GoogleSignInException catch (e) {
+      if (e.code == GoogleSignInExceptionCode.canceled) {
+        throw FirebaseAuthException(
+          code: 'google-sign-in-cancelled',
+          message: 'Google sign-in cancelled',
+        );
+      }
+
+      throw FirebaseAuthException(
+        code: 'google-sign-in-failed',
+        message: e.description ?? 'Google sign-in failed',
+      );
+    }
+  }
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();
     await _firebaseAuth.signOut();
+    HiveHelper.clearRoleBox();
+    HiveHelper.clearStatusBox();
   }
 
   Future<void> sendPasswordReset({required String email}) async {

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../models/products_model.dart';
 import 'action_button.dart';
@@ -169,7 +170,7 @@ class _ProductCardActions extends StatelessWidget {
         children: [
           Expanded(
             child: ProductActionButton(
-              label: 'APPROVE',
+              label: AppLocalizations.of(context)!.admApproveAction,
               color: greenDegree,
               onTap: onApprove,
               isLoading: isProcessing,
@@ -178,7 +179,7 @@ class _ProductCardActions extends StatelessWidget {
           SizedBox(width: 6.w),
           Expanded(
             child: ProductActionButton(
-              label: 'REJECT',
+              label: AppLocalizations.of(context)!.admRejectAction,
               color: redDegree,
               onTap: onReject,
               isLoading: isProcessing,

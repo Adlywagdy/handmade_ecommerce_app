@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
 import '../models/seller_model.dart';
 
 class SellerFirestoreService {
@@ -39,19 +40,26 @@ class SellerFirestoreService {
     }
   }
 
+  /// Stream all products for the current seller
+  Stream<List<SellerProductModel>> getProductsStream() {
+    return _db
+        .collection('products')
+        .where('sellerId', isEqualTo: currentSellerId)
+        .snapshots()
+        .map((snapshot) {
+      return snapshot.docs
+          .map((doc) => SellerProductModel.fromMap(doc.data(), doc.id))
+          .toList();
+    });
+  }
+
   /// Upload images to Firebase Storage and return the download URLs
   Future<List<String>> uploadProductImages(List<File> images) async {
     List<String> downloadUrls = [];
     try {
       for (var image in images) {
-        String fileName =
-            DateTime.now().millisecondsSinceEpoch.toString() +
-            '_' +
-            image.path.split('/').last;
-        Reference ref = _storage.ref().child(
-          'product_images/$currentSellerId/$fileName',
-        );
-
+        String fileName = '${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
+        Reference ref = _storage.ref().child('product_images/$currentSellerId/$fileName');
         UploadTask uploadTask = ref.putFile(image);
         TaskSnapshot snapshot = await uploadTask;
         String downloadUrl = await snapshot.ref.getDownloadURL();
@@ -79,7 +87,37 @@ class SellerFirestoreService {
   /// Update an existing product
   Future<void> updateProduct(SellerProductModel product) async {
     try {
-      await _db.collection('products').doc(product.id).update(product.toMap());
+      // Get the old product to check if price dropped
+      final oldDoc = await _db.collection('products').doc(product.id).get();
+      double oldPrice = 0;
+      if (oldDoc.exists) {
+        oldPrice = (oldDoc.data()?['price'] ?? 0).toDouble();
+      }
+
+      await _db.collection('products').doc(product.id).update({
+        ...product.toMap(),
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+
+      // If price dropped, notify wishlist users
+      if (oldPrice > 0 && product.price < oldPrice) {
+        final wishlistItems = await _db
+            .collectionGroup('items')
+            .where('productId', isEqualTo: product.id)
+            .get();
+
+        for (final doc in wishlistItems.docs) {
+          final userId = doc.reference.parent.parent?.id;
+          if (userId != null) {
+            NotificationGenerator.onPriceDrop(
+              customerId: userId,
+              productName: product.name,
+              oldPrice: oldPrice.toString(),
+              newPrice: product.price.toString(),
+            );
+          }
+        }
+      }
     } catch (e) {
       throw Exception('Failed to update product: $e');
     }
@@ -102,36 +140,141 @@ class SellerFirestoreService {
       final snapshot = await _db
           .collection('orders')
           .where('sellerId', isEqualTo: currentSellerId)
-          .orderBy('orderDate', descending: true)
           .get();
 
       if (snapshot.docs.isEmpty) {
-        return []; // Return empty instead of mock data so UI updates properly
+        return [];
       }
 
-      return snapshot.docs
+      // Filter out archived orders, parse, and sort in memory
+      final orders = snapshot.docs
+          .where((doc) => doc.data()['archived'] != true)
           .map((doc) => SellerOrderModel.fromMap(doc.data(), doc.id))
           .toList();
+      
+      // Sort by orderDate descending in memory
+      orders.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      
+      return orders;
     } catch (e) {
       throw Exception('Failed to load orders: $e');
     }
   }
 
+  /// Stream all orders for the current seller
+  Stream<List<SellerOrderModel>> getOrdersStream() {
+    return _db
+        .collection('orders')
+        .where('sellerId', isEqualTo: currentSellerId)
+        .snapshots()
+        .map((snapshot) {
+      final orders = snapshot.docs
+          .where((doc) => doc.data()['archived'] != true)
+          .map((doc) => SellerOrderModel.fromMap(doc.data(), doc.id))
+          .toList();
+      orders.sort((a, b) => b.orderDate.compareTo(a.orderDate));
+      return orders;
+    });
+  }
+
   /// Update the status of an order
   Future<void> updateOrderStatus(String orderId, String newStatus) async {
     try {
-      await _db.collection('orders').doc(orderId).update({'status': newStatus});
+      final orderDoc = await _db.collection('orders').doc(orderId).get();
+      if (!orderDoc.exists) {
+        throw Exception('Order not found');
+      }
+
+      final orderData = orderDoc.data();
+      final customerId = orderData?['customerId']?.toString();
+
+      // Update root order and customer order using a batch
+      final batch = _db.batch();
+
+      batch.update(_db.collection('orders').doc(orderId), {'status': newStatus});
+
+      // Update customer subcollection order if customer ID exists
+      if (customerId != null && customerId.isNotEmpty) {
+        batch.set(
+          _db.collection('customers').doc(customerId).collection('orders').doc(orderId),
+          {'status': newStatus},
+          SetOptions(merge: true),
+        );
+      }
+
+      // Restore stock if the seller cancels the order
+      if (newStatus.toLowerCase() == 'cancelled') {
+        final itemsList = orderData?['items'] ?? orderData?['products'] as List?;
+        if (itemsList != null && itemsList.isNotEmpty) {
+          for (final item in itemsList) {
+            if (item is Map) {
+              final String? productId = item['productId']?.toString() ?? item['id']?.toString();
+              final int quantity = (item['quantity'] as num?)?.toInt() ?? 1;
+              if (productId != null && productId.isNotEmpty) {
+                batch.update(_db.collection('products').doc(productId), {
+                  'stock': FieldValue.increment(quantity),
+                  'quantity': FieldValue.increment(quantity),
+                });
+              }
+            }
+          }
+        }
+      }
+
+      await batch.commit();
+
+      if (customerId != null && customerId.isNotEmpty) {
+
+        // Trigger notification to customer
+        NotificationGenerator.onOrderStatusChanged(
+          customerId: customerId,
+          orderId: orderId,
+          newStatus: newStatus,
+        );
+
+        // If marked as delivered, trigger Review Request for products in this order
+        if (newStatus.toLowerCase() == 'delivered') {
+          final itemsList = orderData?['items'] as List?;
+          if (itemsList != null && itemsList.isNotEmpty) {
+            for (final item in itemsList) {
+              final String? productId = item['productId']?.toString();
+              final String? productName = item['productName']?.toString();
+              if (productId != null && productName != null) {
+                NotificationGenerator.onReviewRequest(
+                  customerId: customerId,
+                  productName: productName,
+                  productId: productId,
+                );
+              }
+            }
+          }
+        }
+      }
     } catch (e) {
       throw Exception('Failed to update order status: $e');
+    }
+  }
+
+  /// Archive an order (hide from seller list without deleting)
+  Future<void> archiveOrder(String orderId) async {
+    try {
+      await _db.collection('orders').doc(orderId).update({
+        'archived': true,
+        'archivedAt': FieldValue.serverTimestamp(),
+      });
+    } catch (e) {
+      throw Exception('Failed to archive order: $e');
     }
   }
 
   // ─── Dashboard Stats ───
 
   /// Fetch dashboard stats dynamically
-  Future<SellerDashboardStats> getDashboardStats() async {
+  Future<SellerDashboardStats> getDashboardStats(
+    List<SellerOrderModel> orders, {
+    int productCount = 0,
+  }) async {
     try {
-      final orders = await getOrders();
 
       double totalRevenue = 0;
       int completedOrders = 0;
@@ -190,7 +333,7 @@ class SellerFirestoreService {
         totalSales: totalRevenue.toStringAsFixed(2),
         totalOrders: completedOrders.toString(),
         totalRevenue: totalRevenue.toStringAsFixed(2),
-        totalProducts: '0',
+        totalProducts: productCount.toString(), 
         weeklySales: weeklySales,
         monthlySales: monthlySales,
         revenueGrowth: calculateGrowth(currentWeekRevenue, previousWeekRevenue),
