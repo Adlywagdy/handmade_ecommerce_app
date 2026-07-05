@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
-import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -47,11 +47,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  void _showTermsSnack() {
+    showSnack(
+      title: 'Terms Required',
+      message: 'You must agree to the terms first.',
+      bgColor: Colors.orange,
+      icon: Icons.warning_amber_rounded,
+    );
+  }
+
+  void _showRoleSnack() {
+    showSnack(
+      title: 'Choose Role',
+      message: 'Please choose Customer or Seller first.',
+      bgColor: Colors.orange,
+      icon: Icons.person_add_alt_1,
+    );
+  }
+
+  void _showRegisterErrorSnack(String message) {
+    showSnack(
+      title: 'Register Failed',
+      message: message,
+      bgColor: Colors.redAccent,
+      icon: Icons.error_outline,
+    );
+  }
+
   void _goToNextScreenByRole(String role) {
     if (role == 'customer') {
+      showSnack(
+        title: 'Account Created',
+        message: 'Welcome to SoulCrafts.',
+        bgColor: Colors.green,
+        icon: Icons.check_circle_outline,
+      );
+
       Get.offAllNamed(AppRoutes.customerlayout);
     } else {
-      Get.offAllNamed(AppRoutes.sellerdashboard);
+      showSnack(
+        title: 'Seller Request Sent',
+        message: 'Your seller request is waiting for admin approval.',
+        bgColor: Colors.green,
+        icon: Icons.check_circle_outline,
+      );
+
+      Get.offAllNamed(AppRoutes.customerlayout);
     }
   }
 
@@ -68,7 +109,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           icon: Icon(Icons.arrow_back_ios, color: primaryColor),
         ),
         title: Text(
-          context.l10n.createAccount,
+          'Create Account',
           style: AppTextStyles.t_16w700.copyWith(color: primaryColor),
         ),
         centerTitle: true,
@@ -82,23 +123,23 @@ class _RegisterScreenState extends State<RegisterScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  context.l10n.joinAyady,
+                  'Join SoulCrafts',
                   style: AppTextStyles.t_30w700.copyWith(),
                 ),
                 SizedBox(height: 12.h),
                 Text(
-                  context.l10n.experienceTheEleganceOfHandcraftedItems,
+                  'Experience the elegance of handcrafted items',
                   style: AppTextStyles.t_14w400.copyWith(color: blackDegree),
                 ),
                 SizedBox(height: 12.h),
 
                 Customtextfield(
                   controller: _nameController,
-                  label: context.l10n.fullName,
-                  hintText: context.l10n.johnDoe,
+                  label: 'Full Name',
+                  hintText: 'John Doe',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return context.l10n.nameIsRequired;
+                      return 'Name is required';
                     }
                     return null;
                   },
@@ -108,7 +149,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Customtextfield(
                   controller: _emailController,
-                  label: context.l10n.emailAddress,
+                  label: 'Email Address',
                   hintText: "example@mail.com",
                   prefixIcon: Icon(
                     Icons.email_outlined,
@@ -116,10 +157,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return context.l10n.emailIsRequired;
+                      return 'Email is required';
                     }
                     if (!value.emailValid()) {
-                      return context.l10n.emailIsntValid;
+                      return 'Email isn’t valid';
                     }
                     return null;
                   },
@@ -134,13 +175,13 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Icons.lock_outline_rounded,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
-                  label: context.l10n.password,
+                  label: 'Password',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return context.l10n.passwordIsRequired;
+                      return 'Password is required';
                     }
                     if (value.length < 6) {
-                      return context.l10n.passwordShouldBeMoreThan5Letters;
+                      return 'Password should be more than 5 letters';
                     }
                     return null;
                   },
@@ -149,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 15.h),
 
                 Text(
-                  context.l10n.registerAs,
+                  'Register As',
                   style: AppTextStyles.t_12w400.copyWith(
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
@@ -181,7 +222,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                context.l10n.customer,
+                                'Customer',
                                 style: AppTextStyles.t_16w700.copyWith(
                                   color: primaryColor,
                                 ),
@@ -207,7 +248,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             ),
                             child: Center(
                               child: Text(
-                                context.l10n.seller,
+                                'Seller',
                                 style: AppTextStyles.t_16w700.copyWith(
                                   color: primaryColor,
                                 ),
@@ -236,7 +277,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        context.l10n.agreeToTerms,
+                        'I agree to the terms and conditions',
                         style: AppTextStyles.t_12w400.copyWith(
                           color: primaryColor.withValues(alpha: 0.6),
                         ),
@@ -250,19 +291,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is RegisterSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            context.l10n.accountCreatedSuccessfully,
-                          ),
-                        ),
-                      );
-
                       _goToNextScreenByRole(state.role);
                     } else if (state is RegisterErrorState) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                      _showRegisterErrorSnack(state.message);
 
                       if (state.message.contains('already registered')) {
                         Future.delayed(const Duration(seconds: 1), () {
@@ -272,7 +303,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       }
                     }
                   },
-
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 
@@ -281,44 +311,29 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ? null
                           : () {
                               if (!_isChecked) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      context.l10n.youMustAgreeToTheTermsFirst,
-                                    ),
-                                  ),
-                                );
+                                _showTermsSnack();
                                 return;
                               }
 
                               if (_selectedRole == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text(
-                                      context
-                                          .l10n
-                                          .pleaseChooseCustomerOrSellerFirst,
-                                    ),
-                                  ),
-                                );
+                                _showRoleSnack();
                                 return;
                               }
 
                               if (_formKey.currentState!.validate()) {
                                 context.read<AuthCubit>().register(
-                                  fullName: _nameController.text.trim(),
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                  role: _selectedRole!,
-                                );
+                                      fullName: _nameController.text.trim(),
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text,
+                                      role: _selectedRole!,
+                                    );
                               }
                             },
-
                       buttoncolor: primaryColor,
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              context.l10n.createAccount,
+                              'Create Account',
                               style: AppTextStyles.t_16w500.copyWith(
                                 color: Colors.white,
                               ),
@@ -335,7 +350,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8).w,
                       child: Text(
-                        context.l10n.orContinueWith,
+                        'Or continue with',
                         style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                       ),
                     ),
@@ -348,37 +363,25 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 Row(
                   children: [
                     SocialButton(
-                      text: context.l10n.google,
+                      text: 'Google',
                       icon: Icons.g_mobiledata,
                       onTap: () {
                         final state = context.read<AuthCubit>().state;
                         if (state is AuthLoading) return;
 
                         if (!_isChecked) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.l10n.youMustAgreeToTheTermsFirst,
-                              ),
-                            ),
-                          );
+                          _showTermsSnack();
                           return;
                         }
 
                         if (_selectedRole == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              content: Text(
-                                context.l10n.pleaseChooseCustomerOrSellerFirst,
-                              ),
-                            ),
-                          );
+                          _showRoleSnack();
                           return;
                         }
 
                         context.read<AuthCubit>().registerWithGoogle(
-                          selectedRole: _selectedRole!,
-                        );
+                              selectedRole: _selectedRole!,
+                            );
                       },
                     ),
                   ],
@@ -390,14 +393,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      context.l10n.alreadyHaveAnAccount,
+                      'Already have an account?',
                       style: AppTextStyles.t_12w400.copyWith(
                         color: primaryColor.withValues(alpha: 0.6),
                       ),
                     ),
                     SizedBox(width: 10.w),
                     ButtomText(
-                      text: context.l10n.logIn,
+                      text: 'Log In',
                       onTap: () {
                         Get.back();
                       },

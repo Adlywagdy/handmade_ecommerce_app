@@ -110,81 +110,209 @@ class AuthService {
     }
   }
 
+  // Future<void> register({
+  //   required String fullName,
+  //   required String email,
+  //   required String password,
+  //   required String role,
+  // }) async {
+  //   final UserCredential credential = await _firebaseAuth
+  //       .createUserWithEmailAndPassword(email: email, password: password);
+
+  //   final User user = credential.user!;
+
+  //   await user.updateDisplayName(fullName);
+
+  //   await _firestore.collection('users').doc(user.uid).set({
+      
+  //     'uid': user.uid,
+  //     'fullName': fullName,
+  //     'email': email,
+  //     'role': role,
+  //     'provider': 'email',
+  //     'createdAt': FieldValue.serverTimestamp(),
+      
+  //   });
+  // }
   Future<void> register({
-    required String fullName,
-    required String email,
-    required String password,
-    required String role,
-  }) async {
-    final UserCredential credential = await _firebaseAuth
-        .createUserWithEmailAndPassword(email: email, password: password);
+  required String fullName,
+  required String email,
+  required String password,
+  required String role,
+}) async {
+  final UserCredential credential =
+      await _firebaseAuth.createUserWithEmailAndPassword(
+    email: email,
+    password: password,
+  );
 
-    final User user = credential.user!;
+  final User user = credential.user!;
 
-    await user.updateDisplayName(fullName);
+  await user.updateDisplayName(fullName);
+
+  await _firestore.collection('users').doc(user.uid).set({
+    'uid': user.uid,
+    'fullName': fullName,
+    'email': email,
+    'role': role,
+    'provider': 'email',
+    'createdAt': FieldValue.serverTimestamp(),
+  });
+
+  if (role == 'seller') {
+    await _firestore.collection('sellers').doc(user.uid).set({
+      'name': fullName,
+      'ownerName': fullName,
+      'email': email,
+      'phone': '',
+      'specialty': 'Handmade Products',
+      'city': '',
+      'country': '',
+      'avatar': '',
+      'badge': 'New Seller',
+      'rating': 0.0,
+      'totalSales': 0,
+      'totalProducts': 0,
+      'walletBalance': 0.0,
+      'commissionRate': 0.10,
+      'isActive': false,
+      'status': 'pending',
+      'submittedAt': FieldValue.serverTimestamp(),
+      'createdAt': FieldValue.serverTimestamp(),
+    });
+  }
+}
+
+  // Future<String> registerWithGoogle({required String selectedRole}) async {
+  //   await _initGoogleSignIn();
+
+  //   try {
+  //     final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+
+  //     final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       idToken: googleAuth.idToken,
+  //     );
+
+  //     final UserCredential userCredential = await _firebaseAuth
+  //         .signInWithCredential(credential);
+
+  //     final bool isNewUser =
+  //         userCredential.additionalUserInfo?.isNewUser ?? false;
+
+  //     final User user = userCredential.user!;
+
+  //     if (!isNewUser) {
+  //       await signOut();
+  //       throw FirebaseAuthException(
+  //         code: 'account-already-exists',
+  //         message: 'You are already registered. Please log in instead.',
+  //       );
+  //     }
+
+  //     await _firestore.collection('users').doc(user.uid).set({
+  //       'uid': user.uid,
+  //       'fullName': user.displayName ?? '',
+  //       'email': user.email ?? '',
+  //       'role': selectedRole,
+  //       'provider': 'google',
+  //       'createdAt': FieldValue.serverTimestamp(),
+  //     });
+
+  //     return selectedRole;
+  //   } on GoogleSignInException catch (e) {
+  //     if (e.code == GoogleSignInExceptionCode.canceled) {
+  //       throw FirebaseAuthException(
+  //         code: 'google-sign-in-cancelled',
+  //         message: 'Google sign-in cancelled',
+  //       );
+  //     }
+
+  //     throw FirebaseAuthException(
+  //       code: 'google-sign-in-failed',
+  //       message: e.description ?? 'Google sign-in failed',
+  //     );
+  //   }
+  // }
+  Future<String> registerWithGoogle({required String selectedRole}) async {
+  await _initGoogleSignIn();
+
+  try {
+    final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
+
+    final GoogleSignInAuthentication googleAuth = googleUser.authentication;
+
+    final AuthCredential credential = GoogleAuthProvider.credential(
+      idToken: googleAuth.idToken,
+    );
+
+    final UserCredential userCredential =
+        await _firebaseAuth.signInWithCredential(credential);
+
+    final bool isNewUser =
+        userCredential.additionalUserInfo?.isNewUser ?? false;
+
+    final User user = userCredential.user!;
+
+    if (!isNewUser) {
+      await signOut();
+      throw FirebaseAuthException(
+        code: 'account-already-exists',
+        message: 'You are already registered. Please log in instead.',
+      );
+    }
+
+    final fullName = user.displayName ?? '';
+    final email = user.email ?? '';
 
     await _firestore.collection('users').doc(user.uid).set({
       'uid': user.uid,
       'fullName': fullName,
       'email': email,
-      'role': role,
-      'provider': 'email',
+      'role': selectedRole,
+      'provider': 'google',
       'createdAt': FieldValue.serverTimestamp(),
     });
-  }
 
-  Future<String> registerWithGoogle({required String selectedRole}) async {
-    await _initGoogleSignIn();
-
-    try {
-      final GoogleSignInAccount googleUser = await _googleSignIn.authenticate();
-
-      final GoogleSignInAuthentication googleAuth = googleUser.authentication;
-
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        idToken: googleAuth.idToken,
-      );
-
-      final UserCredential userCredential = await _firebaseAuth
-          .signInWithCredential(credential);
-
-      final bool isNewUser =
-          userCredential.additionalUserInfo?.isNewUser ?? false;
-
-      final User user = userCredential.user!;
-
-      if (!isNewUser) {
-        await signOut();
-        throw FirebaseAuthException(
-          code: 'account-already-exists',
-          message: 'You are already registered. Please log in instead.',
-        );
-      }
-
-      await _firestore.collection('users').doc(user.uid).set({
-        'uid': user.uid,
-        'fullName': user.displayName ?? '',
-        'email': user.email ?? '',
-        'role': selectedRole,
-        'provider': 'google',
+    if (selectedRole == 'seller') {
+      await _firestore.collection('sellers').doc(user.uid).set({
+        'name': fullName.isNotEmpty ? fullName : 'Seller',
+        'ownerName': fullName.isNotEmpty ? fullName : 'Seller',
+        'email': email,
+        'phone': user.phoneNumber ?? '',
+        'specialty': 'Handmade Products',
+        'city': '',
+        'country': '',
+        'avatar': user.photoURL ?? '',
+        'badge': 'New Seller',
+        'rating': 0.0,
+        'totalSales': 0,
+        'totalProducts': 0,
+        'walletBalance': 0.0,
+        'commissionRate': 0.10,
+        'isActive': false,
+        'status': 'pending',
+        'submittedAt': FieldValue.serverTimestamp(),
         'createdAt': FieldValue.serverTimestamp(),
       });
+    }
 
-      return selectedRole;
-    } on GoogleSignInException catch (e) {
-      if (e.code == GoogleSignInExceptionCode.canceled) {
-        throw FirebaseAuthException(
-          code: 'google-sign-in-cancelled',
-          message: 'Google sign-in cancelled',
-        );
-      }
-
+    return selectedRole;
+  } on GoogleSignInException catch (e) {
+    if (e.code == GoogleSignInExceptionCode.canceled) {
       throw FirebaseAuthException(
-        code: 'google-sign-in-failed',
-        message: e.description ?? 'Google sign-in failed',
+        code: 'google-sign-in-cancelled',
+        message: 'Google sign-in cancelled',
       );
     }
+
+    throw FirebaseAuthException(
+      code: 'google-sign-in-failed',
+      message: e.description ?? 'Google sign-in failed',
+    );
   }
+}
 
   Future<void> signOut() async {
     await _googleSignIn.signOut();

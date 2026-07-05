@@ -255,6 +255,38 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
               ),
             ),
             SizedBox(width: 12.w),
+            // Product Image
+// Container(
+//   width: 80.w,
+//   height: 80.w,
+//   decoration: BoxDecoration(
+//     borderRadius: BorderRadius.circular(8.r),
+//     color: const Color(0xFFF8FAFC),
+//   ),
+//   clipBehavior: Clip.antiAlias,
+//   child: product.images.isNotEmpty && product.images.first.startsWith('http')
+//       ? Image.network(
+//           product.images.first,
+//           fit: BoxFit.cover,
+//           errorBuilder: (context, error, stackTrace) {
+//             return const Icon(
+//               Icons.image_not_supported_outlined,
+//               color: Color(0xFF94A3B8),
+//             );
+//           },
+//           loadingBuilder: (context, child, loadingProgress) {
+//             if (loadingProgress == null) return child;
+//             return const Center(
+//               child: CircularProgressIndicator(strokeWidth: 2),
+//             );
+//           },
+//         )
+//       : const Icon(
+//           Icons.image_outlined,
+//           color: Color(0xFF94A3B8),
+//         ),
+// ),
+SizedBox(width: 12.w),
 
             // Product Details
             Expanded(

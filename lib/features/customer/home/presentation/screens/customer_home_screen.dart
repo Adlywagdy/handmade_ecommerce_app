@@ -17,13 +17,10 @@ import 'package:handmade_ecommerce_app/features/customer/home/presentation/widge
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/customfeaturerow.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-<<<<<<< HEAD:lib/features/customer/presentation/screens/customer_home_screen.dart
-import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/topratedproductitemlowercolumn.dart';
+// import 'package:handmade_ecommerce_app/features/customer/presentation/widgets/topratedproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/features/recommendation_chatbot/presentation/screens/recommendation_chatbot_screen.dart';
-=======
 import 'package:handmade_ecommerce_app/features/customer/home/presentation/widgets/topratedproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/wishlist/cubit/wishlist_cubit.dart';
->>>>>>> c5ed1beddc016e596a8fe53c09c1af7e5edc9640:lib/features/customer/home/presentation/screens/customer_home_screen.dart
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});

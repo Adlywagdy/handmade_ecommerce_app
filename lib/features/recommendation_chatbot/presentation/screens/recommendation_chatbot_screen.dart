@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/features/recommendation_chatbot/services/firestore_chatbot_product_services.dart';
 
 import '../../models/chatbot_message_model.dart';
 import '../../services/preference_extractor_service.dart';
@@ -27,6 +29,9 @@ class _RecommendationChatbotScreenState
   final RecommendationService _recommendationService = RecommendationService();
 
   final FirebaseAIService _firebaseAIService = FirebaseAIService();
+
+  final FirestoreChatbotProductsService _firestoreProductsService =
+    FirestoreChatbotProductsService();
 
   final List<ChatbotMessageModel> _messages = [
     ChatbotMessageModel(
@@ -80,10 +85,12 @@ class _RecommendationChatbotScreenState
   final preferences =
       aiPreferences ?? _preferenceExtractor.extract(userMessage);
 
-  final recommendedProducts =
-      _recommendationService.getRecommendations(preferences);
+  final products = await _firestoreProductsService.getApprovedProducts();
 
-  String botReply;
+  final recommendedProducts =
+    _recommendationService.getRecommendations(preferences, products);
+     
+      String botReply;
 
   if (!preferences.hasAnyPreference) {
     botReply =
@@ -128,7 +135,7 @@ class _RecommendationChatbotScreenState
 
   void _showExampleMessage() {
     _messageController.text =
-        'عايزة حاجة رقيقة لأوضة نوم صغيرة لونها بينك وأبيض وستايل رومانسي';
+        'I need a delicate product for a small bedroom, in pink and white, with a romantic style.';
   }
 
   @override
@@ -137,7 +144,7 @@ class _RecommendationChatbotScreenState
       backgroundColor: const Color(0xffF8F4EF),
       appBar: AppBar(
         title: const Text('Recommendation Chatbot'),
-        backgroundColor: const Color(0xff8B5E3C),
+        backgroundColor: commonColor,
         foregroundColor: Colors.white,
         actions: [
           IconButton(

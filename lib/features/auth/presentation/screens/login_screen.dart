@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -41,6 +41,18 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
+  void _navigateByRole(String role) {
+    final userRole = role.toLowerCase();
+
+    if (userRole == 'seller') {
+      Get.offAllNamed(AppRoutes.sellerdashboard);
+    } else if (userRole == 'admin') {
+      Get.offAllNamed(AppRoutes.adminBottomBar);
+    } else {
+      Get.offAllNamed(AppRoutes.customerlayout);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,19 +81,19 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
                 SizedBox(height: 20.h),
                 Text(
-                  context.l10n.welcomeToAyady,
+                  'Welcome To SoulCrafts',
                   style: AppTextStyles.t_30w700,
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  context.l10n.pleaseEnterYourDetailsToContinue,
+                  'Please enter your details to continue',
                   style: AppTextStyles.t_16w400.copyWith(color: darkblue),
                 ),
                 SizedBox(height: 30.h),
 
                 Customtextfield(
                   controller: _emailController,
-                  label: context.l10n.emailAddress,
+                  label: 'Email Address',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
                     Icons.email_outlined,
@@ -89,10 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Email is required";
+                      return 'Email is required';
                     }
                     if (!value.emailValid()) {
-                      return context.l10n.emailIsntValid;
+                      return 'Email isn’t valid';
                     }
                     return null;
                   },
@@ -109,14 +121,14 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Password is required";
+                      return 'Password is required';
                     }
                     if (value.length < 6) {
-                      return context.l10n.passwordShouldBeMoreThan5Letters;
+                      return 'Password should be more than 5 letters';
                     }
                     return null;
                   },
-                  label: context.l10n.password,
+                  label: 'Password',
                 ),
 
                 SizedBox(height: 10.h),
@@ -125,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
-                  text: context.l10n.forgotPassword,
+                  text: 'Forget Password?',
                 ),
 
                 SizedBox(height: 20.h),
@@ -133,39 +145,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is LoginSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(context.l10n.loginSuccess)),
+                      showSnack(
+                      title: 'Welcome Back',
+                      message: 'You logged in successfully.',
+                      bgColor: Colors.green,
+                      icon: Icons.check_circle_outline,
                       );
-                      final role = state.role.toLowerCase();
-                      if (role == 'seller') {
-                        Get.offAllNamed(AppRoutes.sellerdashboard);
-                      } else if (role == 'admin') {
-                        Get.offAllNamed(AppRoutes.adminBottomBar);
-                      } else {
-                        Get.offAllNamed(AppRoutes.customerlayout);
-                      }
+                      _navigateByRole(state.role);
                     } else if (state is LoginErrorState) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                       showSnack(
+                        title: 'Login Failed',
+                        message: state.message,
+                        bgColor: Colors.redAccent,
+                        icon: Icons.error_outline,
+                       );
+
+
                     } else if (state is GoogleLoginSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(context.l10n.googleSignInSuccess),
-                        ),
-                      );
-                      final role = state.role.toLowerCase();
-                      if (role == 'seller') {
-                        Get.offAllNamed(AppRoutes.sellerdashboard);
-                      } else if (role == 'admin') {
-                        Get.offAllNamed(AppRoutes.adminBottomBar);
-                      } else {
-                        Get.offAllNamed(AppRoutes.customerlayout);
-                      }
+                      showSnack(
+                        title: 'Google sign_in success',
+                        message: 'You logged in successfully.',
+                        bgColor: Colors.green,
+                        icon: Icons.error_outline,
+                       );
+
+                      _navigateByRole(state.role);
                     } else if (state is GoogleLoginErrorState) {
-                      ScaffoldMessenger.of(
-                        context,
-                      ).showSnackBar(SnackBar(content: Text(state.message)));
+                     showSnack(
+                        title: 'Login Failed',
+                        message: state.message,
+                        bgColor: Colors.redAccent,
+                        icon: Icons.error_outline,
+                       );
                     }
                   },
                   builder: (context, state) {
@@ -177,16 +188,16 @@ class _LoginScreenState extends State<LoginScreen> {
                           : () {
                               if (_formkey.currentState!.validate()) {
                                 context.read<AuthCubit>().login(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                );
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text,
+                                    );
                               }
                             },
                       buttoncolor: primaryColor,
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
                           : Text(
-                              context.l10n.signIn,
+                              'Sign In',
                               style: AppTextStyles.t_16w700.copyWith(
                                 color: Colors.white,
                               ),
@@ -203,7 +214,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8).w,
                       child: Text(
-                        context.l10n.orContinueWith,
+                        'Or continue with',
                         style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                       ),
                     ),
@@ -235,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      '${context.l10n.dontHaveAnAccount} ',
+                      'Don’t have an account ',
                       style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                     ),
                     SizedBox(width: 10.h),
@@ -243,7 +254,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       onTap: () {
                         Get.toNamed(AppRoutes.register);
                       },
-                      text: context.l10n.signUp,
+                      text: 'Sign Up',
                     ),
                   ],
                 ),

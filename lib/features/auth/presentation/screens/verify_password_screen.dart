@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -8,6 +9,15 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 
 class VerifyPasswordScreen extends StatelessWidget {
   const VerifyPasswordScreen({super.key});
+
+  void _showBackToLoginSnack() {
+    showSnack(
+      title: 'Ready to Login',
+      message: 'After resetting your password, sign in with your new password.',
+      bgColor: Colors.green,
+      icon: Icons.login,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +36,7 @@ class VerifyPasswordScreen extends StatelessWidget {
         ),
       ),
       body: Padding(
-        padding: const EdgeInsets.all(16),
+        padding: const EdgeInsets.all(16).w,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
@@ -77,6 +87,7 @@ class VerifyPasswordScreen extends StatelessWidget {
           padding: EdgeInsets.only(left: 16.w, right: 16.w, bottom: 16.h),
           child: CustomElevatedButton(
             onPressed: () {
+              _showBackToLoginSnack();
               Get.offAllNamed(AppRoutes.login);
             },
             buttoncolor: primaryColor,

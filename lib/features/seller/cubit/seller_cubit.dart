@@ -83,6 +83,67 @@ class SellerCubit extends Cubit<SellerState> {
       }
     }
   }
+//  Future<void> addProductWithImages({
+//   required String name,
+//   required String description,
+//   required double price,
+//   required int stock,
+//   required String category,
+//   required List<File> imageFiles,
+// }) async {
+//   final current = state;
+
+//   if (current is SellerLoaded) {
+//     try {
+//       emit(const SellerLoading());
+
+//       final List<String> imageUrls = [];
+
+//       for (final imageFile in imageFiles) {
+//         final imageUrl = await CloudinaryService.uploadImage(imageFile);
+
+//         if (imageUrl == null) {
+//           throw Exception('Failed to upload image to Cloudinary');
+//         }
+
+//         imageUrls.add(imageUrl);
+//       }
+
+//       final newProduct = SellerProductModel(
+//         id: '',
+//         name: name,
+//         description: description,
+//         price: price,
+//         stock: stock,
+//         category: category,
+//         images: imageUrls,
+//         isActive: stock > 0,
+//         status: stock > 0 ? 'In Stock' : 'Out of Stock',
+//       );
+
+//       await _firestoreService.addProduct(newProduct);
+
+//       await loadDashboard();
+//     } catch (e) {
+//       emit(SellerError(e.toString()));
+//     }
+//   }
+// }
+
+//   Future<void> updateProduct(SellerProductModel product) async {
+//     final current = state;
+//     if (current is SellerLoaded) {
+//       try {
+//         // Optimistic UI update
+//         _updateProductsInState(current, product);
+        
+//         // Update in Firestore
+//         await _firestoreService.updateProduct(product);
+//       } catch (e) {
+//         emit(SellerError(e.toString()));
+//       }
+//     }
+//   }
 
   Future<void> addProductWithImages({
     required String name,

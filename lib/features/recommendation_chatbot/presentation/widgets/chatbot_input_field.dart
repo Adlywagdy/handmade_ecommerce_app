@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class ChatbotInputField extends StatelessWidget {
   final TextEditingController controller;
@@ -56,7 +57,7 @@ class ChatbotInputField extends StatelessWidget {
             const SizedBox(width: 8),
             CircleAvatar(
               radius: 24,
-              backgroundColor: const Color(0xff8B5E3C),
+              backgroundColor: commonColor,
               child: IconButton(
                 onPressed: onSend,
                 icon: const Icon(

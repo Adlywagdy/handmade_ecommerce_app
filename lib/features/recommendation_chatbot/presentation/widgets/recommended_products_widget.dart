@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 import '../../models/chatbot_product_model.dart';
 
@@ -91,7 +94,7 @@ class RecommendedProductsWidget extends StatelessWidget {
                           height: 32.h,
                           child: ElevatedButton(
                             style: ElevatedButton.styleFrom(
-                              backgroundColor: const Color(0xff8B5E3C),
+                              backgroundColor: commonColor,
                               foregroundColor: Colors.white,
                               elevation: 0,
                               shape: RoundedRectangleBorder(
@@ -100,14 +103,13 @@ class RecommendedProductsWidget extends StatelessWidget {
                               padding: EdgeInsets.zero,
                             ),
                             onPressed: () {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
-                                  content: Text(
-                                    'Open product: ${product.name}',
-                                  ),
-                                ),
-                              );
-                            },
+                              Get.toNamed(
+                              AppRoutes.customerProductDetails,
+                               arguments: {
+                             'productId': product.id,
+                              },
+                               );
+                                },
                             child: Text(
                               'View Product',
                               style: TextStyle(

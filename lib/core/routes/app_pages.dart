@@ -45,6 +45,7 @@ class AppPages {
   static final List<GetPage<dynamic>> pages = [
     // onboarding
     GetPage(name: AppRoutes.onboarding, page: () => const OnboardingScreen()),
+     GetPage(name: AppRoutes.decider, page: () => const DeciderScreen()),
 
     // auth
     GetPage(name: AppRoutes.login, page: () => const LoginScreen()),
