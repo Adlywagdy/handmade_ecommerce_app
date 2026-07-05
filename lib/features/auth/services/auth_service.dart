@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:handmade_ecommerce_app/core/constants/seller_status.dart';
@@ -29,16 +30,13 @@ class AuthService {
   Future<void> _updateFCMToken(String uid) async {
     try {
       final token = await FirebaseMessaging.instance.getToken();
-
       print("======== FCM UPDATE ========");
       print("UID: $uid");
       print("TOKEN: $token");
-
       if (token != null) {
         await _firestore.collection('users').doc(uid).set({
           'fcmToken': token,
         }, SetOptions(merge: true));
-
         print("✅ FCM TOKEN SAVED");
       } else {
         print("❌ TOKEN IS NULL");
@@ -209,7 +207,7 @@ class AuthService {
       'createdAt': FieldValue.serverTimestamp(),
     });
 
-    await _updateFCMToken(user.uid);
+    await _updateFCMToken(uid);
   }
 
   Future<String> registerWithGoogle({required String selectedRole}) async {
