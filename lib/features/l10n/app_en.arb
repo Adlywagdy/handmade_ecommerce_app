@@ -1,0 +1,218 @@
+{
+  "@@locale": "en",
+  "skip": "Skip",
+  "next": "Next",
+  "getStarted": "Get Started",
+  "discoverUniqueHandmadeItems": "Discover Unique Handmade Items",
+  "supportLocalArtisans": "Support Local Artisans",
+  "shopWithConfidence": "Shop with Confidence",
+  "exploreThousandsHandcraftedProducts": "Explore thousands of handcrafted products made by talented artisans from around the world.",
+  "connectDirectlyWithMakers": "Connect directly with makers and support their craft. Every purchase makes a difference.",
+  "securePaymentsVerifiedSellers": "Secure payments, verified sellers, and authentic reviews. Your satisfaction guaranteed.",
+  "filterAndSort": "Filter & Sort",
+  "rating": "Rating",
+  "priceSort": "Price sort",
+  "any": "Any",
+  "to": "to",
+  "min": "Min",
+  "max": "Max",
+  "cancel": "Cancel",
+  "apply": "Apply",
+  "mustBePositive": "Must be positive",
+  "updateRequired": "Update Required",
+  "pleaseUpdateAppToContinue": "Please update the app to continue.",
+  "update": "Update",
+  "somethingWentWrong": "Something went wrong",
+  "technicalDifficulties": "We're experiencing technical difficulties on our end. Our team is working on it.",
+  "goBack": "Go Back",
+  "noInternetConnection": "No internet connection",
+  "offlineMessage": "It looks like you're offline. Please check your network settings and try again.",
+  "@offlineMessage": {
+    "description": "Message shown when the user is offline."
+  },
+  "retryConnection": "Retry Connection",
+  "@retryConnection": {
+    "description": "Button label to retry a failed network request."
+  },
+  "welcomeToAyady": "Welcome to Ayady",
+  "@welcomeToAyady": {
+    "description": "Welcome message shown on the login screen."
+  },
+  "pleaseEnterYourDetailsToContinue": "Please enter your details to continue",
+  "@pleaseEnterYourDetailsToContinue": {
+    "description": "Hint text shown on the login screen explaining how to proceed."
+  },
+  "emailAddress": "EMAIL ADDRESS",
+  "@emailAddress": {
+    "description": "Label text for the email input field."
+  },
+  
+  "emailIsntValid": "Email isn't valid",
+  "@emailIsntValid": {
+    "description": "Validation message shown when the email input is invalid."
+  },
+  "password": "Password",
+  "@password": {
+    "description": "Label text for the password input field."
+  },
+  "forgotPassword": "Forgot Password?",
+  "@forgotPassword": {
+    "description": "Link text used to navigate to password recovery."
+  },
+  "loginSuccess": "Login Success",
+  "@loginSuccess": {
+    "description": "Snack bar message shown after successful login."
+  },
+  "googleSignInSuccess": "Google Sign In Success",
+  "@googleSignInSuccess": {
+    "description": "Snack bar message shown after successful Google login."
+  },
+  "signIn": "Sign In",
+  "@signIn": {
+    "description": "Button text used to sign in."
+  },
+  "orContinueWith": "Or continue with",
+  "@orContinueWith": {
+    "description": "Text shown between a divider and social login buttons."
+  },
+  "google": "Google",
+  "@google": {
+    "description": "Label for Google sign-in button."
+  },
+  "dontHaveAnAccount": "Don't have an account?",
+  "@dontHaveAnAccount": {
+    "description": "Text shown before the sign up link on the login screen."
+  },
+  "signUp": "Sign Up",
+  "@signUp": {
+    "description": "Text used for the sign up action."
+  },
+  "joinAyady": "Join Ayady",
+  "@joinAyady": {
+    "description": "Title text shown on the register screen."
+  },
+  "createAccount": "Create Account",
+  "@createAccount": {
+    "description": "Button text for the register screen."
+  },
+  "experienceTheEleganceOfHandcraftedItems": "Experience the elegance of handcrafted items",
+  "@experienceTheEleganceOfHandcraftedItems": {
+    "description": "Subtitle text shown on the register screen."
+  },
+  "fullName": "Full Name",
+  "@fullName": {
+    "description": "Label text for the full name input field."
+  },
+  "johnDoe": "John Doe",
+  "@johnDoe": {
+    "description": "Placeholder text for the full name input field."
+  },
+  "nameIsRequired": "Name is required",
+  "@nameIsRequired": {
+    "description": "Validation message shown when the name field is empty."
+  },
+  "emailIsRequired": "Email is required",
+  "@emailIsRequired": {
+    "description": "Validation message shown when the email field is empty."
+  },
+  "passwordIsRequired": "Password is required",
+  "@passwordIsRequired": {
+    "description": "Validation message shown when the password field is empty."
+  },
+  "passwordShouldBeMoreThan5Letters": "Password should be more than 5 letters",
+  "@passwordShouldBeMoreThan5Letters": {
+    "description": "Validation message shown when the password is too short."
+  },
+  "registerAs": "Register as:",
+  "@registerAs": {
+    "description": "Label text shown before choices of customer or seller during registration."
+  },
+  "customer": "Customer",
+  "@customer": {
+    "description": "Role selection option text for customer registration."
+  },
+  "seller": "Seller",
+  "@seller": {
+    "description": "Role selection option text for seller registration."
+  },
+  "agreeToTerms": "I agree to the Terms of Service and Privacy Policy.",
+  "@agreeToTerms": {
+    "description": "Text shown next to the terms and privacy checkbox."
+  },
+  "accountCreatedSuccessfully": "Account created successfully",
+  "@accountCreatedSuccessfully": {
+    "description": "Snack bar text shown after successful account creation."
+  },
+  "youMustAgreeToTheTermsFirst": "You must agree to the terms first",
+  "@youMustAgreeToTheTermsFirst": {
+    "description": "Error message shown when terms are not accepted."
+  },
+  "pleaseChooseCustomerOrSellerFirst": "Please choose Customer or Seller first",
+  "@pleaseChooseCustomerOrSellerFirst": {
+    "description": "Error message shown when a registration role is not selected."
+  },
+  "alreadyHaveAnAccount": "Already have an account?",
+  "@alreadyHaveAnAccount": {
+    "description": "Text shown before the login link on the register screen."
+  },
+  "logIn": "Log In",
+  "@logIn": {
+    "description": "Text used for the login action."
+  },
+  "passwordRecovery": "Password recovery",
+  "@passwordRecovery": {
+    "description": "Title text for the password recovery screen."
+  },
+  "passwordRecoveryDescription": "Please enter your email address to send to a password recovery email.",
+  "@passwordRecoveryDescription": {
+    "description": "Subtitle text for the password recovery screen."
+  },
+  "sendCode": "Send Code",
+  "@sendCode": {
+    "description": "Button text used to request a password reset code."
+  },
+  "verifyItsYou": "Verify it’s you",
+  "@verifyItsYou": {
+    "description": "Title text shown on the verification code screen."
+  },
+  "verificationCodeSentToEmail": "We have sent a verification code to your email. Please enter it below.",
+  "@verificationCodeSentToEmail": {
+    "description": "Explanation text shown above the verification code field."
+  },
+  "youCanResendCodeAfterOneMinute": "You can resend the code after 1 minute.",
+  "@youCanResendCodeAfterOneMinute": {
+    "description": "Notice text shown when the verification code has been sent."
+  },
+  "confirm": "Confirm",
+  "@confirm": {
+    "description": "Button text used to confirm the verification code."
+  },
+  "createNewPassword": "Create new password",
+  "@createNewPassword": {
+    "description": "Title text for the reset password screen."
+  },
+  "createNewPasswordDescription": "Please create a secure password for your account to ensure security of the account.",
+  "@createNewPasswordDescription": {
+    "description": "Subtitle text for the reset password screen."
+  },
+  "retypePassword": "Re-type Password",
+  "@retypePassword": {
+    "description": "Label text for the confirm password field."
+  },
+  "passwordMustBeAtLeast6Characters": "Password must be at least 6 characters",
+  "@passwordMustBeAtLeast6Characters": {
+    "description": "Validation message shown when the password is too short during reset."
+  },
+  "pleaseConfirmYourPassword": "Please confirm your password",
+  "@pleaseConfirmYourPassword": {
+    "description": "Validation message shown when the confirm password field is empty."
+  },
+  "passwordsDoNotMatch": "Passwords do not match",
+  "@passwordsDoNotMatch": {
+    "description": "Validation message shown when password and confirm password do not match."
+  },
+  "setPassword": "Set Password",
+  "@setPassword": {
+    "description": "Button text used to save the new password."
+  }
+}

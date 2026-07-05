@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -47,11 +47,52 @@ class _RegisterScreenState extends State<RegisterScreen> {
     super.dispose();
   }
 
+  void _showTermsSnack() {
+    showSnack(
+      title: 'Terms Required',
+      message: 'You must agree to the terms first.',
+      bgColor: Colors.orange,
+      icon: Icons.warning_amber_rounded,
+    );
+  }
+
+  void _showRoleSnack() {
+    showSnack(
+      title: 'Choose Role',
+      message: 'Please choose Customer or Seller first.',
+      bgColor: Colors.orange,
+      icon: Icons.person_add_alt_1,
+    );
+  }
+
+  void _showRegisterErrorSnack(String message) {
+    showSnack(
+      title: 'Register Failed',
+      message: message,
+      bgColor: Colors.redAccent,
+      icon: Icons.error_outline,
+    );
+  }
+
   void _goToNextScreenByRole(String role) {
     if (role == 'customer') {
+      showSnack(
+        title: 'Account Created',
+        message: 'Welcome to SoulCrafts.',
+        bgColor: Colors.green,
+        icon: Icons.check_circle_outline,
+      );
+
       Get.offAllNamed(AppRoutes.customerlayout);
     } else {
-      Get.offAllNamed(AppRoutes.sellerdashboard);
+      showSnack(
+        title: 'Seller Request Sent',
+        message: 'Your seller request is waiting for admin approval.',
+        bgColor: Colors.green,
+        icon: Icons.check_circle_outline,
+      );
+
+      Get.offAllNamed(AppRoutes.customerlayout);
     }
   }
 
@@ -81,7 +122,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Join Ayady', style: AppTextStyles.t_30w700.copyWith()),
+                Text(
+                  'Join SoulCrafts',
+                  style: AppTextStyles.t_30w700.copyWith(),
+                ),
                 SizedBox(height: 12.h),
                 Text(
                   'Experience the elegance of handcrafted items',
@@ -95,7 +139,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   hintText: 'John Doe',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Name is required";
+                      return 'Name is required';
                     }
                     return null;
                   },
@@ -105,18 +149,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
                 Customtextfield(
                   controller: _emailController,
-                  label: 'EMAIL ADDRESS',
-                  hintText: 'example@mail.com',
+                  label: 'Email Address',
+                  hintText: "example@mail.com",
                   prefixIcon: Icon(
                     Icons.email_outlined,
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Email is required";
+                      return 'Email is required';
                     }
                     if (!value.emailValid()) {
-                      return "Email isn't valid";
+                      return 'Email isn’t valid';
                     }
                     return null;
                   },
@@ -134,10 +178,10 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   label: 'Password',
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Password is required";
+                      return 'Password is required';
                     }
                     if (value.length < 6) {
-                      return "Password should be more than 5 letters";
+                      return 'Password should be more than 5 letters';
                     }
                     return null;
                   },
@@ -146,7 +190,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 SizedBox(height: 15.h),
 
                 Text(
-                  'Register as:',
+                  'Register As',
                   style: AppTextStyles.t_12w400.copyWith(
                     color: primaryColor.withValues(alpha: 0.6),
                   ),
@@ -233,7 +277,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        'I agree to the Terms of Service and Privacy Policy.',
+                        'I agree to the terms and conditions',
                         style: AppTextStyles.t_12w400.copyWith(
                           color: primaryColor.withValues(alpha: 0.6),
                         ),
@@ -247,27 +291,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is RegisterSuccessState) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Account created successfully'),
-                         ),
-                          );
+                      _goToNextScreenByRole(state.role);
+                    } else if (state is RegisterErrorState) {
+                      _showRegisterErrorSnack(state.message);
 
-                       _goToNextScreenByRole(state.role);
-                         } else if (state is RegisterErrorState) {
-                           ScaffoldMessenger.of(context).showSnackBar(
-                             SnackBar(content: Text(state.message)),
-                               );
-
-                         if (state.message.contains('already registered')) {
-                           Future.delayed(const Duration(seconds: 1), () {
-                            if (!mounted) return;
-                               Get.offAllNamed(AppRoutes.login);
-                               });
-                                }
-                                   }
-                    },
-              
+                      if (state.message.contains('already registered')) {
+                        Future.delayed(const Duration(seconds: 1), () {
+                          if (!mounted) return;
+                          Get.offAllNamed(AppRoutes.login);
+                        });
+                      }
+                    }
+                  },
                   builder: (context, state) {
                     final isLoading = state is AuthLoading;
 
@@ -276,37 +311,24 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           ? null
                           : () {
                               if (!_isChecked) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'You must agree to the terms first',
-                                    ),
-                                  ),
-                                );
+                                _showTermsSnack();
                                 return;
                               }
 
                               if (_selectedRole == null) {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text(
-                                      'Please choose Customer or Seller first',
-                                    ),
-                                  ),
-                                );
+                                _showRoleSnack();
                                 return;
                               }
 
                               if (_formKey.currentState!.validate()) {
                                 context.read<AuthCubit>().register(
-                                  fullName: _nameController.text.trim(),
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                  role: _selectedRole!,
-                                );
+                                      fullName: _nameController.text.trim(),
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text,
+                                      role: _selectedRole!,
+                                    );
                               }
                             },
-
                       buttoncolor: primaryColor,
                       child: isLoading
                           ? const CircularProgressIndicator(color: Colors.white)
@@ -348,30 +370,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         if (state is AuthLoading) return;
 
                         if (!_isChecked) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'You must agree to the terms first',
-                              ),
-                            ),
-                          );
+                          _showTermsSnack();
                           return;
                         }
 
                         if (_selectedRole == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(
-                                'Please choose Customer or Seller first',
-                              ),
-                            ),
-                          );
+                          _showRoleSnack();
                           return;
                         }
 
                         context.read<AuthCubit>().registerWithGoogle(
-                          selectedRole: _selectedRole!,
-                        );
+                              selectedRole: _selectedRole!,
+                            );
                       },
                     ),
                   ],

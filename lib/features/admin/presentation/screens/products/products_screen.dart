@@ -124,6 +124,7 @@ class _ProductsGrid extends StatelessWidget {
       itemCount: products.length,
       itemBuilder: (context, index) {
         final product = products[index];
+        debugPrint("product image === ${products[index].productImage}");
         return ProductCard(
           product: product,
           vendorName: cubit.vendorNameFor(product),

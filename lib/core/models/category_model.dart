@@ -1,40 +1,36 @@
-import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-
 class CategoryModel {
   final String? id;
   final String categorytitle;
+  final String? categoryTitleAR;
   final String? categoryiconpath;
-  final String? categoryexample;
   final bool? isActive;
   final int? order;
   final int? productsCount;
-  final List<ProductModel>? categoryproducts;
   final List<CategoryModel>? subcategories;
   const CategoryModel({
     this.id,
     required this.categorytitle,
+    this.categoryTitleAR,
     this.categoryiconpath,
-    this.categoryexample,
     this.isActive,
     this.order,
     this.productsCount,
-    this.categoryproducts,
     this.subcategories,
   });
 
   factory CategoryModel.fromMap(Map<String, dynamic> map, {String? id}) {
-    final orderValue = map['order'] ?? map['sortOrder'];
+    final orderValue = map['order'];
     final productsCountValue = map['productsCount'];
 
     return CategoryModel(
-      id: id ?? map['id']?.toString() ?? map['categoryId']?.toString(),
-      categorytitle: (map['categorytitle'] ?? map['name'] ?? '').toString(),
-      categoryiconpath:
-          map['categoryiconpath']?.toString() ??
-          map['icon']?.toString() ??
-          map['imageUrl']?.toString() ??
-          map['image']?.toString(),
-      categoryexample: map['categoryexample']?.toString(),
+      id: id ?? map['categoryId']?.toString() ?? map['id']?.toString(),
+      categorytitle:
+          (map['nameEN'] ?? map['name'] ?? map['categorytitle'] ?? '')
+              .toString(),
+      categoryTitleAR:
+          (map['nameAR'] ?? map['categoryTitleAR'] ?? map['name_ar'])
+              ?.toString(),
+      categoryiconpath: map['icon']?.toString(),
       isActive: map['isActive'] as bool?,
       order: orderValue is int ? orderValue : int.tryParse('$orderValue'),
       productsCount: productsCountValue is int
@@ -43,20 +39,20 @@ class CategoryModel {
     );
   }
 
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'categorytitle': categorytitle,
-      'name': categorytitle,
-      'categoryiconpath': categoryiconpath,
-      'icon': categoryiconpath,
-      'imageUrl': categoryiconpath,
-      'image': categoryiconpath,
-      'categoryexample': categoryexample,
-      'isActive': isActive,
-      'order': order,
-      'sortOrder': order,
-      'productsCount': productsCount,
-    };
+  static String? normalizeReferenceId(dynamic value) {
+    if (value == null) return null;
+
+    final text = value.toString().trim();
+    if (text.isEmpty) return null;
+
+    final categoriesPath = RegExp(r'^/?categories/([^/]+)$');
+    final pathMatch = categoriesPath.firstMatch(text);
+    if (pathMatch != null) return pathMatch.group(1);
+
+    final embeddedPath = RegExp(r'categories/([^/\s)]+)');
+    final embeddedMatch = embeddedPath.firstMatch(text);
+    if (embeddedMatch != null) return embeddedMatch.group(1);
+
+    return text;
   }
 }

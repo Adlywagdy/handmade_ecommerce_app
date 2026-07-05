@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ForceUpdateDialog extends StatelessWidget {
   const ForceUpdateDialog({super.key});
-
 
   static Future<void> show(BuildContext context) {
     return showDialog<void>(
@@ -17,29 +17,24 @@ class ForceUpdateDialog extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         child: Padding(
           padding: const EdgeInsets.all(24),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
-                Icons.system_update_alt_rounded,
-                size: 48,
-              ),
+              const Icon(Icons.system_update_alt_rounded, size: 48),
               const SizedBox(height: 16),
-              const Text(
-                'Update Required',
-                style: TextStyle(
+              Text(
+                context.l10n.updateRequired,
+                style: const TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.w600,
                 ),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Please update the app to continue.',
+              Text(
+                context.l10n.pleaseUpdateAppToContinue,
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -49,7 +44,7 @@ class ForceUpdateDialog extends StatelessWidget {
                   onPressed: () {
                     // will open store
                   },
-                  child: const Text('Update'),
+                  child: Text(context.l10n.update),
                 ),
               ),
             ],

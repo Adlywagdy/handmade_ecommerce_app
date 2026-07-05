@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
+import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -40,11 +41,15 @@ class _LoginScreenState extends State<LoginScreen> {
     super.dispose();
   }
 
-  void _goToNextScreenByRole(String role) {
-    if (role == 'customer') {
-      Get.offAllNamed(AppRoutes.customerlayout);
-    } else {
+  void _navigateByRole(String role) {
+    final userRole = role.toLowerCase();
+
+    if (userRole == 'seller') {
       Get.offAllNamed(AppRoutes.sellerdashboard);
+    } else if (userRole == 'admin') {
+      Get.offAllNamed(AppRoutes.adminBottomBar);
+    } else {
+      Get.offAllNamed(AppRoutes.customerlayout);
     }
   }
 
@@ -75,7 +80,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   child: Image.asset('assets/icons/Icon1.png'),
                 ),
                 SizedBox(height: 20.h),
-                Text('Welcome to Ayady', style: AppTextStyles.t_30w700),
+                Text(
+                  'Welcome To SoulCrafts',
+                  style: AppTextStyles.t_30w700,
+                ),
                 SizedBox(height: 16.h),
                 Text(
                   'Please enter your details to continue',
@@ -85,7 +93,7 @@ class _LoginScreenState extends State<LoginScreen> {
 
                 Customtextfield(
                   controller: _emailController,
-                  label: 'EMAIL ADDRESS',
+                  label: 'Email Address',
                   hintText: 'example@mail.com',
                   prefixIcon: Icon(
                     Icons.email_outlined,
@@ -93,10 +101,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Email is required";
+                      return 'Email is required';
                     }
                     if (!value.emailValid()) {
-                      return "Email isn't valid";
+                      return 'Email isn’t valid';
                     }
                     return null;
                   },
@@ -113,10 +121,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return "Password is required";
+                      return 'Password is required';
                     }
                     if (value.length < 6) {
-                      return "Password should be more than 5 letters";
+                      return 'Password should be more than 5 letters';
                     }
                     return null;
                   },
@@ -129,7 +137,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   onTap: () {
                     Get.toNamed(AppRoutes.forgotPassword);
                   },
-                  text: 'Forgot Password?',
+                  text: 'Forget Password?',
                 ),
 
                 SizedBox(height: 20.h),
@@ -137,23 +145,38 @@ class _LoginScreenState extends State<LoginScreen> {
                 BlocConsumer<AuthCubit, AuthState>(
                   listener: (context, state) {
                     if (state is LoginSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Login Success')),
+                      showSnack(
+                      title: 'Welcome Back',
+                      message: 'You logged in successfully.',
+                      bgColor: Colors.green,
+                      icon: Icons.check_circle_outline,
                       );
-                      _goToNextScreenByRole(state.role);
+                      _navigateByRole(state.role);
                     } else if (state is LoginErrorState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
+                       showSnack(
+                        title: 'Login Failed',
+                        message: state.message,
+                        bgColor: Colors.redAccent,
+                        icon: Icons.error_outline,
+                       );
+
+
                     } else if (state is GoogleLoginSuccessState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Google Sign In Success')),
-                      );
-                      _goToNextScreenByRole(state.role);
+                      showSnack(
+                        title: 'Google sign_in success',
+                        message: 'You logged in successfully.',
+                        bgColor: Colors.green,
+                        icon: Icons.error_outline,
+                       );
+
+                      _navigateByRole(state.role);
                     } else if (state is GoogleLoginErrorState) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(state.message)),
-                      );
+                     showSnack(
+                        title: 'Login Failed',
+                        message: state.message,
+                        bgColor: Colors.redAccent,
+                        icon: Icons.error_outline,
+                       );
                     }
                   },
                   builder: (context, state) {
@@ -165,9 +188,9 @@ class _LoginScreenState extends State<LoginScreen> {
                           : () {
                               if (_formkey.currentState!.validate()) {
                                 context.read<AuthCubit>().login(
-                                  email: _emailController.text.trim(),
-                                  password: _passwordController.text,
-                                );
+                                      email: _emailController.text.trim(),
+                                      password: _passwordController.text,
+                                    );
                               }
                             },
                       buttoncolor: primaryColor,
@@ -223,7 +246,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Don\'t have an account? ',
+                      'Don’t have an account ',
                       style: AppTextStyles.t_14w400.copyWith(color: darkblue),
                     ),
                     SizedBox(width: 10.h),
