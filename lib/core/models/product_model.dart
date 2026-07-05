@@ -1,7 +1,7 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
-import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 
 class ProductModel {
   final String id;
@@ -214,5 +214,4 @@ class ProductModel {
 
     return data;
   }
-
 }

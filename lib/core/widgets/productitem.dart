@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/widgets/productimagesscroll.dart';
+import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/productimagesscroll.dart';
 
 class ProductItem extends StatelessWidget {
   final ProductModel product;

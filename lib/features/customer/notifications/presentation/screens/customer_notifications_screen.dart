@@ -5,7 +5,7 @@ import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/customer/profile/cubit/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 
 class CustomerNotificationsScreen extends StatelessWidget {
   const CustomerNotificationsScreen({super.key});

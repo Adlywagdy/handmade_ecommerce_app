@@ -8,16 +8,16 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/presentation/screens/customer_cart_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/layout/presentation/screens/customer_layout.dart';
-import 'package:handmade_ecommerce_app/features/customer/layout/presentation/widgets/customer_bloc_providers.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/screens/customer_cart_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_layout.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customer_bloc_providers.dart';
 import 'package:handmade_ecommerce_app/features/customer/notifications/presentation/screens/customer_notifications_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/orders/presentation/screens/customer_orderdetails_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/product_details/presentation/screens/customer_product_details_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/search/presentation/screens/customer_search_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/shop_details/presentation/screens/customer_shop_details_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/reviews/presentation/screens/customer_writereview_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/ui/screens/customer_orderdetails_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/product_details/ui/screens/customer_product_details_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/search/ui/screens/customer_search_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/shop_details/ui/screens/customer_shop_details_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/ui/screens/customer_writereview_screen.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
 
 import 'package:handmade_ecommerce_app/features/home/presentation/screens/Decider_screen.dart';
@@ -86,9 +86,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.customerCart,
-      page: () => const CustomerBlocProviders(
-        child: CustomerCartScreen(),
-      ),
+      page: () => const CustomerBlocProviders(child: CustomerCartScreen()),
     ),
     GetPage(
       name: AppRoutes.customerProductDetails,
@@ -114,9 +112,7 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.customerSearch,
-      page: () => const CustomerBlocProviders(
-        child: CustomerSearchScreen(),
-      ),
+      page: () => const CustomerBlocProviders(child: CustomerSearchScreen()),
     ),
     GetPage(
       name: AppRoutes.customerShopDetails,
@@ -126,9 +122,8 @@ class AppPages {
     ),
     GetPage(
       name: AppRoutes.customerNotifications,
-      page: () => const CustomerBlocProviders(
-        child: CustomerNotificationsScreen(),
-      ),
+      page: () =>
+          const CustomerBlocProviders(child: CustomerNotificationsScreen()),
     ),
     GetPage(
       name: AppRoutes.customerWriteReview,
