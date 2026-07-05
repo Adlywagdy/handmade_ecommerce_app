@@ -17,7 +17,7 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       spacing: 8.h,
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
           product.category!.categorytitle,
@@ -26,7 +26,7 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
         ),
         Text(
           product.name,
-          overflow: .ellipsis,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
         ),
         Row(

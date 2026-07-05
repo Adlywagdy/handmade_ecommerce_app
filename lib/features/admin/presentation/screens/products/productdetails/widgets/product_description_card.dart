@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../../core/theme/colors.dart';
 
 class ProductDescriptionCard extends StatelessWidget {
@@ -20,7 +21,7 @@ class ProductDescriptionCard extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Description',
+            AppLocalizations.of(context)!.admDescription,
             style: TextStyle(
               fontSize: 14.sp,
               fontWeight: FontWeight.w700,

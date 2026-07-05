@@ -10,9 +10,18 @@ class CustomBottomBar extends StatefulWidget {
   /// List of nav items (icon + label + page)
   final List<BottomNavItem> items;
 
+  final Color? selectedColor;
+  final Color? unselectedColor;
+  final Color? backgroundColor;
+  final bool highlightSelected;
+
   const CustomBottomBar({
     super.key,
     required this.items,
+    this.selectedColor,
+    this.unselectedColor,
+    this.backgroundColor,
+    this.highlightSelected = false,
   });
 
   @override
@@ -28,6 +37,9 @@ class _CustomBottomBarState extends State<CustomBottomBar> with AutomaticKeepAli
   @override
   Widget build(BuildContext context) {
     super.build(context);
+    final selectedColor = widget.selectedColor ?? commonColor;
+    final unselectedColor = widget.unselectedColor ?? greyTextColor;
+    final barColor = widget.backgroundColor ?? Colors.white.withValues(alpha: 0.03);
     return PopScope(
       canPop: false,
       /// if in tap of index 3 for example and press back
@@ -56,7 +68,7 @@ class _CustomBottomBarState extends State<CustomBottomBar> with AutomaticKeepAli
             filter: ImageFilter.blur(sigmaX: 60, sigmaY: 5),
             child: Container(
               decoration: BoxDecoration(
-                color: Colors.white.withValues(alpha: 0.03),
+                color: barColor,
                 border: Border(
                   top: BorderSide(
                     color: Colors.white.withValues(alpha: 0.01),
@@ -81,6 +93,8 @@ class _CustomBottomBarState extends State<CustomBottomBar> with AutomaticKeepAli
                       widget.items[index].iconPath,
                       widget.items[index].label,
                       index,
+                      selectedColor,
+                      unselectedColor,
                     ),
                   ),
                 ),
@@ -92,9 +106,18 @@ class _CustomBottomBarState extends State<CustomBottomBar> with AutomaticKeepAli
     );
   }
 
-  Widget _buildNavItem(String iconPath, String label, int index) {
+  Widget _buildNavItem(
+    String iconPath,
+    String label,
+    int index,
+    Color selectedColor,
+    Color unselectedColor,
+  ) {
     final isSelected = currentIndex == index;
+    final itemColor = isSelected ? selectedColor : unselectedColor;
+    final highlight = widget.highlightSelected && isSelected;
     return InkWell(
+      borderRadius: BorderRadius.circular(16.r),
       onTap: () {
         /// To Lock any available Focus before any navigation
         /// or screen change(like keyboard or search).
@@ -103,32 +126,46 @@ class _CustomBottomBarState extends State<CustomBottomBar> with AutomaticKeepAli
           currentIndex = index;
         });
       },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(
-            width: 20.w,
-            height: 20.h,
-            child: SvgPicture.asset(
-              iconPath,
-              colorFilter: ColorFilter.mode(
-                isSelected ? commonColor : greyTextColor,
-                BlendMode.srcIn,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        curve: Curves.easeOut,
+        padding: EdgeInsets.symmetric(
+          horizontal: highlight ? 14.w : 8.w,
+          vertical: 6.h,
+        ),
+        decoration: BoxDecoration(
+          color: highlight
+              ? selectedColor.withValues(alpha: 0.12)
+              : Colors.transparent,
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SizedBox(
+              width: 20.w,
+              height: 20.h,
+              child: SvgPicture.asset(
+                iconPath,
+                colorFilter: ColorFilter.mode(
+                  itemColor,
+                  BlendMode.srcIn,
+                ),
               ),
             ),
-          ),
-          SizedBox(height: 4.h),
-          FittedBox(
-            child: Text(
-              label,
-              style: TextStyle(
-                color: isSelected ? commonColor : greyTextColor,
-                fontWeight: FontWeight.normal,
-                fontSize: 12.sp,
+            SizedBox(height: 4.h),
+            FittedBox(
+              child: Text(
+                label,
+                style: TextStyle(
+                  color: itemColor,
+                  fontWeight: isSelected ? FontWeight.w600 : FontWeight.normal,
+                  fontSize: 12.sp,
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

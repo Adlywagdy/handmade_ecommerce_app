@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
+import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_bottom_bar.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../services/admin_service.dart';
@@ -17,32 +19,36 @@ class AdminBottomBarScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => AdminCubit(AdminFirestoreService())..init(),
-      child: const CustomBottomBar(
+      child: CustomBottomBar(
+        selectedColor: commonColor,
+        unselectedColor: subTitleColor,
+        backgroundColor: Colors.white,
+        highlightSelected: true,
         items: [
           BottomNavItem(
             iconPath: 'assets/images/dashboard.svg',
-            label: 'Dashboard',
-            page: AdminDashboardScreen(),
+            label: AppLocalizations.of(context)!.admDashboard,
+            page: const AdminDashboardScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/sellers.svg',
-            label: 'Sellers',
-            page: AdminSellersScreen(),
+            label: AppLocalizations.of(context)!.admSellers,
+            page: const AdminSellersScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/orders.svg',
-            label: 'Orders',
-            page: AdminOrdersScreen(),
+            label: AppLocalizations.of(context)!.admOrders,
+            page: const AdminOrdersScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/products.svg',
-            label: 'Products',
-            page: AdminProductsScreen(),
+            label: AppLocalizations.of(context)!.admProducts,
+            page: const AdminProductsScreen(),
           ),
           BottomNavItem(
             iconPath: 'assets/images/settings.svg',
-            label: 'Settings',
-            page: AdminSettingsScreen(),
+            label: AppLocalizations.of(context)!.admSettingsNav,
+            page: const AdminSettingsScreen(),
           ),
         ],
       ),

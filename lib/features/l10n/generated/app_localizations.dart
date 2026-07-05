@@ -281,7 +281,7 @@ abstract class AppLocalizations {
   /// Label text for the email input field.
   ///
   /// In en, this message translates to:
-  /// **'EMAIL ADDRESS'**
+  /// **'Email'**
   String get emailAddress;
 
   /// Validation message shown when the email input is invalid.
@@ -535,6 +535,768 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set Password'**
   String get setPassword;
+
+  /// No description provided for @admGreetingMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back!'**
+  String get admGreetingMorning;
+
+  /// No description provided for @admStatLabelTotalUsers.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL USERS'**
+  String get admStatLabelTotalUsers;
+
+  /// No description provided for @admStatLabelTotalSellers.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL SELLERS'**
+  String get admStatLabelTotalSellers;
+
+  /// No description provided for @admStatLabelTotalOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'TOTAL ORDERS'**
+  String get admStatLabelTotalOrders;
+
+  /// No description provided for @admStatLabelRevenue.
+  ///
+  /// In en, this message translates to:
+  /// **'REVENUE'**
+  String get admStatLabelRevenue;
+
+  /// No description provided for @admLabelPlatformCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform Commission'**
+  String get admLabelPlatformCommission;
+
+  /// No description provided for @admSectionPendingActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending Actions'**
+  String get admSectionPendingActions;
+
+  /// No description provided for @admPendingSellersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Sellers awaiting approval'**
+  String admPendingSellersTitle(int count);
+
+  /// No description provided for @admPendingSellersSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'New artisan registrations'**
+  String get admPendingSellersSubtitle;
+
+  /// No description provided for @admPendingProductsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Products awaiting review'**
+  String admPendingProductsTitle(int count);
+
+  /// No description provided for @admPendingProductsSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Quality control check required'**
+  String get admPendingProductsSubtitle;
+
+  /// No description provided for @admButtonReview.
+  ///
+  /// In en, this message translates to:
+  /// **'Review'**
+  String get admButtonReview;
+
+  /// No description provided for @admDialogTitleCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform Commission'**
+  String get admDialogTitleCommission;
+
+  /// No description provided for @admCommissionHintText.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. 15'**
+  String get admCommissionHintText;
+
+  /// No description provided for @admButtonCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get admButtonCancel;
+
+  /// No description provided for @admButtonSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get admButtonSave;
+
+  /// No description provided for @admSellerApprovals.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller Approvals'**
+  String get admSellerApprovals;
+
+  /// No description provided for @admStatusPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get admStatusPending;
+
+  /// No description provided for @admStatusApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get admStatusApproved;
+
+  /// No description provided for @admStatusRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get admStatusRejected;
+
+  /// No description provided for @admSearchSellersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search sellers...'**
+  String get admSearchSellersHint;
+
+  /// No description provided for @admNoSellersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No sellers found'**
+  String get admNoSellersFound;
+
+  /// No description provided for @admSubmittedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted: {date}'**
+  String admSubmittedLabel(String date);
+
+  /// No description provided for @admApproveBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get admApproveBtn;
+
+  /// No description provided for @admRejectBtn.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get admRejectBtn;
+
+  /// No description provided for @admSeller.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller'**
+  String get admSeller;
+
+  /// No description provided for @admSellerNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller not found'**
+  String get admSellerNotFound;
+
+  /// No description provided for @admSellerDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller Details'**
+  String get admSellerDetails;
+
+  /// No description provided for @admContactSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get admContactSectionTitle;
+
+  /// No description provided for @admBusinessSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Business'**
+  String get admBusinessSectionTitle;
+
+  /// No description provided for @admTimelineSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Timeline'**
+  String get admTimelineSectionTitle;
+
+  /// No description provided for @admEmailLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Email'**
+  String get admEmailLabel;
+
+  /// No description provided for @admPhoneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get admPhoneLabel;
+
+  /// No description provided for @admLocationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Location'**
+  String get admLocationLabel;
+
+  /// No description provided for @admSpecialtyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialty'**
+  String get admSpecialtyLabel;
+
+  /// No description provided for @admRatingLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get admRatingLabel;
+
+  /// No description provided for @admTotalSalesLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total sales'**
+  String get admTotalSalesLabel;
+
+  /// No description provided for @admTotalProductsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total products'**
+  String get admTotalProductsLabel;
+
+  /// No description provided for @admWalletBalanceLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Wallet balance'**
+  String get admWalletBalanceLabel;
+
+  /// No description provided for @admCommissionRateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission rate'**
+  String get admCommissionRateLabel;
+
+  /// No description provided for @admSubmittedDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Submitted'**
+  String get admSubmittedDateLabel;
+
+  /// No description provided for @admApprovedDateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get admApprovedDateLabel;
+
+  /// No description provided for @admStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get admStatusLabel;
+
+  /// No description provided for @admApproveProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve Products'**
+  String get admApproveProducts;
+
+  /// No description provided for @admPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get admPending;
+
+  /// No description provided for @admApproved.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get admApproved;
+
+  /// No description provided for @admRejected.
+  ///
+  /// In en, this message translates to:
+  /// **'Rejected'**
+  String get admRejected;
+
+  /// No description provided for @admSearchProductsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search products...'**
+  String get admSearchProductsHint;
+
+  /// No description provided for @admNoProductsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No products found'**
+  String get admNoProductsFound;
+
+  /// No description provided for @admApproveAction.
+  ///
+  /// In en, this message translates to:
+  /// **'APPROVE'**
+  String get admApproveAction;
+
+  /// No description provided for @admRejectAction.
+  ///
+  /// In en, this message translates to:
+  /// **'REJECT'**
+  String get admRejectAction;
+
+  /// No description provided for @admProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Product'**
+  String get admProduct;
+
+  /// No description provided for @admProductNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Product not found'**
+  String get admProductNotFound;
+
+  /// No description provided for @admProductDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Details'**
+  String get admProductDetails;
+
+  /// No description provided for @admInventory.
+  ///
+  /// In en, this message translates to:
+  /// **'Inventory'**
+  String get admInventory;
+
+  /// No description provided for @admStock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock'**
+  String get admStock;
+
+  /// No description provided for @admCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get admCategory;
+
+  /// No description provided for @admActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get admActive;
+
+  /// No description provided for @admYes.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes'**
+  String get admYes;
+
+  /// No description provided for @admNo.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get admNo;
+
+  /// No description provided for @admStats.
+  ///
+  /// In en, this message translates to:
+  /// **'Stats'**
+  String get admStats;
+
+  /// No description provided for @admRating.
+  ///
+  /// In en, this message translates to:
+  /// **'Rating'**
+  String get admRating;
+
+  /// No description provided for @admReviews.
+  ///
+  /// In en, this message translates to:
+  /// **'Reviews'**
+  String get admReviews;
+
+  /// No description provided for @admSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Sales'**
+  String get admSales;
+
+  /// No description provided for @admDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get admDescription;
+
+  /// No description provided for @admApproveButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Approve'**
+  String get admApproveButtonLabel;
+
+  /// No description provided for @admRejectButtonLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reject'**
+  String get admRejectButtonLabel;
+
+  /// No description provided for @admOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get admOrders;
+
+  /// No description provided for @admOrdersTabAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get admOrdersTabAll;
+
+  /// No description provided for @admOrdersTabPending.
+  ///
+  /// In en, this message translates to:
+  /// **'Pending'**
+  String get admOrdersTabPending;
+
+  /// No description provided for @admOrdersTabActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Active'**
+  String get admOrdersTabActive;
+
+  /// No description provided for @admOrdersTabDelivered.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivered'**
+  String get admOrdersTabDelivered;
+
+  /// No description provided for @admOrdersTabCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get admOrdersTabCancelled;
+
+  /// No description provided for @admSearchOrderPlaceholder.
+  ///
+  /// In en, this message translates to:
+  /// **'Search order ID or name'**
+  String get admSearchOrderPlaceholder;
+
+  /// No description provided for @admNoOrdersFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No orders found'**
+  String get admNoOrdersFound;
+
+  /// No description provided for @admSellerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller: {sellerName}'**
+  String admSellerLabel(String sellerName);
+
+  /// No description provided for @admOrderTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get admOrderTitle;
+
+  /// No description provided for @admOrderNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'Order not found'**
+  String get admOrderNotFound;
+
+  /// No description provided for @admSectionParties.
+  ///
+  /// In en, this message translates to:
+  /// **'Parties'**
+  String get admSectionParties;
+
+  /// No description provided for @admCustomerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get admCustomerLabel;
+
+  /// No description provided for @admSellerLabelDetails.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller'**
+  String get admSellerLabelDetails;
+
+  /// No description provided for @admCreatedLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Created'**
+  String get admCreatedLabel;
+
+  /// No description provided for @admLastUpdateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Last update'**
+  String get admLastUpdateLabel;
+
+  /// No description provided for @admSectionTotals.
+  ///
+  /// In en, this message translates to:
+  /// **'Totals'**
+  String get admSectionTotals;
+
+  /// No description provided for @admSubtotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtotal'**
+  String get admSubtotalLabel;
+
+  /// No description provided for @admDeliveryFeeLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery fee'**
+  String get admDeliveryFeeLabel;
+
+  /// No description provided for @admCommissionLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Commission'**
+  String get admCommissionLabel;
+
+  /// No description provided for @admSellerEarningLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller earning'**
+  String get admSellerEarningLabel;
+
+  /// No description provided for @admTotalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Total'**
+  String get admTotalLabel;
+
+  /// No description provided for @admSectionPayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get admSectionPayment;
+
+  /// No description provided for @admPaymentMethodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Method'**
+  String get admPaymentMethodLabel;
+
+  /// No description provided for @admPaymentStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Status'**
+  String get admPaymentStatusLabel;
+
+  /// No description provided for @admSectionShipping.
+  ///
+  /// In en, this message translates to:
+  /// **'Shipping'**
+  String get admSectionShipping;
+
+  /// No description provided for @admStreetLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Street'**
+  String get admStreetLabel;
+
+  /// No description provided for @admCityLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'City'**
+  String get admCityLabel;
+
+  /// No description provided for @admGovernorateLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Governorate'**
+  String get admGovernorateLabel;
+
+  /// No description provided for @admCountryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Country'**
+  String get admCountryLabel;
+
+  /// No description provided for @admZipLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Zip'**
+  String get admZipLabel;
+
+  /// No description provided for @admItemsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Items ({count})'**
+  String admItemsLabel(int count);
+
+  /// No description provided for @admNoLineItems.
+  ///
+  /// In en, this message translates to:
+  /// **'No line items'**
+  String get admNoLineItems;
+
+  /// No description provided for @admStatusHeaderSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'{price} • {count} items'**
+  String admStatusHeaderSubtitle(String price, int count);
+
+  /// No description provided for @admUpdateStatusLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Update status'**
+  String get admUpdateStatusLabel;
+
+  /// No description provided for @admNoFurtherActions.
+  ///
+  /// In en, this message translates to:
+  /// **'No further actions — {status}'**
+  String admNoFurtherActions(String status);
+
+  /// No description provided for @admSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get admSettings;
+
+  /// No description provided for @admPlatformCommission.
+  ///
+  /// In en, this message translates to:
+  /// **'Platform Commission'**
+  String get admPlatformCommission;
+
+  /// No description provided for @admDeliveryFee.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Fee'**
+  String get admDeliveryFee;
+
+  /// No description provided for @admMinimumOrderValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Minimum Order Value'**
+  String get admMinimumOrderValue;
+
+  /// No description provided for @admSupportEmail.
+  ///
+  /// In en, this message translates to:
+  /// **'Support Email'**
+  String get admSupportEmail;
+
+  /// No description provided for @admLanguageRegion.
+  ///
+  /// In en, this message translates to:
+  /// **'Language & Region'**
+  String get admLanguageRegion;
+
+  /// No description provided for @admLogoutTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get admLogoutTitle;
+
+  /// No description provided for @admLogoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get admLogoutConfirmation;
+
+  /// No description provided for @admCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get admCancel;
+
+  /// No description provided for @admLogout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get admLogout;
+
+  /// No description provided for @admDashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Dashboard'**
+  String get admDashboard;
+
+  /// No description provided for @admSellers.
+  ///
+  /// In en, this message translates to:
+  /// **'Sellers'**
+  String get admSellers;
+
+  /// No description provided for @admProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'Products'**
+  String get admProducts;
+
+  /// No description provided for @admSettingsNav.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get admSettingsNav;
+
+  /// No description provided for @sellerDetailsSectionTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller details'**
+  String get sellerDetailsSectionTitle;
+
+  /// No description provided for @sellerDetailsSectionHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete your details so we can review your application.'**
+  String get sellerDetailsSectionHint;
+
+  /// No description provided for @specialtyLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialty / Craft'**
+  String get specialtyLabel;
+
+  /// No description provided for @specialtyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Handmade pottery'**
+  String get specialtyHint;
+
+  /// No description provided for @specialtyIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Specialty is required'**
+  String get specialtyIsRequired;
+
+  /// No description provided for @phoneNumberLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone Number'**
+  String get phoneNumberLabel;
+
+  /// No description provided for @phoneNumberHint.
+  ///
+  /// In en, this message translates to:
+  /// **'+20 1XX XXX XXXX'**
+  String get phoneNumberHint;
+
+  /// No description provided for @phoneIsRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone number is required'**
+  String get phoneIsRequired;
+
+  /// No description provided for @cityLabelOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'City (optional)'**
+  String get cityLabelOptional;
+
+  /// No description provided for @countryLabelOptional.
+  ///
+  /// In en, this message translates to:
+  /// **'Country (optional)'**
+  String get countryLabelOptional;
 }
 
 class _AppLocalizationsDelegate

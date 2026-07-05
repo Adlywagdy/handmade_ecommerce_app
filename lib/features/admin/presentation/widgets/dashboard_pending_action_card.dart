@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../core/theme/colors.dart';
 
 class DashboardPendingActionCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
-  final String buttonText;
+  final String? buttonText;
   final VoidCallback? onButtonTap;
 
   const DashboardPendingActionCard({
@@ -14,7 +15,7 @@ class DashboardPendingActionCard extends StatelessWidget {
     required this.icon,
     required this.title,
     required this.subtitle,
-    this.buttonText = 'Review',
+    this.buttonText,
     this.onButtonTap,
   });
 
@@ -64,7 +65,7 @@ class DashboardPendingActionCard extends StatelessWidget {
                 borderRadius: BorderRadius.circular(10.r),
               ),
               child: Text(
-                buttonText,
+                buttonText ?? AppLocalizations.of(context)!.admButtonReview,
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 13.sp,

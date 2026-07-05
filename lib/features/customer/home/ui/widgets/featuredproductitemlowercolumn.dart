@@ -13,7 +13,7 @@ class FeaturedProductItemLowerColumn extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment: .start,
+      crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4.h,
       children: [
         Container(
@@ -31,11 +31,11 @@ class FeaturedProductItemLowerColumn extends StatelessWidget {
         ),
         Text(
           product.name,
-          overflow: .ellipsis,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_16w700.copyWith(color: AppColors.textPrimary),
         ),
         Row(
-          mainAxisAlignment: .spaceBetween,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               '\$${product.price}',

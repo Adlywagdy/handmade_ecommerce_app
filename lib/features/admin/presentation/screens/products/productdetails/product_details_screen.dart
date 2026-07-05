@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../cubit/admin_cubit.dart';
 import 'widgets/product_details_body.dart';
@@ -18,8 +19,12 @@ class ProductDetailsScreen extends StatelessWidget {
 
         if (product == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Product')),
-            body: const Center(child: Text('Product not found')),
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.admProduct),
+            ),
+            body: Center(
+              child: Text(AppLocalizations.of(context)!.admProductNotFound),
+            ),
           );
         }
 
@@ -29,7 +34,7 @@ class ProductDetailsScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Product Details',
+              AppLocalizations.of(context)!.admProductDetails,
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,

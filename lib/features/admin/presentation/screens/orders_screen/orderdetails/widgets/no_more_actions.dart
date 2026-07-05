@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/models/orders_model.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 class NoMoreActions extends StatelessWidget {
   final OrderStatus status;
@@ -19,7 +20,7 @@ class NoMoreActions extends StatelessWidget {
           Icon(Icons.lock_outline, size: 16.sp, color: subTitleColor),
           SizedBox(width: 8.w),
           Text(
-            'No further actions — ${status.name}',
+            AppLocalizations.of(context)!.admNoFurtherActions(status.name),
             style: TextStyle(fontSize: 12.sp, color: subTitleColor),
           ),
         ],

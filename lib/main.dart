@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_initial_route.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
@@ -28,6 +29,9 @@ void main() async {
   await Hive.openBox(HiveHelper.onboardingBox);
   await Hive.openBox(HiveHelper.login);
   await Hive.openBox(HiveHelper.email);
+  await Hive.openBox(HiveHelper.role);
+  await Hive.openBox(HiveHelper.status);
+  await Hive.openBox(HiveHelper.language);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize FCM Services
@@ -82,9 +86,7 @@ void main() async {
 
 class HandcraftedEcommerceApp extends StatelessWidget {
   final String initialRoute;
-
   const HandcraftedEcommerceApp({super.key, required this.initialRoute});
-
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -101,28 +103,35 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) =>
                   NotificationsCubit()..loadNotifications(),
             ),
-            // seller
             BlocProvider(
               create: (BuildContext context) =>
                   SellerCubit(SellerFirestoreService())..loadDashboard(),
             ),
+            BlocProvider(
+              create: (BuildContext context) =>
+                  LocaleCubit()..loadSavedLocale(),
+            ),
           ],
-          child: GetMaterialApp(
-            debugShowCheckedModeBanner: false,
-            initialRoute: initialRoute,
-            localizationsDelegates: AppLocalizations.localizationsDelegates,
-            supportedLocales: AppLocalizations.supportedLocales,
-            localeResolutionCallback: (locale, supportedLocales) {
-              if (locale == null) return supportedLocales.first;
-              for (final supportedLocale in supportedLocales) {
-                if (supportedLocale.languageCode == locale.languageCode) {
-                  return supportedLocale;
-                }
-              }
-              return supportedLocales.first;
+          child: BlocBuilder<LocaleCubit, Locale?>(
+            builder: (context, locale) {
+              return GetMaterialApp(
+                debugShowCheckedModeBanner: false,
+                initialRoute: initialRoute,
+                locale: locale,
+                localizationsDelegates: AppLocalizations.localizationsDelegates,
+                supportedLocales: AppLocalizations.supportedLocales,
+                localeResolutionCallback: (locale, supportedLocales) {
+                  if (locale == null) return supportedLocales.first;
+                  for (final supportedLocale in supportedLocales) {
+                    if (supportedLocale.languageCode == locale.languageCode) {
+                      return supportedLocale;
+                    }
+                  }
+                  return supportedLocales.first;
+                },
+                getPages: AppPages.pages,
+              );
             },
-
-            getPages: AppPages.pages,
           ),
         );
       },

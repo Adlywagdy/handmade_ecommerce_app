@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/sellers_model.dart';
 import 'sellerdetails/seller_details_screen.dart';
@@ -23,7 +24,7 @@ class AdminSellersScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Seller Approvals',
+            AppLocalizations.of(context)!.admSellerApprovals,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
@@ -41,17 +42,17 @@ class AdminSellersScreen extends StatelessWidget {
             labelStyle: TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w700),
             unselectedLabelStyle:
                 TextStyle(fontSize: 15.sp, fontWeight: FontWeight.w500),
-            tabs: const [
-              Tab(text: 'Pending'),
-              Tab(text: 'Approved'),
-              Tab(text: 'Rejected'),
+            tabs: [
+              Tab(text: AppLocalizations.of(context)!.admStatusPending),
+              Tab(text: AppLocalizations.of(context)!.admStatusApproved),
+              Tab(text: AppLocalizations.of(context)!.admStatusRejected),
             ],
           ),
         ),
         body: Column(
           children: [
             CustomSearchBar(
-              hintText: 'Search sellers...',
+              hintText: AppLocalizations.of(context)!.admSearchSellersHint,
               onChanged: (v) => context.read<AdminCubit>().setSellersQuery(v),
             ),
             Expanded(
@@ -100,7 +101,7 @@ class _SellersList extends StatelessWidget {
     if (sellers.isEmpty) {
       return Center(
         child: Text(
-          'No sellers found',
+          AppLocalizations.of(context)!.admNoSellersFound,
           style: TextStyle(fontSize: 14.sp, color: subTitleColor),
         ),
       );
@@ -112,9 +113,9 @@ class _SellersList extends StatelessWidget {
       itemBuilder: (context, index) {
         final seller = sellers[index];
         return SellerCard(
+          key: ValueKey(seller.id),
           seller: seller,
           showActions: showActions,
-          isProcessing: cubit.isProcessing(seller.id),
           onApprove: () => cubit.approveSeller(seller.id),
           onReject: () => cubit.rejectSeller(seller.id),
           onPreview: () => Get.to(() => BlocProvider.value(value: cubit, child: SellerDetailsScreen(sellerId: seller.id))),

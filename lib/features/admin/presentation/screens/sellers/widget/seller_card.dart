@@ -1,27 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../models/sellers_model.dart';
 import '../../../widgets/custom_action_button.dart';
 
-// One tile shown in the sellers list.
-// Shows: avatar, name, email, specialty, submission date, optional badge,
-// and (optionally) Approve / Reject buttons.
 class SellerCard extends StatelessWidget {
   final SellerData seller;
   final bool showActions;
-  final bool isProcessing;
-  final VoidCallback? onApprove;
-  final VoidCallback? onReject;
+  final Future<void> Function()? onApprove;
+  final Future<void> Function()? onReject;
   final VoidCallback? onPreview;
 
   const SellerCard({
     super.key,
     required this.seller,
     this.showActions = true,
-    this.isProcessing = false,
     this.onApprove,
     this.onReject,
     this.onPreview,
@@ -46,7 +41,6 @@ class SellerCard extends StatelessWidget {
             if (showActions) ...[
               SizedBox(height: 14.h),
               _SellerCardActions(
-                isProcessing: isProcessing,
                 onApprove: onApprove,
                 onReject: onReject,
               ),
@@ -117,7 +111,7 @@ class _SellerInfo extends StatelessWidget {
         ),
         SizedBox(height: 4.h),
         Text(
-          'Submitted: ${seller.submittedDate}',
+          AppLocalizations.of(context)!.admSubmittedLabel(seller.submittedDate),
           style: TextStyle(fontSize: 11.sp, color: greyTextColor),
         ),
       ],
@@ -152,35 +146,55 @@ class _SellerBadgeColumn extends StatelessWidget {
   }
 }
 
-//////////////////////////////////////////////////////////////////
-class _SellerCardActions extends StatelessWidget {
-  final bool isProcessing;
-  final VoidCallback? onApprove;
-  final VoidCallback? onReject;
+/////////////////////////////////////////////////////////////////
+
+class _SellerCardActions extends StatefulWidget {
+  final Future<void> Function()? onApprove;
+  final Future<void> Function()? onReject;
 
   const _SellerCardActions({
-    required this.isProcessing,
     required this.onApprove,
     required this.onReject,
   });
 
   @override
+  State<_SellerCardActions> createState() => _SellerCardActionsState();
+}
+
+class _SellerCardActionsState extends State<_SellerCardActions> {
+  bool _approving = false;
+  bool _rejecting = false;
+
+  Future<void> _run({required bool approve, required Future<void> Function()? action}) async {
+    if (action == null || _approving || _rejecting) return;
+    setState(() => approve ? _approving = true : _rejecting = true);
+    try {
+      await action();
+    } finally {
+      if (mounted) {
+        setState(() => approve ? _approving = false : _rejecting = false);
+      }
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final busy = _approving || _rejecting;
     return Row(
       children: [
         ActionButton(
-          label: 'Approve',
+          label: AppLocalizations.of(context)!.admApproveBtn,
           color: greenDegree,
-          onTap: onApprove,
-          isLoading: isProcessing,
+          onTap: busy ? null   : () => _run(approve: true, action: widget.onApprove),
+          isLoading: _approving,
         ),
         SizedBox(width: 12.w),
         ActionButton(
-          label: 'Reject',
+          label: AppLocalizations.of(context)!.admRejectBtn,
           color: redDegree,
           style: ActionButtonStyle.outlined,
-          onTap: onReject,
-          isLoading: isProcessing,
+          onTap: busy   ? null  : () => _run(approve: false, action: widget.onReject),
+          isLoading: _rejecting,
         ),
       ],
     );

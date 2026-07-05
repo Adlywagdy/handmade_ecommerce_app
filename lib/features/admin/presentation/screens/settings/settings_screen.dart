@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
+import '../../../../../core/cubit/locale_cubit.dart';
 import '../../../../../core/routes/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/colors.dart';
@@ -23,7 +25,7 @@ class AdminSettingsScreen extends StatelessWidget {
         backgroundColor: Colors.white,
         elevation: 0,
         title: Text(
-          'Settings',
+          AppLocalizations.of(context)!.admSettings,
           style: TextStyle(
             fontSize: 20.sp,
             fontWeight: FontWeight.bold,
@@ -54,30 +56,32 @@ class _SettingsBody extends StatelessWidget {
       children: [
         _SettingsTile(
           icon: Icons.percent,
-          label: 'Platform Commission',
+          label: AppLocalizations.of(context)!.admPlatformCommission,
           value: '${(settings.commissionRate * 100).toStringAsFixed(1)}%',
           onTap: () => showCommissionEditor(context, settings.commissionRate),
         ),
         SizedBox(height: 12.h),
         _SettingsTile(
           icon: Icons.local_shipping_outlined,
-          label: 'Delivery Fee',
+          label: AppLocalizations.of(context)!.admDeliveryFee,
           value:
               '${settings.currency} ${settings.deliveryFee.toStringAsFixed(0)}',
         ),
         SizedBox(height: 12.h),
         _SettingsTile(
           icon: Icons.shopping_bag_outlined,
-          label: 'Minimum Order Value',
+          label: AppLocalizations.of(context)!.admMinimumOrderValue,
           value:
               '${settings.currency} ${settings.minOrderValue.toStringAsFixed(0)}',
         ),
         SizedBox(height: 12.h),
         _SettingsTile(
           icon: Icons.support_agent_outlined,
-          label: 'Support Email',
+          label: AppLocalizations.of(context)!.admSupportEmail,
           value: settings.supportEmail.isNotEmpty ? settings.supportEmail : '—',
         ),
+        SizedBox(height: 12.h),
+        _LanguageTile(),
         SizedBox(height: 12.h),
         CustomElevatedButton(
           buttonheight: 60.h,
@@ -86,19 +90,21 @@ class _SettingsBody extends StatelessWidget {
               context: context,
               builder: (context) {
                 return AlertDialog(
-                  title: const Text('Logout'),
-                  content: const Text('Are you sure you want to logout?'),
+                  title: Text(AppLocalizations.of(context)!.admLogoutTitle),
+                  content: Text(
+                      AppLocalizations.of(context)!.admLogoutConfirmation),
                   actions: [
                     TextButton(
                       onPressed: () => Navigator.of(context).pop(false),
-                      child: const Text('Cancel'),
+                      child: Text(AppLocalizations.of(context)!.admCancel),
                     ),
                     TextButton(
                       onPressed: ()async{
                           await AuthService().signOut();
                           Get.offAllNamed(AppRoutes.login);
                       },
-                      child: Text('Logout', style: TextStyle(color: redDegree)),
+                      child: Text(AppLocalizations.of(context)!.admLogout,
+                          style: TextStyle(color: redDegree)),
                     ),
                   ],
                 );
@@ -113,13 +119,76 @@ class _SettingsBody extends StatelessWidget {
               Icon(Icons.logout_rounded, color: redDegree, size: 22.r),
               SizedBox(width: 8.w),
               Text(
-                'Logout',
+                AppLocalizations.of(context)!.admLogout,
                 style: AppTextStyles.t_16w600.copyWith(color: redDegree),
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+}
+
+class _LanguageTile extends StatelessWidget {
+  const _LanguageTile();
+
+  @override
+  Widget build(BuildContext context) {
+    final cubit = context.read<LocaleCubit>();
+    // Arabic when the saved locale is 'ar'; otherwise English.
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 10.h),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14.r),
+        border: Border.all(color: commonColor.withValues(alpha: 0.10)),
+      ),
+      child: Row(
+        children: [
+          Container(
+            width: 38.w,
+            height: 38.h,
+            decoration: BoxDecoration(
+              color: commonColor.withValues(alpha: 0.10),
+              borderRadius: BorderRadius.circular(10.r),
+            ),
+            child: Icon(Icons.language_outlined, color: commonColor, size: 20.sp),
+          ),
+          SizedBox(width: 14.w),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  AppLocalizations.of(context)!.admLanguageRegion,
+                  style: TextStyle(
+                    fontSize: 15.sp,
+                    fontWeight: FontWeight.w600,
+                    color: blackDegree,
+                  ),
+                ),
+                SizedBox(height: 2.h),
+                Text(
+                  isArabic ? 'العربية' : 'English (US)',
+                  style: TextStyle(
+                    fontSize: 13.sp,
+                    color: subTitleColor,
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Switch.adaptive(
+            value: isArabic,
+            activeThumbColor: commonColor,
+            onChanged: (toArabic) =>
+                toArabic ? cubit.switchToArabic() : cubit.switchToEnglish(),
+          ),
+        ],
+      ),
     );
   }
 }

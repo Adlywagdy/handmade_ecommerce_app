@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../cubit/admin_cubit.dart';
 import '../../../../../models/sellers_model.dart';
 import 'info_row.dart';
@@ -29,20 +30,20 @@ class SellerDetailsBody extends StatelessWidget {
         SizedBox(height: 16.h),
 
         SectionWidget(
-          title: 'Contact',
-          rows: _buildContactRows(),
+          title: AppLocalizations.of(context)!.admContactSectionTitle,
+          rows: _buildContactRows(context),
         ),
         SizedBox(height: 12.h),
 
         SectionWidget(
-          title: 'Business',
-          rows: _buildBusinessRows(),
+          title: AppLocalizations.of(context)!.admBusinessSectionTitle,
+          rows: _buildBusinessRows(context),
         ),
         SizedBox(height: 12.h),
 
         SectionWidget(
-          title: 'Timeline',
-          rows: _buildTimelineRows(),
+          title: AppLocalizations.of(context)!.admTimelineSectionTitle,
+          rows: _buildTimelineRows(context),
         ),
         SizedBox(height: 20.h),
 
@@ -58,10 +59,16 @@ class SellerDetailsBody extends StatelessWidget {
 
   // Contact info rows. "Location" is only added when at least one of
   // city/country is set, so we build this list step by step.
-  List<InfoRow> _buildContactRows() {
+  List<InfoRow> _buildContactRows(BuildContext context) {
     final List<InfoRow> rows = [
-      InfoRow(label: 'Email', value: seller.email),
-      InfoRow(label: 'Phone', value: seller.phone ?? '—'),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admEmailLabel,
+        value: seller.email,
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admPhoneLabel,
+        value: seller.phone ?? '—',
+      ),
     ];
 
     final bool hasLocation = seller.city != null || seller.country != null;
@@ -71,7 +78,10 @@ class SellerDetailsBody extends StatelessWidget {
       final String separator =
           (seller.city != null && seller.country != null) ? ', ' : '';
       rows.add(
-        InfoRow(label: 'Location', value: '$city$separator$country'),
+        InfoRow(
+          label: AppLocalizations.of(context)!.admLocationLabel,
+          value: '$city$separator$country',
+        ),
       );
     }
 
@@ -79,33 +89,54 @@ class SellerDetailsBody extends StatelessWidget {
   }
 
   // Business-related rows.
-  List<InfoRow> _buildBusinessRows() {
+  List<InfoRow> _buildBusinessRows(BuildContext context) {
     return [
-      InfoRow(label: 'Specialty', value: seller.specialty),
-      InfoRow(label: 'Rating', value: seller.rating.toStringAsFixed(1)),
-      InfoRow(label: 'Total sales', value: seller.totalSales.toString()),
-      InfoRow(label: 'Total products', value: seller.totalProducts.toString()),
       InfoRow(
-        label: 'Wallet balance',
+        label: AppLocalizations.of(context)!.admSpecialtyLabel,
+        value: seller.specialty,
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admRatingLabel,
+        value: seller.rating.toStringAsFixed(1),
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admTotalSalesLabel,
+        value: seller.totalSales.toString(),
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admTotalProductsLabel,
+        value: seller.totalProducts.toString(),
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admWalletBalanceLabel,
         value: '${seller.walletBalance.toStringAsFixed(2)} EGP',
       ),
       InfoRow(
-        label: 'Commission rate',
+        label: AppLocalizations.of(context)!.admCommissionRateLabel,
         value: '${(seller.commissionRate * 100).toStringAsFixed(1)}%',
       ),
     ];
   }
 
   // Timeline rows (submitted + approved + current status).
-  List<InfoRow> _buildTimelineRows() {
+  List<InfoRow> _buildTimelineRows(BuildContext context) {
     final String submitted =
         seller.submittedDate.isNotEmpty ? seller.submittedDate : '—';
     final String approved = _formatApprovedDate(seller.approvedAt);
 
     return [
-      InfoRow(label: 'Submitted', value: submitted),
-      InfoRow(label: 'Approved', value: approved),
-      InfoRow(label: 'Status', value: seller.status.name),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admSubmittedDateLabel,
+        value: submitted,
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admApprovedDateLabel,
+        value: approved,
+      ),
+      InfoRow(
+        label: AppLocalizations.of(context)!.admStatusLabel,
+        value: seller.status.name,
+      ),
     ];
   }
 
