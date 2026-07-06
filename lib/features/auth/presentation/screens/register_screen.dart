@@ -4,7 +4,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -261,7 +260,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       color: primaryColor.withValues(alpha: 0.6),
                     ),
                     validator: (value) {
-                      if (_isSeller && (value == null || value.trim().isEmpty)) {
+                      if (_isSeller &&
+                          (value == null || value.trim().isEmpty)) {
                         return context.l10n.specialtyIsRequired;
                       }
                       return null;
@@ -277,7 +277,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       color: primaryColor.withValues(alpha: 0.6),
                     ),
                     validator: (value) {
-                      if (_isSeller && (value == null || value.trim().isEmpty)) {
+                      if (_isSeller &&
+                          (value == null || value.trim().isEmpty)) {
                         return context.l10n.phoneIsRequired;
                       }
                       return null;
@@ -390,12 +391,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   role: _selectedRole!,
                                   sellerApplication: _isSeller
                                       ? SellerApplication(
-                                          specialty:
-                                              _specialtyController.text.trim(),
+                                          specialty: _specialtyController.text
+                                              .trim(),
                                           phone: _phoneController.text.trim(),
                                           city: _cityController.text.trim(),
-                                          country:
-                                              _countryController.text.trim(),
+                                          country: _countryController.text
+                                              .trim(),
                                         )
                                       : null,
                                 );
