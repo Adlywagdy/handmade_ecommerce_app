@@ -8,11 +8,12 @@ import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_layout.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customer_bloc_providers.dart';
-import 'package:handmade_ecommerce_app/features/customer/notifications/presentation/screens/customer_notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/ui/screens/customer_orderdetails_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/screens/customer_product_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/ui/screens/customer_search_screen.dart';
@@ -148,7 +149,25 @@ class AppPages {
       name: AppRoutes.notifications,
       page: () => const NotificationsScreen(),
     ),
+    GetPage(
+      name: AppRoutes.customerRecommendationChatbot,
+      page: () {
+        final args = Get.arguments;
+        final ProductModel? product = args is ProductModel
+            ? args
+            : args is Map
+            ? args['product'] as ProductModel?
+            : null;
 
+        if (product == null) {
+          return const _CustomerRouteErrorScreen(
+            title: 'Product not found',
+            subtitle: 'Unable to open product details from this entry point.',
+          );
+        }
+        return const RecommendationChatbotScreen();
+      },
+    ),
     // seller
     GetPage(
       name: AppRoutes.sellerdashboard,

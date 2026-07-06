@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/firebase_product_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/data/models/chatbot_product_model.dart';
 
@@ -31,7 +32,7 @@ class RecommendedProductsWidget extends StatelessWidget {
               borderRadius: BorderRadius.circular(18.r),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.07),
+                  color: Colors.black.withAlpha(18),
                   blurRadius: 8,
                   offset: const Offset(0, 3),
                 ),
@@ -98,11 +99,23 @@ class RecommendedProductsWidget extends StatelessWidget {
                               ),
                               padding: EdgeInsets.zero,
                             ),
-                            onPressed: () {
-                              Get.toNamed(
-                                AppRoutes.customerProductDetails,
-                                arguments: {'productId': product.id},
-                              );
+                            onPressed: () async {
+                              await FirebaseProductService()
+                                  .getProductById(product.id)
+                                  .then((product) {
+                                    if (product != null) {
+                                      Get.toNamed(
+                                        AppRoutes.customerProductDetails,
+                                        arguments: {'product': product},
+                                      );
+                                    } else {
+                                      Get.snackbar(
+                                        'Error',
+                                        'Product not found',
+                                        snackPosition: SnackPosition.BOTTOM,
+                                      );
+                                    }
+                                  });
                             },
                             child: Text(
                               'View Product',

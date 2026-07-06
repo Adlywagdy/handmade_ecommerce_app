@@ -10,6 +10,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
+import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/logic/home_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
@@ -103,6 +104,18 @@ class CustomerHomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: customerbackGroundColor,
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: commonColor,
+        elevation: 6,
+        onPressed: () {
+          Get.to(() => const RecommendationChatbotScreen());
+        },
+        icon: const Icon(Icons.auto_awesome, color: Colors.white),
+        label: Text(
+          'AI Help',
+          style: AppTextStyles.t_14w600.copyWith(color: Colors.white),
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.only(left: 16.0).w,
         child: CustomScrollView(

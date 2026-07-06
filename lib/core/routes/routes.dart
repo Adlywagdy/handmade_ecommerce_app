@@ -18,6 +18,8 @@ abstract class AppRoutes {
   static const String customerShopDetails = '/customer/shop-details';
   static const String customerOrderDetails = '/customer/order-details';
   static const String customerWriteReview = '/customer/write-review';
+  static const String customerRecommendationChatbot =
+      '/customer/recommendation-chatbot';
 
   static const String sellerdashboard = '/sellerdashboard';
   static const String sellerPending = '/seller/pending';
