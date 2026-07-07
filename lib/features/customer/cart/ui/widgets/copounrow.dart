@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -50,7 +51,7 @@ class _CopounRowState extends State<CopounRow> {
               fillColor: Colors.white,
               filled: true,
               hint: Text(
-                'Promo code',
+                context.l10n.promoCode,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               ),
               focusedBorder: OutlineInputBorder(
@@ -82,8 +83,8 @@ class _CopounRowState extends State<CopounRow> {
               final coupon = controller.text.trim();
               if (coupon.isEmpty) {
                 showSnack(
-                  title: "Error",
-                  message: "Please enter a promo code",
+                  title: context.l10n.error,
+                  message: context.l10n.pleaseEnterPromoCode,
                   bgColor: Colors.red,
                   icon: Icons.error,
                 );
@@ -99,7 +100,7 @@ class _CopounRowState extends State<CopounRow> {
               controller.clear();
             },
             child: CustomTextContainer(
-              text: "Apply",
+              text: context.l10n.apply,
               textstyle: AppTextStyles.t_16w700.copyWith(color: commonColor),
               horizontalpadding: 4.h,
               verticalpadding: 12.h,

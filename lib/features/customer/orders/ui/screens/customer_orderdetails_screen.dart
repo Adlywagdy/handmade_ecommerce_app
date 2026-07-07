@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
@@ -17,32 +18,32 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
   final CustomerOrderModel order;
   const CustomerOrderDetailsScreen({super.key, required this.order});
 
-  String get _currencyLabel => order.payment.currency ?? 'EGP';
+  String _currencyLabel(BuildContext context) => order.payment.currency ?? context.l10n.egp;
 
-  String get _customerName {
+  String _customerName(BuildContext context) {
     final authUser = FirebaseAuth.instance.currentUser;
     final orderName = order.customer.name.trim();
     final profileName = authUser?.displayName?.trim() ?? '';
 
     if (orderName.isNotEmpty) return orderName;
     if (profileName.isNotEmpty) return profileName;
-    return _customerEmail;
+    return _customerEmail(context);
   }
 
-  String get _customerEmail {
+  String _customerEmail(BuildContext context) {
     final authUser = FirebaseAuth.instance.currentUser;
     final orderEmail = order.customer.email.trim();
     final profileEmail = authUser?.email?.trim() ?? '';
 
     if (orderEmail.isNotEmpty) return orderEmail;
     if (profileEmail.isNotEmpty) return profileEmail;
-    return 'Unknown Customer';
+    return context.l10n.unknownCustomer;
   }
 
   Future<void> _cancelOrder(BuildContext context) async {
     if (order.status != OrderStatus.pending) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Only pending orders can be cancelled.')),
+        SnackBar(content: Text(context.l10n.onlyPendingOrdersCanBeCancelled)),
       );
       return;
     }
@@ -53,18 +54,18 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
         return AlertDialog(
           backgroundColor: customerbackGroundColor,
 
-          title: const Text('Cancel order?'),
-          content: const Text(
-            'This order will be cancelled and cannot be restored.',
+          title: Text(context.l10n.cancelOrderQuestion),
+          content: Text(
+            context.l10n.cancelOrderWarning,
           ),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(false),
-              child: const Text('No', style: TextStyle(color: subTitleColor)),
+              child: Text(context.l10n.no, style: TextStyle(color: subTitleColor)),
             ),
             TextButton(
               onPressed: () => Navigator.of(dialogContext).pop(true),
-              child: const Text('Yes', style: TextStyle(color: redDegree)),
+              child: Text(context.l10n.yes, style: TextStyle(color: redDegree)),
             ),
           ],
         );
@@ -94,7 +95,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
           children: [
             Text(order.orderid, style: AppTextStyles.t_18w700),
             Text(
-              'Placed on ${order.orderDate.toLocal().toString().split(' ').first}',
+              context.l10n.placedOn(order.orderDate.toLocal().toString().split(' ').first),
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
           ],
@@ -118,7 +119,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                     child: OrderStatusSlider(orderstatus: order.status),
                   ),
                   Text(
-                    'ORDER ITEMS (${order.products.length})',
+                    context.l10n.orderItems(order.products.length),
                     style: AppTextStyles.t_16w700,
                   ),
                   SizedBox(height: 12.h),
@@ -164,22 +165,26 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                             size: 26.r,
                           ),
                           Text(
-                            'DELIVERY ADDRESS',
+                            context.l10n.deliveryAddressSection,
                             style: AppTextStyles.t_14w700,
                           ),
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(_customerName, style: AppTextStyles.t_14w700),
-                      if (_customerEmail != _customerName)
+                      Text(_customerName(context), maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.t_14w700),
+                      if (_customerEmail(context) != _customerName(context))
                         Text(
-                          _customerEmail,
+                          _customerEmail(context),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.t_14w400.copyWith(
                             color: subTitleColor,
                           ),
                         ),
                       Text(
                         order.address.addressdescription,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
@@ -193,7 +198,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                             )
                           : SizedBox(),
                       Text(
-                        "zipCode:${order.address.zipCode.toString()}",
+                        "${context.l10n.zip}:${order.address.zipCode.toString()}",
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),
@@ -205,7 +210,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
             ),
             SliverToBoxAdapter(
               child: OrderSummary(
-                currency: _currencyLabel,
+                currency: _currencyLabel(context),
                 subtotalPrice: order.payment.subtotalPrice,
                 totalPrice: order.payment.totalPrice,
                 deliveryFee: order.payment.deliveryFee,
@@ -224,7 +229,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                     children: [
                       Icon(Icons.cancel_outlined, color: redDegree, size: 24.r),
                       Text(
-                        'Cancel Order',
+                        context.l10n.cancelOrder,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_16w700.copyWith(
                           color: redDegree,
@@ -237,7 +242,7 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
             else
               SliverToBoxAdapter(
                 child: Text(
-                  "Orders can only be cancelled while in 'Pending' status.",
+                  context.l10n.ordersCanOnlyBeCancelledWhenPending,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.t_10w400.copyWith(color: subTitleColor),
                 ),

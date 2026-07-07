@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -18,6 +21,8 @@ class ProductItemOfOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Container(
       decoration: BoxDecoration(
         color: commonColor.withValues(alpha: .02),
@@ -59,10 +64,15 @@ class ProductItemOfOrder extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(product.name, style: AppTextStyles.t_16w600),
+                    Text(
+                      product.localizedName(isArabic),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.t_16w600,
+                    ),
                     SizedBox(height: 2.h),
                     Text(
-                      'Sold by ${product.seller.id}',
+                      context.l10n.soldBy(product.seller.id ?? ''),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.t_12w500.copyWith(
@@ -74,7 +84,7 @@ class ProductItemOfOrder extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '\$${product.price.toString()}',
+                          '${order.payment.currency ?? "EGP"} ${product.price.toString()}',
                           style: AppTextStyles.t_16w700.copyWith(
                             color: commonColor,
                           ),
@@ -87,8 +97,8 @@ class ProductItemOfOrder extends StatelessWidget {
                           elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0).r,
-                            child: Text(
-                              'Qty: ${product.quantity}',
+                            child:                             Text(
+                              context.l10n.qty(product.quantity),
                               style: AppTextStyles.t_12w500,
                             ),
                           ),
@@ -134,7 +144,7 @@ class ProductItemOfOrder extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          'Write Review',
+                          context.l10n.writeReview,
                           style: AppTextStyles.t_12w600.copyWith(
                             color: commonColor,
                           ),
@@ -162,7 +172,7 @@ class ProductItemOfOrder extends StatelessWidget {
                     border: Border.all(color: redDegree.withValues(alpha: .22)),
                   ),
                   child: Text(
-                    'You can review this product after delivery',
+                    context.l10n.reviewAfterDelivery,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.t_12w600.copyWith(color: redDegree),
                   ),

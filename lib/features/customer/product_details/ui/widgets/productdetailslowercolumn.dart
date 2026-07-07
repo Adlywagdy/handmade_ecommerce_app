@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -8,6 +9,7 @@ import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widg
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/productreviewscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/tagsrow.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/logic/reviews_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ProductDetailsLowerColumn extends StatefulWidget {
   const ProductDetailsLowerColumn({super.key, required this.product});
@@ -37,6 +39,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
   @override
   Widget build(BuildContext context) {
     final productId = widget.product.id;
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,10 +47,10 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
         CustomSellerListTile(product: widget.product),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 14.0),
-          child: Text('Description', style: AppTextStyles.t_18w700),
+          child: Text(context.l10n.description, style: AppTextStyles.t_18w700),
         ),
         Text(
-          widget.product.description,
+          widget.product.localizedDescription(isArabic),
           style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
         ),
         SizedBox(height: 12.h),
@@ -75,7 +78,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
 
             if (isErrorCurrentProduct && reviews.isEmpty) {
               return Text(
-                'Unable to load reviews right now.',
+                context.l10n.unableToLoadReviews,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               );
@@ -83,7 +86,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
 
             if (reviews.isEmpty) {
               return Text(
-                'No reviews yet for this product. Be the first to share your thoughts!',
+                context.l10n.noReviewsYetForProduct,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               );
@@ -91,7 +94,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
 
             return ProductReviewsColumn(
               reviews: reviews,
-              productName: widget.product.name,
+              productName: widget.product.localizedName(isArabic),
             );
           },
         ),

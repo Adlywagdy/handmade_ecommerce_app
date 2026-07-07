@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/orderdetailsrow.dart';
@@ -40,10 +41,10 @@ class OrderSummary extends StatelessWidget {
         spacing: 12.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text('Order Summary', style: AppTextStyles.t_18w700),
+          Text(context.l10n.orderSummary, style: AppTextStyles.t_18w700),
 
           OrderDetailsRow(
-            title: 'Subtotal',
+            title: context.l10n.subtotal,
             valuestyle: AppTextStyles.t_14w500,
             titlestyle: AppTextStyles.t_14w400.copyWith(
               color: darkblue.withValues(alpha: .9),
@@ -51,7 +52,7 @@ class OrderSummary extends StatelessWidget {
             value: '$currency ${subtotalPrice?.toStringAsFixed(2) ?? '0.00'}',
           ),
           OrderDetailsRow(
-            title: 'Delivery Fee',
+            title: context.l10n.deliveryFee,
             valuestyle: AppTextStyles.t_14w500,
             titlestyle: AppTextStyles.t_14w400.copyWith(
               color: darkblue.withValues(alpha: .9),
@@ -59,7 +60,7 @@ class OrderSummary extends StatelessWidget {
             value: '$currency ${deliveryFee?.toStringAsFixed(2) ?? '0.00'}',
           ),
           OrderDetailsRow(
-            title: 'Discount',
+            title: context.l10n.discount,
             valuestyle: AppTextStyles.t_14w500.copyWith(color: greenDegree),
             titlestyle: AppTextStyles.t_14w400.copyWith(
               color: darkblue.withValues(alpha: .9),
@@ -68,7 +69,7 @@ class OrderSummary extends StatelessWidget {
           ),
           Divider(color: commonColor.withValues(alpha: .1)),
           OrderDetailsRow(
-            title: 'Total Amount',
+            title: context.l10n.totalAmount,
             titlestyle: AppTextStyles.t_18w700,
             valuestyle: AppTextStyles.t_20w700.copyWith(color: commonColor),
             value: '$currency ${totalPrice?.toStringAsFixed(2) ?? '0.00'}',

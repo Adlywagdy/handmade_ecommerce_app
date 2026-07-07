@@ -5,6 +5,7 @@ import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/review_card.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/screens/reviews_screen.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ProductReviewsColumn extends StatelessWidget {
   const ProductReviewsColumn({
@@ -32,7 +33,7 @@ class ProductReviewsColumn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Reviews',
+              context.l10n.reviews,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
             Row(
@@ -62,7 +63,7 @@ class ProductReviewsColumn extends StatelessWidget {
               );
             },
             child: CustomTextContainer(
-              text: 'View all ${reviews.length} reviews',
+              text: context.l10n.viewAllReviews(reviews.length),
               textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
             ),
           ),

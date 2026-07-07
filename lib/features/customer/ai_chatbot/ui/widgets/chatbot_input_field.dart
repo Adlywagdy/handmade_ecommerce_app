@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class ChatbotInputField extends StatelessWidget {
@@ -37,7 +38,7 @@ class ChatbotInputField extends StatelessWidget {
                 textInputAction: TextInputAction.send,
                 onSubmitted: (_) => onSend(),
                 decoration: InputDecoration(
-                  hintText: 'Describe your room...',
+                  hintText: context.l10n.describeYourRoom,
                   hintStyle: TextStyle(
                     color: Colors.grey.shade600,
                   ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
@@ -25,6 +26,13 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
         listen: false,
       ).walletPhonenumber,
     );
+  }
+
+  String _localizedPaymentMethod(BuildContext context, String method) {
+    final l10n = context.l10n;
+    if (method == "Visa") return l10n.visa;
+    if (method == "PayPal") return l10n.paypal;
+    return l10n.mobileWallets;
   }
 
   @override
@@ -79,7 +87,10 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
                     ),
                     SizedBox(width: 10.w),
                     Expanded(
-                      child: Text(paymentMethod, style: AppTextStyles.t_14w500),
+                      child: Text(
+                        _localizedPaymentMethod(context, paymentMethod),
+                        style: AppTextStyles.t_14w500,
+                      ),
                     ),
                     Image.asset(
                       imagePath,
@@ -108,7 +119,7 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
                         color: commonColor,
                         size: 20.r,
                       ),
-                      hintText: 'Enter wallet phone (e.g. +201xxxxxxxxx)',
+                      hintText: context.l10n.enterWalletPhone,
                       hintStyle: AppTextStyles.t_12w400.copyWith(
                         color: subTitleColor,
                       ),

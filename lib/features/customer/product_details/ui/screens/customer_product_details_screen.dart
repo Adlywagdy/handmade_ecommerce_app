@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -13,6 +14,7 @@ import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/productdetailslowercolumn.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -20,6 +22,8 @@ class CustomerProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Scaffold(
       backgroundColor: customerbackGroundColor,
 
@@ -46,14 +50,14 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   SharePlus.instance.share(
                     ShareParams(
                       text:
-                          'check out this product: ${product.name} for \$${product.price} at our store!',
+                          context.l10n.checkOutThisProduct(product.localizedName(isArabic), 'EGP ${product.price}'),
                     ),
                   );
                 },
               ),
             ],
             title: Text(
-              'Product Details',
+              context.l10n.productDetails,
               textAlign: TextAlign.center,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
@@ -96,14 +100,15 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.name,
-
+                      product.localizedName(isArabic),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.t_30w700.copyWith(
                         color: blackDegree,
                       ),
                     ),
                     Text(
-                      '\$${product.price}',
+                      'EGP ${product.price}',
                       style: AppTextStyles.t_24w700.copyWith(
                         color: commonColor,
                       ),
@@ -145,7 +150,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                       },
                       buttoncolor: commonColor,
                       child: Text(
-                        'Buy Now',
+                        context.l10n.buyNow,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_16w600.copyWith(
                           color: Colors.white,
@@ -187,7 +192,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                                 ),
                                 SizedBox(width: 8.w),
                                 Text(
-                                  'Added',
+                                  context.l10n.added,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyles.t_16w600.copyWith(
                                     color: commonColor,
@@ -206,7 +211,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                               ),
                               SizedBox(width: 8.w),
                               Text(
-                                'Add to Cart',
+                                context.l10n.addToCart,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyles.t_16w600.copyWith(
                                   color: commonColor,

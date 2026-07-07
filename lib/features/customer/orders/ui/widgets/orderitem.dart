@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
@@ -9,7 +10,7 @@ class OrderItem extends StatelessWidget {
   final CustomerOrderModel order;
   const OrderItem({super.key, required this.order});
 
-  String get _currencyLabel => order.payment.currency ?? 'EGP';
+  String _currencyLabel(BuildContext context) => order.payment.currency ?? context.l10n.egp;
 
   @override
   Widget build(BuildContext context) {
@@ -46,7 +47,7 @@ class OrderItem extends StatelessWidget {
           children: [
             Text(order.orderid, style: AppTextStyles.t_16w700),
             CustomTextContainer(
-              text: order.status.toString().split('.').last.toUpperCase(),
+              text: order.status.localizedLabel(context),
 
               horizontalpadding: 8.w,
               verticalpadding: 2.h,
@@ -71,11 +72,11 @@ class OrderItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              '${order.orderDate.toLocal().toString().split(' ')[0]} • ${order.products.length} Items',
+              '${order.orderDate.toLocal().toString().split(' ')[0]} • ${order.products.length} ${context.l10n.items}',
               style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
             ),
             Text(
-              '$_currencyLabel ${order.payment.totalPrice?.toStringAsFixed(2) ?? '0.00'}',
+              '${_currencyLabel(context)} ${order.payment.totalPrice?.toStringAsFixed(2) ?? '0.00'}',
               style: AppTextStyles.t_14w600.copyWith(color: commonColor),
             ),
           ],

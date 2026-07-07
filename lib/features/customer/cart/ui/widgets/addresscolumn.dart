@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/extension/validation.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -51,8 +52,8 @@ class _AddressColumnState extends State<AddressColumn> {
           spacing: 8.h,
           children: [
             CustomFeatureRow(
-              title: 'Delivery Address',
-              buttontext: displayAddress != null ? 'Change' : 'Add',
+              title: context.l10n.deliveryAddress,
+              buttontext: displayAddress != null ? context.l10n.change : 'Add',
               onTap: () => _openAddressBottomSheet(context),
               buttontextstyle: AppTextStyles.t_16w600.copyWith(
                 color: commonColor,
@@ -90,11 +91,15 @@ class _AddressColumnState extends State<AddressColumn> {
                   ),
                 ),
                 title: Text(
-                  displayAddress?.addresstitle ?? "Home",
+                  displayAddress?.addresstitle ?? context.l10n.home,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
                 ),
                 subtitle: Text(
                   displayAddress?.addressdescription ?? "No address added yet",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w400.copyWith(
                     color: blackDegree.withValues(alpha: .7),
                   ),
@@ -204,24 +209,24 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                   ),
                   SizedBox(height: 16.h),
                   Text(
-                    'Delivery Address',
+                    context.l10n.deliveryAddress,
                     style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
                   ),
                   SizedBox(height: 14.h),
                   AddressTextField(
                     controller: _title,
-                    label: 'Title',
-                    hint: 'Home / Work',
+                    label: context.l10n.formTitle,
+                    hint: context.l10n.homeWork,
                   ),
                   SizedBox(height: 12.h),
                   AddressTextField(
                     controller: _description,
-                    label: 'Address',
-                    hint: 'Street, building',
+                    label: context.l10n.address,
+                    hint: context.l10n.streetBuilding,
                     maxLines: 2,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'This field is required';
+                        return context.l10n.thisFieldIsRequired;
                       }
                       return null;
                     },
@@ -233,15 +238,15 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                       Expanded(
                         child: AddressTextField(
                           controller: _city,
-                          label: 'City',
-                          hint: 'Cairo',
+                          label: context.l10n.city,
+                          hint: context.l10n.cairo,
                         ),
                       ),
                       SizedBox(width: 10.w),
                       Expanded(
                         child: AddressTextField(
                           controller: _country,
-                          label: 'Country',
+                          label: context.l10n.country,
                           hint: 'Egypt',
                         ),
                       ),
@@ -250,15 +255,15 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                   SizedBox(height: 12.h),
                   AddressTextField(
                     controller: _zip,
-                    label: 'ZIP Code',
-                    hint: '12345',
+                    label: context.l10n.zipCode,
+                    hint: context.l10n.zipCodeHint,
                     keyboardType: TextInputType.number,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'This field is required';
+                        return context.l10n.thisFieldIsRequired;
                       }
                       if (value.zipCodeValid() != true) {
-                        return 'Please enter a valid ZIP code';
+                        return context.l10n.pleaseEnterValidZipCode;
                       }
                       return null;
                     },
@@ -317,27 +322,27 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Set as default address',
+                                  context.l10n.setAsDefaultAddress,
                                   style: AppTextStyles.t_16w600.copyWith(
                                     color: blackDegree,
                                   ),
                                 ),
                                 SizedBox(height: 2.h),
                                 Text(
-                                  'Tap to use this address for future orders.',
+                                  context.l10n.tapToUseThisAddress,
                                   style: AppTextStyles.t_12w400.copyWith(
                                     color: blackDegree.withValues(alpha: .65),
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                          Text(
-                            _setAsDefault ? 'On' : 'Off',
+                            Text(
+                              _setAsDefault ? context.l10n.toggleOn : context.l10n.toggleOff,
                             style: AppTextStyles.t_12w700.copyWith(
                               color: _setAsDefault
                                   ? commonColor
                                   : blackDegree.withValues(alpha: .45),
+                            ),
+                          ),
+                              ],
                             ),
                           ),
                         ],
@@ -385,7 +390,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                         }
                       },
                       child: Text(
-                        'Save Address',
+                        context.l10n.saveAddress,
                         style: AppTextStyles.t_16w600.copyWith(
                           color: Colors.white,
                         ),

@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/logic/order_cubit.dart';
@@ -37,7 +38,7 @@ class CustomerCartScreen extends StatelessWidget {
               scrolledUnderElevation: 0,
               centerTitle: true,
               title: Text(
-                'Your Cart',
+                context.l10n.yourCart,
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
@@ -81,7 +82,7 @@ class CustomerCartScreen extends StatelessWidget {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Text(
-                        'Failed to load cart. Please try again.',
+                        context.l10n.failedToLoadCart,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: redDegree,
                         ),
@@ -96,13 +97,13 @@ class CustomerCartScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Your cart is empty.',
+                          context.l10n.yourCartIsEmpty,
                           style: AppTextStyles.t_24w500.copyWith(
                             color: subTitleColor,
                           ),
                         ),
                         Text(
-                          'Start adding your favorite products!',
+                          context.l10n.startAddingYourFavoriteProducts,
                           style: AppTextStyles.t_14w500.copyWith(
                             color: subTitleColor,
                           ),
@@ -217,7 +218,7 @@ class CustomerCartScreen extends StatelessWidget {
                         CheckoutButton(),
                         SizedBox(height: 16.h),
                         Text(
-                          'By clicking confirm, you agree to our Terms of Service and Privacy Policy.',
+                          context.l10n.byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy,
                           textAlign: TextAlign.center,
                           style: AppTextStyles.t_12w400.copyWith(
                             color: subTitleColor,
@@ -232,7 +233,7 @@ class CustomerCartScreen extends StatelessWidget {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Failed to load order summary. Please try again.',
+                          context.l10n.failedToLoadOrderSummary,
                           textAlign: TextAlign.center,
                           style: AppTextStyles.t_14w500.copyWith(
                             color: redDegree,
@@ -265,6 +266,7 @@ class CheckoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocConsumer<OrderCubit, OrderState>(
       listenWhen: (previous, current) => current is PlaceOrderFailedState,
       listener: (context, state) {
@@ -276,9 +278,9 @@ class CheckoutButton extends StatelessWidget {
               error.contains('closed');
 
           showSnack(
-            title: isCancelled ? "Payment cancelled" : "Checkout failed",
+            title: isCancelled ? l10n.paymentCancelled : l10n.checkoutFailed,
             message: isCancelled
-                ? "Payment was cancelled. Complete payment to place the order."
+                ? l10n.paymentWasCancelled
                 : state.errorMessage,
             bgColor: redDegree,
             icon: Icons.error_outline,
@@ -309,9 +311,8 @@ class CheckoutButton extends StatelessWidget {
 
                     if (effectiveAddress == null) {
                       showSnack(
-                        title: "Address required",
-                        message:
-                            "Please add an address to proceed to checkout.",
+                        title: l10n.addressRequired,
+                        message: l10n.pleaseAddAnAddress,
                         bgColor: redDegree,
                       );
                       return;
@@ -319,8 +320,8 @@ class CheckoutButton extends StatelessWidget {
 
                     if (cartCubit.currentOrderSummary == null) {
                       showSnack(
-                        title: "Payment details missing",
-                        message: "Please wait for order summary to load.",
+                        title: l10n.paymentDetailsMissing,
+                        message: l10n.pleaseWaitForOrderSummary,
                         bgColor: redDegree,
                       );
                       return;
@@ -341,7 +342,7 @@ class CheckoutButton extends StatelessWidget {
                         products: cartCubit.cartProductsList,
                         status: OrderStatus.pending,
                         address: effectiveAddress,
-                        orderid: "#AY-${orderCubit.orderID + 1}",
+                        orderid: "#AY-${orderCubit.orderID}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),
                       ),
@@ -354,20 +355,20 @@ class CheckoutButton extends StatelessWidget {
                   return CircularProgressIndicator(color: Colors.white);
                 } else if (state is PlaceOrderFailedState) {
                   return Text(
-                    'Checkout Failed. Try Again.',
+                    l10n.checkoutFailed,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                   );
                 } else if (state is PlaceOrderSuccessState) {
                   return Text(
-                    'Checkout Successful!',
+                    l10n.checkoutSuccessful,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                   );
                 }
 
                 return Text(
-                  'Proceed to Checkout',
+                  l10n.proceedToCheckout,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                 );

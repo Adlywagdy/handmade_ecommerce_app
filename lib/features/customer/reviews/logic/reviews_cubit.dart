@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/services/reviews_service.dart';
+
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 part 'reviews_state.dart';
 
@@ -55,7 +58,9 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     if (normalizedComment.isEmpty) {
       emit(
         SubmitReviewErrorState(
-          errorMessage: 'Please write a short comment before submitting.',
+          errorMessage: AppLocalizations.of(
+            Get.context!,
+          )!.pleaseWriteShortComment,
         ),
       );
       return;
@@ -64,7 +69,7 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     if (rating < 1 || rating > 5) {
       emit(
         SubmitReviewErrorState(
-          errorMessage: 'Please select a rating between 1 and 5.',
+          errorMessage: AppLocalizations.of(Get.context!)!.pleaseSelectRating,
         ),
       );
       return;
@@ -75,7 +80,9 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null || userId.trim().isEmpty) {
-        throw Exception('You need to login before submitting a review');
+        throw Exception(
+          AppLocalizations.of(Get.context!)!.youNeedToLoginBeforeReviewing,
+        );
       }
 
       await _reviewsService.addProductReview(

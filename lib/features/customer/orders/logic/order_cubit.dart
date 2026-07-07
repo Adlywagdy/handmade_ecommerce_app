@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/service/customer_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
@@ -83,7 +85,7 @@ class OrderCubit extends Cubit<OrderState> {
           );
         }
       }
-      showSnack(title: "Success", message: "Order placed successfully.");
+      showSnack(title: AppLocalizations.of(Get.context!)!.success, message: AppLocalizations.of(Get.context!)!.orderPlacedSuccessfully);
       emit(PlaceOrderSuccessState());
       await cartCubit.clearCart();
     } catch (e) {

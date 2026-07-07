@@ -69,8 +69,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           }
         },
         builder: (context, state) {
-          final isLoading = state is AuthLoading;
-
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),

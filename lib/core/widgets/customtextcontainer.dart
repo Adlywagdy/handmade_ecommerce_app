@@ -39,7 +39,13 @@ class CustomTextContainer extends StatelessWidget {
         border: Border.all(color: bordercolor, width: 1.5),
       ),
 
-      child: Text(text, style: textstyle, textAlign: TextAlign.center),
+      child: Text(
+        text,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        style: textstyle,
+        textAlign: TextAlign.center,
+      ),
     );
   }
 }

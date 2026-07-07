@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -20,6 +21,7 @@ import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customf
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/topratedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
@@ -27,6 +29,7 @@ class CustomerHomeScreen extends StatelessWidget {
   void _openAllCategoriesSheet(BuildContext context) {
     final searchCubit = context.read<SearchCubit>();
     final categories = searchCubit.categoriesList;
+    final isArabic = context.read<LocaleCubit>().state?.languageCode == 'ar';
 
     showModalBottomSheet(
       context: context,
@@ -56,7 +59,7 @@ class CustomerHomeScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 16.h),
                 Text(
-                  'All Categories',
+                  context.l10n.allCategories,
                   style: AppTextStyles.t_18w700.copyWith(color: commonColor),
                 ),
                 SizedBox(height: 12.h),
@@ -83,7 +86,7 @@ class CustomerHomeScreen extends StatelessWidget {
                           color: commonColor.withValues(alpha: 0.1),
                         ),
                         child: Text(
-                          category.categorytitle,
+                          category.localizedTitle(isArabic),
                           style: AppTextStyles.t_14w600.copyWith(
                             color: commonColor,
                           ),
@@ -113,7 +116,7 @@ class CustomerHomeScreen extends StatelessWidget {
         },
         icon: const Icon(Icons.auto_awesome, color: Colors.white),
         label: Text(
-          'AI Help',
+          context.l10n.aiHelp,
           style: AppTextStyles.t_14w600.copyWith(color: Colors.white),
         ),
       ),
@@ -137,7 +140,7 @@ class CustomerHomeScreen extends StatelessWidget {
                 child: ChangeLanguageWidget(),
               ),
               title: Text(
-                'Ayady',
+                context.l10n.ayady,
                 style: AppTextStyles.t_20w700.copyWith(color: commonColor),
               ),
               actions: [
@@ -180,7 +183,7 @@ class CustomerHomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 16.0).w,
                 child: SearchField(
                   autofocus: false,
-                  hintText: "Search unique handmade crafts",
+                  hintText: context.l10n.searchUniqueHandmadeCrafts,
                   textstyle: AppTextStyles.t_12w500.copyWith(
                     color: commonColor.withValues(alpha: .6),
                   ),
@@ -196,8 +199,8 @@ class CustomerHomeScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(right: 16.w, bottom: 12.h),
                 child: CustomFeatureRow(
-                  title: "Categories",
-                  buttontext: "See All",
+                  title: context.l10n.categories,
+                  buttontext: context.l10n.seeAll,
                   onTap: () => _openAllCategoriesSheet(context),
                   buttontextstyle: AppTextStyles.t_14w600.copyWith(
                     color: commonColor,
@@ -208,8 +211,8 @@ class CustomerHomeScreen extends StatelessWidget {
 
             SliverToBoxAdapter(
               child: Container(
-                height: 107.h,
-                constraints: BoxConstraints(minHeight: 105.h, maxHeight: 110.h),
+                height: 108.h,
+                constraints: BoxConstraints(minHeight: 107.h, maxHeight: 110.h),
                 child: BlocBuilder<SearchCubit, SearchState>(
                   buildWhen: (previous, current) {
                     return current is GetCategoriesLoadingstate ||
@@ -220,7 +223,10 @@ class CustomerHomeScreen extends StatelessWidget {
                     if (state is GetCategoriesSuccessedstate) {
                       return HomeCategoriesList();
                     } else if (state is GetCategoriesFailedstate) {
-                      showSnack(title: "Error", message: state.errorMessage);
+                      showSnack(
+                        title: context.l10n.error,
+                        message: state.errorMessage,
+                      );
                       return SizedBox(height: 100.h);
                     } else {
                       return Center(
@@ -237,11 +243,11 @@ class CustomerHomeScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 14.h),
                   Text(
-                    'Featured Products',
+                    context.l10n.featuredProducts,
                     style: AppTextStyles.t_20w700.copyWith(color: blackDegree),
                   ),
                   Text(
-                    'Handpicked for your style',
+                    context.l10n.handpickedForYourStyle,
                     style: AppTextStyles.t_14w400.copyWith(
                       color: darkblue.withValues(alpha: .75),
                     ),
@@ -289,7 +295,10 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                       );
                     } else if (state is GetFeaturedFailedstate) {
-                      showSnack(title: "Error", message: state.errorMessage);
+                      showSnack(
+                        title: context.l10n.error,
+                        message: state.errorMessage,
+                      );
 
                       return SizedBox(height: 300.h);
                     } else {
@@ -311,8 +320,8 @@ class CustomerHomeScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0).w,
                 child: CustomFeatureRow(
-                  title: "Top Rated",
-                  buttontext: 'Explore All',
+                  title: context.l10n.topRated,
+                  buttontext: context.l10n.exploreAll,
                   onTap: () {
                     Get.toNamed(
                       AppRoutes.customerSearch,
@@ -364,7 +373,10 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                       );
                     } else if (state is GetTopRatedFailedstate) {
-                      showSnack(title: "Error", message: state.errorMessage);
+                      showSnack(
+                        title: context.l10n.error,
+                        message: state.errorMessage,
+                      );
                       return SizedBox(height: 200.h);
                     } else {
                       return ListView(

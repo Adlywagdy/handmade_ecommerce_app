@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/services/firebase_product_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -78,7 +79,7 @@ class RecommendedProductsWidget extends StatelessWidget {
                         ),
                         SizedBox(height: 4.h),
                         Text(
-                          '${product.price} EGP',
+                          '${product.price} ${context.l10n.egp}',
                           style: TextStyle(
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w700,
@@ -110,15 +111,15 @@ class RecommendedProductsWidget extends StatelessWidget {
                                       );
                                     } else {
                                       Get.snackbar(
-                                        'Error',
-                                        'Product not found',
+                                        context.l10n.error,
+                                        context.l10n.productNotFound,
                                         snackPosition: SnackPosition.BOTTOM,
                                       );
                                     }
                                   });
                             },
                             child: Text(
-                              'View Product',
+                              context.l10n.viewProduct,
                               style: TextStyle(
                                 fontSize: 11.sp,
                                 fontWeight: FontWeight.w600,

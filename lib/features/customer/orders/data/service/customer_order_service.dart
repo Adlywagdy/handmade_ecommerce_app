@@ -210,29 +210,18 @@ class CustomerOrderService {
     return status.name;
   }
 
-  /// Get next order ID by fetching the last order and incrementing
+  /// Get next order ID atomically using a Firestore counter document.
   Future<int> getNextOrderID() async {
-    try {
-      final querySnapshot = await _firestore
-          .collection('orders')
-          .orderBy('orderNumber', descending: true)
-          .limit(1)
-          .get();
+    final counterRef = _firestore.collection('counters').doc('orderCounter');
 
-      if (querySnapshot.docs.isEmpty) {
-        return 10000;
-      }
-
-      final doc = querySnapshot.docs.first;
-      final data = doc.data();
-
-      final String orderNumber = data['orderNumber'];
-
-      final int lastOrderNum = int.parse(orderNumber.split('-').last);
-
-      return lastOrderNum + 1;
-    } catch (e) {
-      throw Exception('Failed to get next order ID: $e');
-    }
+    return await _firestore.runTransaction<int>((transaction) async {
+      final snapshot = await transaction.get(counterRef);
+      final current = snapshot.exists
+          ? (snapshot.data()?['current'] as int? ?? 9999)
+          : 9999;
+      final next = current + 1;
+      transaction.set(counterRef, {'current': next});
+      return next;
+    });
   }
 }

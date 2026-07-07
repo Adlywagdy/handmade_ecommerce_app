@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -48,7 +49,7 @@ class _CustomerShopDetailsScreenState extends State<CustomerShopDetailsScreen> {
           scrolledUnderElevation: 0,
           centerTitle: true,
           title: Text(
-            'Shop Details',
+            context.l10n.shopDetails,
             style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
           ),
         ),
@@ -63,15 +64,15 @@ class _CustomerShopDetailsScreenState extends State<CustomerShopDetailsScreen> {
 
             if (state is SellerProfileError) {
               return _StatusView(
-                title: 'Something went wrong',
+                title: context.l10n.somethingWentWrong,
                 subtitle: state.message,
               );
             }
 
             if (state is SellerProfileNotFound) {
-              return const _StatusView(
-                title: 'Shop not found',
-                subtitle: 'We could not load this seller right now.',
+              return _StatusView(
+                title: context.l10n.shopNotFound,
+                subtitle: context.l10n.weCouldNotLoadThisSeller,
               );
             }
 
@@ -102,24 +103,24 @@ class _ShopDetailsBody extends StatelessWidget {
           _SellerHeroCard(seller: seller),
           SizedBox(height: 16.h),
           _SectionCard(
-            title: 'Contact',
+            title: context.l10n.contact,
             child: Column(
               children: [
                 _InfoRow(
                   icon: Icons.mail_outline_rounded,
-                  label: 'Email',
+                  label: context.l10n.email,
                   value: seller.email,
                 ),
                 SizedBox(height: 12.h),
                 _InfoRow(
                   icon: Icons.phone_outlined,
-                  label: 'Phone',
+                  label: context.l10n.phone,
                   value: seller.displayPhone,
                 ),
                 SizedBox(height: 12.h),
                 _InfoRow(
                   icon: Icons.location_on_outlined,
-                  label: 'Location',
+                  label: context.l10n.location,
                   value: seller.displayLocation,
                 ),
               ],
@@ -127,15 +128,15 @@ class _ShopDetailsBody extends StatelessWidget {
           ),
           SizedBox(height: 16.h),
           _SectionCard(
-            title: 'Shop Info',
+            title: context.l10n.shopInfo,
             child: Column(
               children: [
-                _DetailTile(label: 'Owner', value: seller.displayOwnerName),
-                _DetailTile(label: 'Specialty', value: seller.displaySpecialty),
-                _DetailTile(label: 'Badge', value: seller.displayBadge),
-                _DetailTile(label: 'Status', value: seller.displayStatus),
+                _DetailTile(label: context.l10n.owner, value: seller.displayOwnerName),
+                _DetailTile(label: context.l10n.specialty, value: seller.displaySpecialty),
+                _DetailTile(label: context.l10n.badge, value: seller.displayBadge),
+                _DetailTile(label: context.l10n.status, value: seller.displayStatus),
                 _DetailTile(
-                  label: 'Submitted',
+                  label: context.l10n.submitted,
                   value: seller.displaySubmittedDate,
                   showDivider: false,
                 ),
@@ -168,7 +169,7 @@ class _ShopDetailsBody extends StatelessWidget {
               ),
               icon: Icon(Icons.email_outlined, size: 20.r),
               label: Text(
-                'Email Seller',
+                context.l10n.emailSeller,
                 style: AppTextStyles.t_16w600.copyWith(color: Colors.white),
               ),
             ),
@@ -218,12 +219,16 @@ class _SellerHeroCard extends StatelessWidget {
           Text(
             seller.displayName,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_20w700.copyWith(color: blackDegree),
           ),
           SizedBox(height: 6.h),
           Text(
             seller.displaySpecialty,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_14w500.copyWith(color: subTitleColor),
           ),
           SizedBox(height: 18.h),
@@ -231,21 +236,21 @@ class _SellerHeroCard extends StatelessWidget {
             children: [
               Expanded(
                 child: _StatCard(
-                  label: 'Rating',
+                  label: context.l10n.rating,
                   value: seller.rating?.toStringAsFixed(1) ?? '0.0',
                 ),
               ),
               SizedBox(width: 12.w),
               Expanded(
                 child: _StatCard(
-                  label: 'Products',
+                  label: context.l10n.products,
                   value: '${seller.totalProducts ?? 0}',
                 ),
               ),
               SizedBox(width: 12.w),
               Expanded(
                 child: _StatCard(
-                  label: 'Sales',
+                  label: context.l10n.sales,
                   value: '${seller.totalSales ?? 0}',
                 ),
               ),
@@ -323,17 +328,18 @@ class _InfoRow extends StatelessWidget {
               ),
               SizedBox(height: 2.h),
               Text(
-                value.trim().isEmpty ? 'N/A' : value,
+                value.trim().isEmpty ? context.l10n.notAvailable : value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.t_14w600.copyWith(color: blackDegree),
               ),
-            ],
+              ],
+            ),
           ),
-        ),
-      ],
-    );
+          ],
+        );
+    }
   }
-}
-
 class _DetailTile extends StatelessWidget {
   const _DetailTile({
     required this.label,
@@ -360,7 +366,9 @@ class _DetailTile extends StatelessWidget {
             SizedBox(width: 12.w),
             Expanded(
               child: Text(
-                value.trim().isEmpty ? 'N/A' : value,
+                value.trim().isEmpty ? context.l10n.notAvailable : value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.end,
                 style: AppTextStyles.t_14w600.copyWith(color: blackDegree),
               ),
@@ -425,11 +433,13 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
   @override
   void initState() {
     super.initState();
-    _subjectController = TextEditingController(text: 'Custom order request');
-    _messageController = TextEditingController(
-      text:
-          'Hello ${widget.seller.displayName},\n\nI would like to request a customized order.\n\nDetails:\n',
-    );
+    _subjectController = TextEditingController();
+    _messageController = TextEditingController();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      _subjectController.text = context.l10n.customOrderRequestSubject;
+      _messageController.text = context.l10n.customOrderRequestMessage(widget.seller.displayName);
+    });
   }
 
   @override
@@ -445,7 +455,7 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
       listener: (context, state) {
         if (state is ContactSellerSuccess) {
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Email app opened successfully')),
+            SnackBar(content: Text(context.l10n.emailAppOpenedSuccessfully)),
           );
           Navigator.of(context).pop();
           context.read<ContactSellerCubit>().reset();
@@ -485,18 +495,18 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
             ),
             SizedBox(height: 18.h),
             Text(
-              'Send Email',
+              context.l10n.sendEmail,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
             SizedBox(height: 6.h),
             Text(
-              'Write your custom request and continue in your email app.',
+              context.l10n.writeYourCustomRequestAndContinueInYourEmailApp,
               style: AppTextStyles.t_12w500.copyWith(color: subTitleColor),
             ),
             SizedBox(height: 18.h),
             _SheetTextField(
               controller: _subjectController,
-              label: 'Subject',
+              label: context.l10n.subject,
               maxLines: 1,
             ),
             SizedBox(height: 14.h),
@@ -540,7 +550,7 @@ class _ContactSellerSheetState extends State<_ContactSellerSheet> {
                             ),
                           )
                         : Text(
-                            'Continue to Email',
+                            context.l10n.continueToEmail,
                             style: AppTextStyles.t_16w600.copyWith(
                               color: Colors.white,
                             ),

@@ -10,6 +10,9 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/data/customer_seller_profile_service.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+
+final _sellerService = CustomerSellerProfileService();
 
 class CustomSellerListTile extends StatelessWidget {
   const CustomSellerListTile({super.key, required this.product});
@@ -21,7 +24,7 @@ class CustomSellerListTile extends StatelessWidget {
     final sellerIdentifier = product.sellerId;
 
     return FutureBuilder<SellerModel>(
-      future: getsellerdata(sellerIdentifier),
+      future: _sellerService.getSellerProfile(sellerIdentifier),
       builder: (context, snapshot) {
         final seller = snapshot.data ?? product.seller;
         final sellerName = seller.displayName;
@@ -32,6 +35,8 @@ class CustomSellerListTile extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           title: Text(
             sellerName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
           ),
           subtitle: Row(
@@ -63,7 +68,7 @@ class CustomSellerListTile extends StatelessWidget {
             child: CustomTextContainer(
               verticalpadding: 8,
               horizontalpadding: 16,
-              text: 'View Shop',
+              text: context.l10n.viewShop,
               textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
               backGroundColor: commonColor.withValues(alpha: 0.10),
             ),
