@@ -55,6 +55,8 @@ class ReviewCard extends StatelessWidget {
             ),
             Text(
               '"${review.comment}"',
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             ),
           ],

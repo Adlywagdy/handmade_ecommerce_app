@@ -171,16 +171,20 @@ class CustomerOrderDetailsScreen extends StatelessWidget {
                         ],
                       ),
                       SizedBox(height: 4.h),
-                      Text(_customerName(context), style: AppTextStyles.t_14w700),
+                      Text(_customerName(context), maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.t_14w700),
                       if (_customerEmail(context) != _customerName(context))
                         Text(
                           _customerEmail(context),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
                           style: AppTextStyles.t_14w400.copyWith(
                             color: subTitleColor,
                           ),
                         ),
                       Text(
                         order.address.addressdescription,
+                        maxLines: 3,
+                        overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
                         ),

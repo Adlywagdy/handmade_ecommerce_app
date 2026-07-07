@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -19,6 +20,8 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: context.read<SearchCubit>().categoriesList.length,
@@ -74,7 +77,9 @@ class _HomeCategoriesListState extends State<HomeCategoriesList> {
                   ),
                 ),
                 Text(
-                  category.categorytitle,
+                  category.localizedTitle(isArabic),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_12w500.copyWith(color: darkblue),
                 ),
               ],

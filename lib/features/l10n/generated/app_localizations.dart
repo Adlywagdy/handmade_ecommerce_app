@@ -1958,6 +1958,30 @@ abstract class AppLocalizations {
   /// **'Just now'**
   String get justNow;
 
+  /// Title for feature under development.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming Soon'**
+  String get comingSoon;
+
+  /// Subtitle for notifications under development.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications feature is under development.'**
+  String get notificationsUnderDevelopment;
+
+  /// Label for language settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// Subtitle for language settings.
+  ///
+  /// In en, this message translates to:
+  /// **'Change app language'**
+  String get changeLanguage;
+
   /// Card title for becoming a seller.
   ///
   /// In en, this message translates to:

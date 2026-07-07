@@ -1103,6 +1103,22 @@
   "@justNow": {
     "description": "Time label for recent notifications."
   },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Title for feature under development."
+  },
+  "notificationsUnderDevelopment": "Notifications feature is under development.",
+  "@notificationsUnderDevelopment": {
+    "description": "Subtitle for notifications under development."
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Label for language settings."
+  },
+  "changeLanguage": "Change app language",
+  "@changeLanguage": {
+    "description": "Subtitle for language settings."
+  },
   "becomeASeller": "Become a Seller",
   "@becomeASeller": {
     "description": "Card title for becoming a seller."

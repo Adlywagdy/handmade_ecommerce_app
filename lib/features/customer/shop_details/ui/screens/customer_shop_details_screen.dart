@@ -219,12 +219,16 @@ class _SellerHeroCard extends StatelessWidget {
           Text(
             seller.displayName,
             textAlign: TextAlign.center,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_20w700.copyWith(color: blackDegree),
           ),
           SizedBox(height: 6.h),
           Text(
             seller.displaySpecialty,
             textAlign: TextAlign.center,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_14w500.copyWith(color: subTitleColor),
           ),
           SizedBox(height: 18.h),
@@ -325,6 +329,8 @@ class _InfoRow extends StatelessWidget {
               SizedBox(height: 2.h),
               Text(
                 value.trim().isEmpty ? context.l10n.notAvailable : value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 style: AppTextStyles.t_14w600.copyWith(color: blackDegree),
               ),
               ],
@@ -361,6 +367,8 @@ class _DetailTile extends StatelessWidget {
             Expanded(
               child: Text(
                 value.trim().isEmpty ? context.l10n.notAvailable : value,
+                maxLines: 2,
+                overflow: TextOverflow.ellipsis,
                 textAlign: TextAlign.end,
                 style: AppTextStyles.t_14w600.copyWith(color: blackDegree),
               ),

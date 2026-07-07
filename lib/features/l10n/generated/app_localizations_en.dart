@@ -979,6 +979,19 @@ class AppLocalizationsEn extends AppLocalizations {
   String get justNow => 'Just now';
 
   @override
+  String get comingSoon => 'Coming Soon';
+
+  @override
+  String get notificationsUnderDevelopment =>
+      'Notifications feature is under development.';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get changeLanguage => 'Change app language';
+
+  @override
   String get becomeASeller => 'Become a Seller';
 
   @override

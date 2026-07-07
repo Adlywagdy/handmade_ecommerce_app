@@ -6,7 +6,8 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 class CustomerDetailsItem extends StatelessWidget {
   final Map<String, dynamic>? item;
   final VoidCallback? onTap;
-  const CustomerDetailsItem({super.key, this.item, this.onTap});
+  final Widget? trailing;
+  const CustomerDetailsItem({super.key, this.item, this.onTap, this.trailing});
 
   @override
   Widget build(BuildContext context) {
@@ -32,12 +33,14 @@ class CustomerDetailsItem extends StatelessWidget {
             child: Icon(item!['icon'], color: commonColor, size: 26.r),
           ),
         ),
-        title: Text(item!['title'], style: AppTextStyles.t_16w600),
+        title: Text(item!['title'], maxLines: 1, overflow: TextOverflow.ellipsis, style: AppTextStyles.t_16w600),
         subtitle: Text(
           item!['subtitle'],
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_12w400.copyWith(color: subTitleColor),
         ),
-        trailing: Icon(
+        trailing: trailing ?? Icon(
           Icons.arrow_forward_ios_outlined,
           size: 16.r,
           color: subTitleColor.withValues(alpha: .6),

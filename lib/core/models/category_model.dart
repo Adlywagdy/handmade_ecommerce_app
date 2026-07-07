@@ -21,6 +21,13 @@ class CategoryModel {
     this.subcategories,
   });
 
+  String localizedTitle(bool isArabic) {
+    if (isArabic && categoryTitleAR != null && categoryTitleAR!.isNotEmpty) {
+      return categoryTitleAR!;
+    }
+    return categorytitle;
+  }
+
   factory CategoryModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return CategoryModel(
       id: id ?? map['categoryId']?.toString() ?? map['id']?.toString(),

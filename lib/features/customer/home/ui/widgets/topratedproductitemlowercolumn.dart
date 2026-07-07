@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -15,17 +16,20 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Column(
-      spacing: 8.h,
+      spacing: 5.h,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          product.category!.categorytitle,
-
+          product.category!.localizedTitle(isArabic),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_10w700.copyWith(color: commonColor),
         ),
         Text(
-          product.name,
+          product.localizedName(isArabic),
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
         ),
@@ -52,6 +56,7 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
                   return AmountContainerButton(
                     product: product,
                     verticalpadding: 8.h,
+                    iconsize: 18.r,
                   );
                 }
 

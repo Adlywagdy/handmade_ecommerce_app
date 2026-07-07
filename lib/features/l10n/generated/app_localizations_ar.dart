@@ -974,6 +974,18 @@ class AppLocalizationsAr extends AppLocalizations {
   String get justNow => 'الآن';
 
   @override
+  String get comingSoon => 'قريباً';
+
+  @override
+  String get notificationsUnderDevelopment => 'ميزة الإشعارات قيد التطوير.';
+
+  @override
+  String get language => 'اللغة';
+
+  @override
+  String get changeLanguage => 'تغيير لغة التطبيق';
+
+  @override
   String get becomeASeller => 'كن بائعاً';
 
   @override

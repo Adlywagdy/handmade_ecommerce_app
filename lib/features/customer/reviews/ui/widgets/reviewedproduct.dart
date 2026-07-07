@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -15,6 +17,8 @@ class ReviewedProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Container(
       decoration: BoxDecoration(color: Colors.white),
       padding: EdgeInsets.all(12.w),
@@ -53,7 +57,7 @@ class ReviewedProduct extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        product.name,
+                        product.localizedName(isArabic),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.t_16w700,

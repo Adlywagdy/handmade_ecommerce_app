@@ -104,6 +104,18 @@ class ProductModel {
   String get sellerId => seller.primaryIdentifier;
   String? get categoryId => category?.id ?? category?.categorytitle;
 
+  String localizedName(bool isArabic) {
+    if (isArabic && nameAR != null && nameAR!.isNotEmpty) return nameAR!;
+    return name;
+  }
+
+  String localizedDescription(bool isArabic) {
+    if (isArabic && descriptionAR != null && descriptionAR!.isNotEmpty) {
+      return descriptionAR!;
+    }
+    return description;
+  }
+
   static List<String> _parseImages(Map<String, dynamic> map) {
     if (map['images'] is List) {
       return (map['images'] as List).map((e) => e.toString()).toList();

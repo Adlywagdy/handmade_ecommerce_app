@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -27,6 +28,7 @@ class CustomerHomeScreen extends StatelessWidget {
   void _openAllCategoriesSheet(BuildContext context) {
     final searchCubit = context.read<SearchCubit>();
     final categories = searchCubit.categoriesList;
+    final isArabic = context.read<LocaleCubit>().state?.languageCode == 'ar';
 
     showModalBottomSheet(
       context: context,
@@ -55,10 +57,10 @@ class CustomerHomeScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                  Text(
-                    context.l10n.allCategories,
-                    style: AppTextStyles.t_18w700.copyWith(color: commonColor),
-                  ),
+                Text(
+                  context.l10n.allCategories,
+                  style: AppTextStyles.t_18w700.copyWith(color: commonColor),
+                ),
                 SizedBox(height: 12.h),
                 Wrap(
                   spacing: 10.w,
@@ -83,7 +85,7 @@ class CustomerHomeScreen extends StatelessWidget {
                           color: commonColor.withValues(alpha: 0.1),
                         ),
                         child: Text(
-                          category.categorytitle,
+                          category.localizedTitle(isArabic),
                           style: AppTextStyles.t_14w600.copyWith(
                             color: commonColor,
                           ),
@@ -201,8 +203,8 @@ class CustomerHomeScreen extends StatelessWidget {
 
             SliverToBoxAdapter(
               child: Container(
-                height: 107.h,
-                constraints: BoxConstraints(minHeight: 105.h, maxHeight: 110.h),
+                height: 108.h,
+                constraints: BoxConstraints(minHeight: 107.h, maxHeight: 110.h),
                 child: BlocBuilder<SearchCubit, SearchState>(
                   buildWhen: (previous, current) {
                     return current is GetCategoriesLoadingstate ||
@@ -212,8 +214,11 @@ class CustomerHomeScreen extends StatelessWidget {
                   builder: (context, state) {
                     if (state is GetCategoriesSuccessedstate) {
                       return HomeCategoriesList();
-                    } else                     if (state is GetCategoriesFailedstate) {
-                      showSnack(title: context.l10n.error, message: state.errorMessage);
+                    } else if (state is GetCategoriesFailedstate) {
+                      showSnack(
+                        title: context.l10n.error,
+                        message: state.errorMessage,
+                      );
                       return SizedBox(height: 100.h);
                     } else {
                       return Center(
@@ -282,7 +287,10 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                       );
                     } else if (state is GetFeaturedFailedstate) {
-                      showSnack(title: context.l10n.error, message: state.errorMessage);
+                      showSnack(
+                        title: context.l10n.error,
+                        message: state.errorMessage,
+                      );
 
                       return SizedBox(height: 300.h);
                     } else {
@@ -357,7 +365,10 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                       );
                     } else if (state is GetTopRatedFailedstate) {
-                      showSnack(title: context.l10n.error, message: state.errorMessage);
+                      showSnack(
+                        title: context.l10n.error,
+                        message: state.errorMessage,
+                      );
                       return SizedBox(height: 200.h);
                     } else {
                       return ListView(

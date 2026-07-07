@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -38,6 +39,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
   @override
   Widget build(BuildContext context) {
     final productId = widget.product.id;
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -48,7 +50,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
           child: Text(context.l10n.description, style: AppTextStyles.t_18w700),
         ),
         Text(
-          widget.product.description,
+          widget.product.localizedDescription(isArabic),
           style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
         ),
         SizedBox(height: 12.h),
@@ -92,7 +94,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
 
             return ProductReviewsColumn(
               reviews: reviews,
-              productName: widget.product.name,
+              productName: widget.product.localizedName(isArabic),
             );
           },
         ),

@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
@@ -19,6 +21,8 @@ class ProductItemOfOrder extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Container(
       decoration: BoxDecoration(
         color: commonColor.withValues(alpha: .02),
@@ -60,7 +64,12 @@ class ProductItemOfOrder extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(product.name, style: AppTextStyles.t_16w600),
+                    Text(
+                      product.localizedName(isArabic),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.t_16w600,
+                    ),
                     SizedBox(height: 2.h),
                     Text(
                       context.l10n.soldBy(product.seller.id ?? ''),

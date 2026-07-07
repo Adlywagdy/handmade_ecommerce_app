@@ -35,6 +35,8 @@ class CustomSellerListTile extends StatelessWidget {
           contentPadding: EdgeInsets.zero,
           title: Text(
             sellerName,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
           ),
           subtitle: Row(

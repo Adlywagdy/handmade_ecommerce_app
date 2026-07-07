@@ -19,11 +19,15 @@ class UserProfileDetails extends StatelessWidget {
         Text(
           customer.name,
           textAlign: TextAlign.center,
+          maxLines: 2,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_24w700,
         ),
         Text(
           customer.email,
           textAlign: TextAlign.center,
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_16w500.copyWith(color: subTitleColor),
         ),
       ],

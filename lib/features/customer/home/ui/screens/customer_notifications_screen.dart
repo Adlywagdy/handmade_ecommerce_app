@@ -147,14 +147,14 @@ class CustomerNotificationsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 10.h),
                           Text(
-                            'Comming soon',
+                            context.l10n.comingSoon,
                             style: AppTextStyles.t_16w600.copyWith(
                               color: blackDegree,
                             ),
                           ),
                           SizedBox(height: 6.h),
                           Text(
-                            'Notifications feature is under development.',
+                            context.l10n.notificationsUnderDevelopment,
                             textAlign: TextAlign.center,
                             style: AppTextStyles.t_12w400.copyWith(
                               color: darkblue.withValues(alpha: .75),
@@ -207,6 +207,8 @@ class NotificationItem extends StatelessWidget {
               children: [
                 Text(
                   notification,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w500.copyWith(
                     color: blackDegree,
                     height: 1.3,

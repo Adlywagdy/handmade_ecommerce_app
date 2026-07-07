@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/functions/filter_sheet_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
@@ -37,7 +38,8 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
     if (args is CategoryModel) {
       final cubit = _searchCubit;
       cubit.selectedCategory = args;
-      controller.text = args.categorytitle;
+      final isArabic = context.read<LocaleCubit>().state?.languageCode == 'ar';
+      controller.text = args.localizedTitle(isArabic);
       cubit.filterproducts(categoryname: args.categorytitle);
     } else if (args is Map && args['rating'] != null) {
       _searchCubit.filterproducts(rating: (args['rating'] as num).toDouble());

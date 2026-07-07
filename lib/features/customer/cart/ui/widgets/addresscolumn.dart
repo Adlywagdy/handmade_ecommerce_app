@@ -92,10 +92,14 @@ class _AddressColumnState extends State<AddressColumn> {
                 ),
                 title: Text(
                   displayAddress?.addresstitle ?? context.l10n.home,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
                 ),
                 subtitle: Text(
                   displayAddress?.addressdescription ?? "No address added yet",
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w400.copyWith(
                     color: blackDegree.withValues(alpha: .7),
                   ),

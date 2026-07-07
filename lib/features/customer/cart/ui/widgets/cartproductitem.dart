@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
@@ -21,6 +22,8 @@ class CartProductItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Container(
       margin: EdgeInsets.only(bottom: 16.h),
       decoration: BoxDecoration(
@@ -71,7 +74,9 @@ class CartProductItem extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        product.name,
+                        product.localizedName(isArabic),
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.t_16w600.copyWith(
                           color: blackDegree,
                         ),
@@ -106,6 +111,8 @@ class CartProductItem extends StatelessWidget {
                       context.l10n.byVendor(
                         '${seller.displaySpecialty} ${seller.displayName}',
                       ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.t_12w500.copyWith(
                         color: commonColor,
                       ),

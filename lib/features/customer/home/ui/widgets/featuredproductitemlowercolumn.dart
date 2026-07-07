@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -12,6 +14,8 @@ class FeaturedProductItemLowerColumn extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4.h,
@@ -24,13 +28,14 @@ class FeaturedProductItemLowerColumn extends StatelessWidget {
             borderRadius: BorderRadius.circular(20).r,
           ),
           child: Text(
-            product.category!.categorytitle,
-
+            product.category!.localizedTitle(isArabic),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: AppTextStyles.t_10w700.copyWith(color: commonColor),
           ),
         ),
         Text(
-          product.name,
+          product.localizedName(isArabic),
           overflow: TextOverflow.ellipsis,
           style: AppTextStyles.t_16w700.copyWith(color: AppColors.textPrimary),
         ),

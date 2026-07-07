@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
@@ -31,6 +32,8 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return ListView.builder(
       scrollDirection: Axis.horizontal,
       itemCount: BlocProvider.of<SearchCubit>(context).categoriesList.length,
@@ -75,7 +78,7 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
                     items: subcategories
                         .map(
                           (category) => PopupMenuItem(
-                            child: Text(category.categorytitle),
+                            child: Text(category.localizedTitle(isArabic)),
                             onTap: () {
                               setState(() {
                                 selectedIndex = index;
@@ -105,7 +108,7 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
                   BlocProvider.of<SearchCubit>(context).filterproducts(
                     categoryname: BlocProvider.of<SearchCubit>(
                       context,
-                    ).categoriesList[index].categorytitle,
+                    ).categoriesList[index].localizedTitle(isArabic),
                   );
 
                   ScaffoldMessenger.of(context).showSnackBar(
@@ -143,7 +146,7 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
                 BlocProvider.of<SearchCubit>(context).filterproducts(
                   categoryname: BlocProvider.of<SearchCubit>(
                     context,
-                  ).categoriesList[index].categorytitle,
+                  ).categoriesList[index].localizedTitle(isArabic),
                 );
               },
               child: Container(
@@ -162,8 +165,10 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
                     Text(
                       BlocProvider.of<SearchCubit>(
                         context,
-                      ).categoriesList[index].categorytitle,
+                      ).categoriesList[index].localizedTitle(isArabic),
                       textAlign: TextAlign.center,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.t_14w600.copyWith(
                         color: selectedIndex == index
                             ? Colors.white

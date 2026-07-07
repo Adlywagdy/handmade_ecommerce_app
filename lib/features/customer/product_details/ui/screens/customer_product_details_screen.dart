@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -21,6 +22,8 @@ class CustomerProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Scaffold(
       backgroundColor: customerbackGroundColor,
 
@@ -47,7 +50,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   SharePlus.instance.share(
                     ShareParams(
                       text:
-                          context.l10n.checkOutThisProduct(product.name, 'EGP ${product.price}'),
+                          context.l10n.checkOutThisProduct(product.localizedName(isArabic), 'EGP ${product.price}'),
                     ),
                   );
                 },
@@ -97,8 +100,9 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      product.name,
-
+                      product.localizedName(isArabic),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
                       style: AppTextStyles.t_30w700.copyWith(
                         color: blackDegree,
                       ),

@@ -6,6 +6,7 @@ import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
@@ -198,8 +199,10 @@ class CustomerProfilesScreen extends StatelessWidget {
                   Column(
                     children: List.generate(customerDetails(context).length, (index) {
                       final title = customerDetails(context)[index]['title'] as String;
+                      final trailing = customerDetails(context)[index]['trailing'] as Widget?;
                       return CustomerDetailsItem(
                         item: customerDetails(context)[index],
+                        trailing: trailing,
                         onTap: () {
                           if (title == context.l10n.editProfile) {
                             _showEditBottomSheet(context, customer);
@@ -219,6 +222,10 @@ class CustomerProfilesScreen extends StatelessWidget {
                           if (title == context.l10n.settings) {
                             context.read<CustomerCubit>().getNotifications();
                             Get.toNamed(AppRoutes.customerNotifications);
+                          }
+
+                          if (title == context.l10n.language) {
+                            // Language is handled by ChangeLanguageWidget
                           }
                         },
                       );
@@ -287,5 +294,11 @@ List<Map<String, dynamic>> customerDetails(BuildContext context) => [
     'title': context.l10n.settings,
     'subtitle': context.l10n.notificationsAndPrivacy,
     'icon': Icons.settings_outlined,
+  },
+  {
+    'title': context.l10n.language,
+    'subtitle': context.l10n.changeLanguage,
+    'icon': Icons.language_outlined,
+    'trailing': const ChangeLanguageWidget(),
   },
 ];
