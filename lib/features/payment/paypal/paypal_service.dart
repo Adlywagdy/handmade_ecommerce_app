@@ -24,6 +24,13 @@ class PayPAlService {
     final checkoutRoute = Navigator.of(context).push(
       MaterialPageRoute(
         builder: (BuildContext context) => PaypalCheckoutView(
+          // TODO(PRODUCTION): The PayPal secretKey must NEVER ship in the client.
+          // A secret key embedded in the app binary is fully extractable and lets an
+          // attacker impersonate the merchant (create/capture/refund transactions).
+          // Before production: create & capture the PayPal order on a backend that
+          // holds the secret; the app should only receive a short-lived approval/order
+          // token. Also flip `sandboxMode` to false and rotate BOTH keys below (they
+          // are compromised now that they have been committed). Kept for the demo only.
           sandboxMode: true, //testingmode
           clientId:
               "AeV7F4kmJMM5jGe7eEXzxwOm74Fd6Rbq6lmhqHH8dAZDwmlqhncdUKu2ALrfgnY3owDvnVkvJTlwSSjl",

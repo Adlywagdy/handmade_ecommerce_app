@@ -28,21 +28,16 @@ class AuthService {
   }
 
   Future<void> _updateFCMToken(String uid) async {
+    // NOTE: never log the FCM token — it can be used to target push at a user.
     try {
       final token = await FirebaseMessaging.instance.getToken();
-      print("======== FCM UPDATE ========");
-      print("UID: $uid");
-      print("TOKEN: $token");
       if (token != null) {
         await _firestore.collection('users').doc(uid).set({
           'fcmToken': token,
         }, SetOptions(merge: true));
-        print("✅ FCM TOKEN SAVED");
-      } else {
-        print("❌ TOKEN IS NULL");
       }
     } catch (e) {
-      print("❌ ERROR: $e");
+      debugPrint('Failed to update FCM token: $e');
     }
   }
 

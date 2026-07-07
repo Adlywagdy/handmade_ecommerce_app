@@ -37,12 +37,12 @@ class NotificationService {
 
       // ─── Order (Seller) → Seller Orders ───
       case NotificationType.newOrder:
-        _navigateTo(AppRoutes.sellerorders);
+        _navigateTo(AppRoutes.sellerOrders);
         break;
 
       // ─── Payment → Seller Dashboard ───
       case NotificationType.paymentReceived:
-        _navigateTo(AppRoutes.sellerdashboard);
+        _navigateTo(AppRoutes.sellerDashboard);
         break;
 
       // ─── Product (Customer) → Product Details ───
@@ -53,7 +53,7 @@ class NotificationService {
 
       // ─── Low Stock → Seller Manage Products ───
       case NotificationType.lowStock:
-        _navigateTo(AppRoutes.sellermanageproducts);
+        _navigateTo(AppRoutes.sellerManageProducts);
         break;
 
       // ─── Messages → Notifications (Chat not built yet) ───
@@ -66,7 +66,7 @@ class NotificationService {
 
       // ─── Coupon / Offers → Customer Layout ───
       case NotificationType.newCoupon:
-        _navigateTo(AppRoutes.customerlayout);
+        _navigateTo(AppRoutes.customerLayout);
         break;
 
       // ─── Admin: New Seller → Admin Sellers ───

@@ -16,9 +16,10 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetFeaturedLoadingstate());
     try {
       final featuredProducts = await _productService.getFeaturedProducts();
-
+      if (isClosed) return;
       emit(GetFeaturedSuccessedstate(products: featuredProducts));
     } catch (e) {
+      if (isClosed) return;
       emit(GetFeaturedFailedstate(errorMessage: e.toString()));
     }
   }
@@ -28,9 +29,10 @@ class HomeCubit extends Cubit<HomeState> {
     emit(GetTopRatedLoadingstate());
     try {
       final topRatedProducts = await _productService.getTopRatedProducts();
-
+      if (isClosed) return;
       emit(GetTopRatedSuccessedstate(products: topRatedProducts));
     } catch (e) {
+      if (isClosed) return;
       emit(GetTopRatedFailedstate(errorMessage: e.toString()));
     }
   }

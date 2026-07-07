@@ -144,7 +144,7 @@ class SellerDashboardScreen extends StatelessWidget {
                               onAddProduct!();
                               return;
                             }
-                            Get.toNamed(AppRoutes.selleraddproduct);
+                            Get.toNamed(AppRoutes.sellerAddProduct);
                           },
                         ),
                         SizedBox(width: 12.w),
@@ -156,7 +156,7 @@ class SellerDashboardScreen extends StatelessWidget {
                               onViewProducts!();
                               return;
                             }
-                            Get.toNamed(AppRoutes.sellermanageproducts);
+                            Get.toNamed(AppRoutes.sellerManageProducts);
                           },
                         ),
                         SizedBox(width: 12.w),
@@ -168,7 +168,7 @@ class SellerDashboardScreen extends StatelessWidget {
                               onViewOrders!();
                               return;
                             }
-                            Get.toNamed(AppRoutes.sellerorders);
+                            Get.toNamed(AppRoutes.sellerOrders);
                           },
                         ),
                       ],
@@ -195,7 +195,7 @@ class SellerDashboardScreen extends StatelessWidget {
                               onViewOrders!();
                               return;
                             }
-                            Get.toNamed(AppRoutes.sellerorders);
+                            Get.toNamed(AppRoutes.sellerOrders);
                           },
                           child: Text(
                             'See All',

@@ -12,10 +12,13 @@ class SellerProfileCubit extends Cubit<SellerProfileState> {
 
     try {
       final seller = await getsellerdata(sellerId);
+      if (isClosed) return;
       emit(SellerProfileLoaded(seller));
     } on StateError {
+      if (isClosed) return;
       emit(SellerProfileNotFound());
     } catch (e) {
+      if (isClosed) return;
       emit(SellerProfileError(e.toString()));
     }
   }

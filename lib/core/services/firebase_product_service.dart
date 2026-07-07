@@ -185,7 +185,7 @@ class FirebaseProductService {
   }) async {
     final catId = categoryId?.trim();
 
-    Future<List<ProductModel>> _fromQuery(Query<Map<String, dynamic>> q) async {
+    Future<List<ProductModel>> fromQuery(Query<Map<String, dynamic>> q) async {
       final docs = await q.limit(50).get();
       return docs.docs.map(_productFromSnapshot).where(_isApproved).toList();
     }
@@ -196,7 +196,7 @@ class FirebaseProductService {
       if (minPrice != null) query = query.where('price', isGreaterThanOrEqualTo: minPrice);
       if (maxPrice != null) query = query.where('price', isLessThanOrEqualTo: maxPrice);
       if (minRating != null) query = query.where('rating', isGreaterThanOrEqualTo: minRating);
-      return _resolveProductsCategories(await _fromQuery(query));
+      return _resolveProductsCategories(await fromQuery(query));
     } catch (_) {
       final docs = await _productsRef.limit(200).get();
       final products = docs.docs.map(_productFromSnapshot).where((p) {

@@ -8,7 +8,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/logic/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/orderitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/order_item.dart';
 
 class CustomerOrdersScreen extends StatelessWidget {
   const CustomerOrdersScreen({super.key});

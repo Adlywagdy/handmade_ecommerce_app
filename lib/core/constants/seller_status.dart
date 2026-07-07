@@ -5,6 +5,5 @@ abstract class SellerStatus {
   static const String approved = 'approved';
   static const String rejected = 'rejected';
 
-  static bool isApproved(String? status) =>
-      status?.trim().toLowerCase() == approved;
+  static bool isApproved(String? status) =>  status?.trim().toLowerCase() == approved;
 }

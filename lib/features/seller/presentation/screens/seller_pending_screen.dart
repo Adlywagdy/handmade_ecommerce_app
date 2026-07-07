@@ -99,7 +99,7 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
       if (!mounted) return;
 
       if (SellerStatus.isApproved(status)) {
-        Get.offAllNamed(AppRoutes.sellerdashboard);
+        Get.offAllNamed(AppRoutes.sellerDashboard);
         return;
       }
 

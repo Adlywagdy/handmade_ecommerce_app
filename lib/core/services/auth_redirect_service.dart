@@ -10,10 +10,10 @@ abstract class AuthRedirectService {
       case UserRoles.admin:
         return AppRoutes.adminBottomBar;
       case UserRoles.seller:
-        return AppRoutes.sellerdashboard;
+        return AppRoutes.sellerDashboard;
       case UserRoles.customer:
       default:
-        return AppRoutes.customerlayout;
+        return AppRoutes.customerLayout;
     }
   }
 

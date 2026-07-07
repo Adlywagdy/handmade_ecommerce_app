@@ -40,7 +40,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _updateStateFromStreams();
       },
       onError: (e) {
-        emit(SellerError(e.toString()));
+        if (!isClosed) emit(SellerError(e.toString()));
       },
     );
 
@@ -50,7 +50,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _updateStateFromStreams();
       },
       onError: (e) {
-        emit(SellerError(e.toString()));
+        if (!isClosed) emit(SellerError(e.toString()));
       },
     );
   }
@@ -71,6 +71,7 @@ class SellerCubit extends Cubit<SellerState> {
         productCount: _currentProducts.length,
       );
 
+      if (isClosed) return;
       emit(SellerLoaded(
         products: _currentProducts,
         orders: _currentOrders,
@@ -79,6 +80,7 @@ class SellerCubit extends Cubit<SellerState> {
         productSearchQuery: currentQuery,
       ));
     } catch (e) {
+      if (isClosed) return;
       emit(SellerError(e.toString()));
     }
   }
@@ -106,7 +108,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _firestoreService.updateProduct(updatedProduct);
       } catch (e) {
         // Revert optimistic update
-        emit(current.copyWith(products: originalProducts));
+        if (!isClosed) emit(current.copyWith(products: originalProducts));
         rethrow;
       }
     }
@@ -125,7 +127,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _firestoreService.deleteProduct(productId);
       } catch (e) {
         // Revert optimistic update
-        emit(current.copyWith(products: originalProducts));
+        if (!isClosed) emit(current.copyWith(products: originalProducts));
         rethrow;
       }
     }
@@ -214,7 +216,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _firestoreService.updateProduct(product);
       } catch (e) {
         // Revert optimistic update
-        emit(current.copyWith(products: originalProducts));
+        if (!isClosed) emit(current.copyWith(products: originalProducts));
         rethrow;
       }
     }
@@ -254,7 +256,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _firestoreService.updateOrderStatus(orderId, newStatus);
       } catch (e) {
         // Revert optimistic update
-        emit(current.copyWith(orders: originalOrders));
+        if (!isClosed) emit(current.copyWith(orders: originalOrders));
         rethrow;
       }
     }
@@ -273,7 +275,7 @@ class SellerCubit extends Cubit<SellerState> {
         await _firestoreService.archiveOrder(orderId);
       } catch (e) {
         // Revert optimistic update
-        emit(current.copyWith(orders: originalOrders));
+        if (!isClosed) emit(current.copyWith(orders: originalOrders));
         rethrow;
       }
     }

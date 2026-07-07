@@ -467,6 +467,7 @@ class NotificationsScreen extends StatelessWidget {
                   type: 'newOrder',
                   targetId: 'ORD-TEST-999',
                 );
+                if (!context.mounted) return;
                 _showSuccessSnackbar(context, 'Order Created triggered for: $email');
               } else {
                 _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
@@ -492,6 +493,7 @@ class NotificationsScreen extends StatelessWidget {
                   type: 'orderShipped',
                   targetId: 'ORD-TEST-100',
                 );
+                if (!context.mounted) return;
                 _showSuccessSnackbar(context, 'Order Shipped triggered for current user');
               } else {
                 _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
@@ -518,6 +520,7 @@ class NotificationsScreen extends StatelessWidget {
                   type: 'priceDropAlert',
                   targetId: 'PROD-TEST-WALLET',
                 );
+                if (!context.mounted) return;
                 _showSuccessSnackbar(context, 'Price Drop triggered for current user');
               } else {
                 _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
@@ -543,6 +546,7 @@ class NotificationsScreen extends StatelessWidget {
                   type: 'productReview',
                   targetId: 'PROD-TEST-123',
                 );
+                if (!context.mounted) return;
                 _showSuccessSnackbar(context, 'Review Request triggered for current user');
               } else {
                 _showSuccessSnackbar(context, 'Error: You must be logged in to test.');

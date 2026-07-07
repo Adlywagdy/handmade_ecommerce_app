@@ -5,9 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/core/widgets/product_item.dart';
 import 'package:handmade_ecommerce_app/features/customer/wishlist/logic/wishlist_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/search/ui/widgets/searchedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/features/customer/search/ui/widgets/searched_product_item_lower_column.dart';
 
 class CustomerWishlistScreen extends StatelessWidget {
   const CustomerWishlistScreen({super.key});

@@ -8,7 +8,7 @@ import '../../../../../core/cubit/locale_cubit.dart';
 import '../../../../../core/routes/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/colors.dart';
-import '../../../../../core/widgets/customelevatedbutton.dart';
+import '../../../../../core/widgets/custom_elevated_button.dart';
 import '../../../../auth/services/auth_service.dart';
 import '../../../cubit/admin_cubit.dart';
 import '../../../models/settings_model.dart';

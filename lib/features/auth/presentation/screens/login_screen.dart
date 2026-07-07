@@ -9,7 +9,7 @@ import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart'
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/buttom_text.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_textfield.dart';

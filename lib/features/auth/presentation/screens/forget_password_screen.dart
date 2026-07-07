@@ -7,7 +7,7 @@ import 'package:handmade_ecommerce_app/core/extension/localization_extension.dar
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/auth/presentation/widgets/custom_textfield.dart';
 
@@ -69,8 +69,6 @@ class _ForgotPasswordScreenState extends State<ForgotPasswordScreen> {
           }
         },
         builder: (context, state) {
-          final isLoading = state is AuthLoading;
-
           return SingleChildScrollView(
             child: Padding(
               padding: const EdgeInsets.all(16),

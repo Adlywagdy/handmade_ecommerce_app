@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get/get.dart';
-
 import '../services/hivehelper_service.dart';
 
 
-/// The selected language is persisted in Hive so it survives restarts and
-/// applies to every user type (admin / seller / customer) on this device.
 class LocaleCubit extends Cubit<Locale?> {
   LocaleCubit() : super(null);
 

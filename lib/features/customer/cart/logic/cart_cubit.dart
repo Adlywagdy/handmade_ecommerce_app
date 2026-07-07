@@ -35,9 +35,11 @@ class CartCubit extends Cubit<CartState> {
     emit(GetcartLoadingstate());
     try {
       cartProductsList = await _cartService.getCartProducts();
+      if (isClosed) return;
       emit(GetcartSuccessedstate(cartproducts: cartProductsList));
       getOrderSummary(products: cartProductsList);
     } catch (e) {
+      if (isClosed) return;
       emit(GetcartFailedstate(errorMessage: e.toString()));
     }
   }
@@ -62,10 +64,12 @@ class CartCubit extends Cubit<CartState> {
           icon: Icons.check_circle_outline,
         );
       }
+      if (isClosed) return;
       emit(AddcartproductSuccessedstate());
       emit(GetcartSuccessedstate(cartproducts: cartProductsList));
       getOrderSummary(products: cartProductsList);
     } catch (e) {
+      if (isClosed) return;
       emit(AddcartproductFailedstate(errorMessage: e.toString()));
     }
   }
@@ -94,11 +98,13 @@ class CartCubit extends Cubit<CartState> {
             icon: CupertinoIcons.delete,
           );
         }
+        if (isClosed) return;
         emit(DeletecartproductSuccessedstate());
         emit(GetcartSuccessedstate(cartproducts: cartProductsList));
         getOrderSummary(products: cartProductsList);
       }
     } catch (e) {
+      if (isClosed) return;
       emit(DeletecartproductFailedstate(errorMessage: e.toString()));
     }
   } /*------------------------------------------- */
@@ -271,11 +277,14 @@ class CartCubit extends Cubit<CartState> {
           throw Exception("Unsupported payment method: $paymentMethod");
       }
 
+      if (isClosed) return;
       emit(MakePaymentSuccessState());
 
       emit(GetcartSuccessedstate(cartproducts: cartProductsList));
     } catch (e) {
-      emit(MakePaymentFailedState(e.toString()));
+      // Guard the emit but always rethrow so the caller (placeNewOrder) still
+      // sees the failure and its own error handling runs.
+      if (!isClosed) emit(MakePaymentFailedState(e.toString()));
       rethrow;
     }
   }
@@ -288,6 +297,7 @@ class CartCubit extends Cubit<CartState> {
     selectedPaymentMethod = "Visa";
     walletPhonenumber = "";
     _appliedCoupon = "";
+    if (isClosed) return;
     emit(GetcartSuccessedstate(cartproducts: cartProductsList));
   }
 }

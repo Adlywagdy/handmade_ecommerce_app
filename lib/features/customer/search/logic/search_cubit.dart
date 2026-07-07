@@ -26,8 +26,10 @@ class SearchCubit extends Cubit<SearchState> {
     emit(GetCategoriesLoadingstate());
     try {
       categoriesList = await _productService.getCategories();
+      if (isClosed) return;
       emit(GetCategoriesSuccessedstate());
     } catch (e) {
+      if (isClosed) return;
       emit(GetCategoriesFailedstate(errorMessage: e.toString()));
     }
   }
@@ -38,8 +40,10 @@ class SearchCubit extends Cubit<SearchState> {
     emit(SearchProductsLoadingstate());
     try {
       searchedproductsList = await _productService.searchProducts(productname);
+      if (isClosed) return;
       emit(SearchProductsSuccessedstate());
     } catch (e) {
+      if (isClosed) return;
       emit(SearchProductsFailedstate(errorMessage: e.toString()));
     }
   }
@@ -71,8 +75,10 @@ class SearchCubit extends Cubit<SearchState> {
         maxPrice: maxprice,
         minRating: rating,
       );
+      if (isClosed) return;
       emit(FilterProductsSuccessedstate());
     } catch (e) {
+      if (isClosed) return;
       emit(FilterProductsFailedstate(errorMessage: e.toString()));
     }
   }

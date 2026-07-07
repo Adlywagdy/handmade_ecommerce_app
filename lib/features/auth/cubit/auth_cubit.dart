@@ -20,12 +20,15 @@ class AuthCubit extends Cubit<AuthState> {
     try {
       final AuthSession session = await authService.login(email: email, password: password);
       _persistSession(email: email, session: session);
+      if (isClosed) return;
       emit(LoginSuccessState(session.role));
     } on FirebaseAuthException catch (e) {
       debugPrint('[AuthCubit.login] FirebaseAuthException: ${e.code} - ${e.message}');
+      if (isClosed) return;
       emit(LoginErrorState(e.message ?? 'Login failed'));
     } catch (e, stack) {
       debugPrint('[AuthCubit.login] $e\n$stack');
+      if (isClosed) return;
       emit(LoginErrorState('Login failed: $e'));
     }
   }
@@ -38,8 +41,10 @@ class AuthCubit extends Cubit<AuthState> {
         email: FirebaseAuth.instance.currentUser?.email,
         session: session,
       );
+      if (isClosed) return;
       emit(GoogleLoginSuccessState(session.role));
     } on FirebaseAuthException catch (e) {
+      if (isClosed) return;
       if (e.code == 'network-request-failed') {
         emit(
           GoogleLoginErrorState(
@@ -52,6 +57,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(GoogleLoginErrorState(e.message ?? 'Google sign in failed'));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(GoogleLoginErrorState('Something went wrong'));
     }
   }
@@ -80,8 +86,10 @@ class AuthCubit extends Cubit<AuthState> {
           status: role == UserRoles.seller ? SellerStatus.pending : null,
         ),
       );
+      if (isClosed) return;
       emit(RegisterSuccessState(role));
     } on FirebaseAuthException catch (e) {
+      if (isClosed) return;
       if (e.code == 'weak-password') {
         emit(RegisterErrorState('Password is too weak'));
       } else if (e.code == 'email-already-in-use') {
@@ -100,6 +108,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(RegisterErrorState(e.message ?? 'Register failed'));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(RegisterErrorState('Something went wrong'));
     }
   }
@@ -119,8 +128,10 @@ class AuthCubit extends Cubit<AuthState> {
           status: finalRole == UserRoles.seller ? SellerStatus.pending : null,
         ),
       );
+      if (isClosed) return;
       emit(RegisterSuccessState(finalRole));
     } on FirebaseAuthException catch (e) {
+      if (isClosed) return;
       if (e.code == 'network-request-failed') {
         emit(
           RegisterErrorState(
@@ -139,6 +150,7 @@ class AuthCubit extends Cubit<AuthState> {
         emit(RegisterErrorState(e.message ?? 'Google register failed'));
       }
     } catch (e) {
+      if (isClosed) return;
       emit(RegisterErrorState('Something went wrong'));
     }
   }
@@ -165,10 +177,13 @@ class AuthCubit extends Cubit<AuthState> {
 
     try {
       await authService.sendPasswordReset(email: email);
+      if (isClosed) return;
       emit(ForgotPasswordSuccessState());
     } on FirebaseAuthException catch (e) {
+      if (isClosed) return;
       emit(ForgotPasswordErrorState('${e.code} - ${e.message}'));
     } catch (e) {
+      if (isClosed) return;
       emit(ForgotPasswordErrorState(e.toString()));
     }
   }

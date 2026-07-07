@@ -17,8 +17,10 @@ class CustomerCubit extends Cubit<CustomerState> {
     emit(GetCustomerdataLoadingstate());
     try {
       customerData = await _customerService.getCustomerData() ?? customerData;
+      if (isClosed) return;
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
+      if (isClosed) return;
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
   }
@@ -27,8 +29,10 @@ class CustomerCubit extends Cubit<CustomerState> {
     emit(NotificationsLoadingstate());
     try {
       final notificationslist = await _customerService.getNotifications();
+      if (isClosed) return;
       emit(NotificationsSuccessedstate(notifications: notificationslist));
     } catch (e) {
+      if (isClosed) return;
       emit(NotificationsFailedstate(errorMessage: e.toString()));
     }
   }
@@ -37,8 +41,10 @@ class CustomerCubit extends Cubit<CustomerState> {
     try {
       await _customerService.setDefaultAddress(address);
       customerData.address = address;
+      if (isClosed) return;
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
+      if (isClosed) return;
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
   }
@@ -55,8 +61,10 @@ class CustomerCubit extends Cubit<CustomerState> {
         phone: phone ?? customerData.phone,
         image: image,
       );
+      if (isClosed) return;
       await getCustomerdata();
     } catch (e) {
+      if (isClosed) return;
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
     }
   }

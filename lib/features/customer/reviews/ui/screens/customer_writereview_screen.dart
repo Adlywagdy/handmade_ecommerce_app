@@ -6,10 +6,10 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/customreviewdetailstextfield.dart';
-import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/customstarsratingreview.dart';
-import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/reviewedproduct.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
+import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/custom_review_details_text_field.dart';
+import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/custom_stars_rating_review.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/reviewed_product.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/logic/reviews_cubit.dart';
 
 class CustomerWriteReviewScreen extends StatefulWidget {
@@ -154,14 +154,6 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
                     },
                   ),
                 ),
-                // SizedBox(height: 20.h),
-                // Padding(
-                //   padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-                //   child: GestureDetector(
-                //     onTap: () {}, // should open image picker in real app
-                //     child: AddReviewedPhotos(),
-                //   ),
-                // ),
                 SizedBox(height: 32.h),
                 Divider(color: commonColor.withValues(alpha: .2)),
                 SizedBox(height: 8.h),

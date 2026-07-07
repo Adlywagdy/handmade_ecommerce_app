@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
 
 class VerifyPasswordScreen extends StatelessWidget {
   const VerifyPasswordScreen({super.key});

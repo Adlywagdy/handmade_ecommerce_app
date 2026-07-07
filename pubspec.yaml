@@ -39,24 +39,22 @@ dependencies:
   flutter_bloc: ^9.1.1
   hive_flutter: ^1.1.0
   hive: ^2.2.3
-  pin_code_fields: ^9.3.0
   flutter_screenutil: ^5.9.3
   flutter_svg: ^2.2.4
   flutter_paypal_payment: ^1.0.8
   firebase_core: ^4.6.0
   cloud_firestore: ^6.2.0
+  dio: ^5.9.2 # used directly by Paymob payment manager for HTTP calls
   share_plus: ^12.0.2
   image_picker: ^1.2.1
   webview_flutter: ^4.13.1
   firebase_crashlytics: ^5.2.0
-  firebase_analytics: ^12.3.0
   firebase_remote_config: ^6.4.0
   package_info_plus: ^9.0.1
   url_launcher: ^6.3.2
 
   firebase_auth: ^6.4.0
   google_sign_in: ^7.2.0
-  flutter_native_splash: ^2.4.7
   firebase_storage: ^13.3.0
   fl_chart: ^1.2.0
   firebase_messaging: ^16.2.2
@@ -73,6 +71,9 @@ dev_dependencies:
   flutter_lints: ^6.0.0
   hive_generator: ^2.0.1
   build_runner: ^2.4.6
+  # Build-time tool only (generates native splash from flutter_native_splash.yaml);
+  # not imported at runtime, so it belongs in dev_dependencies.
+  flutter_native_splash: ^2.4.7
 
 flutter_icons:
   android: true

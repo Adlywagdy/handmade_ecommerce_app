@@ -7,11 +7,11 @@ import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
-import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_icon_button.dart';
+import 'package:handmade_ecommerce_app/core/widgets/product_item.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/productdetailslowercolumn.dart';
+import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/product_details_lower_column.dart';
 import 'package:share_plus/share_plus.dart';
 
 class CustomerProductDetailsScreen extends StatelessWidget {

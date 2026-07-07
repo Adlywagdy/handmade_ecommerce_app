@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_text_container.dart';
 
 class TagsRow extends StatelessWidget {
   const TagsRow({super.key, required this.product});

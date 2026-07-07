@@ -8,17 +8,17 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
-import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_icon_button.dart';
+import 'package:handmade_ecommerce_app/core/widgets/search_field.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/logic/home_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/categorieslist.dart';
-import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customfeaturerow.dart';
-import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/featuredproductitemlowercolumn.dart';
-import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/topratedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/categories_list.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/custom_feature_row.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/featured_product_item_lower_column.dart';
+import 'package:handmade_ecommerce_app/core/widgets/product_item.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/top_rated_product_item_lower_column.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});

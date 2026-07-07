@@ -130,7 +130,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Get.toNamed(AppRoutes.selleraddproduct);
+          Get.toNamed(AppRoutes.sellerAddProduct);
         },
         backgroundColor: commonColor,
         elevation: 4,

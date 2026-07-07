@@ -59,7 +59,7 @@ class AppPages {
     ),
 
     // customer
-    GetPage(name: AppRoutes.customerlayout, page: () => const CustomerLayout()),
+    GetPage(name: AppRoutes.customerLayout, page: () => const CustomerLayout()),
     GetPage(
       name: AppRoutes.customerOrderDetails,
       page: () {
@@ -170,29 +170,29 @@ class AppPages {
     ),
     // seller
     GetPage(
-      name: AppRoutes.sellerdashboard,
+      name: AppRoutes.sellerDashboard,
       page: () => const SellerBottomNav(),
     ),
     GetPage(
-      name: AppRoutes.selleraddproduct,
+      name: AppRoutes.sellerAddProduct,
       page: () => const SellerAddProductScreen(),
     ),
     GetPage(
-      name: AppRoutes.selleraddoreditproduct,
+      name: AppRoutes.sellerAddOrEditProduct,
       page: () => SellerAddEditProductScreen(
         product: Get.arguments as SellerProductModel,
       ),
     ),
     GetPage(
-      name: AppRoutes.sellerorders,
+      name: AppRoutes.sellerOrders,
       page: () => const SellerOrdersScreen(),
     ),
     GetPage(
-      name: AppRoutes.sellermanageproducts,
+      name: AppRoutes.sellerManageProducts,
       page: () => const SellerManageProductsScreen(),
     ),
     GetPage(
-      name: AppRoutes.sellerregisteation,
+      name: AppRoutes.sellerRegistration,
       page: () => const SellerRegistrationScreen(),
     ),
     GetPage(

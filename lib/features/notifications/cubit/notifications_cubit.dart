@@ -36,6 +36,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
         // Listen to Firestore updates
         _notificationsSubscription = NotificationsService.getNotificationsStream(currentUser.uid)
             .listen((notifications) {
+          if (isClosed) return;
           notifications.sort((a, b) => b.createdAt.compareTo(a.createdAt));
           final unreadCount = notifications.where((n) => !n.isRead).length;
 
@@ -59,11 +60,11 @@ class NotificationsCubit extends Cubit<NotificationsState> {
             unreadCount: unreadCount,
           ));
         }, onError: (e) {
-          emit(NotificationsError('Failed to sync notifications: $e'));
+          if (!isClosed) emit(NotificationsError('Failed to sync notifications: $e'));
         });
       }
     } catch (e) {
-      emit(NotificationsError('Failed to load notifications: $e'));
+      if (!isClosed) emit(NotificationsError('Failed to load notifications: $e'));
     }
   }
 

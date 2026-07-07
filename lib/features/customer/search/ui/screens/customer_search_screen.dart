@@ -10,11 +10,11 @@ import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
-import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_icon_button.dart';
+import 'package:handmade_ecommerce_app/core/widgets/search_field.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
-import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/search/ui/widgets/searchedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/core/widgets/product_item.dart';
+import 'package:handmade_ecommerce_app/features/customer/search/ui/widgets/searched_product_item_lower_column.dart';
 
 class CustomerSearchScreen extends StatefulWidget {
   const CustomerSearchScreen({super.key});

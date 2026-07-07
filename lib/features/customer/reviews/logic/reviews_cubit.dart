@@ -35,6 +35,7 @@ class ReviewsCubit extends Cubit<ReviewsState> {
         productId,
       );
       _reviewsByProduct[productId] = currentProductReviews;
+      if (isClosed) return;
       emit(
         ReviewsLoadedState(
           productId: productId,
@@ -42,6 +43,7 @@ class ReviewsCubit extends Cubit<ReviewsState> {
         ),
       );
     } catch (e) {
+      if (isClosed) return;
       emit(ReviewsErrorState(productId: productId, errorMessage: e.toString()));
     }
   }
@@ -86,9 +88,11 @@ class ReviewsCubit extends Cubit<ReviewsState> {
         rating: rating,
       );
 
+      if (isClosed) return;
       emit(SubmitReviewSuccessState());
       await loadProductReviews(product.id, showLoading: false);
     } catch (e) {
+      if (isClosed) return;
       emit(SubmitReviewErrorState(errorMessage: _formatError(e)));
     }
   }

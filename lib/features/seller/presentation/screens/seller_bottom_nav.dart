@@ -81,7 +81,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
 
   List<Widget> get _screens => [
     SellerDashboardScreen(
-      onAddProduct: () => Get.toNamed(AppRoutes.selleraddproduct),
+      onAddProduct: () => Get.toNamed(AppRoutes.sellerAddProduct),
       onViewProducts: () => _switchTab(1),
       onViewOrders: () => _switchTab(2),
       onOpenProfile: () => _switchTab(3),

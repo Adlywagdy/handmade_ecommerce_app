@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
-import 'package:handmade_ecommerce_app/features/customer/orders/data/service/customer_order_service.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/data/services/customer_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
@@ -31,8 +31,10 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       allordersList = await _orderService.getAllOrders();
       displayedordersList = allordersList;
+      if (isClosed) return;
       emit(GetAllOrdersSuccessState(orders: allordersList));
     } catch (e) {
+      if (isClosed) return;
       emit(GetAllOrdersFailedState(errorMessage: e.toString()));
     }
   }
@@ -43,8 +45,10 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       final fetched = await _orderService.getFilteredOrders(status);
       displayedordersList = fetched;
+      if (isClosed) return;
       emit(GetFilteredOrdersSuccessState(filteredorders: fetched));
     } catch (e) {
+      if (isClosed) return;
       emit(GetFilteredOrdersFailedState(errorMessage: e.toString()));
     }
   }
@@ -53,8 +57,10 @@ class OrderCubit extends Cubit<OrderState> {
     emit(GetOrderDetailsLoadingState());
     try {
       await _orderService.getOrderDetails(orderId);
+      if (isClosed) return;
       emit(GetOrderDetailsSuccessState());
     } catch (e) {
+      if (isClosed) return;
       emit(GetOrderDetailsFailedState(errorMessage: e.toString()));
     }
   }
@@ -84,9 +90,11 @@ class OrderCubit extends Cubit<OrderState> {
         }
       }
       showSnack(title: "Success", message: "Order placed successfully.");
+      if (isClosed) return;
       emit(PlaceOrderSuccessState());
       await cartCubit.clearCart();
     } catch (e) {
+      if (isClosed) return;
       emit(PlaceOrderFailedState(errorMessage: e.toString()));
     }
   }
@@ -96,12 +104,14 @@ class OrderCubit extends Cubit<OrderState> {
     try {
       await _orderService.cancelOrder(orderId);
       await _refreshByCurrentFilter();
+      if (isClosed) return;
       emit(CancelOrderSuccessState());
       final state = selectedStatus == null
           ? GetAllOrdersSuccessState(orders: displayedordersList) as OrderState
           : GetFilteredOrdersSuccessState(filteredorders: displayedordersList);
       emit(state);
     } catch (e) {
+      if (isClosed) return;
       emit(CancelOrderFailedState(errorMessage: e.toString()));
     }
   }

@@ -21,8 +21,10 @@ class WishListCubit extends Cubit<WishListState> {
     emit(GetWishlistLoadingstate());
     try {
       wishlistProductsList = await _wishlistService.getWishlistProducts();
+      if (isClosed) return;
       emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
     } catch (e) {
+      if (isClosed) return;
       emit(GetWishlistFailedstate(errorMessage: e.toString()));
     }
   }
@@ -56,9 +58,11 @@ class WishListCubit extends Cubit<WishListState> {
         );
       }
 
+      if (isClosed) return;
       emit(AddOrDeleteWishlistSuccessedstate());
       emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
     } catch (e) {
+      if (isClosed) return;
       emit(AddOrDeleteWishlistFailedstate(errorMessage: e.toString()));
     }
   }

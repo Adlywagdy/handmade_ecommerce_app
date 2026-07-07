@@ -9,7 +9,7 @@ abstract class AppRoutes {
   static const String verifyPassword = '/verifyPassword';
   static const String resetPassword = '/resetPassword';
 
-  static const String customerlayout = '/customer/layout';
+  static const String customerLayout = '/customer/layout';
 
   static const String customerSearch = '/customer/search';
   static const String customerNotifications = '/customer/notifications';
@@ -21,13 +21,13 @@ abstract class AppRoutes {
   static const String customerRecommendationChatbot =
       '/customer/recommendation-chatbot';
 
-  static const String sellerdashboard = '/sellerdashboard';
+  static const String sellerDashboard = '/sellerdashboard';
   static const String sellerPending = '/seller/pending';
-  static const String selleraddproduct = '/seller/add-product';
-  static const String selleraddoreditproduct = '/seller/add-or-edit-product';
-  static const String sellerorders = '/seller/orders';
-  static const String sellermanageproducts = '/seller/manage-products';
-  static const String sellerregisteation = '/seller/registeration';
+  static const String sellerAddProduct = '/seller/add-product';
+  static const String sellerAddOrEditProduct = '/seller/add-or-edit-product';
+  static const String sellerOrders = '/seller/orders';
+  static const String sellerManageProducts = '/seller/manage-products';
+  static const String sellerRegistration = '/seller/registration';
 
   static const String adminBottomBar = '/admin';
   static const String adminDashboard = '/admin/dashboard';

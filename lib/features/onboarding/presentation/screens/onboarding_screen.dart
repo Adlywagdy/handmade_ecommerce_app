@@ -6,7 +6,7 @@ import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
 import 'package:handmade_ecommerce_app/features/onboarding/models/onboarding_model.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 class OnboardingScreen extends StatefulWidget {

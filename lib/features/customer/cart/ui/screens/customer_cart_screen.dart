@@ -7,17 +7,17 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/logic/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/addresscolumn.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/cartproductitem.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/copounrow.dart';
-import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/ordersummary.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/paymentcolumn.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/address_column.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/cart_product_item.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/coupon_row.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/order_summary.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/payment_column.dart';
 
 class CustomerCartScreen extends StatelessWidget {
   const CustomerCartScreen({super.key});
@@ -207,7 +207,7 @@ class CustomerCartScreen extends StatelessWidget {
                           discount: state.discount,
                         ),
                         SizedBox(height: 8.h),
-                        CopounRow(),
+                        CouponRow(),
                         SizedBox(height: 16.h),
                         AddressColumn(),
                         SizedBox(height: 16.h),
@@ -335,6 +335,7 @@ class CheckoutButton extends StatelessWidget {
                     orderCubit.orderID = await orderCubit.getNewOrderID();
 
                     log(orderCubit.orderID.toString());
+                    if (!context.mounted) return;
                     await orderCubit.placeNewOrder(
                       CustomerOrderModel(
                         customer: customerCubit.customerData,

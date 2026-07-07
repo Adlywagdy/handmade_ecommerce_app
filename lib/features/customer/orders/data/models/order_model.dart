@@ -31,8 +31,9 @@ class CustomerOrderModel {
   List<ProductModel> get items => products;
 
   String get paymentStatus {
-    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery')
+    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery') {
       return 'pending';
+    }
     return 'paid';
   }
 

@@ -36,10 +36,6 @@ void main() async {
 
   // Initialize FCM Services
   await FCMService.init();
-  final token = await FCMService.getToken();
-  debugPrint("==============");
-  debugPrint("FCM TOKEN: $token");
-  debugPrint("==============");
   // Sync token if user is already logged in
   final currentUser = FirebaseAuth.instance.currentUser;
   if (currentUser != null) {
@@ -56,19 +52,6 @@ void main() async {
       debugPrint('❌ Failed to sync FCM Token on app startup: $e');
     }
   }
-
-  // ─── TEST FIREBASE CONNECTION ───
-  try {
-    final db = FirebaseFirestore.instance;
-    await db.collection('test_connection').add({
-      'message': 'Firebase is connected successfully!',
-      'timestamp': FieldValue.serverTimestamp(),
-    });
-    debugPrint('✅ FIREBASE CONNECTION SUCCESSFUL! Document written.');
-  } catch (e) {
-    debugPrint('❌ FIREBASE CONNECTION FAILED: $e');
-  }
-  // ────────────────────────────────
 
   //////////////////////////// Crashlytics ///////////////////////////////////
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterFatalError;
@@ -100,16 +83,13 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) => AuthCubit(AuthService()),
             ),
             BlocProvider(
-              create: (BuildContext context) =>
-                  NotificationsCubit()..loadNotifications(),
+              create: (BuildContext context) =>   NotificationsCubit()..loadNotifications(),
             ),
             BlocProvider(
-              create: (BuildContext context) =>
-                  SellerCubit(SellerFirestoreService())..loadDashboard(),
+              create: (BuildContext context) => SellerCubit(SellerFirestoreService())..loadDashboard(),
             ),
             BlocProvider(
-              create: (BuildContext context) =>
-                  LocaleCubit()..loadSavedLocale(),
+              create: (BuildContext context) => LocaleCubit()..loadSavedLocale(),
             ),
           ],
           child: BlocBuilder<LocaleCubit, Locale?>(

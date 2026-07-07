@@ -25,8 +25,10 @@ class ContactSellerCubit extends Cubit<ContactSellerState> {
         subject: subject,
         message: message,
       );
+      if (isClosed) return;
       emit(ContactSellerSuccess());
     } catch (e) {
+      if (isClosed) return;
       emit(ContactSellerFailure(e.toString()));
     }
   }
