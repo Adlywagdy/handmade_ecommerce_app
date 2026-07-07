@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
@@ -128,6 +129,13 @@ class CustomerHomeScreen extends StatelessWidget {
               pinned: true,
               scrolledUnderElevation: 0,
               centerTitle: true,
+              
+              leadingWidth: 120.w, 
+
+              leading: const Padding(
+                padding: EdgeInsets.only(left: 8),
+                child: ChangeLanguageWidget(),
+              ),
               title: Text(
                 'Ayady',
                 style: AppTextStyles.t_20w700.copyWith(color: commonColor),

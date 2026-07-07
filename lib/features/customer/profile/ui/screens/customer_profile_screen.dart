@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/language_tile.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/becomesellercard.dart';
@@ -195,33 +196,38 @@ class CustomerProfilesScreen extends StatelessWidget {
                   UserProfileDetails(customer: customer),
                   BecomeSellerCard(),
                   Column(
-                    children: List.generate(_customerDetails.length, (index) {
-                      final title = _customerDetails[index]['title'] as String;
-                      return CustomerDetailsItem(
-                        item: _customerDetails[index],
-                        onTap: () {
-                          if (title == 'Edit Profile') {
-                            _showEditBottomSheet(context, customer);
-                            return;
-                          }
+                    children: [
+                      ...List.generate(_customerDetails.length, (index) {
+                        final title = _customerDetails[index]['title'] as String;
+                        return CustomerDetailsItem(
+                          item: _customerDetails[index],
+                          onTap: () {
+                            if (title == 'Edit Profile') {
+                              _showEditBottomSheet(context, customer);
+                              return;
+                            }
 
-                          if (title == 'My Orders') {
-                            _openTab(3);
-                            return;
-                          }
+                            if (title == 'My Orders') {
+                              _openTab(3);
+                              return;
+                            }
 
-                          if (title == 'Favorites') {
-                            _openTab(1);
-                            return;
-                          }
+                            if (title == 'Favorites') {
+                              _openTab(1);
+                              return;
+                            }
 
-                          if (title == 'Settings') {
-                            context.read<CustomerCubit>().getNotifications();
-                            Get.toNamed(AppRoutes.customerNotifications);
-                          }
-                        },
-                      );
-                    }),
+                            if (title == 'Settings') {
+                              context.read<CustomerCubit>().getNotifications();
+                              Get.toNamed(AppRoutes.customerNotifications);
+                            }
+                          },
+                        );
+                      }),
+                      SizedBox(height: 16.h),
+                      const LanguageTile(),
+                      SizedBox(height: 16.h),
+                    ],
                   ),
                   CustomElevatedButton(
                     buttonheight: 70.h,
