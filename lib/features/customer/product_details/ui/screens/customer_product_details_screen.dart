@@ -13,6 +13,7 @@ import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/productdetailslowercolumn.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -46,14 +47,14 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   SharePlus.instance.share(
                     ShareParams(
                       text:
-                          'check out this product: ${product.name} for \$${product.price} at our store!',
+                          context.l10n.checkOutThisProduct(product.name, '\$${product.price}'),
                     ),
                   );
                 },
               ),
             ],
             title: Text(
-              'Product Details',
+              context.l10n.productDetails,
               textAlign: TextAlign.center,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
@@ -145,7 +146,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                       },
                       buttoncolor: commonColor,
                       child: Text(
-                        'Buy Now',
+                        context.l10n.buyNow,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_16w600.copyWith(
                           color: Colors.white,
@@ -187,7 +188,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                                 ),
                                 SizedBox(width: 8.w),
                                 Text(
-                                  'Added',
+                                  context.l10n.added,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyles.t_16w600.copyWith(
                                     color: commonColor,
@@ -206,7 +207,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                               ),
                               SizedBox(width: 8.w),
                               Text(
-                                'Add to Cart',
+                                context.l10n.addToCart,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyles.t_16w600.copyWith(
                                   color: commonColor,

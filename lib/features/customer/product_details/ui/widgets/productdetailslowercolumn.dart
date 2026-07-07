@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widg
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/productreviewscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/tagsrow.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/logic/reviews_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ProductDetailsLowerColumn extends StatefulWidget {
   const ProductDetailsLowerColumn({super.key, required this.product});
@@ -44,7 +45,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
         CustomSellerListTile(product: widget.product),
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 14.0),
-          child: Text('Description', style: AppTextStyles.t_18w700),
+          child: Text(context.l10n.description, style: AppTextStyles.t_18w700),
         ),
         Text(
           widget.product.description,
@@ -75,7 +76,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
 
             if (isErrorCurrentProduct && reviews.isEmpty) {
               return Text(
-                'Unable to load reviews right now.',
+                context.l10n.unableToLoadReviews,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               );
@@ -83,7 +84,7 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
 
             if (reviews.isEmpty) {
               return Text(
-                'No reviews yet for this product. Be the first to share your thoughts!',
+                context.l10n.noReviewsYetForProduct,
                 textAlign: TextAlign.center,
                 style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
               );

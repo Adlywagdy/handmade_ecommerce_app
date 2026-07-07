@@ -11,6 +11,7 @@ import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widg
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/customstarsratingreview.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/reviewedproduct.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/logic/reviews_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerWriteReviewScreen extends StatefulWidget {
   final ProductModel product;
@@ -40,8 +41,8 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
   void _submitReview() {
     if (_selectedRating < 1) {
       showSnack(
-        title: 'Review Missing',
-        message: 'Please select a star rating before submitting.',
+        title: context.l10n.reviewMissing,
+        message: context.l10n.pleaseSelectStarRating,
         bgColor: redDegree,
         icon: Icons.error_outline,
       );
@@ -50,8 +51,8 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
 
     if (_reviewController.text.trim().isEmpty) {
       showSnack(
-        title: 'Review Missing',
-        message: 'Please write a short comment before submitting.',
+        title: context.l10n.reviewMissing,
+        message: context.l10n.pleaseWriteShortComment,
         bgColor: redDegree,
         icon: Icons.error_outline,
       );
@@ -75,8 +76,8 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
       listener: (context, state) {
         if (state is SubmitReviewSuccessState) {
           showSnack(
-            title: 'Thank You',
-            message: 'Your review was submitted successfully.',
+            title: context.l10n.thankYou,
+            message: context.l10n.reviewSubmittedSuccessfully,
             bgColor: Colors.green,
             icon: Icons.check_circle_outline,
           );
@@ -85,7 +86,7 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
 
         if (state is SubmitReviewErrorState) {
           showSnack(
-            title: 'Submit Failed',
+            title: context.l10n.submitFailed,
             message: state.errorMessage,
             bgColor: redDegree,
             icon: Icons.error_outline,
@@ -121,13 +122,13 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
                   child: Column(
                     children: [
                       Text(
-                        'How was your experience?',
+                        context.l10n.howWasYourExperience,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_24w800,
                       ),
                       SizedBox(height: 8.h),
                       Text(
-                        'Your feedback helps our artisan community grow.',
+                        context.l10n.yourFeedbackHelps,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_14w400.copyWith(
                           color: subTitleColor,
@@ -192,7 +193,7 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
                                   ),
                                   SizedBox(width: 4.w),
                                   Text(
-                                    'Submit Review',
+                                    context.l10n.submitReview,
                                     textAlign: TextAlign.center,
                                     style: AppTextStyles.t_16w700.copyWith(
                                       color: Colors.white,
@@ -202,7 +203,7 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
                               ),
                       ),
                       Text(
-                        "By submitting, you agree to Ayady's Terms of Service and Privacy Policy.",
+                        context.l10n.bySubmittingYouAgree,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_10w400.copyWith(
                           color: subTitleColor,

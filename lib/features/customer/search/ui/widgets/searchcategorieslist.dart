@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class Searchcategorieslist extends StatefulWidget {
   const Searchcategorieslist({super.key});
@@ -120,7 +121,7 @@ class _SearchcategorieslistState extends State<Searchcategorieslist> {
                       ),
                       duration: const Duration(seconds: 2),
                       content: Text(
-                        'No subcategories found. Showing all items in this category.',
+                        context.l10n.noSubcategoriesFound,
                         style: AppTextStyles.t_14w600.copyWith(
                           color: Colors.white,
                         ),

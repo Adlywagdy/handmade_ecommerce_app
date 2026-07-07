@@ -19,6 +19,7 @@ import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customf
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/featuredproductitemlowercolumn.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/topratedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerHomeScreen extends StatelessWidget {
   const CustomerHomeScreen({super.key});
@@ -54,10 +55,10 @@ class CustomerHomeScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 16.h),
-                Text(
-                  'All Categories',
-                  style: AppTextStyles.t_18w700.copyWith(color: commonColor),
-                ),
+                  Text(
+                    context.l10n.allCategories,
+                    style: AppTextStyles.t_18w700.copyWith(color: commonColor),
+                  ),
                 SizedBox(height: 12.h),
                 Wrap(
                   spacing: 10.w,
@@ -112,7 +113,7 @@ class CustomerHomeScreen extends StatelessWidget {
         },
         icon: const Icon(Icons.auto_awesome, color: Colors.white),
         label: Text(
-          'AI Help',
+          context.l10n.aiHelp,
           style: AppTextStyles.t_14w600.copyWith(color: Colors.white),
         ),
       ),
@@ -129,7 +130,7 @@ class CustomerHomeScreen extends StatelessWidget {
               scrolledUnderElevation: 0,
               centerTitle: true,
               title: Text(
-                'Ayady',
+                context.l10n.ayady,
                 style: AppTextStyles.t_20w700.copyWith(color: commonColor),
               ),
               actions: [
@@ -172,7 +173,7 @@ class CustomerHomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.only(right: 16.0).w,
                 child: SearchField(
                   autofocus: false,
-                  hintText: "Search unique handmade crafts",
+                  hintText: context.l10n.searchUniqueHandmadeCrafts,
                   textstyle: AppTextStyles.t_12w500.copyWith(
                     color: commonColor.withValues(alpha: .6),
                   ),
@@ -188,8 +189,8 @@ class CustomerHomeScreen extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.only(right: 16.w, bottom: 12.h),
                 child: CustomFeatureRow(
-                  title: "Categories",
-                  buttontext: "See All",
+                  title: context.l10n.categories,
+                  buttontext: context.l10n.seeAll,
                   onTap: () => _openAllCategoriesSheet(context),
                   buttontextstyle: AppTextStyles.t_14w600.copyWith(
                     color: commonColor,
@@ -211,8 +212,8 @@ class CustomerHomeScreen extends StatelessWidget {
                   builder: (context, state) {
                     if (state is GetCategoriesSuccessedstate) {
                       return HomeCategoriesList();
-                    } else if (state is GetCategoriesFailedstate) {
-                      showSnack(title: "Error", message: state.errorMessage);
+                    } else                     if (state is GetCategoriesFailedstate) {
+                      showSnack(title: context.l10n.error, message: state.errorMessage);
                       return SizedBox(height: 100.h);
                     } else {
                       return Center(
@@ -229,11 +230,11 @@ class CustomerHomeScreen extends StatelessWidget {
                 children: [
                   SizedBox(height: 14.h),
                   Text(
-                    'Featured Products',
+                    context.l10n.featuredProducts,
                     style: AppTextStyles.t_20w700.copyWith(color: blackDegree),
                   ),
                   Text(
-                    'Handpicked for your style',
+                    context.l10n.handpickedForYourStyle,
                     style: AppTextStyles.t_14w400.copyWith(
                       color: darkblue.withValues(alpha: .75),
                     ),
@@ -281,7 +282,7 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                       );
                     } else if (state is GetFeaturedFailedstate) {
-                      showSnack(title: "Error", message: state.errorMessage);
+                      showSnack(title: context.l10n.error, message: state.errorMessage);
 
                       return SizedBox(height: 300.h);
                     } else {
@@ -303,8 +304,8 @@ class CustomerHomeScreen extends StatelessWidget {
               child: Padding(
                 padding: const EdgeInsets.only(right: 16.0).w,
                 child: CustomFeatureRow(
-                  title: "Top Rated",
-                  buttontext: 'Explore All',
+                  title: context.l10n.topRated,
+                  buttontext: context.l10n.exploreAll,
                   onTap: () {
                     Get.toNamed(
                       AppRoutes.customerSearch,
@@ -356,7 +357,7 @@ class CustomerHomeScreen extends StatelessWidget {
                         },
                       );
                     } else if (state is GetTopRatedFailedstate) {
-                      showSnack(title: "Error", message: state.errorMessage);
+                      showSnack(title: context.l10n.error, message: state.errorMessage);
                       return SizedBox(height: 200.h);
                     } else {
                       return ListView(

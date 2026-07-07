@@ -11,6 +11,7 @@ import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/custome
 import 'package:handmade_ecommerce_app/features/customer/orders/ui/screens/customer_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/ui/screens/customer_profile_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/wishlist/ui/screens/customer_wishlist_screen.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerLayout extends StatefulWidget {
   const CustomerLayout({super.key});
@@ -65,12 +66,12 @@ class _CustomerLayoutState extends State<CustomerLayout> {
               items: [
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.home_outlined),
-                  label: 'Home',
+                  label: context.l10n.home,
                   activeIcon: const Icon(Icons.home),
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.favorite_border),
-                  label: 'Wishlist',
+                  label: context.l10n.wishlist,
                   activeIcon: const Icon(
                     Icons.favorite,
                     fontWeight: FontWeight.w700,
@@ -103,17 +104,17 @@ class _CustomerLayoutState extends State<CustomerLayout> {
                       );
                     },
                   ),
-                  label: 'Cart',
+                  label: context.l10n.cart,
                   activeIcon: const Icon(Icons.shopping_cart),
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.shopping_bag_outlined),
-                  label: 'Orders',
+                  label: context.l10n.ordersTab,
                   activeIcon: const Icon(Icons.shopping_bag),
                 ),
                 BottomNavigationBarItem(
                   icon: const Icon(Icons.person_outline),
-                  label: 'Profile',
+                  label: context.l10n.profile,
                   activeIcon: const Icon(Icons.person),
                 ),
               ],

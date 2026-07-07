@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ReviewedProduct extends StatelessWidget {
   const ReviewedProduct({super.key, required this.product});
@@ -62,7 +63,7 @@ class ReviewedProduct extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Sold by ${product.seller.name.isNotEmpty ? product.seller.name : product.seller.id}',
+                  context.l10n.soldBy(product.seller.name.isNotEmpty ? product.seller.name : (product.seller.id ?? '')),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w500.copyWith(color: commonColor),

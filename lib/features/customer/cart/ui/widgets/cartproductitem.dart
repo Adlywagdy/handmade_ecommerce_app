@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -100,7 +101,9 @@ class CartProductItem extends StatelessWidget {
                     }
 
                     return Text(
-                      'By ${seller.displaySpecialty} ${seller.displayName}',
+                      context.l10n.byVendor(
+                        '${seller.displaySpecialty} ${seller.displayName}',
+                      ),
                       style: AppTextStyles.t_12w500.copyWith(
                         color: commonColor,
                       ),

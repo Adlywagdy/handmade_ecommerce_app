@@ -10,6 +10,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/data/customer_seller_profile_service.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomSellerListTile extends StatelessWidget {
   const CustomSellerListTile({super.key, required this.product});
@@ -63,7 +64,7 @@ class CustomSellerListTile extends StatelessWidget {
             child: CustomTextContainer(
               verticalpadding: 8,
               horizontalpadding: 16,
-              text: 'View Shop',
+              text: context.l10n.viewShop,
               textstyle: AppTextStyles.t_14w700.copyWith(color: commonColor),
               backGroundColor: commonColor.withValues(alpha: 0.10),
             ),

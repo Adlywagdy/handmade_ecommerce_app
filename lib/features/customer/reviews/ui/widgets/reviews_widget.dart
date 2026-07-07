@@ -3,6 +3,7 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/widgets/review_card.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ReviewsWidget extends StatelessWidget {
   const ReviewsWidget({super.key, required this.reviews});
@@ -14,7 +15,7 @@ class ReviewsWidget extends StatelessWidget {
     if (reviews.isEmpty) {
       return Center(
         child: Text(
-          'No reviews available.',
+          context.l10n.noReviewsAvailable,
           style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
         ),
       );

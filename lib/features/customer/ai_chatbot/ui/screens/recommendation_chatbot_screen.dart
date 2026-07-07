@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/data/models/chatbot_message_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/data/services/firebase_ai_service.dart';
@@ -32,13 +33,24 @@ class _RecommendationChatbotScreenState
   final FirestoreChatbotProductsService _firestoreProductsService =
       FirestoreChatbotProductsService();
 
-  final List<ChatbotMessageModel> _messages = [
-    ChatbotMessageModel(
-      text:
-          'Hi! Tell me about your room size, colors, style, and what handmade product you are looking for.',
-      isUser: false,
-    ),
-  ];
+  late final List<ChatbotMessageModel> _messages;
+
+  @override
+  void initState() {
+    super.initState();
+    _messages = [
+      ChatbotMessageModel(text: '', isUser: false),
+    ];
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
+      setState(() {
+        _messages[0] = ChatbotMessageModel(
+          text: context.l10n.chatbotWelcomeMessage,
+          isUser: false,
+        );
+      });
+    });
+  }
 
   @override
   void dispose() {
@@ -63,7 +75,7 @@ class _RecommendationChatbotScreenState
 
   Future<void> _addBotResponse(String userMessage) async {
     setState(() {
-      _messages.add(ChatbotMessageModel(text: 'Thinking...', isUser: false));
+      _messages.add(ChatbotMessageModel(text: context.l10n.thinking, isUser: false));
     });
 
     _scrollToBottom();
@@ -85,16 +97,11 @@ class _RecommendationChatbotScreenState
     String botReply;
 
     if (!preferences.hasAnyPreference) {
-      botReply =
-          'I need more details. Please tell me the room type, size, colors, or product type you want.';
+      botReply = context.l10n.needMoreDetails;
     } else if (recommendedProducts.isEmpty) {
-      botReply =
-          'I understood your preferences:\n\n${preferences.summary}\n\n'
-          'Sorry, I could not find an exact matching product right now. '
-          'Try changing the color, room type, or product category.';
+      botReply = context.l10n.noMatchingProductFound(preferences.summary);
     } else {
-      botReply =
-          'Great! I found 2 handmade products that may match your room:\n\n${preferences.summary}';
+      botReply = context.l10n.productsFound(recommendedProducts.length, preferences.summary);
     }
 
     if (!mounted) return;
@@ -126,8 +133,7 @@ class _RecommendationChatbotScreenState
   }
 
   void _showExampleMessage() {
-    _messageController.text =
-        'I need a delicate product for a small bedroom, in pink and white, with a romantic style.';
+    _messageController.text = context.l10n.exampleMessage;
   }
 
   @override
@@ -135,14 +141,14 @@ class _RecommendationChatbotScreenState
     return Scaffold(
       backgroundColor: const Color(0xffF8F4EF),
       appBar: AppBar(
-        title: const Text('Recommendation Chatbot'),
+        title: Text(context.l10n.recommendationChatbot),
         backgroundColor: commonColor,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
             onPressed: _showExampleMessage,
             icon: const Icon(Icons.lightbulb_outline),
-            tooltip: 'Example',
+            tooltip: context.l10n.exampleMessage,
           ),
         ],
       ),

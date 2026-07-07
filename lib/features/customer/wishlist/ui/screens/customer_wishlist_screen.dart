@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
@@ -29,7 +30,7 @@ class CustomerWishlistScreen extends StatelessWidget {
               centerTitle: true,
 
               title: Text(
-                'Your Wishlist',
+                context.l10n.yourWishlist,
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
@@ -107,7 +108,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                                     ).wishlistProductsList.length;
 
                               return Text(
-                                '$productsCount saved items',
+                                '$productsCount ${context.l10n.savedItems}',
                                 style: AppTextStyles.t_16w700.copyWith(
                                   color: blackDegree,
                                 ),
@@ -116,7 +117,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 2.h),
                           Text(
-                            'Your favorite products are ready anytime.',
+                            context.l10n.yourFavoriteProductsAreReadyAnytime,
                             style: AppTextStyles.t_12w500.copyWith(
                               color: subTitleColor,
                             ),
@@ -141,7 +142,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
-                        'Failed to load wishlist. Please try again.',
+                        context.l10n.failedToLoadWishlist,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: redDegree,
                         ),
@@ -153,7 +154,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
-                        'Your wishlist is empty. \nStart adding your favorite products!',
+                        context.l10n.yourWishlistIsEmpty,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: subTitleColor,
