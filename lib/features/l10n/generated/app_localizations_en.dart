@@ -1357,6 +1357,9 @@ class AppLocalizationsEn extends AppLocalizations {
       'You can review this product after delivery';
 
   @override
+  String get writeReview => 'Write Review';
+
+  @override
   String get orderPlacedSuccessfully => 'Order placed successfully.';
 
   @override

@@ -47,7 +47,7 @@ class OrderItem extends StatelessWidget {
           children: [
             Text(order.orderid, style: AppTextStyles.t_16w700),
             CustomTextContainer(
-              text: order.status.toString().split('.').last.toUpperCase(),
+              text: order.status.localizedLabel(context),
 
               horizontalpadding: 8.w,
               verticalpadding: 2.h,

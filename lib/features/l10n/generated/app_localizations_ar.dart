@@ -1347,6 +1347,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get reviewAfterDelivery => 'يمكنك تقييم هذا المنتج بعد التوصيل';
 
   @override
+  String get writeReview => 'اكتب تقييم';
+
+  @override
   String get orderPlacedSuccessfully => 'تم تقديم الطلب بنجاح';
 
   @override

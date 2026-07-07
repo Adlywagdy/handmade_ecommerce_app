@@ -179,8 +179,8 @@ class CustomerWishlistScreen extends StatelessWidget {
                           lowercolumnflex: 1,
                           elevation: 0,
                           imageclipBehavior: Clip.antiAlias,
-                          lowercolumnbottompadding: 7.h,
-                          lowercolumntoppadding: 7.h,
+                          lowercolumnbottompadding: 5.h,
+                          lowercolumntoppadding: 5.h,
                           lowercolumnleftpadding: 8,
                           lowercolumnrightpadding: 8,
                           lowercolumn: SearchedProductItemLowerColumn(

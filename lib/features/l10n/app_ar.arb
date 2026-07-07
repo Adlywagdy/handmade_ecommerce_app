@@ -1608,6 +1608,10 @@
   "@reviewAfterDelivery": {
     "description": "Info message when user tries to review an undelivered product."
   },
+  "writeReview": "اكتب تقييم",
+  "@writeReview": {
+    "description": "Button text to write a review for a delivered product."
+  },
   "orderPlacedSuccessfully": "تم تقديم الطلب بنجاح",
   "@orderPlacedSuccessfully": {
     "description": "Snackbar message when order is placed."

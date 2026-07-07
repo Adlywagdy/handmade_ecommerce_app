@@ -2624,6 +2624,12 @@ abstract class AppLocalizations {
   /// **'You can review this product after delivery'**
   String get reviewAfterDelivery;
 
+  /// Button text to write a review for a delivered product.
+  ///
+  /// In en, this message translates to:
+  /// **'Write Review'**
+  String get writeReview;
+
   /// Snackbar message when order is placed.
   ///
   /// In en, this message translates to:

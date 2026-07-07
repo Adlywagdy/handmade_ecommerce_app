@@ -1,7 +1,9 @@
+import 'package:flutter/widgets.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 class CustomerOrderModel {
   final CustomerModel customer;
@@ -127,6 +129,8 @@ class CustomerOrderModel {
             'price': p.price,
             'quantity': p.quantity,
             'sellerId': p.sellerId,
+            'images': p.images,
+            'productImage': p.image,
             'subtotal': p.price * p.quantity,
           },
         )
@@ -167,4 +171,24 @@ enum OrderStatus {
   shipped,
   delivered,
   cancelled,
+}
+
+extension OrderStatusLocalization on OrderStatus {
+  String localizedLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (this) {
+      case OrderStatus.pending:
+        return l10n.pending;
+      case OrderStatus.confirmed:
+        return l10n.confirmed;
+      case OrderStatus.preparing:
+        return l10n.preparing;
+      case OrderStatus.shipped:
+        return l10n.shipped;
+      case OrderStatus.delivered:
+        return l10n.delivered;
+      case OrderStatus.cancelled:
+        return l10n.cancelled;
+    }
+  }
 }

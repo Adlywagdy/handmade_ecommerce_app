@@ -84,7 +84,7 @@ class ProductItemOfOrder extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'EGP ${product.price.toString()}',
+                          '${order.payment.currency ?? "EGP"} ${product.price.toString()}',
                           style: AppTextStyles.t_16w700.copyWith(
                             color: commonColor,
                           ),
@@ -144,7 +144,7 @@ class ProductItemOfOrder extends StatelessWidget {
                         ),
                         SizedBox(width: 6.w),
                         Text(
-                          'Write Review',
+                          context.l10n.writeReview,
                           style: AppTextStyles.t_12w600.copyWith(
                             color: commonColor,
                           ),

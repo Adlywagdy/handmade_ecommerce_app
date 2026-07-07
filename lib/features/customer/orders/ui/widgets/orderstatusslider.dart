@@ -46,11 +46,7 @@ class OrderStatusSlider extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    _steps[progressindex]
-                        .toString()
-                        .split('.')
-                        .last
-                        .toUpperCase(),
+                    _steps[progressindex].localizedLabel(context),
                     style: AppTextStyles.t_10w700.copyWith(
                       color:
                           orderstatus != _steps[progressindex] &&
