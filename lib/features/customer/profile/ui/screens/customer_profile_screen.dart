@@ -123,7 +123,10 @@ class CustomerProfilesScreen extends StatelessWidget {
                 HiveHelper.clearEmailBox();
                 Navigator.of(context).pop(true);
               },
-              child: Text(context.l10n.logout, style: TextStyle(color: redDegree)),
+              child: Text(
+                context.l10n.logout,
+                style: TextStyle(color: redDegree),
+              ),
             ),
           ],
         );
@@ -198,39 +201,46 @@ class CustomerProfilesScreen extends StatelessWidget {
                   UserProfileDetails(customer: customer),
                   BecomeSellerCard(),
                   Column(
-                    children: List.generate(customerDetails(context).length, (index) {
-                      final title = customerDetails(context)[index]['title'] as String;
-                      final trailing = customerDetails(context)[index]['trailing'] as Widget?;
-                      return CustomerDetailsItem(
-                        item: customerDetails(context)[index],
-                        trailing: trailing,
-                        onTap: () {
-                          if (title == context.l10n.editProfile) {
-                            _showEditBottomSheet(context, customer);
-                            return;
-                          }
+                    children: [
+                      ...List.generate(customerDetails(context).length, (
+                        index,
+                      ) {
+                        final title =
+                            customerDetails(context)[index]['title'] as String;
+                        final trailing =
+                            customerDetails(context)[index]['trailing']
+                                as Widget?;
+                        return CustomerDetailsItem(
+                          item: customerDetails(context)[index],
+                          trailing: trailing,
+                          onTap: () {
+                            if (title == context.l10n.editProfile) {
+                              _showEditBottomSheet(context, customer);
+                              return;
+                            }
 
-                          if (title == context.l10n.myOrders) {
-                            _openTab(3);
-                            return;
-                          }
+                            if (title == context.l10n.myOrders) {
+                              _openTab(3);
+                              return;
+                            }
 
-                          if (title == context.l10n.favorites) {
-                            _openTab(1);
-                            return;
-                          }
+                            if (title == context.l10n.favorites) {
+                              _openTab(1);
+                              return;
+                            }
 
-                          if (title == context.l10n.settings) {
-                            context.read<CustomerCubit>().getNotifications();
-                            Get.toNamed(AppRoutes.customerNotifications);
-                          }
+                            if (title == context.l10n.settings) {
+                              context.read<CustomerCubit>().getNotifications();
+                              Get.toNamed(AppRoutes.customerNotifications);
+                            }
 
-                          if (title == context.l10n.language) {
-                            // Language is handled by ChangeLanguageWidget
-                          }
-                        },
-                      );
-                    }),
+                            if (title == context.l10n.language) {
+                              // Language is handled by ChangeLanguageWidget
+                            }
+                          },
+                        );
+                      }),
+                    ],
                   ),
                   CustomElevatedButton(
                     buttonheight: 70.h,
