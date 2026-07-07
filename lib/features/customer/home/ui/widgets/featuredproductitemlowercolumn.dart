@@ -38,7 +38,7 @@ class FeaturedProductItemLowerColumn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '\$${product.price}',
+              'EGP ${product.price}',
 
               style: AppTextStyles.t_16w700.copyWith(color: commonColor),
             ),

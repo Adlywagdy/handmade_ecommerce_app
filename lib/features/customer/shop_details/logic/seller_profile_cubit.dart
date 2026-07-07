@@ -5,13 +5,17 @@ import 'package:handmade_ecommerce_app/features/customer/shop_details/data/custo
 part 'seller_profile_state.dart';
 
 class SellerProfileCubit extends Cubit<SellerProfileState> {
-  SellerProfileCubit() : super(SellerProfileInitial());
+  SellerProfileCubit({CustomerSellerProfileService? service})
+      : _service = service ?? CustomerSellerProfileService(),
+        super(SellerProfileInitial());
+
+  final CustomerSellerProfileService _service;
 
   Future<void> getSellerProfileById(String sellerId) async {
     emit(SellerProfileLoading());
 
     try {
-      final seller = await getsellerdata(sellerId);
+      final seller = await _service.getSellerProfile(sellerId);
       emit(SellerProfileLoaded(seller));
     } on StateError {
       emit(SellerProfileNotFound());

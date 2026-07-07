@@ -12,6 +12,8 @@ import 'package:handmade_ecommerce_app/core/widgets/customtextcontainer.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/data/customer_seller_profile_service.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
+final _sellerService = CustomerSellerProfileService();
+
 class CustomSellerListTile extends StatelessWidget {
   const CustomSellerListTile({super.key, required this.product});
 
@@ -22,7 +24,7 @@ class CustomSellerListTile extends StatelessWidget {
     final sellerIdentifier = product.sellerId;
 
     return FutureBuilder<SellerModel>(
-      future: getsellerdata(sellerIdentifier),
+      future: _sellerService.getSellerProfile(sellerIdentifier),
       builder: (context, snapshot) {
         final seller = snapshot.data ?? product.seller;
         final sellerName = seller.displayName;

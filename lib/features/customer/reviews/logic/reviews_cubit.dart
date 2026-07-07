@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/services/reviews_service.dart';
+
 import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 part 'reviews_state.dart';
@@ -57,7 +58,9 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     if (normalizedComment.isEmpty) {
       emit(
         SubmitReviewErrorState(
-          errorMessage: AppLocalizations.of(Get.context!)!.pleaseWriteShortComment,
+          errorMessage: AppLocalizations.of(
+            Get.context!,
+          )!.pleaseWriteShortComment,
         ),
       );
       return;
@@ -77,7 +80,9 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null || userId.trim().isEmpty) {
-        throw Exception(AppLocalizations.of(Get.context!)!.youNeedToLoginBeforeReviewing);
+        throw Exception(
+          AppLocalizations.of(Get.context!)!.youNeedToLoginBeforeReviewing,
+        );
       }
 
       await _reviewsService.addProductReview(

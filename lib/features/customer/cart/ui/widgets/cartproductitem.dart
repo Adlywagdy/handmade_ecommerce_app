@@ -12,6 +12,8 @@ import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.d
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/amountcontainerbutton.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/data/customer_seller_profile_service.dart';
 
+final _sellerService = CustomerSellerProfileService();
+
 class CartProductItem extends StatelessWidget {
   const CartProductItem({super.key, required this.product});
 
@@ -93,7 +95,7 @@ class CartProductItem extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 FutureBuilder<SellerModel>(
-                  future: getsellerdata(product.sellerId),
+                  future: _sellerService.getSellerProfile(product.sellerId),
                   builder: (context, snapshot) {
                     final seller = snapshot.data;
                     if (seller == null) {

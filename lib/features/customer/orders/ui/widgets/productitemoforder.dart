@@ -75,7 +75,7 @@ class ProductItemOfOrder extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '\$${product.price.toString()}',
+                          'EGP ${product.price.toString()}',
                           style: AppTextStyles.t_16w700.copyWith(
                             color: commonColor,
                           ),

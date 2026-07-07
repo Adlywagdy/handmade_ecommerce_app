@@ -35,7 +35,7 @@ class SearchedProductItemLowerColumn extends StatelessWidget {
           ],
         ),
         Text(
-          "\$${product.price}",
+          "EGP ${product.price}",
           style: AppTextStyles.t_14w700.copyWith(color: commonColor),
         ),
       ],

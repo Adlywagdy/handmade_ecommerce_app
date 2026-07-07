@@ -47,7 +47,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                   SharePlus.instance.share(
                     ShareParams(
                       text:
-                          context.l10n.checkOutThisProduct(product.name, '\$${product.price}'),
+                          context.l10n.checkOutThisProduct(product.name, 'EGP ${product.price}'),
                     ),
                   );
                 },
@@ -104,7 +104,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      '\$${product.price}',
+                      'EGP ${product.price}',
                       style: AppTextStyles.t_24w700.copyWith(
                         color: commonColor,
                       ),

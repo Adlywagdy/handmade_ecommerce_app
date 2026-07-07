@@ -33,7 +33,7 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              "\$${product.price}",
+              "EGP ${product.price}",
               style: AppTextStyles.t_14w700.copyWith(color: commonColor),
             ),
             BlocBuilder<CartCubit, CartState>(
