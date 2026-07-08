@@ -6,8 +6,6 @@ class FirebaseWishlistService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  // ─── Helpers ──────────────────────────────────────────
-
   String? get _userId => _auth.currentUser?.uid;
 
   DocumentReference<Map<String, dynamic>> _rootRef(String uid) =>
@@ -23,8 +21,6 @@ class FirebaseWishlistService {
     }, SetOptions(merge: true));
   }
 
-  // ─── Public API ───────────────────────────────────────
-
   Future<List<ProductModel>> getWishlistProducts() async {
     final uid = _userId;
     if (uid == null) return [];
@@ -32,7 +28,6 @@ class FirebaseWishlistService {
     final snapshot = await _itemsRef(uid).orderBy('addedAt', descending: true).get();
     if (snapshot.docs.isEmpty) return [];
 
-    // Batch-fetch all products in a single `in` query
     final productIds = snapshot.docs
         .map((doc) => (doc.data()['productId'] ?? doc.id).toString())
         .where((id) => id.isNotEmpty)
@@ -40,7 +35,6 @@ class FirebaseWishlistService {
         .toList();
 
     final products = <ProductModel>[];
-    // Firestore `in` supports max 30 items, so chunk if needed
     for (var i = 0; i < productIds.length; i += 30) {
       final chunk = productIds.sublist(i, (i + 30).clamp(0, productIds.length));
       final docs = await _firestore
@@ -75,13 +69,6 @@ class FirebaseWishlistService {
     }
 
     await _rootRef(uid).set({'updatedAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
-  }
-
-  Future<bool> isInWishlist(String productId) async {
-    final uid = _userId;
-    if (uid == null) return false;
-    final doc = await _itemsRef(uid).doc(productId).get();
-    return doc.exists;
   }
 
   Future<void> clearWishlist() async {

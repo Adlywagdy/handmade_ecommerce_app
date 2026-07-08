@@ -42,9 +42,9 @@ class TopRatedProductItemLowerColumn extends StatelessWidget {
             ),
             BlocBuilder<CartCubit, CartState>(
               buildWhen: (previous, current) {
-                return current is GetcartSuccessedstate ||
-                    current is AddcartproductSuccessedstate ||
-                    current is DeletecartproductSuccessedstate;
+                return current is CartSuccess ||
+                    current is AddProductSuccess ||
+                    current is DeleteProductSuccess;
               },
               builder: (context, state) {
                 if (isItemExictedFun(

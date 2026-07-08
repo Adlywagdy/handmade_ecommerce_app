@@ -82,29 +82,29 @@ class CustomerOrdersScreen extends StatelessWidget {
         ),
         body: BlocBuilder<OrderCubit, OrderState>(
           buildWhen: (previous, current) {
-            return current is GetAllOrdersLoadingState ||
-                current is GetAllOrdersSuccessState ||
-                current is GetAllOrdersFailedState ||
-                current is GetFilteredOrdersLoadingState ||
-                current is GetFilteredOrdersSuccessState ||
-                current is GetFilteredOrdersFailedState ||
-                current is CancelOrderSuccessState ||
-                current is PlaceOrderSuccessState;
+            return current is GetAllOrdersLoading ||
+                current is GetAllOrdersSuccess ||
+                current is GetAllOrdersError ||
+                current is GetFilteredOrdersLoading ||
+                current is GetFilteredOrdersSuccess ||
+                current is GetFilteredOrdersError ||
+                current is CancelOrderSuccess ||
+                current is PlaceOrderSuccess;
           },
           builder: (context, state) {
             final orderCubit = context.read<OrderCubit>();
             final orders = orderCubit.displayedordersList;
 
-            if ((state is GetAllOrdersLoadingState ||
-                    state is GetFilteredOrdersLoadingState) &&
+            if ((state is GetAllOrdersLoading ||
+                    state is GetFilteredOrdersLoading) &&
                 orders.isEmpty) {
               return const Center(
                 child: CircularProgressIndicator(color: commonColor),
               );
             }
 
-            if ((state is GetAllOrdersFailedState ||
-                    state is GetFilteredOrdersFailedState) &&
+            if ((state is GetAllOrdersError ||
+                    state is GetFilteredOrdersError) &&
                 orders.isEmpty) {
               return Center(
                 child: Text(

@@ -490,6 +490,10 @@
   "@phone": {
     "description": "Label for phone number field."
   },
+  "phoneHint": "Enter your phone number",
+  "@phoneHint": {
+    "description": "Hint text for phone number field."
+  },
   "location": "Location",
   "@location": {
     "description": "Label for location field."
@@ -1437,6 +1441,10 @@
   "@deliveryAddress": {
     "description": "Section title for delivery address on cart and order screens."
   },
+  "deliveryDetails": "Delivery Details",
+  "@deliveryDetails": {
+    "description": "Section title for delivery details on cart and order screens."
+  },
   "change": "Change",
   "@change": {
     "description": "Button text to change an existing address."
@@ -1512,6 +1520,10 @@
   "mobileWallets": "Mobile Wallets",
   "@mobileWallets": {
     "description": "Payment method name for mobile wallets."
+  },
+  "cashOnDelivery": "Cash on Delivery",
+  "@cashOnDelivery": {
+    "description": "Payment method name for cash on delivery."
   },
   "pleaseEnterPromoCode": "Please enter a promo code",
   "@pleaseEnterPromoCode": {
@@ -1942,6 +1954,7 @@
   "admDashboard": "Dashboard",
   "admSellers": "Sellers",
   "admProducts": "Products",
+  "admCoupons": "Coupons",
   "admSettingsNav": "Settings",
 
   "selGlobalReach": "Global Reach",
@@ -2427,5 +2440,106 @@
   "selNoProductsFound": "No products found",
   "@selNoProductsFound": {
     "description": "Empty state text when no products found."
+  },
+  "admCategories": "Categories",
+  "@admCategories": {
+    "description": "AppBar title for categories management screen."
+  },
+  "admSearchCategoriesHint": "Search categories...",
+  "@admSearchCategoriesHint": {
+    "description": "Hint text for categories search bar."
+  },
+  "admNoCategoriesFound": "No categories yet",
+  "@admNoCategoriesFound": {
+    "description": "Empty state text when no categories exist."
+  },
+  "admTapToAddCategory": "Tap + to add your first category",
+  "@admTapToAddCategory": {
+    "description": "Subtitle for empty categories state."
+  },
+  "admInactive": "Inactive",
+  "@admInactive": {
+    "description": "Label for inactive status."
+  },
+  "admDeleteCategory": "Delete Category",
+  "@admDeleteCategory": {
+    "description": "Title for delete category confirmation dialog."
+  },
+  "admDeleteCategoryConfirm": "Delete \"{name}\"?",
+  "@admDeleteCategoryConfirm": {
+    "description": "Content for delete category confirmation dialog.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Electronics"
+      }
+    }
+  },
+  "admCategoryDeleted": "Category deleted successfully",
+  "@admCategoryDeleted": {
+    "description": "Snackbar message after category deletion."
+  },
+  "admCategoryAdded": "Category added successfully",
+  "@admCategoryAdded": {
+    "description": "Snackbar message after adding a category."
+  },
+  "admCategoryUpdated": "Category updated successfully",
+  "@admCategoryUpdated": {
+    "description": "Snackbar message after updating a category."
+  },
+  "admManageCategories": "Manage Categories",
+  "@admManageCategories": {
+    "description": "Subtitle for manage categories action card."
+  },
+  "admCategoriesCount": "{count} Categories",
+  "@admCategoriesCount": {
+    "description": "Title for manage categories action card.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "admManageCoupons": "Manage Coupons",
+  "admAddCategory": "Add Category",
+  "@admAddCategory": {
+    "description": "Title for add category bottom sheet."
+  },
+  "admEditCategory": "Edit Category",
+  "@admEditCategory": {
+    "description": "Title for edit category bottom sheet."
+  },
+  "admCategoryNameEN": "Category Name (English)",
+  "@admCategoryNameEN": {
+    "description": "Label for English category name field."
+  },
+  "admCategoryNameAR": "Category Name (Arabic)",
+  "@admCategoryNameAR": {
+    "description": "Label for Arabic category name field."
+  },
+  "admCategoryImage": "Category Image",
+  "@admCategoryImage": {
+    "description": "Label for category image picker."
+  },
+  "admTapToPickImage": "Tap to pick image",
+  "@admTapToPickImage": {
+    "description": "Placeholder text for category image picker."
+  },
+  "admPleaseSelectImage": "Please select a category image",
+  "@admPleaseSelectImage": {
+    "description": "Validation message when no image is selected."
+  },
+  "admDisplayOrder": "Display Order",
+  "@admDisplayOrder": {
+    "description": "Label for display order field."
+  },
+  "admEnglishNameRequired": "English name is required",
+  "@admEnglishNameRequired": {
+    "description": "Validation message for empty English name."
+  },
+  "admArabicNameRequired": "Arabic name is required",
+  "@admArabicNameRequired": {
+    "description": "Validation message for empty Arabic name."
   }
 }

@@ -4,32 +4,28 @@ sealed class ReviewsState {}
 
 final class ReviewsInitial extends ReviewsState {}
 
-final class ReviewsLoadingState extends ReviewsState {
+final class ReviewsLoading extends ReviewsState {
   final String productId;
-
-  ReviewsLoadingState({required this.productId});
+  ReviewsLoading({required this.productId});
 }
 
-final class ReviewsLoadedState extends ReviewsState {
+final class ReviewsLoaded extends ReviewsState {
   final String productId;
   final List<ReviewsModel> reviews;
-
-  ReviewsLoadedState({required this.productId, required this.reviews});
+  ReviewsLoaded({required this.productId, required this.reviews});
 }
 
-final class ReviewsErrorState extends ReviewsState {
+final class ReviewsError extends ReviewsState {
   final String productId;
-  final String errorMessage;
-
-  ReviewsErrorState({required this.productId, required this.errorMessage});
+  final String message;
+  ReviewsError({required this.productId, required this.message});
 }
 
-final class SubmitReviewLoadingState extends ReviewsState {}
+final class SubmitReviewLoading extends ReviewsState {}
 
-final class SubmitReviewSuccessState extends ReviewsState {}
+final class SubmitReviewSuccess extends ReviewsState {}
 
-final class SubmitReviewErrorState extends ReviewsState {
-  final String errorMessage;
-
-  SubmitReviewErrorState({required this.errorMessage});
+final class SubmitReviewError extends ReviewsState {
+  final String message;
+  SubmitReviewError({required this.message});
 }

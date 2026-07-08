@@ -3,7 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
+import 'package:handmade_ecommerce_app/features/onboarding/ui/onboarding_screen.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

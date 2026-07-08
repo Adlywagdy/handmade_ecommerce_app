@@ -70,11 +70,11 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
   Widget build(BuildContext context) {
     return BlocConsumer<ReviewsCubit, ReviewsState>(
       listenWhen: (previous, current) {
-        return current is SubmitReviewSuccessState ||
-            current is SubmitReviewErrorState;
+        return current is SubmitReviewSuccess ||
+            current is SubmitReviewError;
       },
       listener: (context, state) {
-        if (state is SubmitReviewSuccessState) {
+        if (state is SubmitReviewSuccess) {
           showSnack(
             title: context.l10n.thankYou,
             message: context.l10n.reviewSubmittedSuccessfully,
@@ -84,17 +84,17 @@ class _CustomerWriteReviewScreenState extends State<CustomerWriteReviewScreen> {
           Get.back();
         }
 
-        if (state is SubmitReviewErrorState) {
+        if (state is SubmitReviewError) {
           showSnack(
             title: context.l10n.submitFailed,
-            message: state.errorMessage,
+            message: state.message,
             bgColor: redDegree,
             icon: Icons.error_outline,
           );
         }
       },
       builder: (context, state) {
-        final isSubmitting = state is SubmitReviewLoadingState;
+        final isSubmitting = state is SubmitReviewLoading;
 
         return Scaffold(
           backgroundColor: customerbackGroundColor,

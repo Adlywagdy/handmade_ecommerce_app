@@ -6,7 +6,7 @@ import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations
 import 'package:handmade_ecommerce_app/features/customer/orders/data/service/customer_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/services/notification_generator.dart';
 
 part 'order_state.dart';
 
@@ -29,35 +29,25 @@ class OrderCubit extends Cubit<OrderState> {
 
   Future<void> getAllOrders() async {
     selectedStatus = null;
-    emit(GetAllOrdersLoadingState());
+    emit(GetAllOrdersLoading());
     try {
       allordersList = await _orderService.getAllOrders();
       displayedordersList = allordersList;
-      emit(GetAllOrdersSuccessState(orders: allordersList));
+      emit(GetAllOrdersSuccess(orders: allordersList));
     } catch (e) {
-      emit(GetAllOrdersFailedState(errorMessage: e.toString()));
+      emit(GetAllOrdersError(message: e.toString()));
     }
   }
 
   Future<void> getFilteredOrders({required OrderStatus status}) async {
     selectedStatus = status;
-    emit(GetFilteredOrdersLoadingState());
+    emit(GetFilteredOrdersLoading());
     try {
       final fetched = await _orderService.getFilteredOrders(status);
       displayedordersList = fetched;
-      emit(GetFilteredOrdersSuccessState(filteredorders: fetched));
+      emit(GetFilteredOrdersSuccess(orders: fetched));
     } catch (e) {
-      emit(GetFilteredOrdersFailedState(errorMessage: e.toString()));
-    }
-  }
-
-  Future<void> getOrderDetails(String orderId) async {
-    emit(GetOrderDetailsLoadingState());
-    try {
-      await _orderService.getOrderDetails(orderId);
-      emit(GetOrderDetailsSuccessState());
-    } catch (e) {
-      emit(GetOrderDetailsFailedState(errorMessage: e.toString()));
+      emit(GetFilteredOrdersError(message: e.toString()));
     }
   }
 
@@ -65,7 +55,7 @@ class OrderCubit extends Cubit<OrderState> {
     CustomerOrderModel newOrder,
     BuildContext context,
   ) async {
-    emit(PlaceOrderLoadingState());
+    emit(PlaceOrderLoading());
     try {
       final cartCubit = context.read<CartCubit>();
       await cartCubit.makePayment(newOrder.payment, context);
@@ -73,7 +63,6 @@ class OrderCubit extends Cubit<OrderState> {
       allordersList.add(newOrder);
       await _refreshByCurrentFilter();
 
-      // Trigger notifications for the seller(s) of the ordered products
       for (final product in newOrder.products) {
         final sellerEmail = product.seller.email;
         if (sellerEmail.isNotEmpty) {
@@ -85,16 +74,19 @@ class OrderCubit extends Cubit<OrderState> {
           );
         }
       }
-      showSnack(title: AppLocalizations.of(Get.context!)!.success, message: AppLocalizations.of(Get.context!)!.orderPlacedSuccessfully);
-      emit(PlaceOrderSuccessState());
+      showSnack(
+        title: AppLocalizations.of(Get.context!)!.success,
+        message: AppLocalizations.of(Get.context!)!.orderPlacedSuccessfully,
+      );
+      emit(PlaceOrderSuccess());
       await cartCubit.clearCart();
     } catch (e) {
-      emit(PlaceOrderFailedState(errorMessage: e.toString()));
+      emit(PlaceOrderError(message: e.toString()));
     }
   }
 
   Future<void> cancelOrder(String orderId) async {
-    emit(CancelOrderLoadingState());
+    emit(CancelOrderLoading());
     try {
       // Find the order before cancelling it to extract sellers
       CustomerOrderModel? orderToCancel;
@@ -119,13 +111,13 @@ class OrderCubit extends Cubit<OrderState> {
           }
         }
       }
-      emit(CancelOrderSuccessState());
+      emit(CancelOrderSuccess());
       final state = selectedStatus == null
-          ? GetAllOrdersSuccessState(orders: displayedordersList) as OrderState
-          : GetFilteredOrdersSuccessState(filteredorders: displayedordersList);
+          ? GetAllOrdersSuccess(orders: displayedordersList) as OrderState
+          : GetFilteredOrdersSuccess(orders: displayedordersList);
       emit(state);
     } catch (e) {
-      emit(CancelOrderFailedState(errorMessage: e.toString()));
+      emit(CancelOrderError(message: e.toString()));
     }
   }
 

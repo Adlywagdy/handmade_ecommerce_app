@@ -21,22 +21,22 @@ class CustomerCubit extends Cubit<CustomerState> {
   CustomerModel customerData = CustomerModel.empty();
 
   Future<void> getCustomerdata() async {
-    emit(GetCustomerdataLoadingstate());
+    emit(CustomerDataLoading());
     try {
       customerData = await _customerService.getCustomerData() ?? customerData;
-      emit(GetCustomerdataSuccessedstate(customer: customerData));
+      emit(CustomerDataSuccess(customer: customerData));
     } catch (e) {
-      emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+      emit(CustomerDataError(message: e.toString()));
     }
   }
 
   Future<void> getNotifications() async {
-    emit(NotificationsLoadingstate());
+    emit(NotificationsLoading());
     try {
       final notificationslist = await _customerService.getNotifications();
-      emit(NotificationsSuccessedstate(notifications: notificationslist));
+      emit(NotificationsSuccess(notifications: notificationslist));
     } catch (e) {
-      emit(NotificationsFailedstate(errorMessage: e.toString()));
+      emit(NotificationsError(message: e.toString()));
     }
   }
 
@@ -44,9 +44,9 @@ class CustomerCubit extends Cubit<CustomerState> {
     try {
       await _customerService.setDefaultAddress(address);
       customerData.address = address;
-      emit(GetCustomerdataSuccessedstate(customer: customerData));
+      emit(CustomerDataSuccess(customer: customerData));
     } catch (e) {
-      emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+      emit(CustomerDataError(message: e.toString()));
     }
   }
 
@@ -55,7 +55,7 @@ class CustomerCubit extends Cubit<CustomerState> {
     String? phone,
     String? image,
   }) async {
-    emit(GetCustomerdataLoadingstate());
+    emit(CustomerDataLoading());
     try {
       await _customerService.updateCustomerProfile(
         name: name,
@@ -64,12 +64,12 @@ class CustomerCubit extends Cubit<CustomerState> {
       );
       await getCustomerdata();
     } catch (e) {
-      emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+      emit(CustomerDataError(message: e.toString()));
     }
   }
 
   Future<void> uploadAndSaveProfileImage(File imageFile) async {
-    emit(ImageUploadLoadingstate());
+    emit(ImageUploadLoading());
     try {
       final imageUrl = await _cloudinaryService.uploadImage(imageFile);
 
@@ -90,9 +90,9 @@ class CustomerCubit extends Cubit<CustomerState> {
         address: customerData.address,
       );
 
-      emit(ImageUploadSuccessedstate(customer: customerData));
+      emit(ImageUploadSuccess(customer: customerData));
     } catch (e) {
-      emit(ImageUploadFailedstate(errorMessage: e.toString()));
+      emit(ImageUploadError(message: e.toString()));
     }
   }
 }

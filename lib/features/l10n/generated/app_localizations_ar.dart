@@ -524,6 +524,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get phone => 'الهاتف';
 
   @override
+  String get phoneHint => 'أدخل رقم هاتفك';
+
+  @override
   String get location => 'الموقع';
 
   @override
@@ -1239,6 +1242,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get deliveryAddress => 'عنوان التوصيل';
 
   @override
+  String get deliveryDetails => 'تفاصيل التوصيل';
+
+  @override
   String get change => 'تغيير';
 
   @override
@@ -1292,6 +1298,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get mobileWallets => 'المحافظ المحمولة';
+
+  @override
+  String get cashOnDelivery => 'الدفع عند الاستلام';
 
   @override
   String get pleaseEnterPromoCode => 'يرجى إدخال رمز العرض';
@@ -1869,6 +1878,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get admProducts => 'المنتجات';
 
   @override
+  String get admCoupons => 'الكوبونات';
+
+  @override
   String get admSettingsNav => 'الإعدادات';
 
   @override
@@ -2238,4 +2250,77 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get selNoProductsFound => 'لم يتم العثور على منتجات';
+
+  @override
+  String get admCategories => 'الأقسام';
+
+  @override
+  String get admSearchCategoriesHint => 'بحث في الأقسام...';
+
+  @override
+  String get admNoCategoriesFound => 'لا توجد أقسام بعد';
+
+  @override
+  String get admTapToAddCategory => 'اضغط + لإضافة أول قسم';
+
+  @override
+  String get admInactive => 'غير نشط';
+
+  @override
+  String get admDeleteCategory => 'حذف القسم';
+
+  @override
+  String admDeleteCategoryConfirm(String name) {
+    return 'حذف \"$name\"؟';
+  }
+
+  @override
+  String get admCategoryDeleted => 'تم حذف القسم بنجاح';
+
+  @override
+  String get admCategoryAdded => 'تمت إضافة القسم بنجاح';
+
+  @override
+  String get admCategoryUpdated => 'تم تحديث القسم بنجاح';
+
+  @override
+  String get admManageCategories => 'إدارة الأقسام';
+
+  @override
+  String admCategoriesCount(int count) {
+    return '$count أقسام';
+  }
+
+  @override
+  String get admManageCoupons => 'إدارة الكوبونات';
+
+  @override
+  String get admAddCategory => 'إضافة قسم';
+
+  @override
+  String get admEditCategory => 'تعديل القسم';
+
+  @override
+  String get admCategoryNameEN => 'اسم القسم (إنجليزي)';
+
+  @override
+  String get admCategoryNameAR => 'اسم القسم (عربي)';
+
+  @override
+  String get admCategoryImage => 'صورة القسم';
+
+  @override
+  String get admTapToPickImage => 'اضغط لاختيار صورة';
+
+  @override
+  String get admPleaseSelectImage => 'يرجى اختيار صورة للقسم';
+
+  @override
+  String get admDisplayOrder => 'ترتيب العرض';
+
+  @override
+  String get admEnglishNameRequired => 'الاسم الإنجليزي مطلوب';
+
+  @override
+  String get admArabicNameRequired => 'الاسم العربي مطلوب';
 }
