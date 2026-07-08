@@ -216,12 +216,28 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(8.r),
+                        image: item.image != null && item.image!.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(item.image!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
+<<<<<<< HEAD:lib/features/seller/ui/screens/seller_order_details_screen.dart
                       child: Icon(
                         Icons.image_outlined,
                         color: Colors.grey,
                         size: 24.w,
                       ),
+=======
+                      child: item.image == null || item.image!.isEmpty
+                          ? Icon(
+                              Icons.image_outlined,
+                              color: Colors.grey,
+                              size: 24.w,
+                            )
+                          : null,
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/presentation/screens/seller_order_details_screen.dart
                     ),
                     SizedBox(width: 12.w),
                     Expanded(

@@ -2,8 +2,14 @@ import 'dart:io';
 import 'dart:async';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/services/cloudinary_service.dart';
+<<<<<<< HEAD:lib/features/seller/logic/seller_cubit.dart
 import '../data/models/seller_model.dart';
 import '../data/services/seller_firestore_service.dart';
+=======
+import '../../../../core/models/category_model.dart';
+import '../models/seller_model.dart';
+import '../services/seller_firestore_service.dart';
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/cubit/seller_cubit.dart
 import 'seller_state.dart';
 
 class SellerCubit extends Cubit<SellerState> {
@@ -15,7 +21,9 @@ class SellerCubit extends Cubit<SellerState> {
 
   List<SellerProductModel> _currentProducts = [];
   List<SellerOrderModel> _currentOrders = [];
+  List<CategoryModel> _currentCategories = [];
   bool _isListening = false;
+  String? _lastSellerId;
 
   SellerCubit(this._firestoreService, {CloudinaryService? cloudinaryService})
     : _cloudinaryService = cloudinaryService ?? CloudinaryService(),
@@ -30,10 +38,27 @@ class SellerCubit extends Cubit<SellerState> {
 
   // ─── Dashboard ───
   Future<void> loadDashboard({bool showLoading = true}) async {
+    try {
+      final currentId = _firestoreService.currentSellerId;
+      if (_lastSellerId != currentId) {
+        _isListening = false; // Reset if user changed
+        _lastSellerId = currentId;
+      }
+    } catch (_) {
+      // currentSellerId throws if not authenticated, which shouldn't happen here, but just in case
+    }
+
     if (_isListening) return; // Only initialize listeners once
     _isListening = true;
 
     if (showLoading) emit(const SellerLoading());
+
+    try {
+      _currentCategories = await _firestoreService.getCategories();
+    } catch (_) {
+      // If fetching categories fails, keep going with an empty list
+      _currentCategories = [];
+    }
 
     _productsSubscription?.cancel();
     _ordersSubscription?.cancel();
@@ -75,6 +100,7 @@ class SellerCubit extends Cubit<SellerState> {
         productCount: _currentProducts.length,
       );
 
+<<<<<<< HEAD:lib/features/seller/logic/seller_cubit.dart
       emit(
         SellerLoaded(
           products: _currentProducts,
@@ -84,6 +110,16 @@ class SellerCubit extends Cubit<SellerState> {
           productSearchQuery: currentQuery,
         ),
       );
+=======
+      emit(SellerLoaded(
+        products: _currentProducts,
+        orders: _currentOrders,
+        categories: _currentCategories,
+        stats: stats,
+        activeOrderFilter: currentFilter,
+        productSearchQuery: currentQuery,
+      ));
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/cubit/seller_cubit.dart
     } catch (e) {
       emit(SellerError(e.toString()));
     }
@@ -152,10 +188,12 @@ class SellerCubit extends Cubit<SellerState> {
 
   Future<void> addProductWithImages({
     required String name,
+    required String nameAR,
     required String description,
+    required String descriptionAR,
     required double price,
     required int stock,
-    required String category,
+    required String categoryId,
     required List<File> imageFiles,
   }) async {
     final current = state;
@@ -171,31 +209,40 @@ class SellerCubit extends Cubit<SellerState> {
         final newProduct = SellerProductModel(
           id: '',
           name: name,
+          nameAR: nameAR,
           description: description,
+          descriptionAR: descriptionAR,
           price: price,
           stock: stock,
-          category: category,
+          categoryId: categoryId,
           images: imageUrls,
           isActive: true,
-          status: stock > 0 ? 'In Stock' : 'Out of Stock',
+          status: 'pending',
         );
 
         await _firestoreService.addProduct(newProduct);
+        
+        // Return to loaded state after successful addition
+        await _updateStateFromStreams();
       } catch (e) {
         try {
           final testProduct = SellerProductModel(
             id: '',
             name: name,
+            nameAR: nameAR,
             description: description,
+            descriptionAR: descriptionAR,
             price: price,
             stock: stock,
-            category: category,
+            categoryId: categoryId,
             images: ['https://via.placeholder.com/400'],
             isActive: true,
-            status: stock > 0 ? 'In Stock' : 'Out of Stock',
+            status: 'pending',
           );
 
           await _firestoreService.addProduct(testProduct);
+          
+          await _updateStateFromStreams();
         } catch (fallbackError) {
           await _updateStateFromStreams();
           rethrow;

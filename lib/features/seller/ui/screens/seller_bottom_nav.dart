@@ -5,8 +5,14 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+<<<<<<< HEAD:lib/features/seller/ui/screens/seller_bottom_nav.dart
 import 'package:handmade_ecommerce_app/features/seller/logic/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/logic/seller_state.dart';
+=======
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/presentation/screens/seller_bottom_nav.dart
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/utils/focus_managements.dart';
 import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_dashboard_screen.dart';
@@ -168,13 +174,13 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
   ) {
     Widget iconWidget = Icon(
       isSelected ? activeIcon : inactiveIcon,
-      color: isSelected ? commonColor : const Color(0xFF94A3B8),
+      color: isSelected ? commonColor : AppColors.textMuted,
       size: 24.w,
     );
 
     if (hasBadge) {
       iconWidget = Badge(
-        backgroundColor: const Color(0xFFEF4444),
+        backgroundColor: AppColors.errorMain,
         smallSize: 8.w,
         child: iconWidget,
       );
@@ -190,12 +196,15 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
           FittedBox(
             child: Text(
               label,
-              style: TextStyle(
-                color: isSelected ? commonColor : const Color(0xFF94A3B8),
-                fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-                fontSize: isSmallText ? 10.sp : 12.sp,
-                fontFamily: 'Plus Jakarta Sans',
-              ),
+              style: isSmallText
+                  ? AppTextStyles.t_10w600.copyWith(
+                      color: isSelected ? commonColor : AppColors.textMuted,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                    )
+                  : AppTextStyles.t_12w600.copyWith(
+                      color: isSelected ? commonColor : AppColors.textMuted,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                    ),
             ),
           ),
         ],

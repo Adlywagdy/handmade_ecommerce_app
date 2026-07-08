@@ -9,12 +9,21 @@ import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/debugging/bloc_observer.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_initial_route.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+<<<<<<< HEAD
 import 'package:handmade_ecommerce_app/features/auth/logic/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/features/notifications/logic/notifications_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/logic/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/data/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:handmade_ecommerce_app/features/auth/data/services/auth_service.dart';
+=======
+import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
+import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
+import 'package:hive_flutter/hive_flutter.dart';
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handmade_ecommerce_app/features/notifications/data/services/fcm_service.dart';
@@ -25,6 +34,7 @@ import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
   await Hive.openBox('notifications');
   await Hive.openBox(HiveHelper.onboardingBox);
@@ -80,6 +90,8 @@ void main() async {
   };
 
   await RemoteConfigService.instance.init();
+  /////////////////////////////////////////////////////////////////////////
+
   final initialRoute = await getInitialRoute();
   Bloc.observer = MyCubitObserver();
   runApp(HandcraftedEcommerceApp(initialRoute: initialRoute));

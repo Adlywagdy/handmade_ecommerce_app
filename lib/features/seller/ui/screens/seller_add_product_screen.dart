@@ -8,7 +8,11 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/logic/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/logic/seller_state.dart';
 
+<<<<<<< HEAD:lib/features/seller/ui/screens/seller_add_product_screen.dart
 import 'package:handmade_ecommerce_app/features/seller/data/models/data/seller_mock_data.dart';
+=======
+import 'package:handmade_ecommerce_app/core/models/category_model.dart';
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/presentation/screens/seller_add_product_screen.dart
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerAddProductScreen extends StatefulWidget {
@@ -23,12 +27,18 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   bool _isActive = true;
 
   final TextEditingController _titleController = TextEditingController();
+<<<<<<< HEAD:lib/features/seller/ui/screens/seller_add_product_screen.dart
   final TextEditingController _categoryController = TextEditingController(
     text: 'Ceramics',
   );
+=======
+  final TextEditingController _titleARController = TextEditingController();
+  final TextEditingController _categoryController = TextEditingController();
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/presentation/screens/seller_add_product_screen.dart
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _stockController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
+  final TextEditingController _descriptionARController = TextEditingController();
 
   final List<File> _selectedImages = [];
   final ImagePicker _picker = ImagePicker();
@@ -47,10 +57,12 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
   @override
   void dispose() {
     _titleController.dispose();
+    _titleARController.dispose();
     _categoryController.dispose();
     _priceController.dispose();
     _stockController.dispose();
     _descriptionController.dispose();
+    _descriptionARController.dispose();
     super.dispose();
   }
 
@@ -117,8 +129,26 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 ),
                 SizedBox(height: 20.h),
 
+                // Product Title AR
+                _buildLabel('Product Title (Arabic)'),
+                _buildTextField(
+                  hint: 'اسم المنتج بالعربي',
+                  controller: _titleARController,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Arabic title is required';
+                    }
+                    if (value.trim().length < 3) {
+                      return context.l10n.selTitleMin3Chars;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 20.h),
+
                 // Category dropdown (full-width)
                 _buildLabel(context.l10n.category),
+<<<<<<< HEAD:lib/features/seller/ui/screens/seller_add_product_screen.dart
                 DropdownButtonFormField<String>(
                   initialValue: _categoryController.text.isEmpty
                       ? 'Ceramics'
@@ -165,7 +195,54 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                   onChanged: (val) {
                     if (val != null) {
                       _categoryController.text = val;
+=======
+                BlocBuilder<SellerCubit, SellerState>(
+                  builder: (context, state) {
+                    List<CategoryModel> categories = [];
+                    if (state is SellerLoaded) {
+                      categories = state.categories;
+>>>>>>> b3f706d1c93438364cf27aeaeb668eae6afdaa7a:lib/features/seller/presentation/screens/seller_add_product_screen.dart
                     }
+                    
+                    // If the list is empty, we show a fallback
+                    if (categories.isEmpty) {
+                      return Text('Loading categories...', style: TextStyle(color: Colors.grey, fontSize: 14.sp));
+                    }
+
+                    // Set initial value if not set
+                    if (_categoryController.text.isEmpty && categories.isNotEmpty) {
+                      _categoryController.text = categories.first.id ?? '';
+                    }
+
+                    return DropdownButtonFormField<String>(
+                      initialValue: _categoryController.text.isNotEmpty && categories.any((c) => c.id == _categoryController.text) 
+                          ? _categoryController.text 
+                          : categories.first.id,
+                      dropdownColor: Colors.white,
+                      icon: Icon(Icons.keyboard_arrow_down, color: const Color(0xFF64748B), size: 20.w),
+                      decoration: InputDecoration(
+                        fillColor: Colors.white,
+                        filled: true,
+                        contentPadding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 14.h),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                        enabledBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r), borderSide: const BorderSide(color: Color(0xFFE2E8F0))),
+                        focusedBorder: OutlineInputBorder(borderRadius: BorderRadius.circular(8.r), borderSide: BorderSide(color: commonColor)),
+                      ),
+                      items: categories.map((cat) {
+                        return DropdownMenuItem<String>(
+                          value: cat.id,
+                          child: Text(
+                            cat.localizedTitle(false), // Or true if app is in Arabic
+                            style: TextStyle(fontSize: 14.sp, fontFamily: 'Plus Jakarta Sans', color: const Color(0xFF334155)),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (val) {
+                        if (val != null) {
+                          _categoryController.text = val;
+                        }
+                      },
+                    );
                   },
                 ),
                 SizedBox(height: 20.h),
@@ -243,6 +320,24 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
                       return context.l10n.selDescriptionRequired;
+                    }
+                    if (value.trim().length < 10) {
+                      return context.l10n.selDescriptionMin10Chars;
+                    }
+                    return null;
+                  },
+                ),
+                SizedBox(height: 24.h),
+
+                // Description AR
+                _buildLabel('Product Description (Arabic)'),
+                _buildTextField(
+                  hint: 'وصف المنتج بالعربي',
+                  controller: _descriptionARController,
+                  maxLines: 5,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Arabic description is required';
                     }
                     if (value.trim().length < 10) {
                       return context.l10n.selDescriptionMin10Chars;
@@ -561,10 +656,12 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                     final cubit = context.read<SellerCubit>();
                     await cubit.addProductWithImages(
                       name: _titleController.text,
+                      nameAR: _titleARController.text,
                       description: _descriptionController.text,
+                      descriptionAR: _descriptionARController.text,
                       price: price,
                       stock: stock,
-                      category: _categoryController.text,
+                      categoryId: _categoryController.text,
                       imageFiles: _selectedImages,
                     );
 
