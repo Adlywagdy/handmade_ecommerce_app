@@ -1864,6 +1864,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get admProducts => 'Products';
 
   @override
+  String get admCoupons => 'Coupons';
+
+  @override
   String get admSettingsNav => 'Settings';
 
   @override
@@ -2277,6 +2280,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String admCategoriesCount(int count) {
     return '$count Categories';
   }
+
+  @override
+  String get admManageCoupons => 'Manage Coupons';
 
   @override
   String get admAddCategory => 'Add Category';

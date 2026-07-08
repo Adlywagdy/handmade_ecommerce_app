@@ -1,8 +1,10 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/services/cloudinary_service.dart';
 import '../data/models/category_model.dart';
+import '../data/models/coupon_model.dart';
 import '../data/models/next_status_action.dart';
 import '../data/models/orders_model.dart';
 import '../data/models/products_model.dart';
@@ -23,6 +25,7 @@ class AdminCubit extends Cubit<AdminState> {
   List<OrderModel> ordersList = [];
   List<ProductsModel> productsList = [];
   List<CategoryModel> categoriesList = [];
+  List<CouponModel> couponsList = [];
   Map<String, SellerData> sellersById = {};
   SettingsModel settings = const SettingsModel();
   AdminStats? dashboardStats;
@@ -38,6 +41,7 @@ class AdminCubit extends Cubit<AdminState> {
   String ordersQuery = '';
   String productsQuery = '';
   String categoriesQuery = '';
+  String couponsQuery = '';
 
   ////////////////////// Subscriptions /////////////////////
   StreamSubscription<List<SellerData>>? _sellersSub;
@@ -45,6 +49,7 @@ class AdminCubit extends Cubit<AdminState> {
   StreamSubscription<List<ProductsModel>>? _productsSub;
   StreamSubscription<SettingsModel>? _settingsSub;
   StreamSubscription<List<CategoryModel>>? _categoriesSub;
+  StreamSubscription<List<CouponModel>>? _couponsSub;
 
   ////////////////////// init method  /////////////////////
   void init() {
@@ -53,6 +58,7 @@ class AdminCubit extends Cubit<AdminState> {
     getProducts();
     getSettings();
     getCategories();
+    getCoupons();
     getDashboard();
   }
 
@@ -105,6 +111,15 @@ class AdminCubit extends Cubit<AdminState> {
       categoriesList = categories;
       emit(GetCategoriesSuccess());
     }, onError: (error) => emit(GetCategoriesError(error.toString())));
+  }
+
+  void getCoupons() {
+    if (couponsList.isEmpty) emit(GetCouponsLoading());
+    _couponsSub?.cancel();
+    _couponsSub = _service.streamCoupons().listen((coupons) {
+      couponsList = coupons;
+      emit(GetCouponsSuccess());
+    }, onError: (error) => emit(GetCouponsError(error.toString())));
   }
 
   Future<void> getDashboard() async {
@@ -247,6 +262,78 @@ class AdminCubit extends Cubit<AdminState> {
     }
   }
 
+  //////////////////////////// Coupon CRUD   ////////////////////////////
+  Future<void> addCoupon({
+    required String code,
+    required DiscountType discountType,
+    required double discountValue,
+    int maxUses = 0,
+    double minOrderAmount = 0,
+    DateTime? expiryDate,
+  }) async {
+    emit(CouponActionLoading());
+    try {
+      final coupon = CouponModel(
+        code: code.toUpperCase(),
+        discountType: discountType,
+        discountValue: discountValue,
+        isActive: true,
+        maxUses: maxUses,
+        minOrderAmount: minOrderAmount,
+        expiryDate: expiryDate,
+      );
+      await _service.addCoupon(coupon);
+      emit(CouponActionSuccess('Coupon added successfully'));
+    } catch (e) {
+      emit(CouponActionError(e.toString()));
+    }
+  }
+
+  Future<void> updateCoupon({
+    required String id,
+    required String code,
+    required DiscountType discountType,
+    required double discountValue,
+    int? maxUses,
+    double? minOrderAmount,
+    DateTime? expiryDate,
+  }) async {
+    emit(CouponActionLoading());
+    try {
+      final data = <String, dynamic>{
+        'code': code.toUpperCase(),
+        'discountType': discountType.name,
+        'discountValue': discountValue,
+      };
+      if (maxUses != null) data['maxUses'] = maxUses;
+      if (minOrderAmount != null) data['minOrderAmount'] = minOrderAmount;
+      data['expiryDate'] =
+          expiryDate != null ? Timestamp.fromDate(expiryDate) : null;
+      await _service.updateCoupon(id, data);
+      emit(CouponActionSuccess('Coupon updated successfully'));
+    } catch (e) {
+      emit(CouponActionError(e.toString()));
+    }
+  }
+
+  Future<void> deleteCoupon(String id) async {
+    emit(CouponActionLoading());
+    try {
+      await _service.deleteCoupon(id);
+      emit(CouponActionSuccess('Coupon deleted successfully'));
+    } catch (e) {
+      emit(CouponActionError(e.toString()));
+    }
+  }
+
+  Future<void> toggleCouponActive(String id, bool isActive) async {
+    try {
+      await _service.toggleCouponActive(id, isActive);
+    } catch (e) {
+      emit(CouponActionError(e.toString()));
+    }
+  }
+
   ////////////////////////////  Search setters  ////////////////////////////
   void setSellersQuery(String query) {
     sellersQuery = query;
@@ -266,6 +353,11 @@ class AdminCubit extends Cubit<AdminState> {
   void setCategoriesQuery(String query) {
     categoriesQuery = query;
     emit(GetCategoriesSuccess());
+  }
+
+  void setCouponsQuery(String query) {
+    couponsQuery = query;
+    emit(GetCouponsSuccess());
   }
 
   ////////////////////////////  Helpers   ////////////////////////////
@@ -386,6 +478,21 @@ class AdminCubit extends Cubit<AdminState> {
         .toList();
   }
 
+  List<CouponModel> couponsByActive({required bool active}) =>
+      _applyCouponSearch(
+        couponsList,
+      ).where((c) => c.isActive == active).toList();
+
+  List<CouponModel> _applyCouponSearch(List<CouponModel> list) {
+    if (couponsQuery.isEmpty) return list;
+    final q = couponsQuery.toLowerCase();
+    return list
+        .where(
+          (c) => c.code.toLowerCase().contains(q),
+        )
+        .toList();
+  }
+
   // Handle next-status transitions for order status.
   List<NextStatusAction> nextOrderActions(OrderStatus current) {
     switch (current) {
@@ -421,6 +528,7 @@ class AdminCubit extends Cubit<AdminState> {
     _productsSub?.cancel();
     _settingsSub?.cancel();
     _categoriesSub?.cancel();
+    _couponsSub?.cancel();
     return super.close();
   }
 }

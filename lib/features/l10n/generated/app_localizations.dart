@@ -3560,6 +3560,12 @@ abstract class AppLocalizations {
   /// **'Products'**
   String get admProducts;
 
+  /// No description provided for @admCoupons.
+  ///
+  /// In en, this message translates to:
+  /// **'Coupons'**
+  String get admCoupons;
+
   /// No description provided for @admSettingsNav.
   ///
   /// In en, this message translates to:
@@ -4309,6 +4315,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} Categories'**
   String admCategoriesCount(int count);
+
+  /// No description provided for @admManageCoupons.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Coupons'**
+  String get admManageCoupons;
 
   /// Title for add category bottom sheet.
   ///

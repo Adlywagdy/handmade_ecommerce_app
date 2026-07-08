@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/features/admin/data/models/coupon_model.dart';
 
 class FirebaseCartService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -137,5 +138,12 @@ class FirebaseCartService {
     }
 
     await doc.reference.update(_cartPayload(userId: uid, items: items));
+  }
+
+  Future<List<CouponModel>> fetchCoupons() async {
+    final snapshot = await _firestore.collection('coupons').get();
+    return snapshot.docs
+        .map((doc) => CouponModel.fromJson(doc.data(), id: doc.id))
+        .toList();
   }
 }

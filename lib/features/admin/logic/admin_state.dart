@@ -123,3 +123,31 @@ class CategoryActionError extends AdminState {
   final String error;
   CategoryActionError(this.error);
 }
+
+///////////////////////////////////////////
+class GetCouponsLoading extends AdminState {}
+
+class GetCouponsSuccess extends AdminState {}
+
+class GetCouponsFailure extends AdminState {
+  final String error;
+  GetCouponsFailure(this.error);
+}
+
+class GetCouponsError extends AdminState {
+  final String error;
+  GetCouponsError(this.error);
+}
+
+///////////////////////////////////////////
+class CouponActionLoading extends AdminState {}
+
+class CouponActionSuccess extends AdminState {
+  final String message;
+  CouponActionSuccess(this.message);
+}
+
+class CouponActionError extends AdminState {
+  final String error;
+  CouponActionError(this.error);
+}

@@ -1850,6 +1850,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get admProducts => 'المنتجات';
 
   @override
+  String get admCoupons => 'الكوبونات';
+
+  @override
   String get admSettingsNav => 'الإعدادات';
 
   @override
@@ -2259,6 +2262,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String admCategoriesCount(int count) {
     return '$count أقسام';
   }
+
+  @override
+  String get admManageCoupons => 'إدارة الكوبونات';
 
   @override
   String get admAddCategory => 'إضافة قسم';

@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/category_model.dart';
+import '../models/coupon_model.dart';
 import '../models/orders_model.dart';
 import '../models/products_model.dart';
 import '../models/sellers_model.dart';
@@ -174,6 +175,39 @@ class AdminFirestoreService {
 
   Future<void> toggleCategoryActive(String id, bool isActive) async {
     await _db.collection('categories').doc(id).update({
+      'isActive': isActive,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  /////////////////////// Coupons /////////////////////
+  Stream<List<CouponModel>> streamCoupons() => _db
+      .collection('coupons')
+      .orderBy('createdAt', descending: true)
+      .snapshots()
+      .map(
+        (s) => s.docs
+            .map((d) => CouponModel.fromJson(d.data(), id: d.id))
+            .toList(),
+      );
+
+  Future<void> addCoupon(CouponModel coupon) async {
+    final data = coupon.toJson();
+    data['createdAt'] = FieldValue.serverTimestamp();
+    await _db.collection('coupons').add(data);
+  }
+
+  Future<void> updateCoupon(String id, Map<String, dynamic> data) async {
+    data['updatedAt'] = FieldValue.serverTimestamp();
+    await _db.collection('coupons').doc(id).update(data);
+  }
+
+  Future<void> deleteCoupon(String id) async {
+    await _db.collection('coupons').doc(id).delete();
+  }
+
+  Future<void> toggleCouponActive(String id, bool isActive) async {
+    await _db.collection('coupons').doc(id).update({
       'isActive': isActive,
       'updatedAt': FieldValue.serverTimestamp(),
     });

@@ -6,6 +6,7 @@ import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dar
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/services/firebase_cart_service.dart';
+import 'package:handmade_ecommerce_app/features/admin/data/models/coupon_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
@@ -30,6 +31,7 @@ class CartCubit extends Cubit<CartState> {
   String walletPhonenumber = "";
   String selectedOrderPhone = "";
   String _appliedCoupon = "";
+  List<CouponModel> _coupons = [];
 
   /* ------------------------------------------- */
   Future<void> getcartProducts() async {
@@ -115,12 +117,16 @@ class CartCubit extends Cubit<CartState> {
       final effectiveCoupon = (coupon ?? _appliedCoupon).trim();
       _appliedCoupon = effectiveCoupon;
 
+      if (_coupons.isEmpty) {
+        _coupons = await _cartService.fetchCoupons();
+      }
+
       final ordersubtotalPrice = calculateOrdersubTotalPrice(
         cartproducts: products,
       );
       final double discount = showCouponFeedback
-          ? applyCoupon(effectiveCoupon)
-          : getCouponDiscount(effectiveCoupon);
+          ? applyCoupon(effectiveCoupon, _coupons, subtotal: ordersubtotalPrice)
+          : getCouponDiscount(effectiveCoupon, _coupons, subtotal: ordersubtotalPrice);
       currentOrderSummary = PaymentDetailsModel(
         subtotalPrice: ordersubtotalPrice,
         totalPrice: ordersubtotalPrice + deliveryFee - discount,
@@ -297,6 +303,7 @@ class CartCubit extends Cubit<CartState> {
     walletPhonenumber = "";
     selectedOrderPhone = "";
     _appliedCoupon = "";
+    _coupons = [];
     emit(GetcartSuccessedstate(cartproducts: cartProductsList));
   }
 }

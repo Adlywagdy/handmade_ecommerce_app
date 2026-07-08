@@ -1940,6 +1940,7 @@
   "admDashboard": "لوحة التحكم",
   "admSellers": "البائعون",
   "admProducts": "المنتجات",
+  "admCoupons": "الكوبونات",
   "admSettingsNav": "الإعدادات",
 
   "selGlobalReach": "انتشار عالمي",
@@ -2486,6 +2487,7 @@
       }
     }
   },
+  "admManageCoupons": "إدارة الكوبونات",
   "admAddCategory": "إضافة قسم",
   "@admAddCategory": {
     "description": "Title for add category bottom sheet."

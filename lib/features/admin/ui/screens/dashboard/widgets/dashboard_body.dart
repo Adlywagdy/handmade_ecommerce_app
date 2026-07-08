@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/logic/admin_cubit.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/screens/categories/categories_screen.dart';
+import 'package:handmade_ecommerce_app/features/admin/ui/screens/coupons/coupons_screen.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/screens/products/products_screen.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/screens/sellers/sellers_screen.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/widgets/commission_editor_dialog.dart';
@@ -118,6 +119,18 @@ class DashboardBody extends StatelessWidget {
               () => BlocProvider.value(
                 value: cubit,
                 child: const AdminCategoriesScreen(),
+              ),
+            ),
+          ),
+          SizedBox(height: 10.h),
+          DashboardPendingActionCard(
+            icon: Icons.local_offer_outlined,
+            title: '${cubit.couponsList.length} Coupons',
+            subtitle: AppLocalizations.of(context)!.admManageCoupons,
+            onButtonTap: () => Get.to(
+              () => BlocProvider.value(
+                value: cubit,
+                child: const AdminCouponsScreen(),
               ),
             ),
           ),

@@ -37,4 +37,5 @@ abstract class AppRoutes {
   static const String adminOrders = '/admin/orders';
   static const String adminSettings = '/admin/settings';
   static const String adminCategories = '/admin/categories';
+  static const String adminCoupons = '/admin/coupons';
 }

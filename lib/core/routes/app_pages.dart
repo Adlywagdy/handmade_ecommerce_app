@@ -4,6 +4,7 @@ import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/screens/admin_bottom_bar/admin_bottom_bar.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/screens/categories/categories_screen.dart';
+import 'package:handmade_ecommerce_app/features/admin/ui/screens/coupons/coupons_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/forget_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/register_screen.dart';
@@ -226,6 +227,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.adminCategories,
       page: () => const AdminCategoriesScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.adminCoupons,
+      page: () => const AdminCouponsScreen(),
     ),
   ];
 }
