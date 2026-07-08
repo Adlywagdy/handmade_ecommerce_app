@@ -1,0 +1,419 @@
+diff --git a/lib/core/models/product_model.dart b/lib/core/models/product_model.dart
+index adc32f9..a530f56 100644
+--- a/lib/core/models/product_model.dart
++++ b/lib/core/models/product_model.dart
+@@ -120,13 +120,15 @@ class ProductModel {
+     if (map['images'] is List) {
+       return (map['images'] as List).map((e) => e.toString()).toList();
+     }
+-    final single = map['productImage']?.toString() ?? map['imageUrl']?.toString();
++    final single =
++        map['productImage']?.toString() ?? map['imageUrl']?.toString();
+     return (single != null && single.isNotEmpty) ? [single] : [];
+   }
+ 
+   static SellerModel _parseSeller(Map<String, dynamic> map) {
+     final sellerMap = map['seller'];
+-    final refId = SellerModel.normalizeReferenceId(sellerMap) ??
++    final refId =
++        SellerModel.normalizeReferenceId(sellerMap) ??
+         SellerModel.normalizeReferenceId(map['sellerId']);
+     if (sellerMap is Map<String, dynamic>) {
+       return SellerModel.fromMap(sellerMap, fallbackId: refId?.toString());
+@@ -145,7 +147,8 @@ class ProductModel {
+ 
+   static CategoryModel? _parseCategory(Map<String, dynamic> map) {
+     final categoryMap = map['category'];
+-    final refId = CategoryModel.normalizeReferenceId(categoryMap) ??
++    final refId =
++        CategoryModel.normalizeReferenceId(categoryMap) ??
+         CategoryModel.normalizeReferenceId(map['categoryId']);
+     if (categoryMap is Map<String, dynamic>) {
+       return CategoryModel.fromMap(categoryMap, id: refId);
+@@ -162,14 +165,15 @@ class ProductModel {
+   factory ProductModel.fromMap(Map<String, dynamic> map, {String? id}) {
+     return ProductModel(
+       id: id ?? map['id']?.toString() ?? map['productId']?.toString() ?? '',
+-      name: map['name']?.toString() ??
++      name:
++          map['name']?.toString() ??
+           map['productName']?.toString() ??
+           map['title']?.toString() ??
+           '',
+       nameAR: map['nameAR']?.toString() ?? map['name_ar']?.toString(),
+       description: map['description']?.toString() ?? '',
+-      descriptionAR: map['descriptionAR']?.toString() ??
+-          map['description_ar']?.toString(),
++      descriptionAR:
++          map['descriptionAR']?.toString() ?? map['description_ar']?.toString(),
+       price: parseDouble(map['price']) ?? 0,
+       discountedPrice: parseDouble(map['discountedPrice']),
+       currency: map['currency']?.toString() ?? 'EGP',
+@@ -208,7 +212,7 @@ class ProductModel {
+       'categoryId': category?.id,
+       'tags': tags ?? <String>[],
+       'isActive': isActive,
+-      'status': status ?? 'approved',
++      'status': status ?? 'pending',
+       'salesCount': salesCount ?? 0,
+       'createdAt': createdAt ?? DateTime.now(),
+       'updatedAt': updatedAt ?? DateTime.now(),
+diff --git a/lib/core/services/cloudinary_service.dart b/lib/core/services/cloudinary_service.dart
+index d6187bb..a65e433 100644
+--- a/lib/core/services/cloudinary_service.dart
++++ b/lib/core/services/cloudinary_service.dart
+@@ -13,7 +13,7 @@ class CloudinaryService {
+   final Dio _dio = Dio();
+ 
+   Future<String> uploadImage(File file) async {
+-    final fileName = file.path.split('/').last;
++    final fileName = file.uri.pathSegments.last;
+ 
+     final formData = FormData.fromMap({
+       'file': await MultipartFile.fromFile(file.path, filename: fileName),
+@@ -49,4 +49,13 @@ class CloudinaryService {
+       throw Exception('Failed to upload image: ${response.statusCode}');
+     }
+   }
++
++  Future<List<String>> uploadImages(List<File> files) async {
++    final urls = <String>[];
++    for (final file in files) {
++      final url = await uploadImage(file);
++      urls.add(url);
++    }
++    return urls;
++  }
+ }
+diff --git a/lib/features/seller/cubit/seller_cubit.dart b/lib/features/seller/cubit/seller_cubit.dart
+index 812e953..9859d81 100644
+--- a/lib/features/seller/cubit/seller_cubit.dart
++++ b/lib/features/seller/cubit/seller_cubit.dart
+@@ -1,12 +1,14 @@
+ import 'dart:io';
+ import 'dart:async';
+ import 'package:flutter_bloc/flutter_bloc.dart';
++import 'package:handmade_ecommerce_app/core/services/cloudinary_service.dart';
+ import '../models/seller_model.dart';
+ import '../services/seller_firestore_service.dart';
+ import 'seller_state.dart';
+ 
+ class SellerCubit extends Cubit<SellerState> {
+   final SellerFirestoreService _firestoreService;
++  final CloudinaryService _cloudinaryService;
+   
+   StreamSubscription? _productsSubscription;
+   StreamSubscription? _ordersSubscription;
+@@ -16,7 +18,9 @@ class SellerCubit extends Cubit<SellerState> {
+   bool _isListening = false;
+   String? _lastSellerId;
+ 
+-  SellerCubit(this._firestoreService) : super(const SellerInitial());
++  SellerCubit(this._firestoreService, {CloudinaryService? cloudinaryService})
++      : _cloudinaryService = cloudinaryService ?? CloudinaryService(),
++        super(const SellerInitial());
+ 
+   @override
+   Future<void> close() {
+@@ -164,18 +168,15 @@ class SellerCubit extends Cubit<SellerState> {
+     final current = state;
+     if (current is SellerLoaded) {
+       try {
+-        // We emit SellerLoading so the UI can show a progress indicator while uploading
+         emit(const SellerLoading());
+         
+-        // 1. Upload images to Firebase Storage
+         List<String> imageUrls = [];
+         if (imageFiles.isNotEmpty) {
+-          imageUrls = await _firestoreService.uploadProductImages(imageFiles);
++          imageUrls = await _cloudinaryService.uploadImages(imageFiles);
+         }
+ 
+-        // 2. Create the model
+         final newProduct = SellerProductModel(
+-          id: '', // Will be generated by Firestore
++          id: '',
+           name: name,
+           description: description,
+           price: price,
+@@ -186,10 +187,8 @@ class SellerCubit extends Cubit<SellerState> {
+           status: 'pending',
+         );
+         
+-        // 3. Save to Firestore
+         await _firestoreService.addProduct(newProduct);
+       } catch (e) {
+-        // Storage upload failed — try adding with placeholder image
+         try {
+           final testProduct = SellerProductModel(
+             id: '', 
+@@ -205,7 +204,6 @@ class SellerCubit extends Cubit<SellerState> {
+           
+           await _firestoreService.addProduct(testProduct);
+         } catch (fallbackError) {
+-          // Both attempts failed — reload previous state and propagate error
+           await _updateStateFromStreams();
+           rethrow;
+         }
+@@ -231,6 +229,36 @@ class SellerCubit extends Cubit<SellerState> {
+     }
+   }
+ 
++  Future<void> updateProductWithImages({
++    required SellerProductModel product,
++    required List<File> newImageFiles,
++    required List<String> existingImageUrls,
++  }) async {
++    final current = state;
++    if (current is SellerLoaded) {
++      final originalProducts = current.products;
++      try {
++        emit(const SellerLoading());
++
++        List<String> allImageUrls = List<String>.from(existingImageUrls);
++        if (newImageFiles.isNotEmpty) {
++          final uploadedUrls = await _cloudinaryService.uploadImages(newImageFiles);
++          allImageUrls = [...allImageUrls, ...uploadedUrls];
++        }
++
++        final updatedProduct = product.copyWith(
++          images: allImageUrls.isNotEmpty ? allImageUrls : ['https://via.placeholder.com/150'],
++        );
++
++        _updateProductsInState(current, updatedProduct);
++        await _firestoreService.updateProduct(updatedProduct);
++      } catch (e) {
++        emit(current.copyWith(products: originalProducts));
++        rethrow;
++      }
++    }
++  }
++
+   void _updateProductsInState(SellerLoaded current, SellerProductModel updatedProduct) {
+     final updatedProducts = current.products.map((p) {
+       if (p.id == updatedProduct.id) return updatedProduct;
+diff --git a/lib/features/seller/models/data/seller_mock_data.dart b/lib/features/seller/models/data/seller_mock_data.dart
+index 5d09308..15b1652 100644
+--- a/lib/features/seller/models/data/seller_mock_data.dart
++++ b/lib/features/seller/models/data/seller_mock_data.dart
+@@ -17,7 +17,8 @@ List<SellerProductModel> mockSellerProducts = [
+   const SellerProductModel(
+     id: 'P001',
+     name: 'Handmade Ceramic Plate',
+-    description: 'Beautiful hand-painted ceramic plate with traditional patterns.',
++    description:
++        'Beautiful hand-painted ceramic plate with traditional patterns.',
+     price: 25.00,
+     stock: 15,
+     category: 'Ceramics',
+@@ -91,8 +92,16 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 75.00,
+     status: 'Pending',
+     items: [
+-      SellerOrderItemModel(productName: 'Handmade Ceramic Plate', quantity: 2, price: 25.00),
+-      SellerOrderItemModel(productName: 'Terra Cotta Vase', quantity: 1, price: 25.00),
++      SellerOrderItemModel(
++        productName: 'Handmade Ceramic Plate',
++        quantity: 2,
++        price: 25.00,
++      ),
++      SellerOrderItemModel(
++        productName: 'Terra Cotta Vase',
++        quantity: 1,
++        price: 25.00,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -102,7 +111,11 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 89.99,
+     status: 'Delivered',
+     items: [
+-      SellerOrderItemModel(productName: 'Hand-Stitched Leather Bag', quantity: 1, price: 89.99),
++      SellerOrderItemModel(
++        productName: 'Hand-Stitched Leather Bag',
++        quantity: 1,
++        price: 89.99,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -112,7 +125,11 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 35.00,
+     status: 'Pending',
+     items: [
+-      SellerOrderItemModel(productName: 'Woven Cotton Scarf', quantity: 1, price: 35.00),
++      SellerOrderItemModel(
++        productName: 'Woven Cotton Scarf',
++        quantity: 1,
++        price: 35.00,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -122,7 +139,11 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 55.50,
+     status: 'Cancelled',
+     items: [
+-      SellerOrderItemModel(productName: 'Beaded Bracelet Set', quantity: 3, price: 18.50),
++      SellerOrderItemModel(
++        productName: 'Beaded Bracelet Set',
++        quantity: 3,
++        price: 18.50,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -132,7 +153,11 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 45.00,
+     status: 'Delivered',
+     items: [
+-      SellerOrderItemModel(productName: 'Wooden Jewelry Box', quantity: 1, price: 45.00),
++      SellerOrderItemModel(
++        productName: 'Wooden Jewelry Box',
++        quantity: 1,
++        price: 45.00,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -142,7 +167,11 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 110.00,
+     status: 'Delivered',
+     items: [
+-      SellerOrderItemModel(productName: 'Terra Cotta Vase', quantity: 2, price: 55.00),
++      SellerOrderItemModel(
++        productName: 'Terra Cotta Vase',
++        quantity: 2,
++        price: 55.00,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -152,7 +181,11 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 25.00,
+     status: 'Pending',
+     items: [
+-      SellerOrderItemModel(productName: 'Handmade Ceramic Plate', quantity: 1, price: 25.00),
++      SellerOrderItemModel(
++        productName: 'Handmade Ceramic Plate',
++        quantity: 1,
++        price: 25.00,
++      ),
+     ],
+   ),
+   const SellerOrderModel(
+@@ -162,20 +195,26 @@ List<SellerOrderModel> mockSellerOrders = [
+     totalAmount: 53.50,
+     status: 'Cancelled',
+     items: [
+-      SellerOrderItemModel(productName: 'Beaded Bracelet Set', quantity: 1, price: 18.50),
+-      SellerOrderItemModel(productName: 'Woven Cotton Scarf', quantity: 1, price: 35.00),
++      SellerOrderItemModel(
++        productName: 'Beaded Bracelet Set',
++        quantity: 1,
++        price: 18.50,
++      ),
++      SellerOrderItemModel(
++        productName: 'Woven Cotton Scarf',
++        quantity: 1,
++        price: 35.00,
++      ),
+     ],
+   ),
+ ];
+ 
+ // Category options for dropdowns
+ const List<String> sellerCategories = [
+-  'Ceramics',
+-  'Textiles',
+-  'Woodwork',
+-  'Leather',
+-  'Jewelry',
+-  'Pottery',
+-  'Glasswork',
+-  'Metalwork',
++  "candles",
++  "ceramic_vases",
++  "crochet_products",
++  "handmade_lamps",
++  "macrame",
++  "wooden_shelves",
+ ];
+diff --git a/lib/features/seller/presentation/screens/seller_add_edit_product_screen.dart b/lib/features/seller/presentation/screens/seller_add_edit_product_screen.dart
+index 2e08cf4..ab177e6 100644
+--- a/lib/features/seller/presentation/screens/seller_add_edit_product_screen.dart
++++ b/lib/features/seller/presentation/screens/seller_add_edit_product_screen.dart
+@@ -75,6 +75,9 @@ class _SellerAddEditProductScreenState
+ 
+     try {
+       final cubit = context.read<SellerCubit>();
++
++      final existingImageUrls = _images.where((img) => img.startsWith('http')).toList();
++
+       final product = SellerProductModel(
+         id: widget.product.id,
+         name: _nameController.text.trim(),
+@@ -82,11 +85,16 @@ class _SellerAddEditProductScreenState
+         price: double.tryParse(_priceController.text) ?? 0,
+         stock: stock,
+         category: _selectedCategory ?? 'Ceramics',
+-        images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
++        images: widget.product.images,
+         isActive: stock > 0,
+         status: status,
+       );
+-      await cubit.updateProduct(product);
++
++      await cubit.updateProductWithImages(
++        product: product,
++        newImageFiles: _newImages,
++        existingImageUrls: existingImageUrls,
++      );
+ 
+       if (mounted) {
+         ScaffoldMessenger.of(context).showSnackBar(
+diff --git a/lib/features/seller/services/seller_firestore_service.dart b/lib/features/seller/services/seller_firestore_service.dart
+index a567be2..c38c457 100644
+--- a/lib/features/seller/services/seller_firestore_service.dart
++++ b/lib/features/seller/services/seller_firestore_service.dart
+@@ -1,14 +1,11 @@
+-import 'dart:io';
+ import 'package:cloud_firestore/cloud_firestore.dart';
+ import 'package:firebase_auth/firebase_auth.dart';
+-import 'package:firebase_storage/firebase_storage.dart';
+ import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
+ import '../models/seller_model.dart';
+ 
+ class SellerFirestoreService {
+   final FirebaseFirestore _db = FirebaseFirestore.instance;
+   final FirebaseAuth _auth = FirebaseAuth.instance;
+-  final FirebaseStorage _storage = FirebaseStorage.instance;
+ 
+   String get currentSellerId {
+     final uid = _auth.currentUser?.uid;
+@@ -53,24 +50,6 @@ class SellerFirestoreService {
+     });
+   }
+ 
+-  /// Upload images to Firebase Storage and return the download URLs
+-  Future<List<String>> uploadProductImages(List<File> images) async {
+-    List<String> downloadUrls = [];
+-    try {
+-      for (var image in images) {
+-        String fileName = '${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
+-        Reference ref = _storage.ref().child('product_images/$currentSellerId/$fileName');
+-        UploadTask uploadTask = ref.putFile(image);
+-        TaskSnapshot snapshot = await uploadTask;
+-        String downloadUrl = await snapshot.ref.getDownloadURL();
+-        downloadUrls.add(downloadUrl);
+-      }
+-      return downloadUrls;
+-    } catch (e) {
+-      throw Exception('Failed to upload images: $e');
+-    }
+-  }
+-
+   /// Add a new product
+   Future<void> addProduct(SellerProductModel product) async {
+     try {

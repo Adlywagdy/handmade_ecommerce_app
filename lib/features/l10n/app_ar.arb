@@ -252,6 +252,24 @@
   "@sendCode": {
     "description": "Button text used to request a password reset code."
   },
+  "notificationsTitle": "الإشعارات",
+  "@notificationsTitle": {},
+  "filterAll": "الكل",
+  "@filterAll": {},
+  "filterUnread": "غير مقروء",
+  "@filterUnread": {},
+  "filterOrders": "الطلبات",
+  "@filterOrders": {},
+  "filterMessages": "الرسائل",
+  "@filterMessages": {},
+  "filterOffers": "العروض",
+  "@filterOffers": {},
+  "clearNotificationsDialogTitle": "مسح الإشعارات",
+  "@clearNotificationsDialogTitle": {},
+  "clearNotificationsConfirmation": "هل أنت متأكد من مسح جميع الإشعارات؟",
+  "@clearNotificationsConfirmation": {},
+  "noNotificationsDescription": "ليس لديك أي إشعارات حتى الآن.",
+  "@noNotificationsDescription": {},
   "verifyItsYou": "تحقق من هويتك",
   "@verifyItsYou": {
     "description": "Title text shown on the verification code screen."

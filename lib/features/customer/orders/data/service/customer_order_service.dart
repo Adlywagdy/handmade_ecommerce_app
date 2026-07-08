@@ -125,7 +125,20 @@ class CustomerOrderService {
       'updatedAt': FieldValue.serverTimestamp(),
     };
 
-    await rootOrderRef.set(orderPayload);
+    final batch = _firestore.batch();
+    batch.set(rootOrderRef, orderPayload);
+
+    for (final product in order.products) {
+      if (product.id.isNotEmpty) {
+        final productRef = _firestore.collection('products').doc(product.id);
+        batch.update(productRef, {
+          'stock': FieldValue.increment(-product.quantity),
+          'salesCount': FieldValue.increment(product.quantity),
+        });
+      }
+    }
+
+    await batch.commit();
     return rootOrderRef.id;
   }
 

@@ -25,6 +25,7 @@ import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
   await Hive.openBox('notifications');
   await Hive.openBox(HiveHelper.onboardingBox);
@@ -80,6 +81,8 @@ void main() async {
   };
 
   await RemoteConfigService.instance.init();
+  /////////////////////////////////////////////////////////////////////////
+
   final initialRoute = await getInitialRoute();
   Bloc.observer = MyCubitObserver();
   runApp(HandcraftedEcommerceApp(initialRoute: initialRoute));

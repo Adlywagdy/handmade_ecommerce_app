@@ -698,6 +698,60 @@ abstract class AppLocalizations {
   /// **'Send Code'**
   String get sendCode;
 
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get filterUnread;
+
+  /// No description provided for @filterOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get filterOrders;
+
+  /// No description provided for @filterMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get filterMessages;
+
+  /// No description provided for @filterOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get filterOffers;
+
+  /// No description provided for @clearNotificationsDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear Notifications'**
+  String get clearNotificationsDialogTitle;
+
+  /// No description provided for @clearNotificationsConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to clear all notifications?'**
+  String get clearNotificationsConfirmation;
+
+  /// No description provided for @noNotificationsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'You don\'t have any notifications yet.'**
+  String get noNotificationsDescription;
+
   /// Title text shown on the verification code screen.
   ///
   /// In en, this message translates to:

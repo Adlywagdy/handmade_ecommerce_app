@@ -96,6 +96,28 @@ class NotificationGenerator {
     );
   }
 
+  /// When an order is cancelled by the customer → notify the seller
+  static Future<void> onOrderCancelledByCustomer({
+    required String sellerId,
+    required String orderId,
+    required String customerName,
+    required String productName,
+  }) async {
+    await _sendToUser(
+      sellerId,
+      NotificationModel(
+        id: _generateId(),
+        title: 'Order Cancelled ❌',
+        body:
+            'Order $orderId containing "$productName" was cancelled by $customerName.',
+        type: NotificationType
+            .orderStatusUpdate, // Seller will get an order status update notification
+        createdAt: DateTime.now(),
+        targetId: orderId,
+      ),
+    );
+  }
+
   /// When a product review is posted → notify the seller
   static Future<void> onProductReview({
     required String sellerId,
@@ -293,23 +315,63 @@ class NotificationGenerator {
 
   // ─── Admin Notifications ───
 
-  /// When a new seller registers → notify admin
+  /// Fetch all admin IDs from users collection
+  static Future<List<String>> _getAdminIds() async {
+    try {
+      final query = await _firestore
+          .collection('users')
+          .where('role', isEqualTo: 'admin')
+          .get();
+      return query.docs.map((doc) => doc.id).toList();
+    } catch (e) {
+      debugPrint('Error getting admins: $e');
+      return [];
+    }
+  }
+
+  /// When a new seller registers → notify all admins
   static Future<void> onNewSellerRegistered({
-    required String adminId,
     required String sellerName,
     String? sellerId,
   }) async {
-    await _sendToUser(
-      adminId,
-      NotificationModel(
-        id: _generateId(),
-        title: 'New Seller Registration 👤',
-        body:
-            '$sellerName has submitted a seller registration request. Review required.',
-        type: NotificationType.newSellerRegistration,
-        createdAt: DateTime.now(),
-        targetId: sellerId,
-      ),
-    );
+    final adminIds = await _getAdminIds();
+    for (final adminId in adminIds) {
+      await _sendToUser(
+        adminId,
+        NotificationModel(
+          id: _generateId(),
+          title: 'New Seller Registration 👤',
+          body:
+              '$sellerName has submitted a seller registration request. Review required.',
+          type: NotificationType.newSellerRegistration,
+          createdAt: DateTime.now(),
+          targetId: sellerId,
+        ),
+      );
+    }
+  }
+
+  /// When a seller adds a new product → notify all admins
+  static Future<void> onProductPendingReview({
+    required String sellerName,
+    required String productName,
+    String? productId,
+  }) async {
+    final adminIds = await _getAdminIds();
+    for (final adminId in adminIds) {
+      await _sendToUser(
+        adminId,
+        NotificationModel(
+          id: _generateId(),
+          title: 'Product Pending Review 📦',
+          body:
+              '$sellerName added a new product "$productName" that requires your approval.',
+          type:
+              NotificationType.orderStatusUpdate, // Using existing type for now
+          createdAt: DateTime.now(),
+          targetId: productId,
+        ),
+      );
+    }
   }
 }

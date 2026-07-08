@@ -88,8 +88,29 @@ class OrderCubit extends Cubit<OrderState> {
   Future<void> cancelOrder(String orderId) async {
     emit(CancelOrderLoading());
     try {
+      // Find the order before cancelling it to extract sellers
+      CustomerOrderModel? orderToCancel;
+      try {
+        orderToCancel = allordersList.firstWhere(
+            (o) => o.orderid == orderId || o.orderid.contains(orderId));
+      } catch (_) {}
+
       await _orderService.cancelOrder(orderId);
       await _refreshByCurrentFilter();
+      // Trigger notification to sellers if we found the order
+      if (orderToCancel != null) {
+        for (final product in orderToCancel.products) {
+          final sellerEmail = product.seller.email;
+          if (sellerEmail.isNotEmpty) {
+            NotificationGenerator.onOrderCancelledByCustomer(
+              sellerId: sellerEmail,
+              orderId: orderToCancel.orderid,
+              customerName: orderToCancel.customer.name,
+              productName: product.name,
+            );
+          }
+        }
+      }
       emit(CancelOrderSuccess());
       final state = selectedStatus == null
           ? GetAllOrdersSuccess(orders: displayedordersList) as OrderState

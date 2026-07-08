@@ -121,6 +121,14 @@ class CustomerOrderModel {
   Map<String, dynamic> toMap() {
     final numMatch = RegExp(r"(\d+)").firstMatch(orderid);
     final orderNum = numMatch != null ? int.tryParse(numMatch.group(1)!) : null;
+    
+    // Extract unique seller IDs from all products in the order
+    final sellerIds = products
+        .map((p) => p.sellerId)
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList();
+
     final items = products
         .map(
           (p) => {
@@ -139,6 +147,7 @@ class CustomerOrderModel {
     return {
       'orderid': orderid,
       'orderNumber': orderNum,
+      'sellerIds': sellerIds,
       'items': items,
       'shippingAddress': {
         'street': address.street,
@@ -148,6 +157,7 @@ class CustomerOrderModel {
       },
       'phone': phone,
       'customerId': customer.id,
+      'customerName': customer.name,
       'status': status.name,
       'subtotal': subtotalAmount,
       'deliveryFee': deliveryFeeAmount,

@@ -7,6 +7,7 @@ import 'package:handmade_ecommerce_app/core/constants/user_roles.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/data/models/auth_session.dart';
 import 'package:handmade_ecommerce_app/features/auth/data/models/seller_application.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/services/notification_generator.dart';
 
 class AuthService {
   final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
@@ -207,6 +208,12 @@ class AuthService {
     });
 
     await _updateFCMToken(uid);
+
+    // Notify admins about the new seller registration
+    await NotificationGenerator.onNewSellerRegistered(
+      sellerName: name,
+      sellerId: uid,
+    );
   }
 
   Future<String> registerWithGoogle({required String selectedRole}) async {

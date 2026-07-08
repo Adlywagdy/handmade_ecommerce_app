@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../../../core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 /// Empty state widget shown when there are no notifications
 class NotificationEmpty extends StatelessWidget {
@@ -42,7 +43,7 @@ class NotificationEmpty extends StatelessWidget {
 
             // Title
             Text(
-              'No Notifications Yet',
+              context.l10n.noNotificationsYet,
               style: TextStyle(
                 color: const Color(0xFF0F172A),
                 fontSize: 18.sp,
@@ -54,7 +55,7 @@ class NotificationEmpty extends StatelessWidget {
 
             // Subtitle
             Text(
-              'When you receive notifications, they\'ll appear here. Stay tuned!',
+              context.l10n.noNotificationsDescription,
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: const Color(0xFF94A3B8),

@@ -75,13 +75,21 @@ class FirebaseCartService {
     final snapshot = await ref.get();
     final items = _parseItems(snapshot.data()?['items']);
 
-    final idx = items.indexWhere(
-      (i) => i['productId']?.toString() == product.id,
-    );
+    final productDoc = await _firestore.collection('products').doc(product.id).get();
+    if (!productDoc.exists) throw Exception('Product not found');
+    final stock = int.tryParse('${productDoc.data()?['stock']}') ?? 0;
+
+    final idx = items.indexWhere((i) => i['productId']?.toString() == product.id);
     if (idx != -1) {
       final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
+      if (currentQty + 1 > stock) {
+        throw Exception('Cannot exceed available stock ($stock)');
+      }
       items[idx]['quantity'] = (currentQty + 1).toString();
     } else {
+      if (1 > stock) {
+        throw Exception('Product is out of stock');
+      }
       items.add(_toCartItem(product, quantity: 1));
     }
 

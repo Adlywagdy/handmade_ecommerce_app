@@ -325,6 +325,35 @@ class AppLocalizationsEn extends AppLocalizations {
   String get sendCode => 'Send Code';
 
   @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterUnread => 'Unread';
+
+  @override
+  String get filterOrders => 'Orders';
+
+  @override
+  String get filterMessages => 'Messages';
+
+  @override
+  String get filterOffers => 'Offers';
+
+  @override
+  String get clearNotificationsDialogTitle => 'Clear Notifications';
+
+  @override
+  String get clearNotificationsConfirmation =>
+      'Are you sure you want to clear all notifications?';
+
+  @override
+  String get noNotificationsDescription =>
+      'You don\'t have any notifications yet.';
+
+  @override
   String get verifyItsYou => 'Verify it’s you';
 
   @override

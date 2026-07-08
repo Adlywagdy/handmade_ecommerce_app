@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/features/notifications/data/services/notification_generator.dart';
 import '../models/seller_model.dart';
 
@@ -13,6 +14,21 @@ class SellerFirestoreService {
       throw Exception('No authenticated user found');
     }
     return uid;
+  }
+
+  // ─── Categories ───
+  Future<List<CategoryModel>> getCategories() async {
+    try {
+      final snapshot = await _db
+          .collection('categories')
+          .where('isActive', isEqualTo: true)
+          .get();
+      return snapshot.docs
+          .map((doc) => CategoryModel.fromMap(doc.data(), id: doc.id))
+          .toList();
+    } catch (e) {
+      throw Exception('Failed to fetch categories: $e');
+    }
   }
 
   // ─── Products ───
@@ -57,6 +73,17 @@ class SellerFirestoreService {
       map['sellerId'] = currentSellerId; // Link product to seller
       map['createdAt'] = FieldValue.serverTimestamp();
 
+      // Attach seller info so customer app displays it correctly
+      final userDoc = await _db.collection('users').doc(currentSellerId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data();
+        map['seller'] = {
+          'id': currentSellerId,
+          'name': userData?['name'] ?? '',
+          'email': userData?['email'] ?? '',
+        };
+      }
+
       await _db.collection('products').add(map);
     } catch (e) {
       throw Exception('Failed to add product: $e');
@@ -73,8 +100,21 @@ class SellerFirestoreService {
         oldPrice = (oldDoc.data()?['price'] ?? 0).toDouble();
       }
 
+      final map = product.toMap();
+      
+      // Attach seller info so customer app displays it correctly
+      final userDoc = await _db.collection('users').doc(currentSellerId).get();
+      if (userDoc.exists) {
+        final userData = userDoc.data();
+        map['seller'] = {
+          'id': currentSellerId,
+          'name': userData?['name'] ?? '',
+          'email': userData?['email'] ?? '',
+        };
+      }
+
       await _db.collection('products').doc(product.id).update({
-        ...product.toMap(),
+        ...map,
         'updatedAt': FieldValue.serverTimestamp(),
       });
 
@@ -116,10 +156,31 @@ class SellerFirestoreService {
   /// Fetch all orders for the current seller
   Future<List<SellerOrderModel>> getOrders() async {
     try {
-      final snapshot = await _db
-          .collection('orders')
-          .where('sellerId', isEqualTo: currentSellerId)
-          .get();
+      // First try to fetch using the new sellerIds array
+      QuerySnapshot snapshot;
+      try {
+        snapshot = await _db
+            .collection('orders')
+            .where('sellerIds', arrayContains: currentSellerId)
+            .get();
+      } catch (e) {
+        // Fallback for older orders without sellerIds
+        snapshot = await _db
+            .collection('orders')
+            .where('sellerId', isEqualTo: currentSellerId)
+            .get();
+      }
+
+      if (snapshot.docs.isEmpty) {
+        // Try fallback if array query returned empty just in case
+        final fallbackSnapshot = await _db
+            .collection('orders')
+            .where('sellerId', isEqualTo: currentSellerId)
+            .get();
+        if (fallbackSnapshot.docs.isNotEmpty) {
+          snapshot = fallbackSnapshot;
+        }
+      }
 
       if (snapshot.docs.isEmpty) {
         return [];
@@ -127,8 +188,8 @@ class SellerFirestoreService {
 
       // Filter out archived orders, parse, and sort in memory
       final orders = snapshot.docs
-          .where((doc) => doc.data()['archived'] != true)
-          .map((doc) => SellerOrderModel.fromMap(doc.data(), doc.id))
+          .where((doc) => (doc.data() as Map<String, dynamic>)['archived'] != true)
+          .map((doc) => SellerOrderModel.fromMap(doc.data() as Map<String, dynamic>, doc.id))
           .toList();
 
       // Sort by orderDate descending in memory
@@ -142,9 +203,13 @@ class SellerFirestoreService {
 
   /// Stream all orders for the current seller
   Stream<List<SellerOrderModel>> getOrdersStream() {
+    // Note: Firestore doesn't support an OR query combining arrayContains and isEqualTo across different fields cleanly without composites.
+    // For streams, we will rely on sellerIds. New orders will have it. 
+    // To be perfectly backwards compatible, we can merge streams, but it's complex.
+    // Assuming 'sellerIds' is primarily used going forward.
     return _db
         .collection('orders')
-        .where('sellerId', isEqualTo: currentSellerId)
+        .where('sellerIds', arrayContains: currentSellerId)
         .snapshots()
         .map((snapshot) {
           final orders = snapshot.docs
