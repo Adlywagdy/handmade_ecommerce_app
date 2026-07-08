@@ -49,8 +49,10 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                 onPressed: () {
                   SharePlus.instance.share(
                     ShareParams(
-                      text:
-                          context.l10n.checkOutThisProduct(product.localizedName(isArabic), 'EGP ${product.price}'),
+                      text: context.l10n.checkOutThisProduct(
+                        product.localizedName(isArabic),
+                        'EGP ${product.price}',
+                      ),
                     ),
                   );
                 },
@@ -85,8 +87,8 @@ class CustomerProductDetailsScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 490.h,
-              constraints: BoxConstraints(maxHeight: 550.h, minHeight: 350.h),
+              height: 450.h,
+              constraints: BoxConstraints(maxHeight: 500.h, minHeight: 300.h),
               child: ProductItem(
                 product: product,
                 imageflex: 3.h.toInt(),
@@ -98,18 +100,20 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                 cardclipBehavior: Clip.none,
                 lowercolumn: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
                       product.localizedName(isArabic),
                       maxLines: 2,
                       overflow: TextOverflow.ellipsis,
-                      style: AppTextStyles.t_30w700.copyWith(
+                      style: AppTextStyles.t_24w700.copyWith(
                         color: blackDegree,
                       ),
                     ),
+                    SizedBox(height: 4.h),
                     Text(
                       'EGP ${product.price}',
-                      style: AppTextStyles.t_24w700.copyWith(
+                      style: AppTextStyles.t_20w700.copyWith(
                         color: commonColor,
                       ),
                     ),
@@ -124,7 +128,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: ProductDetailsLowerColumn(product: product),
             ),
           ),

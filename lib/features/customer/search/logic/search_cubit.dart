@@ -54,19 +54,22 @@ class SearchCubit extends Cubit<SearchState> {
   }) async {
     emit(FilterProductsLoadingstate());
     try {
-      String? categoryId;
+      String? resolvedCategoryId;
       if (categoryname != null && categoryname.trim().isNotEmpty) {
+        if (categoriesList.isEmpty) {
+          await getCategories();
+        }
         final normalized = categoryname.trim().toLowerCase();
         for (final category in categoriesList) {
           if (category.categorytitle.toLowerCase() == normalized) {
-            categoryId = category.id ?? category.categorytitle;
+            resolvedCategoryId = category.id ?? category.categorytitle;
             break;
           }
         }
       }
 
       filteredproductsList = await _productService.filterProducts(
-        categoryId: categoryId,
+        categoryId: resolvedCategoryId,
         minPrice: minprice,
         maxPrice: maxprice,
         minRating: rating,
