@@ -7,18 +7,17 @@ import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
 import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
-import 'package:handmade_ecommerce_app/features/onboarding/models/onboarding_model.dart';
+import 'package:handmade_ecommerce_app/features/onboarding/data/onboarding_model.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
 
   @override
-  State<OnboardingScreen> createState() =>
-      _OnboardingScreenState();
+  State<OnboardingScreen> createState() => _OnboardingScreenState();
 }
 
-class _OnboardingScreenState
-    extends State<OnboardingScreen> {
+class _OnboardingScreenState extends State<OnboardingScreen> {
   int count = 1;
 
   void _finishOnboarding() {
@@ -44,9 +43,7 @@ class _OnboardingScreenState
               onPressed: _finishOnboarding,
               child: Text(
                 context.l10n.skip,
-                style: AppTextStyles.t_16w500.copyWith(
-                  color: subtitlesplash,
-                ),
+                style: AppTextStyles.t_16w500.copyWith(color: subtitlesplash),
               ),
             ),
           ],
@@ -70,12 +67,9 @@ class _OnboardingScreenState
             SizedBox(
               width: 305.w,
               child: Text(
-                OnboardingTitleDescription
-                    .titles(context)[count - 1],
+                OnboardingTitleDescription.titles(context)[count - 1],
                 textAlign: TextAlign.center,
-                style: AppTextStyles.t_24w500.copyWith(
-                  color: subtitlesplash,
-                ),
+                style: AppTextStyles.t_24w500.copyWith(color: subtitlesplash),
               ),
             ),
 
@@ -84,12 +78,9 @@ class _OnboardingScreenState
             SizedBox(
               width: 312.w,
               child: Text(
-                OnboardingTitleDescription
-                    .subTitle(context)[count - 1],
+                OnboardingTitleDescription.subTitle(context)[count - 1],
                 textAlign: TextAlign.center,
-                style: AppTextStyles.t_16w500.copyWith(
-                  color: subtitlesplash,
-                ),
+                style: AppTextStyles.t_16w500.copyWith(color: subtitlesplash),
               ),
             ),
 
@@ -119,26 +110,17 @@ class _OnboardingScreenState
               },
 
               child: Row(
-                mainAxisAlignment:
-                    MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    count < 3
-                        ? context.l10n.next
-                        : context.l10n.getStarted,
-                    style:
-                        AppTextStyles.t_16w600.copyWith(
-                      color: Colors.white,
-                    ),
+                    count < 3 ? context.l10n.next : context.l10n.getStarted,
+                    style: AppTextStyles.t_16w600.copyWith(color: Colors.white),
                   ),
 
                   if (count < 3) ...[
                     SizedBox(width: 4.w),
 
-                    const Icon(
-                      Icons.navigate_next,
-                      color: Colors.white,
-                    ),
+                    const Icon(Icons.navigate_next, color: Colors.white),
                   ],
                 ],
               ),
