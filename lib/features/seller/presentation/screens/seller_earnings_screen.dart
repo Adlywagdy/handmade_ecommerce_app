@@ -9,6 +9,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerEarningsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -139,7 +140,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     children: [
                       Expanded(
                         child: _buildQuickStatCard(
-                          title: 'Orders Processed',
+                          title: context.l10n.ordersProcessed,
                           value: completedOrdersCount.toString(),
                           icon: Icons.shopping_cart_outlined,
                           iconColor: commonColor,
@@ -149,7 +150,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       SizedBox(width: 12.w),
                       Expanded(
                         child: _buildQuickStatCard(
-                          title: 'Avg. Order Value',
+                          title: context.l10n.avgOrderValue,
                           value: 'EGP $avgOrderValue',
                           icon: Icons.bar_chart_rounded,
                           iconColor: primaryColor,
@@ -635,7 +636,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                             fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w600,
                           ),
-                          hintText: '0.00',
+                          hintText: context.l10n.zeroPriceHint,
                           hintStyle: TextStyle(
                             color: const Color(0xFFCBD5E1),
                             fontSize: 18.sp,

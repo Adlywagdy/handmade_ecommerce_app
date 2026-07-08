@@ -241,4 +241,208 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get setPassword => 'Set Password';
+
+  @override
+  String get productUpdatedSuccessfully => 'Product updated successfully';
+
+  @override
+  String errorSavingProduct(String error) {
+    return 'Error saving product: $error';
+  }
+
+  @override
+  String get unexpectedState => 'Unexpected State';
+
+  @override
+  String get noProductsFound => 'No products found';
+
+  @override
+  String get deleteProduct => 'Delete Product';
+
+  @override
+  String get deleteProductConfirmation =>
+      'Are you sure you want to delete this product? This action cannot be undone.';
+
+  @override
+  String get editProduct => 'Edit Product';
+
+  @override
+  String get cancelOrder => 'Cancel Order';
+
+  @override
+  String cancelOrderConfirmation(String orderId) {
+    return 'Are you sure you want to cancel order $orderId?';
+  }
+
+  @override
+  String get no => 'No';
+
+  @override
+  String get orderCancelledSuccess =>
+      'Order has been cancelled and stock restored';
+
+  @override
+  String failedToCancelOrder(String error) {
+    return 'Failed to cancel order: $error';
+  }
+
+  @override
+  String get yesCancel => 'Yes, Cancel';
+
+  @override
+  String get orderArchivedSuccessfully => 'Order archived successfully';
+
+  @override
+  String orderStatusUpdated(String newStatus) {
+    return 'Order status updated to $newStatus';
+  }
+
+  @override
+  String get logout => 'Logout';
+
+  @override
+  String get logoutConfirmation => 'Are you sure you want to logout?';
+
+  @override
+  String get profile => 'Profile';
+
+  @override
+  String get productName => 'Product Name';
+
+  @override
+  String get priceWithCurrency => 'Price (\$)';
+
+  @override
+  String get stock => 'Stock';
+
+  @override
+  String get description => 'Description';
+
+  @override
+  String get addProduct => 'Add Product';
+
+  @override
+  String get viewProducts => 'View Products';
+
+  @override
+  String get viewOrders => 'View Orders';
+
+  @override
+  String get enterProductName => 'Enter product name';
+
+  @override
+  String get zeroPriceHint => '0.00';
+
+  @override
+  String get zeroStockHint => '0';
+
+  @override
+  String get selectCategory => 'Select category';
+
+  @override
+  String get describeYourProduct => 'Describe your product...';
+
+  @override
+  String get totalRevenue => 'Total Revenue';
+
+  @override
+  String get totalOrders => 'Total Orders';
+
+  @override
+  String get bestSellingItem => 'Best selling item';
+
+  @override
+  String get ordersProcessed => 'Orders Processed';
+
+  @override
+  String get avgOrderValue => 'Avg. Order Value';
+
+  @override
+  String get shopSettings => 'Shop Settings';
+
+  @override
+  String get viewShopInformation => 'View your shop information';
+
+  @override
+  String get notificationsCenter => 'Notifications';
+
+  @override
+  String get openNotificationsCenter => 'Open your notifications center';
+
+  @override
+  String get helpAndSupport => 'Help & Support';
+
+  @override
+  String get contactSupport => 'Contact support and review help info';
+
+  @override
+  String get globalReach => 'Global Reach';
+
+  @override
+  String get sellWorldwide => 'Sell to customers worldwide';
+
+  @override
+  String get secureSales => 'Secure Sales';
+
+  @override
+  String get guaranteedSafePayments => 'Guaranteed safe payments';
+
+  @override
+  String get support247 => '24/7 Support';
+
+  @override
+  String get dedicatedArtisanAssistance => 'Dedicated artisan assistance';
+
+  @override
+  String get notificationsTitle => 'Notifications';
+
+  @override
+  String get markAllAsRead => 'Mark all as read';
+
+  @override
+  String get clearAllNotifications => 'Clear all';
+
+  @override
+  String get filterAll => 'All';
+
+  @override
+  String get filterUnread => 'Unread';
+
+  @override
+  String get filterOrders => 'Orders';
+
+  @override
+  String get filterMessages => 'Messages';
+
+  @override
+  String get filterOffers => 'Offers';
+
+  @override
+  String get today => 'TODAY';
+
+  @override
+  String get yesterday => 'YESTERDAY';
+
+  @override
+  String get earlier => 'EARLIER';
+
+  @override
+  String get clearNotificationsDialogTitle => 'Clear All Notifications';
+
+  @override
+  String get clearNotificationsConfirmation =>
+      'Are you sure you want to delete all notifications? This action cannot be undone.';
+
+  @override
+  String get clearAll => 'Clear All';
+
+  @override
+  String get notificationDeleted => 'Notification deleted';
+
+  @override
+  String get noNotificationsYet => 'No Notifications Yet';
+
+  @override
+  String get noNotificationsDescription =>
+      'When you receive notifications, they\'ll appear here. Stay tuned!';
 }

@@ -1,9 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/services/notification_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -13,8 +11,7 @@ import 'package:handmade_ecommerce_app/features/notifications/cubit/notification
 import 'package:handmade_ecommerce_app/features/notifications/models/notifications_model.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/widgets/notification_card.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/widgets/notification_empty.dart';
-import 'package:handmade_ecommerce_app/features/notifications/services/fcm_service.dart';
-import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class NotificationsScreen extends StatelessWidget {
   const NotificationsScreen({super.key});
@@ -64,7 +61,7 @@ class NotificationsScreen extends StatelessWidget {
       ),
       centerTitle: true,
       title: Text(
-        'Notifications',
+        context.l10n.notificationsTitle,
         style: TextStyle(
           color: const Color(0xFF0F172A),
           fontSize: 18.sp,
@@ -73,15 +70,6 @@ class NotificationsScreen extends StatelessWidget {
         ),
       ),
       actions: [
-        if (kDebugMode)
-          IconButton(
-            icon: Icon(
-              Icons.bug_report_outlined,
-              color: commonColor,
-              size: 22.w,
-            ),
-            onPressed: () => _triggerTestNotification(context),
-          ),
         BlocBuilder<NotificationsCubit, NotificationsState>(
           builder: (context, state) {
             if (state is NotificationsLoaded && state.notifications.isNotEmpty) {
@@ -112,7 +100,7 @@ class NotificationsScreen extends StatelessWidget {
                         Icon(Icons.done_all, color: commonColor, size: 18.w),
                         SizedBox(width: 10.w),
                         Text(
-                          'Mark all as read',
+                          context.l10n.markAllAsRead,
                           style: TextStyle(
                             color: const Color(0xFF334155),
                             fontSize: 14.sp,
@@ -130,7 +118,7 @@ class NotificationsScreen extends StatelessWidget {
                         Icon(Icons.delete_outline, color: redDegree, size: 18.w),
                         SizedBox(width: 10.w),
                         Text(
-                          'Clear all',
+                          context.l10n.clearAllNotifications,
                           style: TextStyle(
                             color: redDegree,
                             fontSize: 14.sp,
@@ -156,27 +144,27 @@ class NotificationsScreen extends StatelessWidget {
     final filters = [
       _FilterTabData(
         filter: NotificationFilter.all,
-        label: 'All',
+        label: context.l10n.filterAll,
         icon: Icons.all_inbox_outlined,
       ),
       _FilterTabData(
         filter: NotificationFilter.unread,
-        label: 'Unread',
+        label: context.l10n.filterUnread,
         icon: Icons.mark_email_unread_outlined,
       ),
       _FilterTabData(
         filter: NotificationFilter.orders,
-        label: 'Orders',
+        label: context.l10n.filterOrders,
         icon: Icons.shopping_bag_outlined,
       ),
       _FilterTabData(
         filter: NotificationFilter.messages,
-        label: 'Messages',
+        label: context.l10n.filterMessages,
         icon: Icons.chat_bubble_outline,
       ),
       _FilterTabData(
         filter: NotificationFilter.offers,
-        label: 'Offers',
+        label: context.l10n.filterOffers,
         icon: Icons.local_offer_outlined,
       ),
     ];
@@ -314,7 +302,7 @@ class NotificationsScreen extends StatelessWidget {
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: Text(
-                            'Notification deleted',
+                            context.l10n.notificationDeleted,
                             style: TextStyle(
                               fontFamily: 'Plus Jakarta Sans',
                               fontSize: 13.sp,
@@ -363,16 +351,16 @@ class NotificationsScreen extends StatelessWidget {
 
     final groups = <_NotificationGroup>[];
     if (todayList.isNotEmpty) {
-      groups.add(_NotificationGroup(label: 'TODAY', notifications: todayList));
+      groups.add(_NotificationGroup(label: context.l10n.today, notifications: todayList));
     }
     if (yesterdayList.isNotEmpty) {
       groups.add(
-        _NotificationGroup(label: 'YESTERDAY', notifications: yesterdayList),
+        _NotificationGroup(label: context.l10n.yesterday, notifications: yesterdayList),
       );
     }
     if (earlierList.isNotEmpty) {
       groups.add(
-        _NotificationGroup(label: 'EARLIER', notifications: earlierList),
+        _NotificationGroup(label: context.l10n.earlier, notifications: earlierList),
       );
     }
 
@@ -389,7 +377,7 @@ class NotificationsScreen extends StatelessWidget {
           borderRadius: BorderRadius.circular(16.r),
         ),
         title: Text(
-          'Clear All Notifications',
+          context.l10n.clearNotificationsDialogTitle,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 17.sp,
@@ -398,7 +386,7 @@ class NotificationsScreen extends StatelessWidget {
           ),
         ),
         content: Text(
-          'Are you sure you want to delete all notifications? This action cannot be undone.',
+          context.l10n.clearNotificationsConfirmation,
           style: TextStyle(
             color: const Color(0xFF64748B),
             fontSize: 14.sp,
@@ -411,7 +399,7 @@ class NotificationsScreen extends StatelessWidget {
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
-              'Cancel',
+              context.l10n.cancel,
               style: TextStyle(
                 color: const Color(0xFF94A3B8),
                 fontSize: 14.sp,
@@ -426,7 +414,7 @@ class NotificationsScreen extends StatelessWidget {
               Navigator.of(dialogContext).pop();
             },
             child: Text(
-              'Clear All',
+              context.l10n.clearAll,
               style: TextStyle(
                 color: redDegree,
                 fontSize: 14.sp,
@@ -440,141 +428,7 @@ class NotificationsScreen extends StatelessWidget {
     );
   }
 
-  void _triggerTestNotification(BuildContext context) {
-    showCupertinoModalPopup(
-      context: context,
-      builder: (modalContext) => CupertinoActionSheet(
-        title: const Text('Test Notification Triggers'),
-        message: const Text('Choose a notification event to simulate (writes directly to Firestore & triggers local Push).'),
-        actions: [
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              Navigator.pop(modalContext);
-              final currentUser = FirebaseAuth.instance.currentUser;
-              if (currentUser != null) {
-                final email = currentUser.email ?? 'seller@test.com';
-                // 1. Write to Firestore
-                await NotificationGenerator.onOrderCreated(
-                  sellerId: email,
-                  orderId: 'ORD-TEST-999',
-                  customerName: 'Ahmad M.',
-                  productName: 'Handmade Coffee Mug',
-                );
-                // 2. Trigger native local notification popup
-                await FCMService.showTestNotification(
-                  title: 'New Order Received! 🛒',
-                  body: 'Order ORD-TEST-999 from Ahmad M. — "Handmade Coffee Mug"',
-                  type: 'newOrder',
-                  targetId: 'ORD-TEST-999',
-                );
-                _showSuccessSnackbar(context, 'Order Created triggered for: $email');
-              } else {
-                _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
-              }
-            },
-            child: const Text('Simulate New Order (for Seller)'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              Navigator.pop(modalContext);
-              final currentUser = FirebaseAuth.instance.currentUser;
-              if (currentUser != null) {
-                // 1. Write to Firestore
-                await NotificationGenerator.onOrderStatusChanged(
-                  customerId: currentUser.uid,
-                  orderId: 'ORD-TEST-100',
-                  newStatus: 'shipped',
-                );
-                // 2. Trigger native local notification popup
-                await FCMService.showTestNotification(
-                  title: 'Your Order is on the Way! 📦',
-                  body: 'Order ORD-TEST-100 has been shipped. Expected delivery in 3-5 days.',
-                  type: 'orderShipped',
-                  targetId: 'ORD-TEST-100',
-                );
-                _showSuccessSnackbar(context, 'Order Shipped triggered for current user');
-              } else {
-                _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
-              }
-            },
-            child: const Text('Simulate Order Shipped (for Customer)'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              Navigator.pop(modalContext);
-              final currentUser = FirebaseAuth.instance.currentUser;
-              if (currentUser != null) {
-                // 1. Write to Firestore
-                await NotificationGenerator.onPriceDrop(
-                  customerId: currentUser.uid,
-                  productName: 'Leather Wallet',
-                  oldPrice: '450',
-                  newPrice: '380',
-                );
-                // 2. Trigger native local notification popup
-                await FCMService.showTestNotification(
-                  title: 'Price Drop Alert! 💰',
-                  body: '"Leather Wallet" dropped from EGP 450 to EGP 380!',
-                  type: 'priceDropAlert',
-                  targetId: 'PROD-TEST-WALLET',
-                );
-                _showSuccessSnackbar(context, 'Price Drop triggered for current user');
-              } else {
-                _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
-              }
-            },
-            child: const Text('Simulate Price Drop (Wishlist)'),
-          ),
-          CupertinoActionSheetAction(
-            onPressed: () async {
-              Navigator.pop(modalContext);
-              final currentUser = FirebaseAuth.instance.currentUser;
-              if (currentUser != null) {
-                // 1. Write to Firestore
-                await NotificationGenerator.onReviewRequest(
-                  customerId: currentUser.uid,
-                  productName: 'Handwoven Shawl',
-                  productId: 'PROD-TEST-123',
-                );
-                // 2. Trigger native local notification popup
-                await FCMService.showTestNotification(
-                  title: 'Review your purchase ⭐',
-                  body: 'How was your experience with "Handwoven Shawl"? Tap to leave a review.',
-                  type: 'productReview',
-                  targetId: 'PROD-TEST-123',
-                );
-                _showSuccessSnackbar(context, 'Review Request triggered for current user');
-              } else {
-                _showSuccessSnackbar(context, 'Error: You must be logged in to test.');
-              }
-            },
-            child: const Text('Simulate Review Request (for Customer)'),
-          ),
-        ],
-        cancelButton: CupertinoActionSheetAction(
-          isDefaultAction: true,
-          onPressed: () => Navigator.pop(modalContext),
-          child: const Text('Cancel'),
-        ),
-      ),
-    );
-  }
 
-  void _showSuccessSnackbar(BuildContext context, String message) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Text(
-          message,
-          style: TextStyle(fontFamily: 'Plus Jakarta Sans', fontSize: 13.sp),
-        ),
-        backgroundColor: Colors.green,
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.r)),
-        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
-        duration: const Duration(seconds: 3),
-      ),
-    );
-  }
 }
 
 /// Internal model for grouped notifications

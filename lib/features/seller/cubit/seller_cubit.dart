@@ -14,6 +14,7 @@ class SellerCubit extends Cubit<SellerState> {
   List<SellerProductModel> _currentProducts = [];
   List<SellerOrderModel> _currentOrders = [];
   bool _isListening = false;
+  String? _lastSellerId;
 
   SellerCubit(this._firestoreService) : super(const SellerInitial());
 
@@ -26,6 +27,16 @@ class SellerCubit extends Cubit<SellerState> {
 
   // ─── Dashboard ───
   Future<void> loadDashboard({bool showLoading = true}) async {
+    try {
+      final currentId = _firestoreService.currentSellerId;
+      if (_lastSellerId != currentId) {
+        _isListening = false; // Reset if user changed
+        _lastSellerId = currentId;
+      }
+    } catch (_) {
+      // currentSellerId throws if not authenticated, which shouldn't happen here, but just in case
+    }
+
     if (_isListening) return; // Only initialize listeners once
     _isListening = true;
 
@@ -172,7 +183,7 @@ class SellerCubit extends Cubit<SellerState> {
           category: category,
           images: imageUrls,
           isActive: true,
-          status: stock > 0 ? 'In Stock' : 'Out of Stock',
+          status: 'pending',
         );
         
         // 3. Save to Firestore
@@ -189,7 +200,7 @@ class SellerCubit extends Cubit<SellerState> {
             category: category,
             images: ['https://via.placeholder.com/400'],
             isActive: true,
-            status: stock > 0 ? 'In Stock' : 'Out of Stock',
+            status: 'pending',
           );
           
           await _firestoreService.addProduct(testProduct);

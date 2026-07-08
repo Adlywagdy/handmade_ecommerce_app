@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -107,13 +108,14 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
             final activeProducts = allProducts
                 .where(
                   (p) =>
+                      p.status == 'approved' ||
                       p.status == 'Active' ||
                       p.status == 'In Stock' ||
-                      p.isActive,
+                      (p.isActive && p.status != 'pending' && p.status != 'Pending Review'),
                 )
                 .toList();
             final pendingProducts = allProducts
-                .where((p) => p.status == 'Pending Review')
+                .where((p) => p.status == 'pending' || p.status == 'Pending Review')
                 .toList();
 
             return TabBarView(
@@ -125,7 +127,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
               ],
             );
           }
-          return const Center(child: Text('No products found'));
+          return Center(child: Text(context.l10n.noProductsFound));
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -337,12 +339,12 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                     builder: (ctx) => AlertDialog(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-                      title: const Text('Delete Product'),
-                      content: const Text('Are you sure you want to delete this product? This action cannot be undone.'),
+                      title: Text(context.l10n.deleteProduct),
+                      content: Text(context.l10n.deleteProductConfirmation),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
-                          child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B))),
+                          child: Text(context.l10n.cancel, style: const TextStyle(color: Color(0xFF64748B))),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -364,7 +366,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                               );
                             }
                           },
-                          child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                          child: Text(context.l10n.delete, style: const TextStyle(color: Colors.red)),
                         ),
                       ],
                     ),
@@ -374,11 +376,11 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
               itemBuilder: (BuildContext context) => [
                 const PopupMenuItem<String>(
                   value: 'edit',
-                  child: Text('Edit Product'),
+                  child: Text(context.l10n.editProduct),
                 ),
                 const PopupMenuItem<String>(
                   value: 'delete',
-                  child: Text('Delete', style: TextStyle(color: Colors.red)),
+                  child: Text(context.l10n.delete, style: const TextStyle(color: Colors.red)),
                 ),
               ],
             ),

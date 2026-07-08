@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 
 class SellerManageOrderCard extends StatelessWidget {
   final String orderId;
@@ -116,17 +117,12 @@ class SellerManageOrderCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                            child: Text(
-                              orderId,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: const Color(0xFF0F172A),
-                                fontSize: 16.sp,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Plus Jakarta Sans',
+                              child: Text(
+                                orderId,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: AppTextStyles.t_16w700,
                               ),
-                            ),
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -135,15 +131,12 @@ class SellerManageOrderCard extends StatelessWidget {
                               color: _getStatusBgColor(),
                               borderRadius: BorderRadius.circular(100.r),
                             ),
-                            child: Text(
-                              status.toUpperCase(),
-                              style: TextStyle(
-                                color: _getStatusColor(),
-                                fontSize: 10.sp,
-                                fontWeight: FontWeight.w700,
-                                fontFamily: 'Plus Jakarta Sans',
+                              child: Text(
+                                status.toUpperCase(),
+                                style: AppTextStyles.t_10w700.copyWith(
+                                  color: _getStatusColor(),
+                                ),
                               ),
-                            ),
                           ),
                         ],
                       ),
@@ -152,11 +145,8 @@ class SellerManageOrderCard extends StatelessWidget {
                         'Customer: $customerName',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
-                          color: const Color(0xFF64748B),
-                          fontSize: 13.sp,
-                          fontWeight: FontWeight.w400,
-                          fontFamily: 'Plus Jakarta Sans',
+                        style: AppTextStyles.t_14w400.copyWith(
+                          color: AppColors.textMuted,
                         ),
                       ),
                       SizedBox(height: 4.h),
@@ -164,18 +154,14 @@ class SellerManageOrderCard extends StatelessWidget {
                         text: TextSpan(
                           text:
                               '$itemCount item${itemCount > 1 ? 's' : ''} • Total: ',
-                          style: TextStyle(
-                            color: const Color(0xFF64748B),
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w400,
-                            fontFamily: 'Plus Jakarta Sans',
+                          style: AppTextStyles.t_14w400.copyWith(
+                            color: AppColors.textMuted,
                           ),
                           children: [
                             TextSpan(
                               text: 'EGP $totalAmount',
-                              style: TextStyle(
+                              style: AppTextStyles.t_14w700.copyWith(
                                 color: commonColor,
-                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
@@ -204,11 +190,8 @@ class SellerManageOrderCard extends StatelessWidget {
                     timeAgo,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      color: const Color(0xFF64748B),
-                      fontSize: 12.sp,
-                      fontWeight: FontWeight.w400,
-                      fontFamily: 'Plus Jakarta Sans',
+                    style: AppTextStyles.t_12w400.copyWith(
+                      color: AppColors.textMuted,
                     ),
                   ),
                 ),
@@ -231,11 +214,8 @@ class SellerManageOrderCard extends StatelessWidget {
                             ),
                             child: Text(
                               'Cancel',
-                              style: TextStyle(
-                                color: const Color(0xFFD32F2F),
-                                fontSize: 13.sp,
-                                fontWeight: FontWeight.w600,
-                                fontFamily: 'Plus Jakarta Sans',
+                              style: AppTextStyles.t_14w600.copyWith(
+                                color: AppColors.errorMain,
                               ),
                             ),
                           ),
@@ -255,11 +235,8 @@ class SellerManageOrderCard extends StatelessWidget {
                         ),
                         child: Text(
                           buttonText,
-                          style: TextStyle(
+                          style: AppTextStyles.t_14w600.copyWith(
                             color: isButtonFilled ? Colors.white : commonColor,
-                            fontSize: 13.sp,
-                            fontWeight: FontWeight.w600,
-                            fontFamily: 'Plus Jakarta Sans',
                           ),
                         ),
                       ),

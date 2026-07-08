@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerRegistrationScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -79,18 +80,18 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                 // Info Cards
               _buildInfoCard(
                 icon: Icons.language,
-                title: 'Global Reach',
-                subtitle: 'Sell to customers worldwide',
+                title: context.l10n.globalReach,
+                subtitle: context.l10n.sellWorldwide,
               ),
               _buildInfoCard(
                 icon: Icons.verified_user_outlined,
-                title: 'Secure Sales',
-                subtitle: 'Guaranteed safe payments',
+                title: context.l10n.secureSales,
+                subtitle: context.l10n.guaranteedSafePayments,
               ),
               _buildInfoCard(
                 icon: Icons.support_agent_outlined,
-                title: '24/7 Support',
-                subtitle: 'Dedicated artisan assistance',
+                title: context.l10n.support247,
+                subtitle: context.l10n.dedicatedArtisanAssistance,
               ),
 
               SizedBox(height: 24.h),

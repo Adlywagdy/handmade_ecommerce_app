@@ -9,6 +9,7 @@ import '../../models/seller_model.dart';
 import '../../models/data/seller_mock_data.dart';
 import '../widgets/seller_input_field.dart';
 import '../widgets/seller_image_upload.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerAddEditProductScreen extends StatefulWidget {
   final SellerProductModel product;
@@ -61,14 +62,9 @@ class _SellerAddEditProductScreenState
     if (!_formKey.currentState!.validate()) return;
 
     final stock = int.tryParse(_stockController.text) ?? 0;
-    String status;
-    if (stock == 0) {
-      status = 'Out of Stock';
-    } else if (stock <= 5) {
-      status = 'Low Stock';
-    } else {
-      status = 'In Stock';
-    }
+    
+    // Any edited product goes back to pending for Admin approval
+    String status = 'pending';
 
     setState(() => _isLoading = true);
 
@@ -90,7 +86,7 @@ class _SellerAddEditProductScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Product updated successfully'),
+            content: Text(context.l10n.productUpdatedSuccessfully),
             backgroundColor: const Color(0xff07880E),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -102,7 +98,7 @@ class _SellerAddEditProductScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error saving product: $e'),
+            content: Text(context.l10n.errorSavingProduct(e.toString())),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -188,8 +184,8 @@ class _SellerAddEditProductScreenState
 
                       // Product Name
                       SellerInputField(
-                        label: 'Product Name',
-                        hintText: 'Enter product name',
+                        label: context.l10n.productName,
+                        hintText: context.l10n.enterProductName,
                         controller: _nameController,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
@@ -208,8 +204,8 @@ class _SellerAddEditProductScreenState
                         children: [
                           Expanded(
                             child: SellerInputField(
-                              label: 'Price (\$)',
-                              hintText: '0.00',
+                              label: context.l10n.priceWithCurrency,
+                              hintText: context.l10n.zeroPriceHint,
                               controller: _priceController,
                               keyboardType:
                                   const TextInputType.numberWithOptions(
@@ -232,8 +228,8 @@ class _SellerAddEditProductScreenState
                           SizedBox(width: 12.w),
                           Expanded(
                             child: SellerInputField(
-                              label: 'Stock',
-                              hintText: '0',
+                              label: context.l10n.stock,
+                              hintText: context.l10n.zeroStockHint,
                               controller: _stockController,
                               keyboardType: TextInputType.number,
                               validator: (value) {
@@ -282,7 +278,7 @@ class _SellerAddEditProductScreenState
                               fontFamily: 'Plus Jakarta Sans',
                             ),
                             decoration: InputDecoration(
-                              hintText: 'Select category',
+                              hintText: context.l10n.selectCategory,
                               hintStyle: TextStyle(
                                 fontSize: 13.sp,
                                 color: const Color(0xFF94A3B8),
@@ -334,8 +330,8 @@ class _SellerAddEditProductScreenState
 
                       // Description
                       SellerInputField(
-                        label: 'Description',
-                        hintText: 'Describe your product...',
+                        label: context.l10n.description,
+                        hintText: context.l10n.describeYourProduct,
                         controller: _descriptionController,
                         maxLines: 4,
                         validator: (value) {

@@ -535,6 +535,390 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Set Password'**
   String get setPassword;
+
+  /// No description provided for @productUpdatedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Product updated successfully'**
+  String get productUpdatedSuccessfully;
+
+  /// No description provided for @errorSavingProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving product: {error}'**
+  String errorSavingProduct(String error);
+
+  /// No description provided for @unexpectedState.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexpected State'**
+  String get unexpectedState;
+
+  /// No description provided for @noProductsFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No products found'**
+  String get noProductsFound;
+
+  /// No description provided for @deleteProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Product'**
+  String get deleteProduct;
+
+  /// No description provided for @deleteProductConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this product? This action cannot be undone.'**
+  String get deleteProductConfirmation;
+
+  /// No description provided for @editProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get editProduct;
+
+  /// No description provided for @cancelOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Order'**
+  String get cancelOrder;
+
+  /// No description provided for @cancelOrderConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel order {orderId}?'**
+  String cancelOrderConfirmation(String orderId);
+
+  /// No description provided for @no.
+  ///
+  /// In en, this message translates to:
+  /// **'No'**
+  String get no;
+
+  /// No description provided for @orderCancelledSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Order has been cancelled and stock restored'**
+  String get orderCancelledSuccess;
+
+  /// No description provided for @failedToCancelOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel order: {error}'**
+  String failedToCancelOrder(String error);
+
+  /// No description provided for @yesCancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Cancel'**
+  String get yesCancel;
+
+  /// No description provided for @orderArchivedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Order archived successfully'**
+  String get orderArchivedSuccessfully;
+
+  /// No description provided for @orderStatusUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Order status updated to {newStatus}'**
+  String orderStatusUpdated(String newStatus);
+
+  /// No description provided for @logout.
+  ///
+  /// In en, this message translates to:
+  /// **'Logout'**
+  String get logout;
+
+  /// No description provided for @logoutConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to logout?'**
+  String get logoutConfirmation;
+
+  /// No description provided for @profile.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile'**
+  String get profile;
+
+  /// No description provided for @productName.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Name'**
+  String get productName;
+
+  /// No description provided for @priceWithCurrency.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (\$)'**
+  String get priceWithCurrency;
+
+  /// No description provided for @stock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock'**
+  String get stock;
+
+  /// No description provided for @description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description'**
+  String get description;
+
+  /// No description provided for @addProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Product'**
+  String get addProduct;
+
+  /// No description provided for @viewProducts.
+  ///
+  /// In en, this message translates to:
+  /// **'View Products'**
+  String get viewProducts;
+
+  /// No description provided for @viewOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'View Orders'**
+  String get viewOrders;
+
+  /// No description provided for @enterProductName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter product name'**
+  String get enterProductName;
+
+  /// No description provided for @zeroPriceHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0.00'**
+  String get zeroPriceHint;
+
+  /// No description provided for @zeroStockHint.
+  ///
+  /// In en, this message translates to:
+  /// **'0'**
+  String get zeroStockHint;
+
+  /// No description provided for @selectCategory.
+  ///
+  /// In en, this message translates to:
+  /// **'Select category'**
+  String get selectCategory;
+
+  /// No description provided for @describeYourProduct.
+  ///
+  /// In en, this message translates to:
+  /// **'Describe your product...'**
+  String get describeYourProduct;
+
+  /// No description provided for @totalRevenue.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Revenue'**
+  String get totalRevenue;
+
+  /// No description provided for @totalOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Orders'**
+  String get totalOrders;
+
+  /// No description provided for @bestSellingItem.
+  ///
+  /// In en, this message translates to:
+  /// **'Best selling item'**
+  String get bestSellingItem;
+
+  /// No description provided for @ordersProcessed.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders Processed'**
+  String get ordersProcessed;
+
+  /// No description provided for @avgOrderValue.
+  ///
+  /// In en, this message translates to:
+  /// **'Avg. Order Value'**
+  String get avgOrderValue;
+
+  /// No description provided for @shopSettings.
+  ///
+  /// In en, this message translates to:
+  /// **'Shop Settings'**
+  String get shopSettings;
+
+  /// No description provided for @viewShopInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'View your shop information'**
+  String get viewShopInformation;
+
+  /// No description provided for @notificationsCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsCenter;
+
+  /// No description provided for @openNotificationsCenter.
+  ///
+  /// In en, this message translates to:
+  /// **'Open your notifications center'**
+  String get openNotificationsCenter;
+
+  /// No description provided for @helpAndSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Help & Support'**
+  String get helpAndSupport;
+
+  /// No description provided for @contactSupport.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact support and review help info'**
+  String get contactSupport;
+
+  /// No description provided for @globalReach.
+  ///
+  /// In en, this message translates to:
+  /// **'Global Reach'**
+  String get globalReach;
+
+  /// No description provided for @sellWorldwide.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell to customers worldwide'**
+  String get sellWorldwide;
+
+  /// No description provided for @secureSales.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure Sales'**
+  String get secureSales;
+
+  /// No description provided for @guaranteedSafePayments.
+  ///
+  /// In en, this message translates to:
+  /// **'Guaranteed safe payments'**
+  String get guaranteedSafePayments;
+
+  /// No description provided for @support247.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 Support'**
+  String get support247;
+
+  /// No description provided for @dedicatedArtisanAssistance.
+  ///
+  /// In en, this message translates to:
+  /// **'Dedicated artisan assistance'**
+  String get dedicatedArtisanAssistance;
+
+  /// No description provided for @notificationsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Notifications'**
+  String get notificationsTitle;
+
+  /// No description provided for @markAllAsRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark all as read'**
+  String get markAllAsRead;
+
+  /// No description provided for @clearAllNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear all'**
+  String get clearAllNotifications;
+
+  /// No description provided for @filterAll.
+  ///
+  /// In en, this message translates to:
+  /// **'All'**
+  String get filterAll;
+
+  /// No description provided for @filterUnread.
+  ///
+  /// In en, this message translates to:
+  /// **'Unread'**
+  String get filterUnread;
+
+  /// No description provided for @filterOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'Orders'**
+  String get filterOrders;
+
+  /// No description provided for @filterMessages.
+  ///
+  /// In en, this message translates to:
+  /// **'Messages'**
+  String get filterMessages;
+
+  /// No description provided for @filterOffers.
+  ///
+  /// In en, this message translates to:
+  /// **'Offers'**
+  String get filterOffers;
+
+  /// No description provided for @today.
+  ///
+  /// In en, this message translates to:
+  /// **'TODAY'**
+  String get today;
+
+  /// No description provided for @yesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'YESTERDAY'**
+  String get yesterday;
+
+  /// No description provided for @earlier.
+  ///
+  /// In en, this message translates to:
+  /// **'EARLIER'**
+  String get earlier;
+
+  /// No description provided for @clearNotificationsDialogTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All Notifications'**
+  String get clearNotificationsDialogTitle;
+
+  /// No description provided for @clearNotificationsConfirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete all notifications? This action cannot be undone.'**
+  String get clearNotificationsConfirmation;
+
+  /// No description provided for @clearAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear All'**
+  String get clearAll;
+
+  /// No description provided for @notificationDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'Notification deleted'**
+  String get notificationDeleted;
+
+  /// No description provided for @noNotificationsYet.
+  ///
+  /// In en, this message translates to:
+  /// **'No Notifications Yet'**
+  String get noNotificationsYet;
+
+  /// No description provided for @noNotificationsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'When you receive notifications, they\'ll appear here. Stay tuned!'**
+  String get noNotificationsDescription;
 }
 
 class _AppLocalizationsDelegate

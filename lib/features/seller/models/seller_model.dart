@@ -187,7 +187,7 @@ class SellerOrderModel {
       customerName: parsedCustomerName,
       orderDate: parsedDate,
       totalAmount: parsedTotalAmount,
-      status: map['status'] ?? 'Pending',
+      status: (map['status']?.toString() ?? 'pending').toLowerCase(),
       items: List<SellerOrderItemModel>.from(
         (map['items'] as List? ?? []).map((x) {
           final itemMap = x is Map ? Map<String, dynamic>.from(x) : <String, dynamic>{};

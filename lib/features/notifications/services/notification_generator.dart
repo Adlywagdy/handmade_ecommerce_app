@@ -91,6 +91,26 @@ class NotificationGenerator {
     );
   }
 
+  /// When an order is cancelled by the customer → notify the seller
+  static Future<void> onOrderCancelledByCustomer({
+    required String sellerId,
+    required String orderId,
+    required String customerName,
+    required String productName,
+  }) async {
+    await _sendToUser(
+      sellerId,
+      NotificationModel(
+        id: _generateId(),
+        title: 'Order Cancelled ❌',
+        body: 'Order $orderId containing "$productName" was cancelled by $customerName.',
+        type: NotificationType.orderStatusUpdate, // Seller will get an order status update notification
+        createdAt: DateTime.now(),
+        targetId: orderId,
+      ),
+    );
+  }
+
   /// When a product review is posted → notify the seller
   static Future<void> onProductReview({
     required String sellerId,

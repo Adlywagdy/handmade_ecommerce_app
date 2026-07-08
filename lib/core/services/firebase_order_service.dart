@@ -17,11 +17,11 @@ class FirebaseOrderService {
     return double.tryParse(value?.toString() ?? '') ?? 0;
   }
 
-  List<OrderModel> _mergeAndSortOrders({
+  List<CustomerOrderModel> _mergeAndSortOrders({
     required List<QueryDocumentSnapshot<Map<String, dynamic>>> customerDocs,
     required List<QueryDocumentSnapshot<Map<String, dynamic>>> rootDocs,
   }) {
-    final merged = <String, OrderModel>{};
+    final merged = <String, CustomerOrderModel>{};
 
     for (final doc in rootDocs) {
       final data = doc.data();
@@ -100,7 +100,7 @@ class FirebaseOrderService {
   }
 
   /// Get all orders for current user
-  Future<List<OrderModel>> getAllOrders() async {
+  Future<List<CustomerOrderModel>> getAllOrders() async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
@@ -118,7 +118,7 @@ class FirebaseOrderService {
   }
 
   /// Get filtered orders by status
-  Future<List<OrderModel>> getFilteredOrders(OrderStatus status) async {
+  Future<List<CustomerOrderModel>> getFilteredOrders(OrderStatus status) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
@@ -139,7 +139,7 @@ class FirebaseOrderService {
   }
 
   /// Search orders by ID, name, email, or phone
-  Future<List<OrderModel>> searchOrders(String query) async {
+  Future<List<CustomerOrderModel>> searchOrders(String query) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return [];
@@ -174,7 +174,7 @@ class FirebaseOrderService {
   }
 
   /// Get order details
-  Future<OrderModel?> getOrderDetails(String orderId) async {
+  Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
     try {
       final user = _auth.currentUser;
       if (user == null) return null;
@@ -219,7 +219,7 @@ class FirebaseOrderService {
   }
 
   /// Place new order
-  Future<String> placeOrder(OrderModel order) async {
+  Future<String> placeOrder(CustomerOrderModel order) async {
     try {
       final user = _auth.currentUser;
       if (user == null) throw Exception('User not authenticated');
@@ -247,11 +247,18 @@ class FirebaseOrderService {
       final deliveryFee = _toDouble(order.payment.deliveryFee);
       final totalPrice = _toDouble(order.payment.totalPrice);
       final commission = subtotal * _commissionRate;
+      final sellerIds = order.products
+          .map((p) => p.sellerId)
+          .where((id) => id.isNotEmpty)
+          .toSet()
+          .toList();
+
       final orderPayload = {
         ...order.toMap(),
         'customerId': user.uid,
         'customerName': order.customer.name,
-        'sellerId': order.products.isNotEmpty ? order.products.first.sellerId : '',
+        'sellerId': sellerIds.isNotEmpty ? sellerIds.first : '',
+        'sellerIds': sellerIds,
         'commissionRate': _commissionRate,
         'commission': commission,
         'sellerEarning': subtotal - commission,
@@ -308,7 +315,7 @@ class FirebaseOrderService {
           .doc(orderId);
       final customerDoc = await customerDocRef.get();
       if (customerDoc.exists) {
-        productsData = customerDoc.data()?['products'] ?? [];
+        productsData = customerDoc.data()?['items'] ?? customerDoc.data()?['products'] ?? [];
         batch.update(customerDocRef, {
           'status': _statusToString(OrderStatus.cancelled),
           'updatedAt': FieldValue.serverTimestamp(),
@@ -319,7 +326,7 @@ class FirebaseOrderService {
       final rootDoc = await rootDocRef.get();
       if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
         if (productsData.isEmpty) {
-          productsData = rootDoc.data()?['products'] ?? [];
+          productsData = rootDoc.data()?['items'] ?? rootDoc.data()?['products'] ?? [];
         }
         batch.update(rootDocRef, {
           'status': _statusToString(OrderStatus.cancelled),
@@ -335,7 +342,7 @@ class FirebaseOrderService {
         );
         if (rootByOrderNumber.docs.isNotEmpty) {
           if (productsData.isEmpty) {
-            productsData = rootByOrderNumber.docs.first.data()['products'] ?? [];
+            productsData = rootByOrderNumber.docs.first.data()['items'] ?? rootByOrderNumber.docs.first.data()['products'] ?? [];
           }
           batch.update(rootByOrderNumber.docs.first.reference, {
             'status': _statusToString(OrderStatus.cancelled),
@@ -365,8 +372,8 @@ class FirebaseOrderService {
     }
   }
 
-  /// Helper to convert Firestore document to OrderModel
-  OrderModel _orderFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
+  /// Helper to convert Firestore document to CustomerOrderModel
+  CustomerOrderModel _orderFromSnapshot(DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data() ?? <String, dynamic>{};
     final createdAt = data['createdAt'];
     final updatedAt = data['updatedAt'];
@@ -378,7 +385,7 @@ class FirebaseOrderService {
         ? updatedAt.toDate().toIso8601String()
         : updatedAt?.toString();
 
-    return OrderModel.fromMap({
+    return CustomerOrderModel.fromMap({
       ...data,
       'orderId': data['orderId'] ?? data['orderNumber'] ?? doc.id,
       'status': data['status'] ?? 'pending',

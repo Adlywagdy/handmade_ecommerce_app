@@ -8,28 +8,28 @@ import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_initial_route.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
+import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/services/seller_firestore_service.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:handmade_ecommerce_app/features/notifications/services/fcm_service.dart';
 import 'core/routes/app_pages.dart';
 import 'core/services/remote_config_services.dart';
 import 'firebase_options.dart';
-import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Hive.initFlutter();
   await Hive.openBox('notifications');
   await Hive.openBox(HiveHelper.onboardingBox);
   await Hive.openBox(HiveHelper.login);
   await Hive.openBox(HiveHelper.email);
+
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   // Initialize FCM Services
@@ -77,6 +77,8 @@ void main() async {
   };
 
   await RemoteConfigService.instance.init();
+  /////////////////////////////////////////////////////////////////////////
+
   final initialRoute = await getInitialRoute();
 
   runApp(HandcraftedEcommerceApp(initialRoute: initialRoute));
@@ -103,12 +105,12 @@ class HandcraftedEcommerceApp extends StatelessWidget {
               create: (BuildContext context) =>
                   NotificationsCubit()..loadNotifications(),
             ),
-            // seller
             BlocProvider(
               create: (BuildContext context) =>
                   SellerCubit(SellerFirestoreService())..loadDashboard(),
             ),
           ],
+
           child: GetMaterialApp(
             debugShowCheckedModeBanner: false,
             initialRoute: initialRoute,

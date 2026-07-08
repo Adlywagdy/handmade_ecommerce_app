@@ -7,16 +7,17 @@ class SellerStatusBadge extends StatelessWidget {
   const SellerStatusBadge({super.key, required this.status});
 
   Color get _backgroundColor {
-    switch (status) {
-      case 'In Stock':
-      case 'Delivered':
+    switch (status.toLowerCase()) {
+      case 'in stock':
+      case 'delivered':
+      case 'completed':
         return const Color(0xff07880E).withValues(alpha: 0.15);
-      case 'Pending':
+      case 'pending':
         return const Color(0xffF59E0B).withValues(alpha: 0.15);
-      case 'Out of Stock':
-      case 'Cancelled':
+      case 'out of stock':
+      case 'cancelled':
         return const Color(0xffD32F2F).withValues(alpha: 0.15);
-      case 'Low Stock':
+      case 'low stock':
         return const Color(0xffF59E0B).withValues(alpha: 0.15);
       default:
         return Colors.grey.withValues(alpha: 0.15);
@@ -24,16 +25,17 @@ class SellerStatusBadge extends StatelessWidget {
   }
 
   Color get _textColor {
-    switch (status) {
-      case 'In Stock':
-      case 'Delivered':
+    switch (status.toLowerCase()) {
+      case 'in stock':
+      case 'delivered':
+      case 'completed':
         return const Color(0xff07880E);
-      case 'Pending':
+      case 'pending':
         return const Color(0xffF59E0B);
-      case 'Out of Stock':
-      case 'Cancelled':
+      case 'out of stock':
+      case 'cancelled':
         return const Color(0xffD32F2F);
-      case 'Low Stock':
+      case 'low stock':
         return const Color(0xffF59E0B);
       default:
         return Colors.grey;
