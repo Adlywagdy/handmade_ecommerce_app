@@ -1119,6 +1119,10 @@
   "@language": {
     "description": "Label for language settings."
   },
+  "changeAppLanguage": "تغيير لغة التطبيق",
+  "@changeAppLanguage": {
+    "description": "Subtitle for language settings tile."
+  },
   "changeLanguage": "تغيير لغة التطبيق",
   "@changeLanguage": {
     "description": "Subtitle for language settings."

@@ -9,6 +9,7 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerProfileScreen extends StatelessWidget {
@@ -116,6 +117,13 @@ class SellerProfileScreen extends StatelessWidget {
               subtitle: context.l10n.contactSupportAndReviewHelpInfo,
               onTap: () {},
             ),
+            _ProfileMenuTile(
+              icon: Icons.language_rounded,
+              title: context.l10n.language,
+              subtitle: context.l10n.changeAppLanguage,
+              trailing: const ChangeLanguageWidget(),
+              onTap: () {},
+            ),
             SizedBox(height: 24.h),
             CustomElevatedButton(
               buttonheight: 60.h,
@@ -146,12 +154,14 @@ class _ProfileMenuTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final Widget? trailing;
 
   const _ProfileMenuTile({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.trailing,
   });
 
   @override
@@ -194,11 +204,14 @@ class _ProfileMenuTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: greyTextColor,
-                size: 22.w,
-              ),
+              if (trailing != null)
+                trailing!
+              else
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: greyTextColor,
+                  size: 22.w,
+                ),
             ],
           ),
         ),

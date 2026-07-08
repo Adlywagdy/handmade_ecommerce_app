@@ -989,6 +989,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get language => 'Language';
 
   @override
+  String get changeAppLanguage => 'Change app language';
+
+  @override
   String get changeLanguage => 'Change app language';
 
   @override

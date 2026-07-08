@@ -1976,6 +1976,12 @@ abstract class AppLocalizations {
   /// **'Language'**
   String get language;
 
+  /// Subtitle for language settings tile.
+  ///
+  /// In en, this message translates to:
+  /// **'Change app language'**
+  String get changeAppLanguage;
+
   /// Subtitle for language settings.
   ///
   /// In en, this message translates to:
