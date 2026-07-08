@@ -4,44 +4,38 @@ sealed class CustomerState {}
 
 final class CustomerInitial extends CustomerState {}
 
-/* ------------------------------------------- */
-final class GetCustomerdataLoadingstate extends CustomerState {}
+final class CustomerDataLoading extends CustomerState {}
 
-final class GetCustomerdataSuccessedstate extends CustomerState {
+final class CustomerDataSuccess extends CustomerState {
   final CustomerModel customer;
-  GetCustomerdataSuccessedstate({required this.customer});
+  CustomerDataSuccess({required this.customer});
 }
 
-final class GetCustomerdataFailedstate extends CustomerState {
-  final String errorMessage;
-
-  GetCustomerdataFailedstate({required this.errorMessage});
+final class CustomerDataError extends CustomerState {
+  final String message;
+  CustomerDataError({required this.message});
 }
 
-/* ------------------------------------------- */
-final class NotificationsLoadingstate extends CustomerState {}
+final class NotificationsLoading extends CustomerState {}
 
-final class NotificationsSuccessedstate extends CustomerState {
+final class NotificationsSuccess extends CustomerState {
   final List<String> notifications;
-  NotificationsSuccessedstate({required this.notifications});
+  NotificationsSuccess({required this.notifications});
 }
 
-final class NotificationsFailedstate extends CustomerState {
-  final String errorMessage;
-
-  NotificationsFailedstate({required this.errorMessage});
+final class NotificationsError extends CustomerState {
+  final String message;
+  NotificationsError({required this.message});
 }
 
-/* ------------------------------------------- */
-final class ImageUploadLoadingstate extends CustomerState {}
+final class ImageUploadLoading extends CustomerState {}
 
-final class ImageUploadSuccessedstate extends CustomerState {
+final class ImageUploadSuccess extends CustomerState {
   final CustomerModel customer;
-  ImageUploadSuccessedstate({required this.customer});
+  ImageUploadSuccess({required this.customer});
 }
 
-final class ImageUploadFailedstate extends CustomerState {
-  final String errorMessage;
-
-  ImageUploadFailedstate({required this.errorMessage});
+final class ImageUploadError extends CustomerState {
+  final String message;
+  ImageUploadError({required this.message});
 }

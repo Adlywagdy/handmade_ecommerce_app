@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/features/admin/data/models/coupon_model.dart';
+import 'package:handmade_ecommerce_app/core/models/coupon_model.dart';
 
 double calculateOrdersubTotalPrice({required List<ProductModel> cartproducts}) {
   return cartproducts.fold(

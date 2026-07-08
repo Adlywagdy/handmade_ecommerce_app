@@ -95,14 +95,14 @@ class CustomerWishlistScreen extends StatelessWidget {
                         children: [
                           BlocBuilder<WishListCubit, WishListState>(
                             buildWhen: (previous, current) {
-                              return current is GetWishlistLoadingstate ||
-                                  current is GetWishlistFailedstate ||
-                                  current is GetWishlistSuccessedstate;
+                              return current is WishlistLoading ||
+                                  current is WishlistError ||
+                                  current is WishlistSuccess;
                             },
                             builder: (context, state) {
                               final productsCount =
-                                  state is GetWishlistSuccessedstate
-                                  ? state.wishlistproducts.length
+                                  state is WishlistSuccess
+                                  ? state.products.length
                                   : BlocProvider.of<WishListCubit>(
                                       context,
                                     ).wishlistProductsList.length;
@@ -132,13 +132,13 @@ class CustomerWishlistScreen extends StatelessWidget {
 
             BlocBuilder<WishListCubit, WishListState>(
               buildWhen: (previous, current) {
-                return current is GetWishlistLoadingstate ||
-                    current is GetWishlistFailedstate ||
-                    current is GetWishlistSuccessedstate ||
-                    current is AddOrDeleteWishlistSuccessedstate;
+                return current is WishlistLoading ||
+                    current is WishlistError ||
+                    current is WishlistSuccess ||
+                    current is ToggleWishlistSuccess;
               },
               builder: (context, state) {
-                if (state is GetWishlistFailedstate) {
+                if (state is WishlistError) {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
@@ -149,8 +149,8 @@ class CustomerWishlistScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (state is GetWishlistSuccessedstate &&
-                    state.wishlistproducts.isEmpty) {
+                } else if (state is WishlistSuccess &&
+                    state.products.isEmpty) {
                   return SliverFillRemaining(
                     child: Center(
                       child: Text(
@@ -162,19 +162,19 @@ class CustomerWishlistScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (state is GetWishlistSuccessedstate) {
+                } else if (state is WishlistSuccess) {
                   return SliverGrid.builder(
                     gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       childAspectRatio: 1 / 1.8,
                     ),
-                    itemCount: state.wishlistproducts.length,
+                    itemCount: state.products.length,
                     itemBuilder: (context, index) {
                       return Padding(
                         padding: const EdgeInsets.only(left: 8.0, right: 8.0).w,
                         child: ProductItem(
                           cardclipBehavior: Clip.antiAlias,
-                          product: state.wishlistproducts[index],
+                          product: state.products[index],
                           imageflex: 2,
                           lowercolumnflex: 1,
                           elevation: 0,
@@ -184,7 +184,7 @@ class CustomerWishlistScreen extends StatelessWidget {
                           lowercolumnleftpadding: 8,
                           lowercolumnrightpadding: 8,
                           lowercolumn: SearchedProductItemLowerColumn(
-                            product: state.wishlistproducts[index],
+                            product: state.products[index],
                           ),
                         ),
                       );

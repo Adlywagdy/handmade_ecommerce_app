@@ -24,9 +24,9 @@ class _AddressColumnState extends State<AddressColumn> {
   Widget build(BuildContext context) {
     return BlocBuilder<CartCubit, CartState>(
       buildWhen: (previous, current) {
-        return current is GetOrderaddressLoadingState ||
-            current is GetOrderaddressSuccessState ||
-            current is GetOrderaddressFailedState;
+        return current is OrderAddressLoading ||
+            current is OrderAddressSuccess ||
+            current is OrderAddressError;
       },
       builder: (context, state) {
         final cartCubit = BlocProvider.of<CartCubit>(context);
@@ -35,7 +35,7 @@ class _AddressColumnState extends State<AddressColumn> {
             cartCubit.selectedOrderAddress ??
             customerCubit.customerData.address;
 
-        if (state is GetOrderaddressLoadingState) {
+        if (state is OrderAddressLoading) {
           return Padding(
             padding: const EdgeInsets.all(16.0).h,
             child: const Center(
@@ -44,8 +44,8 @@ class _AddressColumnState extends State<AddressColumn> {
           );
         }
 
-        if (state is GetOrderaddressFailedState) {
-          return Center(child: Text(state.errorMessage));
+        if (state is OrderAddressError) {
+          return Center(child: Text(state.message));
         }
 
         return Column(
@@ -397,7 +397,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                               : _country.text.trim(),
                           zipCode: int.tryParse(_zip.text.trim()) ?? 0,
                         );
-                        await context.read<CartCubit>().getOrderaddress(
+                        context.read<CartCubit>().getOrderaddress(
                           address: addressData,
                         );
                         context.read<CartCubit>().setOrderPhone(

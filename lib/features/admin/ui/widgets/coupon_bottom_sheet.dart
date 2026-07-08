@@ -7,7 +7,7 @@ import '../../../../core/theme/app_theme.dart';
 import '../../../../core/theme/colors.dart';
 import '../../../l10n/generated/app_localizations.dart';
 import '../../logic/admin_cubit.dart';
-import '../../data/models/coupon_model.dart';
+import '../../../../core/models/coupon_model.dart';
 
 class CouponBottomSheet extends StatefulWidget {
   final CouponModel? coupon;
@@ -33,9 +33,7 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _codeController = TextEditingController(
-      text: widget.coupon?.code ?? '',
-    );
+    _codeController = TextEditingController(text: widget.coupon?.code ?? '');
     _discountValueController = TextEditingController(
       text: widget.coupon != null ? '${widget.coupon!.discountValue}' : '',
     );
@@ -65,9 +63,11 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
 
     final cubit = context.read<AdminCubit>();
     final code = _codeController.text.trim();
-    final discountValue = double.tryParse(_discountValueController.text.trim()) ?? 0;
+    final discountValue =
+        double.tryParse(_discountValueController.text.trim()) ?? 0;
     final maxUses = int.tryParse(_maxUsesController.text.trim()) ?? 0;
-    final minOrderAmount = double.tryParse(_minOrderController.text.trim()) ?? 0;
+    final minOrderAmount =
+        double.tryParse(_minOrderController.text.trim()) ?? 0;
 
     if (_isEditing) {
       cubit.updateCoupon(
@@ -280,7 +280,8 @@ class _CouponBottomSheetState extends State<CouponBottomSheet> {
           onTap: () async {
             final picked = await showDatePicker(
               context: context,
-              initialDate: _expiryDate ?? DateTime.now().add(const Duration(days: 30)),
+              initialDate:
+                  _expiryDate ?? DateTime.now().add(const Duration(days: 30)),
               firstDate: DateTime.now(),
               lastDate: DateTime.now().add(const Duration(days: 365)),
               builder: (context, child) {

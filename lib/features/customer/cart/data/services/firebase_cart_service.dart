@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
-import 'package:handmade_ecommerce_app/features/admin/data/models/coupon_model.dart';
+import 'package:handmade_ecommerce_app/core/models/coupon_model.dart';
 
 class FirebaseCartService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -10,13 +10,14 @@ class FirebaseCartService {
   CollectionReference<Map<String, dynamic>> get _carts =>
       _firestore.collection('carts');
 
-  // ─── Helpers ──────────────────────────────────────────
-
   String? get _userId => _auth.currentUser?.uid;
 
   List<Map<String, dynamic>> _parseItems(dynamic raw) {
     if (raw is! List) return [];
-    return raw.whereType<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+    return raw
+        .whereType<Map>()
+        .map((e) => Map<String, dynamic>.from(e))
+        .toList();
   }
 
   double _subtotal(List<Map<String, dynamic>> items) {
@@ -44,10 +45,8 @@ class FirebaseCartService {
     return {
       'productId': product.id,
       'name': product.name,
-      'title': product.name,
       'images': product.images,
       'productImage': product.image ?? '',
-      'imageUrl': product.image ?? '',
       'price': product.price,
       'quantity': quantity.toString(),
       'sellerId': product.sellerId,
@@ -60,8 +59,6 @@ class FirebaseCartService {
     final doc = await _carts.doc(uid).get();
     return doc.exists ? doc : null;
   }
-
-  // ─── Public API ───────────────────────────────────────
 
   Future<List<ProductModel>> getCartProducts() async {
     final doc = await _getCartDoc();
@@ -78,7 +75,9 @@ class FirebaseCartService {
     final snapshot = await ref.get();
     final items = _parseItems(snapshot.data()?['items']);
 
-    final idx = items.indexWhere((i) => i['productId']?.toString() == product.id);
+    final idx = items.indexWhere(
+      (i) => i['productId']?.toString() == product.id,
+    );
     if (idx != -1) {
       final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
       items[idx]['quantity'] = (currentQty + 1).toString();
@@ -86,7 +85,10 @@ class FirebaseCartService {
       items.add(_toCartItem(product, quantity: 1));
     }
 
-    await ref.set(_cartPayload(userId: uid, items: items), SetOptions(merge: true));
+    await ref.set(
+      _cartPayload(userId: uid, items: items),
+      SetOptions(merge: true),
+    );
   }
 
   Future<void> removeFromCart(String productId) async {
@@ -97,7 +99,9 @@ class FirebaseCartService {
     if (doc == null) return;
 
     final items = _parseItems(doc.data()?['items']);
-    final idx = items.indexWhere((i) => i['productId']?.toString() == productId);
+    final idx = items.indexWhere(
+      (i) => i['productId']?.toString() == productId,
+    );
     if (idx == -1) return;
 
     final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
@@ -118,26 +122,6 @@ class FirebaseCartService {
     if (doc != null) {
       await doc.reference.update(_cartPayload(userId: uid, items: []));
     }
-  }
-
-  Future<void> updateCartItemQuantity(String productId, int quantity) async {
-    final uid = _userId;
-    if (uid == null) throw Exception('User not authenticated');
-
-    final doc = await _getCartDoc();
-    if (doc == null) return;
-
-    final items = _parseItems(doc.data()?['items']);
-    final idx = items.indexWhere((i) => i['productId']?.toString() == productId);
-    if (idx == -1) return;
-
-    if (quantity <= 0) {
-      items.removeAt(idx);
-    } else {
-      items[idx]['quantity'] = quantity.toString();
-    }
-
-    await doc.reference.update(_cartPayload(userId: uid, items: items));
   }
 
   Future<List<CouponModel>> fetchCoupons() async {

@@ -16,20 +16,18 @@ class WishListCubit extends Cubit<WishListState> {
 
   List<ProductModel> wishlistProductsList = [];
 
-  /* ------------------------------------------- */
   Future<void> getWishlistProducts() async {
-    emit(GetWishlistLoadingstate());
+    emit(WishlistLoading());
     try {
       wishlistProductsList = await _wishlistService.getWishlistProducts();
-      emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
+      emit(WishlistSuccess(products: wishlistProductsList));
     } catch (e) {
-      emit(GetWishlistFailedstate(errorMessage: e.toString()));
+      emit(WishlistError(message: e.toString()));
     }
   }
 
-  /* ------------------------------------------- */
   Future<void> addordeleteWishlistProducts(ProductModel product) async {
-    emit(AddOrDeleteWishlistLoadingstate());
+    emit(ToggleWishlistLoading());
     try {
       final alreadyExists = isItemExictedFun(
         productslist: wishlistProductsList,
@@ -56,10 +54,10 @@ class WishListCubit extends Cubit<WishListState> {
         );
       }
 
-      emit(AddOrDeleteWishlistSuccessedstate());
-      emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
+      emit(ToggleWishlistSuccess());
+      emit(WishlistSuccess(products: wishlistProductsList));
     } catch (e) {
-      emit(AddOrDeleteWishlistFailedstate(errorMessage: e.toString()));
+      emit(ToggleWishlistError(message: e.toString()));
     }
   }
 }

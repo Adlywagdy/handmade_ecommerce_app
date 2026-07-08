@@ -57,9 +57,9 @@ class AmountContainerButton extends StatelessWidget {
 
           BlocBuilder<CartCubit, CartState>(
             buildWhen: (previous, current) {
-              return current is AddcartproductSuccessedstate ||
-                  current is GetcartSuccessedstate ||
-                  current is DeletecartproductSuccessedstate;
+              return current is AddProductSuccess ||
+                  current is CartSuccess ||
+                  current is DeleteProductSuccess;
             },
             builder: (context, state) {
               final quantity =

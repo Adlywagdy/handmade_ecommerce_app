@@ -7,7 +7,7 @@ import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../logic/admin_cubit.dart';
-import '../../../data/models/coupon_model.dart';
+import '../../../../../core/models/coupon_model.dart';
 import '../../widgets/coupon_bottom_sheet.dart';
 
 class AdminCouponsScreen extends StatelessWidget {
@@ -40,12 +40,10 @@ class AdminCouponsScreen extends StatelessWidget {
             child: BlocBuilder<AdminCubit, AdminState>(
               builder: (context, state) {
                 final cubit = context.read<AdminCubit>();
-                if (cubit.couponsList.isEmpty &&
-                    state is GetCouponsLoading) {
+                if (cubit.couponsList.isEmpty && state is GetCouponsLoading) {
                   return const Center(child: CircularProgressIndicator());
                 }
-                if (cubit.couponsList.isEmpty &&
-                    state is GetCouponsError) {
+                if (cubit.couponsList.isEmpty && state is GetCouponsError) {
                   return Center(child: Text(state.error));
                 }
                 if (cubit.couponsList.isEmpty) {
@@ -181,10 +179,7 @@ class _CouponTile extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () => Navigator.of(ctx).pop(true),
-                  child: Text(
-                    'Delete',
-                    style: TextStyle(color: redDegree),
-                  ),
+                  child: Text('Delete', style: TextStyle(color: redDegree)),
                 ),
               ],
             ),
@@ -218,27 +213,18 @@ class _CouponTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      coupon.code,
-                      style: AppTextStyles.t_14w600,
-                    ),
+                    Text(coupon.code, style: AppTextStyles.t_14w600),
                     SizedBox(height: 2.h),
                     Text(
                       coupon.discountType == DiscountType.percentage
                           ? '${coupon.discountValue.toStringAsFixed(0)}% off'
                           : '${coupon.discountValue.toStringAsFixed(2)} EGP off',
-                      style: TextStyle(
-                        fontSize: 12.sp,
-                        color: subTitleColor,
-                      ),
+                      style: TextStyle(fontSize: 12.sp, color: subTitleColor),
                     ),
                     SizedBox(height: 2.h),
                     Text(
                       _buildSubtitle(coupon),
-                      style: TextStyle(
-                        fontSize: 11.sp,
-                        color: greyTextColor,
-                      ),
+                      style: TextStyle(fontSize: 11.sp, color: greyTextColor),
                     ),
                   ],
                 ),
@@ -246,8 +232,7 @@ class _CouponTile extends StatelessWidget {
               Switch.adaptive(
                 value: coupon.isActive,
                 activeThumbColor: commonColor,
-                onChanged: (val) =>
-                    cubit.toggleCouponActive(coupon.id, val),
+                onChanged: (val) => cubit.toggleCouponActive(coupon.id, val),
               ),
               SizedBox(width: 4.w),
               IconButton(
@@ -256,8 +241,7 @@ class _CouponTile extends StatelessWidget {
                   color: commonColor,
                   size: 20.sp,
                 ),
-                onPressed: () =>
-                    showCouponBottomSheet(context, coupon: coupon),
+                onPressed: () => showCouponBottomSheet(context, coupon: coupon),
               ),
             ],
           ),

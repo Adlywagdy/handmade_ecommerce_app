@@ -1,6 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
@@ -14,6 +15,7 @@ class CustomerOrderModel {
   final PaymentDetailsModel payment;
   final AddressModel address;
   final String phone;
+
   CustomerOrderModel({
     required this.customer,
     required this.products,
@@ -32,11 +34,11 @@ class CustomerOrderModel {
   double get commissionAmount => subtotalAmount * commissionRate;
   double get sellerEarningAmount => subtotalAmount - commissionAmount;
   String get deliveryAddress => address.addressdescription;
-  List<ProductModel> get items => products;
 
   String get paymentStatus {
-    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery')
+    if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery') {
       return 'pending';
+    }
     return 'paid';
   }
 
@@ -55,11 +57,6 @@ class CustomerOrderModel {
         .where((item) => item.isNotEmpty)
         .map(ProductModel.fromMap)
         .toList();
-  }
-
-  static DateTime _parseDate(dynamic value) {
-    if (value is DateTime) return value;
-    return DateTime.tryParse(value?.toString() ?? '') ?? DateTime.now();
   }
 
   static Map<String, dynamic> _buildCustomerMap(
@@ -109,7 +106,7 @@ class CustomerOrderModel {
       orderid:
           (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '')
               .toString(),
-      orderDate: _parseDate(map['orderDate'] ?? map['createdAt']),
+      orderDate: parseDateTime(map['orderDate'] ?? map['createdAt']) ?? DateTime.now(),
       payment: PaymentDetailsModel.fromMap(_buildPaymentMap(map, paymentMap)),
       address: addressMap.isNotEmpty
           ? AddressModel.fromMap(addressMap)

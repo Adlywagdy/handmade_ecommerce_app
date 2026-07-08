@@ -4,29 +4,26 @@ sealed class HomeState {}
 
 final class HomeInitial extends HomeState {}
 
-/* ------------------------------------------- */
-final class GetFeaturedLoadingstate extends HomeState {}
+final class FeaturedLoading extends HomeState {}
 
-final class GetFeaturedSuccessedstate extends HomeState {
+final class FeaturedSuccess extends HomeState {
   final List<ProductModel> products;
-  GetFeaturedSuccessedstate({required this.products});
+  FeaturedSuccess({required this.products});
 }
 
-final class GetFeaturedFailedstate extends HomeState {
-  final String errorMessage;
-
-  GetFeaturedFailedstate({required this.errorMessage});
-} /* ------------------------------------------- */
-
-final class GetTopRatedLoadingstate extends HomeState {}
-
-final class GetTopRatedSuccessedstate extends HomeState {
-  final List<ProductModel> products;
-  GetTopRatedSuccessedstate({required this.products});
+final class FeaturedError extends HomeState {
+  final String message;
+  FeaturedError({required this.message});
 }
 
-final class GetTopRatedFailedstate extends HomeState {
-  final String errorMessage;
+final class TopRatedLoading extends HomeState {}
 
-  GetTopRatedFailedstate({required this.errorMessage});
+final class TopRatedSuccess extends HomeState {
+  final List<ProductModel> products;
+  TopRatedSuccess({required this.products});
+}
+
+final class TopRatedError extends HomeState {
+  final String message;
+  TopRatedError({required this.message});
 }

@@ -60,17 +60,17 @@ class _ProductDetailsLowerColumnState extends State<ProductDetailsLowerColumn> {
         SizedBox(height: 20.h),
         BlocBuilder<ReviewsCubit, ReviewsState>(
           buildWhen: (previous, current) {
-            return current is ReviewsLoadingState ||
-                current is ReviewsLoadedState ||
-                current is ReviewsErrorState;
+            return current is ReviewsLoading ||
+                current is ReviewsLoaded ||
+                current is ReviewsError;
           },
           builder: (context, state) {
             final reviewsCubit = context.read<ReviewsCubit>();
             final reviews = reviewsCubit.cachedReviewsFor(productId);
             final isLoadingCurrentProduct =
-                state is ReviewsLoadingState && state.productId == productId;
+                state is ReviewsLoading && state.productId == productId;
             final isErrorCurrentProduct =
-                state is ReviewsErrorState && state.productId == productId;
+                state is ReviewsError && state.productId == productId;
 
             if (isLoadingCurrentProduct && reviews.isEmpty) {
               return const Center(child: CircularProgressIndicator());

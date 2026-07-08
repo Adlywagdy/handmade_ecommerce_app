@@ -68,14 +68,14 @@ class CustomerCartScreen extends StatelessWidget {
             ),
             BlocBuilder<CartCubit, CartState>(
               buildWhen: (previous, current) {
-                return current is GetcartSuccessedstate ||
-                    current is GetcartLoadingstate ||
-                    current is GetcartFailedstate ||
-                    current is AddcartproductSuccessedstate ||
-                    current is DeletecartproductSuccessedstate;
+                return current is CartSuccess ||
+                    current is CartLoading ||
+                    current is CartError ||
+                    current is AddProductSuccess ||
+                    current is DeleteProductSuccess;
               },
               builder: (context, state) {
-                if (state is GetcartFailedstate) {
+                if (state is CartError) {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Text(
@@ -86,8 +86,7 @@ class CustomerCartScreen extends StatelessWidget {
                       ),
                     ),
                   );
-                } else if (state is GetcartSuccessedstate &&
-                    state.cartproducts.isEmpty) {
+                } else if (state is CartSuccess && state.products.isEmpty) {
                   return SliverFillRemaining(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -108,14 +107,14 @@ class CustomerCartScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                } else if (state is GetcartSuccessedstate) {
+                } else if (state is CartSuccess) {
                   return SliverList.builder(
                     itemBuilder: (context, index) {
                       return CartProductItem(
-                        product: state.cartproducts[index],
+                        product: state.products[index],
                       );
                     },
-                    itemCount: state.cartproducts.length,
+                    itemCount: state.products.length,
                   );
                 } else {
                   return SliverList.builder(
@@ -184,17 +183,17 @@ class CustomerCartScreen extends StatelessWidget {
             ),
             BlocBuilder<CartCubit, CartState>(
               buildWhen: (previous, current) {
-                return current is GetOrderSummarySuccessState ||
-                    current is GetOrderSummaryLoadingState ||
-                    current is GetOrderSummaryFailedState ||
-                    current is GetcartSuccessedstate;
+                return current is OrderSummarySuccess ||
+                    current is OrderSummaryLoading ||
+                    current is OrderSummaryError ||
+                    current is CartSuccess;
               },
               builder: (context, state) {
                 if (BlocProvider.of<CartCubit>(
                   context,
                 ).cartProductsList.isEmpty) {
                   return const SliverToBoxAdapter(child: SizedBox());
-                } else if (state is GetOrderSummarySuccessState) {
+                } else if (state is OrderSummarySuccess) {
                   return SliverToBoxAdapter(
                     child: Column(
                       children: [
@@ -224,7 +223,7 @@ class CustomerCartScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                } else if (state is GetOrderSummaryFailedState) {
+                } else if (state is OrderSummaryError) {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Padding(
@@ -265,10 +264,10 @@ class CheckoutButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final l10n = context.l10n;
     return BlocConsumer<OrderCubit, OrderState>(
-      listenWhen: (previous, current) => current is PlaceOrderFailedState,
+      listenWhen: (previous, current) => current is PlaceOrderError,
       listener: (context, state) {
-        if (state is PlaceOrderFailedState) {
-          final error = state.errorMessage.toLowerCase();
+        if (state is PlaceOrderError) {
+          final error = state.message.toLowerCase();
           final isCancelled =
               error.contains('not completed') ||
               error.contains('cancel') ||
@@ -278,19 +277,19 @@ class CheckoutButton extends StatelessWidget {
             title: isCancelled ? l10n.paymentCancelled : l10n.checkoutFailed,
             message: isCancelled
                 ? l10n.paymentWasCancelled
-                : state.errorMessage,
+                : state.message,
             bgColor: redDegree,
             icon: Icons.error_outline,
           );
         }
       },
       buildWhen: (previous, current) {
-        return current is PlaceOrderSuccessState ||
-            current is PlaceOrderLoadingState ||
-            current is PlaceOrderFailedState;
+        return current is PlaceOrderSuccess ||
+            current is PlaceOrderLoading ||
+            current is PlaceOrderError;
       },
       builder: (context, state) {
-        final isLoading = state is PlaceOrderLoadingState;
+        final isLoading = state is PlaceOrderLoading;
 
         return Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 15).h,
@@ -356,15 +355,15 @@ class CheckoutButton extends StatelessWidget {
                   },
             child: Builder(
               builder: (context) {
-                if (state is PlaceOrderLoadingState) {
+                if (state is PlaceOrderLoading) {
                   return CircularProgressIndicator(color: Colors.white);
-                } else if (state is PlaceOrderFailedState) {
+                } else if (state is PlaceOrderError) {
                   return Text(
                     l10n.checkoutFailed,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                   );
-                } else if (state is PlaceOrderSuccessState) {
+                } else if (state is PlaceOrderSuccess) {
                   return Text(
                     l10n.checkoutSuccessful,
                     textAlign: TextAlign.center,

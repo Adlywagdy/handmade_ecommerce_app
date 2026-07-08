@@ -4,54 +4,44 @@ sealed class CartState {}
 
 final class CartInitial extends CartState {}
 
-/* ------------------------------------------- */
+final class CartLoading extends CartState {}
 
-final class GetcartLoadingstate extends CartState {}
-
-final class GetcartSuccessedstate extends CartState {
-  final List<ProductModel> cartproducts;
-
-  GetcartSuccessedstate({required this.cartproducts});
+final class CartSuccess extends CartState {
+  final List<ProductModel> products;
+  CartSuccess({required this.products});
 }
 
-final class GetcartFailedstate extends CartState {
-  final String errorMessage;
-
-  GetcartFailedstate({required this.errorMessage});
+final class CartError extends CartState {
+  final String message;
+  CartError({required this.message});
 }
-/* ------------------------------------------- */
 
-final class AddcartproductLoadingstate extends CartState {}
+final class AddProductLoading extends CartState {}
 
-final class AddcartproductSuccessedstate extends CartState {}
+final class AddProductSuccess extends CartState {}
 
-final class AddcartproductFailedstate extends CartState {
-  final String errorMessage;
-
-  AddcartproductFailedstate({required this.errorMessage});
+final class AddProductError extends CartState {
+  final String message;
+  AddProductError({required this.message});
 }
-/* ------------------------------------------- */
 
-final class DeletecartproductLoadingstate extends CartState {}
+final class DeleteProductLoading extends CartState {}
 
-final class DeletecartproductSuccessedstate extends CartState {}
+final class DeleteProductSuccess extends CartState {}
 
-final class DeletecartproductFailedstate extends CartState {
-  final String errorMessage;
-
-  DeletecartproductFailedstate({required this.errorMessage});
+final class DeleteProductError extends CartState {
+  final String message;
+  DeleteProductError({required this.message});
 }
-/*------------------------------------------- */
 
-final class GetOrderSummaryLoadingState extends CartState {}
+final class OrderSummaryLoading extends CartState {}
 
-final class GetOrderSummarySuccessState extends CartState {
-  final double? subtotalPrice;
-  final double? totalPrice;
-  final double? deliveryFee;
-  final double? discount;
-
-  GetOrderSummarySuccessState({
+final class OrderSummarySuccess extends CartState {
+  final double subtotalPrice;
+  final double totalPrice;
+  final double deliveryFee;
+  final double discount;
+  OrderSummarySuccess({
     required this.subtotalPrice,
     required this.totalPrice,
     required this.deliveryFee,
@@ -59,30 +49,19 @@ final class GetOrderSummarySuccessState extends CartState {
   });
 }
 
-final class GetOrderSummaryFailedState extends CartState {
-  final String errorMessage;
-  GetOrderSummaryFailedState({required this.errorMessage});
+final class OrderSummaryError extends CartState {
+  final String message;
+  OrderSummaryError({required this.message});
 }
 
-/*------------------------------------------- */
-final class GetOrderaddressLoadingState extends CartState {}
+final class OrderAddressLoading extends CartState {}
 
-final class GetOrderaddressSuccessState extends CartState {
-  final AddressModel orderAddress;
-  GetOrderaddressSuccessState({required this.orderAddress});
+final class OrderAddressSuccess extends CartState {
+  final AddressModel address;
+  OrderAddressSuccess({required this.address});
 }
 
-final class GetOrderaddressFailedState extends CartState {
-  final String errorMessage;
-  GetOrderaddressFailedState({required this.errorMessage});
-}
-
-/*------------------------------------------- */
-final class MakePaymentLoadingState extends CartState {}
-
-final class MakePaymentSuccessState extends CartState {}
-
-final class MakePaymentFailedState extends CartState {
-  final String error;
-  MakePaymentFailedState(this.error);
+final class OrderAddressError extends CartState {
+  final String message;
+  OrderAddressError({required this.message});
 }

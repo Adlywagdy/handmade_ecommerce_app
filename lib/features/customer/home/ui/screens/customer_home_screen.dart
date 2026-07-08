@@ -207,17 +207,17 @@ class CustomerHomeScreen extends StatelessWidget {
                 constraints: BoxConstraints(minHeight: 107.h, maxHeight: 110.h),
                 child: BlocBuilder<SearchCubit, SearchState>(
                   buildWhen: (previous, current) {
-                    return current is GetCategoriesLoadingstate ||
-                        current is GetCategoriesSuccessedstate ||
-                        current is GetCategoriesFailedstate;
+                    return current is CategoriesLoading ||
+                        current is CategoriesSuccess ||
+                        current is CategoriesError;
                   },
                   builder: (context, state) {
-                    if (state is GetCategoriesSuccessedstate) {
+                    if (state is CategoriesSuccess) {
                       return HomeCategoriesList();
-                    } else if (state is GetCategoriesFailedstate) {
+                    } else if (state is CategoriesError) {
                       showSnack(
                         title: context.l10n.error,
-                        message: state.errorMessage,
+                        message: state.message,
                       );
                       return SizedBox(height: 100.h);
                     } else {
@@ -254,12 +254,12 @@ class CustomerHomeScreen extends StatelessWidget {
                 constraints: BoxConstraints(minHeight: 395.h, maxHeight: 400.h),
                 child: BlocBuilder<HomeCubit, HomeState>(
                   buildWhen: (previous, current) {
-                    return current is GetFeaturedLoadingstate ||
-                        current is GetFeaturedSuccessedstate ||
-                        current is GetFeaturedFailedstate;
+                    return current is FeaturedLoading ||
+                        current is FeaturedSuccess ||
+                        current is FeaturedError;
                   },
                   builder: (context, state) {
-                    if (state is GetFeaturedSuccessedstate) {
+                    if (state is FeaturedSuccess) {
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: state.products.length,
@@ -286,10 +286,10 @@ class CustomerHomeScreen extends StatelessWidget {
                           );
                         },
                       );
-                    } else if (state is GetFeaturedFailedstate) {
+                    } else if (state is FeaturedError) {
                       showSnack(
                         title: context.l10n.error,
-                        message: state.errorMessage,
+                        message: state.message,
                       );
 
                       return SizedBox(height: 300.h);
@@ -332,12 +332,12 @@ class CustomerHomeScreen extends StatelessWidget {
                 constraints: BoxConstraints(minHeight: 337.h, maxHeight: 343.h),
                 child: BlocBuilder<HomeCubit, HomeState>(
                   buildWhen: (previous, current) {
-                    return current is GetTopRatedLoadingstate ||
-                        current is GetTopRatedSuccessedstate ||
-                        current is GetTopRatedFailedstate;
+                    return current is TopRatedLoading ||
+                        current is TopRatedSuccess ||
+                        current is TopRatedError;
                   },
                   builder: (context, state) {
-                    if (state is GetTopRatedSuccessedstate) {
+                    if (state is TopRatedSuccess) {
                       return ListView.builder(
                         scrollDirection: Axis.horizontal,
                         itemCount: state.products.length,
@@ -364,10 +364,10 @@ class CustomerHomeScreen extends StatelessWidget {
                           );
                         },
                       );
-                    } else if (state is GetTopRatedFailedstate) {
+                    } else if (state is TopRatedError) {
                       showSnack(
                         title: context.l10n.error,
-                        message: state.errorMessage,
+                        message: state.message,
                       );
                       return SizedBox(height: 200.h);
                     } else {

@@ -4,7 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/services/cloudinary_service.dart';
 import '../data/models/category_model.dart';
-import '../data/models/coupon_model.dart';
+import '../../../core/models/coupon_model.dart';
 import '../data/models/next_status_action.dart';
 import '../data/models/orders_model.dart';
 import '../data/models/products_model.dart';
@@ -307,8 +307,9 @@ class AdminCubit extends Cubit<AdminState> {
       };
       if (maxUses != null) data['maxUses'] = maxUses;
       if (minOrderAmount != null) data['minOrderAmount'] = minOrderAmount;
-      data['expiryDate'] =
-          expiryDate != null ? Timestamp.fromDate(expiryDate) : null;
+      data['expiryDate'] = expiryDate != null
+          ? Timestamp.fromDate(expiryDate)
+          : null;
       await _service.updateCoupon(id, data);
       emit(CouponActionSuccess('Coupon updated successfully'));
     } catch (e) {
@@ -486,11 +487,7 @@ class AdminCubit extends Cubit<AdminState> {
   List<CouponModel> _applyCouponSearch(List<CouponModel> list) {
     if (couponsQuery.isEmpty) return list;
     final q = couponsQuery.toLowerCase();
-    return list
-        .where(
-          (c) => c.code.toLowerCase().contains(q),
-        )
-        .toList();
+    return list.where((c) => c.code.toLowerCase().contains(q)).toList();
   }
 
   // Handle next-status transitions for order status.

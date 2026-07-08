@@ -6,7 +6,7 @@ import 'package:handmade_ecommerce_app/core/functions/is_already_exicted_fun.dar
 import 'package:handmade_ecommerce_app/core/functions/orderpayment_functions.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/services/firebase_cart_service.dart';
-import 'package:handmade_ecommerce_app/features/admin/data/models/coupon_model.dart';
+import 'package:handmade_ecommerce_app/core/models/coupon_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
@@ -33,21 +33,19 @@ class CartCubit extends Cubit<CartState> {
   String _appliedCoupon = "";
   List<CouponModel> _coupons = [];
 
-  /* ------------------------------------------- */
   Future<void> getcartProducts() async {
-    emit(GetcartLoadingstate());
+    emit(CartLoading());
     try {
       cartProductsList = await _cartService.getCartProducts();
-      emit(GetcartSuccessedstate(cartproducts: cartProductsList));
+      emit(CartSuccess(products: cartProductsList));
       getOrderSummary(products: cartProductsList);
     } catch (e) {
-      emit(GetcartFailedstate(errorMessage: e.toString()));
+      emit(CartError(message: e.toString()));
     }
   }
 
-  /* ------------------------------------------- */
   Future<void> addCartProducts(ProductModel product) async {
-    emit(AddcartproductLoadingstate());
+    emit(AddProductLoading());
     try {
       final alreadyExists = isItemExictedFun(
         productslist: cartProductsList,
@@ -65,17 +63,16 @@ class CartCubit extends Cubit<CartState> {
           icon: Icons.check_circle_outline,
         );
       }
-      emit(AddcartproductSuccessedstate());
-      emit(GetcartSuccessedstate(cartproducts: cartProductsList));
+      emit(AddProductSuccess());
+      emit(CartSuccess(products: cartProductsList));
       getOrderSummary(products: cartProductsList);
     } catch (e) {
-      emit(AddcartproductFailedstate(errorMessage: e.toString()));
+      emit(AddProductError(message: e.toString()));
     }
   }
 
-  /* ------------------------------------------- */
   Future<void> deleteCartProducts(ProductModel product) async {
-    emit(DeletecartproductLoadingstate());
+    emit(DeleteProductLoading());
     try {
       if (isItemExictedFun(
         productslist: cartProductsList,
@@ -97,14 +94,14 @@ class CartCubit extends Cubit<CartState> {
             icon: CupertinoIcons.delete,
           );
         }
-        emit(DeletecartproductSuccessedstate());
-        emit(GetcartSuccessedstate(cartproducts: cartProductsList));
+        emit(DeleteProductSuccess());
+        emit(CartSuccess(products: cartProductsList));
         getOrderSummary(products: cartProductsList);
       }
     } catch (e) {
-      emit(DeletecartproductFailedstate(errorMessage: e.toString()));
+      emit(DeleteProductError(message: e.toString()));
     }
-  } /*------------------------------------------- */
+  }
 
   Future<void> getOrderSummary({
     required List<ProductModel> products,
@@ -112,7 +109,7 @@ class CartCubit extends Cubit<CartState> {
     double deliveryFee = 0,
     bool showCouponFeedback = false,
   }) async {
-    emit(GetOrderSummaryLoadingState());
+    emit(OrderSummaryLoading());
     try {
       final effectiveCoupon = (coupon ?? _appliedCoupon).trim();
       _appliedCoupon = effectiveCoupon;
@@ -126,171 +123,156 @@ class CartCubit extends Cubit<CartState> {
       );
       final double discount = showCouponFeedback
           ? applyCoupon(effectiveCoupon, _coupons, subtotal: ordersubtotalPrice)
-          : getCouponDiscount(effectiveCoupon, _coupons, subtotal: ordersubtotalPrice);
+          : getCouponDiscount(
+              effectiveCoupon,
+              _coupons,
+              subtotal: ordersubtotalPrice,
+            );
+      final totalPrice = ordersubtotalPrice + deliveryFee - discount;
+
       currentOrderSummary = PaymentDetailsModel(
         subtotalPrice: ordersubtotalPrice,
-        totalPrice: ordersubtotalPrice + deliveryFee - discount,
+        totalPrice: totalPrice,
         deliveryFee: deliveryFee,
         discount: discount,
         paymentMethod: selectedPaymentMethod,
         currency: "EGP",
       );
       emit(
-        GetOrderSummarySuccessState(
+        OrderSummarySuccess(
           subtotalPrice: ordersubtotalPrice,
-          totalPrice: ordersubtotalPrice + deliveryFee - discount,
+          totalPrice: totalPrice,
           deliveryFee: deliveryFee,
           discount: discount,
         ),
       );
     } catch (e) {
-      emit(GetOrderSummaryFailedState(errorMessage: e.toString()));
+      emit(OrderSummaryError(message: e.toString()));
     }
   }
 
-  /*------------------------------------------- */
-  Future<void> getOrderaddress({required AddressModel address}) async {
-    emit(GetOrderaddressLoadingState());
-    try {
-      selectedOrderAddress = address;
-      emit(GetOrderaddressSuccessState(orderAddress: selectedOrderAddress!));
-    } catch (e) {
-      emit(GetOrderaddressFailedState(errorMessage: e.toString()));
-    }
+  void getOrderaddress({required AddressModel address}) {
+    selectedOrderAddress = address;
+    emit(OrderAddressSuccess(address: address));
   }
 
-  /*------------------------------------------- */
   void setOrderPhone(String phone) {
     selectedOrderPhone = phone;
   }
 
-  /*------------------------------------------- */
   Future<void> makePayment(
     PaymentDetailsModel paymentmethoddetails,
     BuildContext context,
   ) async {
-    emit(MakePaymentLoadingState());
+    final manager = PaymobManager();
+    final paymentMethod =
+        paymentmethoddetails.paymentMethod ?? selectedPaymentMethod;
+    final amount = paymentmethoddetails.totalPrice?.round();
 
-    try {
-      final manager = PaymobManager();
-      final paymentMethod =
-          paymentmethoddetails.paymentMethod ?? selectedPaymentMethod;
-      final amount = paymentmethoddetails.totalPrice?.round();
+    if (amount == null) {
+      throw Exception("Payment amount is missing");
+    }
 
-      if (amount == null) {
-        throw Exception("Payment amount is missing");
-      }
+    switch (paymentMethod) {
+      case 'Visa':
+        final paymentKey = await manager.getPaymentKey(
+          amount: amount,
+          currency: "EGP",
+          integrationId: Constants.integrationIdCard,
+        );
 
-      switch (paymentMethod) {
-        case 'Visa':
-          final paymentKey = await manager.getPaymentKey(
-            amount: amount,
-            currency: "EGP",
-            integrationId: Constants.integrationIdCard,
-          );
+        final url =
+            "https://accept.paymob.com/api/acceptance/iframes/${Constants.iframeId}?payment_token=$paymentKey";
 
-          final url =
-              "https://accept.paymob.com/api/acceptance/iframes/${Constants.iframeId}?payment_token=$paymentKey";
+        if (!context.mounted) {
+          throw Exception("Payment screen is no longer available");
+        }
 
-          if (!context.mounted) {
-            throw Exception("Payment screen is no longer available");
-          }
+        final paymentResult = await Navigator.of(context).push<bool>(
+          MaterialPageRoute(builder: (_) => PaymentWebView(paymentUrl: url)),
+        );
 
-          final paymentResult = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(builder: (_) => PaymentWebView(paymentUrl: url)),
-          );
-
-          if (paymentResult != true) {
-            throw Exception("Visa payment was not completed");
-          }
-          break;
-        case 'PayPal':
-          final paypalSuccess = await PayPAlService.makePayPalpayment(
-            context,
-            AmountPaymentModel(
-              total: ((paymentmethoddetails.totalPrice!) / 50).toString(),
-              currency: "USD",
-              details: Details(
-                subtotal: paymentmethoddetails.subtotalPrice.toString(),
-                shipping: paymentmethoddetails.deliveryFee.toString(),
-                shippingDiscount: paymentmethoddetails.discount!.toInt(),
-              ),
+        if (paymentResult != true) {
+          throw Exception("Visa payment was not completed");
+        }
+        break;
+      case 'PayPal':
+        final paypalSuccess = await PayPAlService.makePayPalpayment(
+          context,
+          AmountPaymentModel(
+            total: ((paymentmethoddetails.totalPrice!) / 50).toString(),
+            currency: "USD",
+            details: Details(
+              subtotal: paymentmethoddetails.subtotalPrice.toString(),
+              shipping: paymentmethoddetails.deliveryFee.toString(),
+              shippingDiscount: paymentmethoddetails.discount!.toInt(),
             ),
-            ItemListModel(
-              orderslist: cartProductsList
-                  .map(
-                    (e) => OrderItemModel(
-                      name: e.name,
-                      quantity: e.quantity,
-                      price: e.price.toString(),
-                      currency: "USD",
-                    ),
-                  )
-                  .toList(),
-            ),
+          ),
+          ItemListModel(
+            orderslist: cartProductsList
+                .map(
+                  (e) => OrderItemModel(
+                    name: e.name,
+                    quantity: e.quantity,
+                    price: e.price.toString(),
+                    currency: "USD",
+                  ),
+                )
+                .toList(),
+          ),
+        );
+
+        if (!paypalSuccess) {
+          throw Exception("PayPal payment was not completed");
+        }
+        break;
+      case 'Mobile Wallets':
+        final customerPhone = walletPhonenumber.trim().isNotEmpty
+            ? walletPhonenumber.trim()
+            : BlocProvider.of<CustomerCubit>(context).customerData.phone.trim();
+
+        if (customerPhone.isEmpty) {
+          throw Exception(
+            "Customer phone number is required for wallet payment",
           );
+        }
 
-          if (!paypalSuccess) {
-            throw Exception("PayPal payment was not completed");
-          }
-          break;
-        case 'Mobile Wallets':
-          final customerPhone = walletPhonenumber.trim().isNotEmpty
-              ? walletPhonenumber.trim()
-              : BlocProvider.of<CustomerCubit>(
-                  context,
-                ).customerData.phone.trim();
-
-          if (customerPhone.isEmpty) {
-            throw Exception(
-              "Customer phone number is required for wallet payment",
-            );
-          }
-
-          final phoneRegex = RegExp(r'^(\+201|01)[0-9]{9}$');
-          if (!phoneRegex.hasMatch(customerPhone)) {
-            throw Exception(
-              "Customer phone number is invalid for wallet payment",
-            );
-          }
-
-          final paymentKey = await manager.getPaymentKey(
-            amount: amount,
-            currency: "EGP",
-            integrationId: Constants.integrationIdWallet,
+        final phoneRegex = RegExp(r'^(\+201|01)[0-9]{9}$');
+        if (!phoneRegex.hasMatch(customerPhone)) {
+          throw Exception(
+            "Customer phone number is invalid for wallet payment",
           );
+        }
 
-          final redirectUrl = await manager.payWithWallet(
-            paymentKey: paymentKey,
-            phone: customerPhone,
-          );
+        final paymentKey = await manager.getPaymentKey(
+          amount: amount,
+          currency: "EGP",
+          integrationId: Constants.integrationIdWallet,
+        );
 
-          if (!context.mounted) {
-            throw Exception("Payment screen is no longer available");
-          }
+        final redirectUrl = await manager.payWithWallet(
+          paymentKey: paymentKey,
+          phone: customerPhone,
+        );
 
-          final paymentResult = await Navigator.of(context).push<bool>(
-            MaterialPageRoute(
-              builder: (_) => PaymentWebView(paymentUrl: redirectUrl),
-            ),
-          );
+        if (!context.mounted) {
+          throw Exception("Payment screen is no longer available");
+        }
 
-          if (paymentResult != true) {
-            throw Exception("Wallet payment was not completed");
-          }
-          break;
-        case 'Cash on Delivery':
-          break;
-        default:
-          throw Exception("Unsupported payment method: $paymentMethod");
-      }
+        final paymentResult = await Navigator.of(context).push<bool>(
+          MaterialPageRoute(
+            builder: (_) => PaymentWebView(paymentUrl: redirectUrl),
+          ),
+        );
 
-      emit(MakePaymentSuccessState());
-
-      emit(GetcartSuccessedstate(cartproducts: cartProductsList));
-    } catch (e) {
-      emit(MakePaymentFailedState(e.toString()));
-      rethrow;
+        if (paymentResult != true) {
+          throw Exception("Wallet payment was not completed");
+        }
+        break;
+      case 'Cash on Delivery':
+        break;
+      default:
+        throw Exception("Unsupported payment method: $paymentMethod");
     }
   }
 
@@ -304,6 +286,6 @@ class CartCubit extends Cubit<CartState> {
     selectedOrderPhone = "";
     _appliedCoupon = "";
     _coupons = [];
-    emit(GetcartSuccessedstate(cartproducts: cartProductsList));
+    emit(CartSuccess(products: cartProductsList));
   }
 }

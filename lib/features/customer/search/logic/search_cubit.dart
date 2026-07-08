@@ -12,7 +12,9 @@ class SearchCubit extends Cubit<SearchState> {
   final FirebaseProductService _productService;
 
   CategoryModel? selectedCategory;
-  /* ------------------------------------------- */
+  List<CategoryModel> categoriesList = [];
+  List<ProductModel> searchedproductsList = [];
+  List<ProductModel> filteredproductsList = [];
 
   Future<void> resetSearchState() async {
     searchedproductsList = [];
@@ -21,38 +23,33 @@ class SearchCubit extends Cubit<SearchState> {
     emit(SearchInitial());
   }
 
-  List<CategoryModel> categoriesList = [];
   Future<void> getCategories() async {
-    emit(GetCategoriesLoadingstate());
+    emit(CategoriesLoading());
     try {
       categoriesList = await _productService.getCategories();
-      emit(GetCategoriesSuccessedstate());
+      emit(CategoriesSuccess());
     } catch (e) {
-      emit(GetCategoriesFailedstate(errorMessage: e.toString()));
+      emit(CategoriesError(message: e.toString()));
     }
   }
 
-  /* ------------------------------------------- */
-  List<ProductModel> searchedproductsList = [];
   Future<void> searchproducts({required String productname}) async {
-    emit(SearchProductsLoadingstate());
+    emit(SearchProductsLoading());
     try {
       searchedproductsList = await _productService.searchProducts(productname);
-      emit(SearchProductsSuccessedstate());
+      emit(SearchProductsSuccess());
     } catch (e) {
-      emit(SearchProductsFailedstate(errorMessage: e.toString()));
+      emit(SearchProductsError(message: e.toString()));
     }
   }
 
-  /* ------------------------------------------- */
-  List<ProductModel> filteredproductsList = [];
   Future<void> filterproducts({
     String? categoryname,
     double? minprice,
     double? maxprice,
-    double? rating /* + filter parameters */,
+    double? rating,
   }) async {
-    emit(FilterProductsLoadingstate());
+    emit(FilterProductsLoading());
     try {
       String? resolvedCategoryId;
       if (categoryname != null && categoryname.trim().isNotEmpty) {
@@ -74,9 +71,9 @@ class SearchCubit extends Cubit<SearchState> {
         maxPrice: maxprice,
         minRating: rating,
       );
-      emit(FilterProductsSuccessedstate());
+      emit(FilterProductsSuccess());
     } catch (e) {
-      emit(FilterProductsFailedstate(errorMessage: e.toString()));
+      emit(FilterProductsError(message: e.toString()));
     }
   }
 }

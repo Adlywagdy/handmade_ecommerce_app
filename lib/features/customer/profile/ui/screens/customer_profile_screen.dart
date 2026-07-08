@@ -162,7 +162,7 @@ class CustomerProfilesScreen extends StatelessWidget {
       ),
       body: BlocListener<CustomerCubit, CustomerState>(
         listener: (context, state) {
-          if (state is ImageUploadLoadingstate) {
+          if (state is ImageUploadLoading) {
             showDialog(
               context: context,
               barrierDismissible: false,
@@ -170,7 +170,7 @@ class CustomerProfilesScreen extends StatelessWidget {
                 child: CircularProgressIndicator(color: commonColor),
               ),
             );
-          } else if (state is ImageUploadSuccessedstate) {
+          } else if (state is ImageUploadSuccess) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               const SnackBar(
@@ -178,11 +178,11 @@ class CustomerProfilesScreen extends StatelessWidget {
                 backgroundColor: Colors.green,
               ),
             );
-          } else if (state is ImageUploadFailedstate) {
+          } else if (state is ImageUploadError) {
             Navigator.of(context).pop();
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
-                content: Text(state.errorMessage),
+                content: Text(state.message),
                 backgroundColor: redDegree,
               ),
             );
@@ -193,12 +193,12 @@ class CustomerProfilesScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
             child: BlocBuilder<CustomerCubit, CustomerState>(
               buildWhen: (previous, current) {
-                return current is GetCustomerdataLoadingstate ||
-                    current is GetCustomerdataSuccessedstate ||
-                    current is GetCustomerdataFailedstate;
+                return current is CustomerDataLoading ||
+                    current is CustomerDataSuccess ||
+                    current is CustomerDataError;
               },
               builder: (context, state) {
-                if (state is GetCustomerdataLoadingstate) {
+                if (state is CustomerDataLoading) {
                   return Padding(
                     padding: EdgeInsets.only(top: 80.h),
                     child: const Center(
@@ -207,12 +207,12 @@ class CustomerProfilesScreen extends StatelessWidget {
                   );
                 }
 
-                if (state is GetCustomerdataFailedstate) {
+                if (state is CustomerDataError) {
                   return Padding(
                     padding: EdgeInsets.only(top: 80.h),
                     child: Center(
                       child: Text(
-                        state.errorMessage,
+                        state.message,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: redDegree,

@@ -5,14 +5,13 @@ class PaymentDetailsModel {
   final double? deliveryFee;
   final double? discount;
   final String? currency;
-  final String? imagePath;
+
   PaymentDetailsModel({
     this.paymentMethod,
     this.subtotalPrice,
     this.totalPrice,
     this.deliveryFee,
     this.discount = 0,
-    this.imagePath,
     this.currency = "USD",
   });
 
@@ -23,7 +22,6 @@ class PaymentDetailsModel {
       totalPrice: totalPrice,
       deliveryFee: deliveryFee,
       discount: discount,
-      imagePath: imagePath,
       currency: currency,
     );
   }
@@ -35,7 +33,6 @@ class PaymentDetailsModel {
       totalPrice: (map['totalPrice'] ?? map['totalAmount'] ?? 0).toDouble(),
       deliveryFee: (map['deliveryFee'] ?? 0).toDouble(),
       discount: (map['discount'] ?? 0).toDouble(),
-      imagePath: map['imagePath']?.toString(),
       currency: map['currency']?.toString() ?? 'USD',
     );
   }
@@ -48,7 +45,6 @@ class PaymentDetailsModel {
       'totalAmount': totalPrice,
       'deliveryFee': deliveryFee,
       'discount': discount,
-      'imagePath': imagePath,
       'currency': currency,
     };
   }

@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../models/category_model.dart';
-import '../models/coupon_model.dart';
+import '../../../../core/models/coupon_model.dart';
 import '../models/orders_model.dart';
 import '../models/products_model.dart';
 import '../models/sellers_model.dart';
