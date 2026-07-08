@@ -75,6 +75,9 @@ class _SellerAddEditProductScreenState
 
     try {
       final cubit = context.read<SellerCubit>();
+
+      final existingImageUrls = _images.where((img) => img.startsWith('http')).toList();
+
       final product = SellerProductModel(
         id: widget.product.id,
         name: _nameController.text.trim(),
@@ -82,11 +85,16 @@ class _SellerAddEditProductScreenState
         price: double.tryParse(_priceController.text) ?? 0,
         stock: stock,
         category: _selectedCategory ?? 'Ceramics',
-        images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
+        images: widget.product.images,
         isActive: stock > 0,
         status: status,
       );
-      await cubit.updateProduct(product);
+
+      await cubit.updateProductWithImages(
+        product: product,
+        newImageFiles: _newImages,
+        existingImageUrls: existingImageUrls,
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(

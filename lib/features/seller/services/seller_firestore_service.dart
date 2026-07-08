@@ -1,14 +1,11 @@
-import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
 import '../models/seller_model.dart';
 
 class SellerFirestoreService {
   final FirebaseFirestore _db = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   String get currentSellerId {
     final uid = _auth.currentUser?.uid;
@@ -51,24 +48,6 @@ class SellerFirestoreService {
           .map((doc) => SellerProductModel.fromMap(doc.data(), doc.id))
           .toList();
     });
-  }
-
-  /// Upload images to Firebase Storage and return the download URLs
-  Future<List<String>> uploadProductImages(List<File> images) async {
-    List<String> downloadUrls = [];
-    try {
-      for (var image in images) {
-        String fileName = '${DateTime.now().millisecondsSinceEpoch}_${image.path.split('/').last}';
-        Reference ref = _storage.ref().child('product_images/$currentSellerId/$fileName');
-        UploadTask uploadTask = ref.putFile(image);
-        TaskSnapshot snapshot = await uploadTask;
-        String downloadUrl = await snapshot.ref.getDownloadURL();
-        downloadUrls.add(downloadUrl);
-      }
-      return downloadUrls;
-    } catch (e) {
-      throw Exception('Failed to upload images: $e');
-    }
   }
 
   /// Add a new product
