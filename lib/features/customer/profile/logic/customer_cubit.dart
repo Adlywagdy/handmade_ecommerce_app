@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/cloudinary_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/data/firebase_customer_service.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
@@ -6,11 +9,15 @@ import 'package:handmade_ecommerce_app/features/customer/home/data/customer_mode
 part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
-  CustomerCubit({FirebaseCustomerService? customerService})
-    : _customerService = customerService ?? FirebaseCustomerService(),
-      super(CustomerInitial());
+  CustomerCubit({
+    FirebaseCustomerService? customerService,
+    CloudinaryService? cloudinaryService,
+  })  : _customerService = customerService ?? FirebaseCustomerService(),
+        _cloudinaryService = cloudinaryService ?? CloudinaryService(),
+        super(CustomerInitial());
 
   final FirebaseCustomerService _customerService;
+  final CloudinaryService _cloudinaryService;
   CustomerModel customerData = CustomerModel.empty();
 
   Future<void> getCustomerdata() async {
@@ -58,6 +65,34 @@ class CustomerCubit extends Cubit<CustomerState> {
       await getCustomerdata();
     } catch (e) {
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+    }
+  }
+
+  Future<void> uploadAndSaveProfileImage(File imageFile) async {
+    emit(ImageUploadLoadingstate());
+    try {
+      final imageUrl = await _cloudinaryService.uploadImage(imageFile);
+
+      await _customerService.updateCustomerProfile(
+        name: customerData.name,
+        phone: customerData.phone,
+        image: imageUrl,
+      );
+
+      customerData = CustomerModel(
+        id: customerData.id,
+        name: customerData.name,
+        email: customerData.email,
+        phone: customerData.phone,
+        role: customerData.role,
+        provider: customerData.provider,
+        image: imageUrl,
+        address: customerData.address,
+      );
+
+      emit(ImageUploadSuccessedstate(customer: customerData));
+    } catch (e) {
+      emit(ImageUploadFailedstate(errorMessage: e.toString()));
     }
   }
 }

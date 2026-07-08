@@ -13,9 +13,14 @@ import 'package:handmade_ecommerce_app/features/customer/home/data/customer_mode
 import 'package:image_picker/image_picker.dart';
 
 class CustomProfilePicture extends StatefulWidget {
-  const CustomProfilePicture({super.key, required this.customer});
+  const CustomProfilePicture({
+    super.key,
+    required this.customer,
+    this.onImagePicked,
+  });
 
   final CustomerModel customer;
+  final ValueChanged<XFile>? onImagePicked;
 
   @override
   State<CustomProfilePicture> createState() => _CustomProfilePictureState();
@@ -73,6 +78,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
       if (pickedImage == null) return;
 
       await _setSelectedImage(pickedImage);
+      widget.onImagePicked?.call(pickedImage);
     } on PlatformException {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
@@ -91,7 +97,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         return ClipOval(
           child: Image.memory(
             _webImageBytes!,
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             width: 150.r,
             height: 150.r,
           ),
@@ -102,7 +108,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         return ClipOval(
           child: Image.file(
             File(_selectedImage!.path),
-            fit: BoxFit.cover,
+            fit: BoxFit.fitWidth,
             width: 150.r,
             height: 150.r,
           ),
@@ -117,7 +123,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         'assets/images/unknown_user_icon.svg',
         width: 100.r,
         height: 100.r,
-        fit: BoxFit.cover,
+        fit: BoxFit.fitWidth,
       );
     }
 
@@ -126,11 +132,13 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         ? NetworkImage(imagePath)
         : AssetImage(imagePath);
 
-    return Image(
-      image: imageProvider,
-      fit: BoxFit.cover,
-      width: 150.r,
-      height: 150.r,
+    return ClipOval(
+      child: Image(
+        image: imageProvider,
+        fit: BoxFit.cover,
+        width: 150.r,
+        height: 150.r,
+      ),
     );
   }
 

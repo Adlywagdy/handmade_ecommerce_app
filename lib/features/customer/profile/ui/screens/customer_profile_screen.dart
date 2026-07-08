@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -122,7 +123,10 @@ class CustomerProfilesScreen extends StatelessWidget {
                 HiveHelper.clearEmailBox();
                 Navigator.of(context).pop(true);
               },
-              child: Text(context.l10n.logout, style: TextStyle(color: redDegree)),
+              child: Text(
+                context.l10n.logout,
+                style: TextStyle(color: redDegree),
+              ),
             ),
           ],
         );
@@ -156,117 +160,160 @@ class CustomerProfilesScreen extends StatelessWidget {
           style: AppTextStyles.t_18w700,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-          child: BlocBuilder<CustomerCubit, CustomerState>(
-            buildWhen: (previous, current) {
-              return current is GetCustomerdataLoadingstate ||
-                  current is GetCustomerdataSuccessedstate ||
-                  current is GetCustomerdataFailedstate;
-            },
-            builder: (context, state) {
-              if (state is GetCustomerdataLoadingstate) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 80.h),
-                  child: const Center(
-                    child: CircularProgressIndicator(color: commonColor),
-                  ),
-                );
-              }
-
-              if (state is GetCustomerdataFailedstate) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 80.h),
-                  child: Center(
-                    child: Text(
-                      state.errorMessage,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.t_14w500.copyWith(color: redDegree),
+      body: BlocListener<CustomerCubit, CustomerState>(
+        listener: (context, state) {
+          if (state is ImageUploadLoadingstate) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(
+                child: CircularProgressIndicator(color: commonColor),
+              ),
+            );
+          } else if (state is ImageUploadSuccessedstate) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Profile picture updated'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state is ImageUploadFailedstate) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.errorMessage),
+                backgroundColor: redDegree,
+              ),
+            );
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
+            child: BlocBuilder<CustomerCubit, CustomerState>(
+              buildWhen: (previous, current) {
+                return current is GetCustomerdataLoadingstate ||
+                    current is GetCustomerdataSuccessedstate ||
+                    current is GetCustomerdataFailedstate;
+              },
+              builder: (context, state) {
+                if (state is GetCustomerdataLoadingstate) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: 80.h),
+                    child: const Center(
+                      child: CircularProgressIndicator(color: commonColor),
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              final customer = context.read<CustomerCubit>().customerData;
+                if (state is GetCustomerdataFailedstate) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: 80.h),
+                    child: Center(
+                      child: Text(
+                        state.errorMessage,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: redDegree,
+                        ),
+                      ),
+                    ),
+                  );
+                }
 
-              return Column(
-                spacing: 16.h,
-                children: [
-                  SizedBox(height: 16.h),
-                  UserProfileDetails(customer: customer),
-                  BecomeSellerCard(),
-                  Column(
-                    children: List.generate(customerDetails(context).length, (index) {
-                      final title = customerDetails(context)[index]['title'] as String;
-                      final trailing = customerDetails(context)[index]['trailing'] as Widget?;
-                      return CustomerDetailsItem(
-                        item: customerDetails(context)[index],
-                        trailing: trailing,
-                        onTap: () {
-                          if (title == context.l10n.editProfile) {
-                            _showEditBottomSheet(context, customer);
-                            return;
-                          }
+                final customer = context.read<CustomerCubit>().customerData;
 
-                          if (title == context.l10n.myOrders) {
-                            _openTab(3);
-                            return;
-                          }
+                return Column(
+                  spacing: 16.h,
+                  children: [
+                    SizedBox(height: 16.h),
+                    UserProfileDetails(
+                      customer: customer,
+                      onImagePicked: (image) {
+                        context.read<CustomerCubit>().uploadAndSaveProfileImage(
+                          File(image.path),
+                        );
+                      },
+                    ),
+                    BecomeSellerCard(),
+                    Column(
+                      children: List.generate(customerDetails(context).length, (
+                        index,
+                      ) {
+                        final title =
+                            customerDetails(context)[index]['title'] as String;
+                        final trailing =
+                            customerDetails(context)[index]['trailing']
+                                as Widget?;
+                        return CustomerDetailsItem(
+                          item: customerDetails(context)[index],
+                          trailing: trailing,
+                          onTap: () {
+                            if (title == context.l10n.editProfile) {
+                              _showEditBottomSheet(context, customer);
+                              return;
+                            }
 
-                          if (title == context.l10n.favorites) {
-                            _openTab(1);
-                            return;
-                          }
+                            if (title == context.l10n.myOrders) {
+                              _openTab(3);
+                              return;
+                            }
 
-                          if (title == context.l10n.settings) {
-                            context.read<CustomerCubit>().getNotifications();
-                            Get.toNamed(AppRoutes.customerNotifications);
-                          }
+                            if (title == context.l10n.favorites) {
+                              _openTab(1);
+                              return;
+                            }
 
-                          if (title == context.l10n.language) {
-                            // Language is handled by ChangeLanguageWidget
-                          }
-                        },
-                      );
-                    }),
-                  ),
-                  CustomElevatedButton(
-                    buttonheight: 70.h,
-                    onPressed: () => _confirmLogout(context),
-                    bordercolor: redDegree.withValues(alpha: .1),
-                    buttoncolor: redDegree.withValues(alpha: .07),
-                    child: Row(
-                      children: [
-                        Card(
-                          elevation: 0,
-                          shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadiusGeometry.circular(20.r),
-                          ),
-                          color: redDegree.withValues(alpha: .1),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0).h,
-                            child: Icon(
-                              Icons.logout,
-                              color: redDegree,
-                              size: 25.r,
+                            if (title == context.l10n.settings) {
+                              context.read<CustomerCubit>().getNotifications();
+                              Get.toNamed(AppRoutes.customerNotifications);
+                            }
+
+                            if (title == context.l10n.language) {
+                              // Language is handled by ChangeLanguageWidget
+                            }
+                          },
+                        );
+                      }),
+                    ),
+                    CustomElevatedButton(
+                      buttonheight: 70.h,
+                      onPressed: () => _confirmLogout(context),
+                      bordercolor: redDegree.withValues(alpha: .1),
+                      buttoncolor: redDegree.withValues(alpha: .07),
+                      child: Row(
+                        children: [
+                          Card(
+                            elevation: 0,
+                            shape: ContinuousRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(20.r),
+                            ),
+                            color: redDegree.withValues(alpha: .1),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0).h,
+                              child: Icon(
+                                Icons.logout,
+                                color: redDegree,
+                                size: 25.r,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          context.l10n.logout,
-                          style: AppTextStyles.t_16w600.copyWith(
-                            color: redDegree,
+                          SizedBox(width: 8.w),
+                          Text(
+                            context.l10n.logout,
+                            style: AppTextStyles.t_16w600.copyWith(
+                              color: redDegree,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
-                ],
-              );
-            },
+                    SizedBox(height: 16.h),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),

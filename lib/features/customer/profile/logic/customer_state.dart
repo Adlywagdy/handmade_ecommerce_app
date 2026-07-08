@@ -31,3 +31,17 @@ final class NotificationsFailedstate extends CustomerState {
 
   NotificationsFailedstate({required this.errorMessage});
 }
+
+/* ------------------------------------------- */
+final class ImageUploadLoadingstate extends CustomerState {}
+
+final class ImageUploadSuccessedstate extends CustomerState {
+  final CustomerModel customer;
+  ImageUploadSuccessedstate({required this.customer});
+}
+
+final class ImageUploadFailedstate extends CustomerState {
+  final String errorMessage;
+
+  ImageUploadFailedstate({required this.errorMessage});
+}
