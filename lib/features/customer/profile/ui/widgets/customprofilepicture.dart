@@ -97,7 +97,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         return ClipOval(
           child: Image.memory(
             _webImageBytes!,
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             width: 150.r,
             height: 150.r,
           ),
@@ -108,7 +108,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         return ClipOval(
           child: Image.file(
             File(_selectedImage!.path),
-            fit: BoxFit.fitWidth,
+            fit: BoxFit.cover,
             width: 150.r,
             height: 150.r,
           ),
@@ -119,11 +119,13 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
     final String? imagePath = widget.customer.image;
 
     if (imagePath == null || imagePath.endsWith('.svg')) {
-      return SvgPicture.asset(
-        'assets/images/unknown_user_icon.svg',
-        width: 100.r,
-        height: 100.r,
-        fit: BoxFit.fitWidth,
+      return ClipOval(
+        child: SvgPicture.asset(
+          'assets/images/unknown_user_icon.svg',
+          width: 150.r,
+          height: 150.r,
+          fit: BoxFit.cover,
+        ),
       );
     }
 
