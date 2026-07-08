@@ -1272,6 +1272,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get mobileWallets => 'Mobile Wallets';
 
   @override
+  String get cashOnDelivery => 'Cash on Delivery';
+
+  @override
   String get pleaseEnterPromoCode => 'Please enter a promo code';
 
   @override
@@ -2228,4 +2231,74 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get selNoProductsFound => 'No products found';
+
+  @override
+  String get admCategories => 'Categories';
+
+  @override
+  String get admSearchCategoriesHint => 'Search categories...';
+
+  @override
+  String get admNoCategoriesFound => 'No categories yet';
+
+  @override
+  String get admTapToAddCategory => 'Tap + to add your first category';
+
+  @override
+  String get admInactive => 'Inactive';
+
+  @override
+  String get admDeleteCategory => 'Delete Category';
+
+  @override
+  String admDeleteCategoryConfirm(String name) {
+    return 'Delete \"$name\"?';
+  }
+
+  @override
+  String get admCategoryDeleted => 'Category deleted successfully';
+
+  @override
+  String get admCategoryAdded => 'Category added successfully';
+
+  @override
+  String get admCategoryUpdated => 'Category updated successfully';
+
+  @override
+  String get admManageCategories => 'Manage Categories';
+
+  @override
+  String admCategoriesCount(int count) {
+    return '$count Categories';
+  }
+
+  @override
+  String get admAddCategory => 'Add Category';
+
+  @override
+  String get admEditCategory => 'Edit Category';
+
+  @override
+  String get admCategoryNameEN => 'Category Name (English)';
+
+  @override
+  String get admCategoryNameAR => 'Category Name (Arabic)';
+
+  @override
+  String get admCategoryImage => 'Category Image';
+
+  @override
+  String get admTapToPickImage => 'Tap to pick image';
+
+  @override
+  String get admPleaseSelectImage => 'Please select a category image';
+
+  @override
+  String get admDisplayOrder => 'Display Order';
+
+  @override
+  String get admEnglishNameRequired => 'English name is required';
+
+  @override
+  String get admArabicNameRequired => 'Arabic name is required';
 }

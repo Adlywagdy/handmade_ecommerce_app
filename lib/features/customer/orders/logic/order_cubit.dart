@@ -6,7 +6,7 @@ import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations
 import 'package:handmade_ecommerce_app/features/customer/orders/data/service/customer_order_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/notifications/services/notification_generator.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/services/notification_generator.dart';
 
 part 'order_state.dart';
 
@@ -85,7 +85,10 @@ class OrderCubit extends Cubit<OrderState> {
           );
         }
       }
-      showSnack(title: AppLocalizations.of(Get.context!)!.success, message: AppLocalizations.of(Get.context!)!.orderPlacedSuccessfully);
+      showSnack(
+        title: AppLocalizations.of(Get.context!)!.success,
+        message: AppLocalizations.of(Get.context!)!.orderPlacedSuccessfully,
+      );
       emit(PlaceOrderSuccessState());
       await cartCubit.clearCart();
     } catch (e) {

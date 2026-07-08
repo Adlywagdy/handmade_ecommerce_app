@@ -2486,6 +2486,12 @@ abstract class AppLocalizations {
   /// **'Mobile Wallets'**
   String get mobileWallets;
 
+  /// Payment method name for cash on delivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Cash on Delivery'**
+  String get cashOnDelivery;
+
   /// Snackbar message when promo code field is empty.
   ///
   /// In en, this message translates to:
@@ -4219,6 +4225,138 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'No products found'**
   String get selNoProductsFound;
+
+  /// AppBar title for categories management screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Categories'**
+  String get admCategories;
+
+  /// Hint text for categories search bar.
+  ///
+  /// In en, this message translates to:
+  /// **'Search categories...'**
+  String get admSearchCategoriesHint;
+
+  /// Empty state text when no categories exist.
+  ///
+  /// In en, this message translates to:
+  /// **'No categories yet'**
+  String get admNoCategoriesFound;
+
+  /// Subtitle for empty categories state.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap + to add your first category'**
+  String get admTapToAddCategory;
+
+  /// Label for inactive status.
+  ///
+  /// In en, this message translates to:
+  /// **'Inactive'**
+  String get admInactive;
+
+  /// Title for delete category confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Category'**
+  String get admDeleteCategory;
+
+  /// Content for delete category confirmation dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete \"{name}\"?'**
+  String admDeleteCategoryConfirm(String name);
+
+  /// Snackbar message after category deletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Category deleted successfully'**
+  String get admCategoryDeleted;
+
+  /// Snackbar message after adding a category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category added successfully'**
+  String get admCategoryAdded;
+
+  /// Snackbar message after updating a category.
+  ///
+  /// In en, this message translates to:
+  /// **'Category updated successfully'**
+  String get admCategoryUpdated;
+
+  /// Subtitle for manage categories action card.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Categories'**
+  String get admManageCategories;
+
+  /// Title for manage categories action card.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} Categories'**
+  String admCategoriesCount(int count);
+
+  /// Title for add category bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Add Category'**
+  String get admAddCategory;
+
+  /// Title for edit category bottom sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Category'**
+  String get admEditCategory;
+
+  /// Label for English category name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Name (English)'**
+  String get admCategoryNameEN;
+
+  /// Label for Arabic category name field.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Name (Arabic)'**
+  String get admCategoryNameAR;
+
+  /// Label for category image picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Category Image'**
+  String get admCategoryImage;
+
+  /// Placeholder text for category image picker.
+  ///
+  /// In en, this message translates to:
+  /// **'Tap to pick image'**
+  String get admTapToPickImage;
+
+  /// Validation message when no image is selected.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category image'**
+  String get admPleaseSelectImage;
+
+  /// Label for display order field.
+  ///
+  /// In en, this message translates to:
+  /// **'Display Order'**
+  String get admDisplayOrder;
+
+  /// Validation message for empty English name.
+  ///
+  /// In en, this message translates to:
+  /// **'English name is required'**
+  String get admEnglishNameRequired;
+
+  /// Validation message for empty Arabic name.
+  ///
+  /// In en, this message translates to:
+  /// **'Arabic name is required'**
+  String get admArabicNameRequired;
 }
 
 class _AppLocalizationsDelegate

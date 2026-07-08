@@ -32,6 +32,7 @@ class _PaymentsMethodsListState extends State<PaymentsMethodsList> {
     final l10n = context.l10n;
     if (method == "Visa") return l10n.visa;
     if (method == "PayPal") return l10n.paypal;
+    if (method == "Cash on Delivery") return l10n.cashOnDelivery;
     return l10n.mobileWallets;
   }
 
@@ -157,4 +158,5 @@ final List<Map<String, String>> _paymentListData = [
     "paymentMethod": "Mobile Wallets",
     "image": "assets/images/mobile_wallet.png",
   },
+  {"paymentMethod": "Cash on Delivery", "image": "assets/images/COD.png"},
 ];

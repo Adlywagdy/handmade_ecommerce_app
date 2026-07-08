@@ -1499,6 +1499,10 @@
   "@mobileWallets": {
     "description": "Payment method name for mobile wallets."
   },
+  "cashOnDelivery": "الدفع عند الاستلام",
+  "@cashOnDelivery": {
+    "description": "Payment method name for cash on delivery."
+  },
   "pleaseEnterPromoCode": "يرجى إدخال رمز العرض",
   "@pleaseEnterPromoCode": {
     "description": "Snackbar message when promo code field is empty."
@@ -2413,5 +2417,105 @@
   "selNoProductsFound": "لم يتم العثور على منتجات",
   "@selNoProductsFound": {
     "description": "Empty state text when no products found."
+  },
+  "admCategories": "الأقسام",
+  "@admCategories": {
+    "description": "AppBar title for categories management screen."
+  },
+  "admSearchCategoriesHint": "بحث في الأقسام...",
+  "@admSearchCategoriesHint": {
+    "description": "Hint text for categories search bar."
+  },
+  "admNoCategoriesFound": "لا توجد أقسام بعد",
+  "@admNoCategoriesFound": {
+    "description": "Empty state text when no categories exist."
+  },
+  "admTapToAddCategory": "اضغط + لإضافة أول قسم",
+  "@admTapToAddCategory": {
+    "description": "Subtitle for empty categories state."
+  },
+  "admInactive": "غير نشط",
+  "@admInactive": {
+    "description": "Label for inactive status."
+  },
+  "admDeleteCategory": "حذف القسم",
+  "@admDeleteCategory": {
+    "description": "Title for delete category confirmation dialog."
+  },
+  "admDeleteCategoryConfirm": "حذف \"{name}\"؟",
+  "@admDeleteCategoryConfirm": {
+    "description": "Content for delete category confirmation dialog.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Electronics"
+      }
+    }
+  },
+  "admCategoryDeleted": "تم حذف القسم بنجاح",
+  "@admCategoryDeleted": {
+    "description": "Snackbar message after category deletion."
+  },
+  "admCategoryAdded": "تمت إضافة القسم بنجاح",
+  "@admCategoryAdded": {
+    "description": "Snackbar message after adding a category."
+  },
+  "admCategoryUpdated": "تم تحديث القسم بنجاح",
+  "@admCategoryUpdated": {
+    "description": "Snackbar message after updating a category."
+  },
+  "admManageCategories": "إدارة الأقسام",
+  "@admManageCategories": {
+    "description": "Subtitle for manage categories action card."
+  },
+  "admCategoriesCount": "{count} أقسام",
+  "@admCategoriesCount": {
+    "description": "Title for manage categories action card.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "admAddCategory": "إضافة قسم",
+  "@admAddCategory": {
+    "description": "Title for add category bottom sheet."
+  },
+  "admEditCategory": "تعديل القسم",
+  "@admEditCategory": {
+    "description": "Title for edit category bottom sheet."
+  },
+  "admCategoryNameEN": "اسم القسم (إنجليزي)",
+  "@admCategoryNameEN": {
+    "description": "Label for English category name field."
+  },
+  "admCategoryNameAR": "اسم القسم (عربي)",
+  "@admCategoryNameAR": {
+    "description": "Label for Arabic category name field."
+  },
+  "admCategoryImage": "صورة القسم",
+  "@admCategoryImage": {
+    "description": "Label for category image picker."
+  },
+  "admTapToPickImage": "اضغط لاختيار صورة",
+  "@admTapToPickImage": {
+    "description": "Placeholder text for category image picker."
+  },
+  "admPleaseSelectImage": "يرجى اختيار صورة للقسم",
+  "@admPleaseSelectImage": {
+    "description": "Validation message when no image is selected."
+  },
+  "admDisplayOrder": "ترتيب العرض",
+  "@admDisplayOrder": {
+    "description": "Label for display order field."
+  },
+  "admEnglishNameRequired": "الاسم الإنجليزي مطلوب",
+  "@admEnglishNameRequired": {
+    "description": "Validation message for empty English name."
+  },
+  "admArabicNameRequired": "الاسم العربي مطلوب",
+  "@admArabicNameRequired": {
+    "description": "Validation message for empty Arabic name."
   }
 }

@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
-import 'package:handmade_ecommerce_app/features/admin/presentation/screens/admin_bottom_bar/admin_bottom_bar.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/forget_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/login_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/register_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/reset_password_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/presentation/screens/verify_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/admin/ui/screens/admin_bottom_bar/admin_bottom_bar.dart';
+import 'package:handmade_ecommerce_app/features/admin/ui/screens/categories/categories_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/ui/screens/forget_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/ui/screens/login_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/ui/screens/register_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/ui/screens/reset_password_screen.dart';
+import 'package:handmade_ecommerce_app/features/auth/ui/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
@@ -19,23 +20,23 @@ import 'package:handmade_ecommerce_app/features/customer/product_details/ui/scre
 import 'package:handmade_ecommerce_app/features/customer/search/ui/screens/customer_search_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/shop_details/ui/screens/customer_shop_details_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/ui/screens/customer_writereview_screen.dart';
-import 'package:handmade_ecommerce_app/features/notifications/presentation/screens/notifications_screen.dart';
+import 'package:handmade_ecommerce_app/features/notifications/ui/screens/notifications_screen.dart';
 
-import 'package:handmade_ecommerce_app/features/onboarding/presentation/screens/onboarding_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_product_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_bottom_nav.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_pending_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_registration_screen.dart';
-import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
+import 'package:handmade_ecommerce_app/features/onboarding/ui/onboarding_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_add_edit_product_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_add_product_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_bottom_nav.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_manage_products_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_orders_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_pending_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/ui/screens/seller_registration_screen.dart';
+import 'package:handmade_ecommerce_app/features/seller/data/models/seller_model.dart';
 
-import '../../features/admin/presentation/screens/dashboard/dashboard_screen.dart';
-import '../../features/admin/presentation/screens/orders_screen/orders_screen.dart';
-import '../../features/admin/presentation/screens/products/products_screen.dart';
-import '../../features/admin/presentation/screens/sellers/sellers_screen.dart';
-import '../../features/admin/presentation/screens/settings/settings_screen.dart';
+import '../../features/admin/ui/screens/dashboard/dashboard_screen.dart';
+import '../../features/admin/ui/screens/orders_screen/orders_screen.dart';
+import '../../features/admin/ui/screens/products/products_screen.dart';
+import '../../features/admin/ui/screens/sellers/sellers_screen.dart';
+import '../../features/admin/ui/screens/settings/settings_screen.dart';
 
 class AppPages {
   static final List<GetPage<dynamic>> pages = [
@@ -221,6 +222,10 @@ class AppPages {
     GetPage(
       name: AppRoutes.adminSettings,
       page: () => const AdminSettingsScreen(),
+    ),
+    GetPage(
+      name: AppRoutes.adminCategories,
+      page: () => const AdminCategoriesScreen(),
     ),
   ];
 }

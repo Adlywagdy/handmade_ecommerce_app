@@ -267,6 +267,8 @@ class CartCubit extends Cubit<CartState> {
             throw Exception("Wallet payment was not completed");
           }
           break;
+        case 'Cash on Delivery':
+          break;
         default:
           throw Exception("Unsupported payment method: $paymentMethod");
       }
