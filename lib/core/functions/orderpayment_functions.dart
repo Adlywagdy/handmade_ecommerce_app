@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/models/coupon_model.dart';
 
 double calculateOrdersubTotalPrice({required List<ProductModel> cartproducts}) {
   return cartproducts.fold(
@@ -10,31 +11,59 @@ double calculateOrdersubTotalPrice({required List<ProductModel> cartproducts}) {
   );
 }
 
-const Map<String, double> _coupons = {
-  'SAVE20': 20,
-  'DISCOUNT10': 10,
-  'ADLY': 30,
-  'WELCOME15': 15,
-  'SUMMER25': 25,
-};
-
 String _normalizeCoupon(String coupon) => coupon.trim().toUpperCase();
 
-bool isValidCoupon(String coupon) {
+CouponModel? findCoupon(String coupon, List<CouponModel> coupons) {
   final normalizedCoupon = _normalizeCoupon(coupon);
-  return normalizedCoupon.isNotEmpty && _coupons.containsKey(normalizedCoupon);
+  if (normalizedCoupon.isEmpty) return null;
+  for (final c in coupons) {
+    if (c.code.toUpperCase() == normalizedCoupon) return c;
+  }
+  return null;
 }
 
-double getCouponDiscount(String coupon) {
-  final normalizedCoupon = _normalizeCoupon(coupon);
-  if (!isValidCoupon(normalizedCoupon)) return 0;
-  return _coupons[normalizedCoupon] ?? 0;
+bool isValidCoupon(String coupon, List<CouponModel> coupons) {
+  final found = findCoupon(coupon, coupons);
+  return found != null && found.isValid;
 }
 
-double applyCoupon(String coupon) {
+double getCouponDiscount(
+  String coupon,
+  List<CouponModel> coupons, {
+  required double subtotal,
+}) {
+  final found = findCoupon(coupon, coupons);
+  if (found == null || !found.isValid) return 0;
+
+  if (subtotal < found.minOrderAmount) return 0;
+
+  if (found.discountType == DiscountType.percentage) {
+    return subtotal * (found.discountValue / 100);
+  }
+  return found.discountValue;
+}
+
+double applyCoupon(
+  String coupon,
+  List<CouponModel> coupons, {
+  required double subtotal,
+}) {
   final normalizedCoupon = _normalizeCoupon(coupon);
-  final discount = getCouponDiscount(normalizedCoupon);
-  if (discount > 0) {
+  final found = findCoupon(coupon, coupons);
+
+  if (found != null && found.isValid) {
+    if (subtotal < found.minOrderAmount) {
+      showSnack(
+        title: "Minimum not met",
+        message:
+            "Minimum order ${found.minOrderAmount.toStringAsFixed(0)} EGP required.",
+        bgColor: Colors.orange,
+        icon: Icons.info_outline,
+      );
+      return 0;
+    }
+
+    final discount = getCouponDiscount(coupon, coupons, subtotal: subtotal);
     showSnack(
       title: "Applied coupon",
       message: "Coupon $normalizedCoupon has been applied successfully.",

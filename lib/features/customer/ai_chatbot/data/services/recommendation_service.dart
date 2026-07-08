@@ -6,25 +6,13 @@ class RecommendationService {
     UserPreferencesModel preferences,
     List<ChatbotProductModel> products,
   ) {
-    final scoredProducts = products.map((product) {
-      final score = _calculateScore(product, preferences);
+    final scoredProducts = products
+        .map((p) => (product: p, score: _calculateScore(p, preferences)))
+        .where((item) => item.score > 0)
+        .toList()
+      ..sort((a, b) => b.score.compareTo(a.score));
 
-      return {
-        'product': product,
-        'score': score,
-      };
-    }).where((item) {
-      return item['score'] as int > 0;
-    }).toList();
-
-    scoredProducts.sort((a, b) {
-      return (b['score'] as int).compareTo(a['score'] as int);
-    });
-
-    return scoredProducts
-        .take(2)
-        .map((item) => item['product'] as ChatbotProductModel)
-        .toList();
+    return scoredProducts.take(2).map((item) => item.product).toList();
   }
 
   int _calculateScore(

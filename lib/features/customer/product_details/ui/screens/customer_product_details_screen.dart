@@ -174,18 +174,18 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                       },
                       child: BlocBuilder<CartCubit, CartState>(
                         buildWhen: (previous, current) {
-                          return current is AddcartproductSuccessedstate ||
-                              current is AddcartproductFailedstate ||
-                              current is AddcartproductLoadingstate;
+                          return current is AddProductSuccess ||
+                              current is AddProductError ||
+                              current is AddProductLoading;
                         },
                         builder: (context, state) {
-                          if (state is AddcartproductLoadingstate) {
+                          if (state is AddProductLoading) {
                             return CircularProgressIndicator(
                               color: commonColor,
                               strokeWidth: 1.5,
                             );
                           }
-                          if (state is AddcartproductSuccessedstate) {
+                          if (state is AddProductSuccess) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [

@@ -37,12 +37,12 @@ class CustomerNotificationsScreen extends StatelessWidget {
 
           BlocBuilder<CustomerCubit, CustomerState>(
             buildWhen: (previous, current) {
-              return current is NotificationsLoadingstate ||
-                  current is NotificationsSuccessedstate ||
-                  current is NotificationsFailedstate;
+              return current is NotificationsLoading ||
+                  current is NotificationsSuccess ||
+                  current is NotificationsError;
             },
             builder: (context, state) {
-              if (state is NotificationsSuccessedstate) {
+              if (state is NotificationsSuccess) {
                 if (state.notifications.isEmpty) {
                   return SliverToBoxAdapter(
                     child: Center(
@@ -93,7 +93,7 @@ class CustomerNotificationsScreen extends StatelessWidget {
                     },
                   );
                 }
-              } else if (state is NotificationsFailedstate) {
+              } else if (state is NotificationsError) {
                 return SliverToBoxAdapter(
                   child: Center(
                     child: Padding(
@@ -115,7 +115,7 @@ class CustomerNotificationsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 6.h),
                           Text(
-                            state.errorMessage,
+                            state.message,
                             textAlign: TextAlign.center,
                             style: AppTextStyles.t_12w400.copyWith(
                               color: darkblue.withValues(alpha: .75),
@@ -126,7 +126,7 @@ class CustomerNotificationsScreen extends StatelessWidget {
                     ),
                   ),
                 );
-              } else if (state is NotificationsLoadingstate) {
+              } else if (state is NotificationsLoading) {
                 return SliverFillRemaining(
                   child: Center(
                     child: CircularProgressIndicator(color: commonColor),

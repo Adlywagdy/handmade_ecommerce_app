@@ -144,17 +144,17 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
           BlocBuilder<SearchCubit, SearchState>(
             buildWhen: (previous, current) {
               return current is SearchInitial ||
-                  current is SearchProductsSuccessedstate ||
-                  current is FilterProductsSuccessedstate ||
-                  current is SearchProductsLoadingstate ||
-                  current is FilterProductsLoadingstate ||
-                  current is SearchProductsFailedstate ||
-                  current is FilterProductsFailedstate;
+                  current is SearchProductsSuccess ||
+                  current is FilterProductsSuccess ||
+                  current is SearchProductsLoading ||
+                  current is FilterProductsLoading ||
+                  current is SearchProductsError ||
+                  current is FilterProductsError;
             },
             builder: (context, state) {
-              if (state is SearchProductsSuccessedstate ||
-                  state is FilterProductsSuccessedstate) {
-                final resultsCount = state is SearchProductsSuccessedstate
+              if (state is SearchProductsSuccess ||
+                  state is FilterProductsSuccess) {
+                final resultsCount = state is SearchProductsSuccess
                     ? _searchCubit.searchedproductsList.length
                     : _searchCubit.filteredproductsList.length;
 
@@ -180,18 +180,18 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
           BlocBuilder<SearchCubit, SearchState>(
             buildWhen: (previous, current) {
               return current is SearchInitial ||
-                  current is SearchProductsSuccessedstate ||
-                  current is FilterProductsSuccessedstate ||
-                  current is SearchProductsLoadingstate ||
-                  current is FilterProductsLoadingstate ||
-                  current is SearchProductsFailedstate ||
-                  current is FilterProductsFailedstate;
+                  current is SearchProductsSuccess ||
+                  current is FilterProductsSuccess ||
+                  current is SearchProductsLoading ||
+                  current is FilterProductsLoading ||
+                  current is SearchProductsError ||
+                  current is FilterProductsError;
             },
             builder: (context, state) {
-              if (state is SearchProductsSuccessedstate ||
-                  state is FilterProductsSuccessedstate) {
+              if (state is SearchProductsSuccess ||
+                  state is FilterProductsSuccess) {
                 final List<ProductModel> products =
-                    state is SearchProductsSuccessedstate
+                    state is SearchProductsSuccess
                     ? _searchCubit.searchedproductsList
                     : _searchCubit.filteredproductsList;
 
@@ -222,15 +222,15 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     );
                   },
                 );
-              } else if (state is SearchProductsFailedstate ||
-                  state is FilterProductsFailedstate) {
-                String errorMessage = state is SearchProductsFailedstate
-                    ? state.errorMessage
-                    : (state as FilterProductsFailedstate).errorMessage;
+              } else if (state is SearchProductsError ||
+                  state is FilterProductsError) {
+                String errorMessage = state is SearchProductsError
+                    ? state.message
+                    : (state as FilterProductsError).message;
                 showSnack(title: context.l10n.error, message: errorMessage);
                 return SliverToBoxAdapter(child: SizedBox(height: 200.h));
-              } else if (state is SearchProductsLoadingstate ||
-                  state is FilterProductsLoadingstate) {
+              } else if (state is SearchProductsLoading ||
+                  state is FilterProductsLoading) {
                 return SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,

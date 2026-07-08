@@ -29,7 +29,7 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     bool showLoading = true,
   }) async {
     if (showLoading) {
-      emit(ReviewsLoadingState(productId: productId));
+      emit(ReviewsLoading(productId: productId));
     }
 
     try {
@@ -39,13 +39,13 @@ class ReviewsCubit extends Cubit<ReviewsState> {
       );
       _reviewsByProduct[productId] = currentProductReviews;
       emit(
-        ReviewsLoadedState(
+        ReviewsLoaded(
           productId: productId,
           reviews: currentProductReviews,
         ),
       );
     } catch (e) {
-      emit(ReviewsErrorState(productId: productId, errorMessage: e.toString()));
+      emit(ReviewsError(productId: productId, message: e.toString()));
     }
   }
 
@@ -57,8 +57,8 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     final normalizedComment = comment.trim();
     if (normalizedComment.isEmpty) {
       emit(
-        SubmitReviewErrorState(
-          errorMessage: AppLocalizations.of(
+        SubmitReviewError(
+          message: AppLocalizations.of(
             Get.context!,
           )!.pleaseWriteShortComment,
         ),
@@ -68,14 +68,14 @@ class ReviewsCubit extends Cubit<ReviewsState> {
 
     if (rating < 1 || rating > 5) {
       emit(
-        SubmitReviewErrorState(
-          errorMessage: AppLocalizations.of(Get.context!)!.pleaseSelectRating,
+        SubmitReviewError(
+          message: AppLocalizations.of(Get.context!)!.pleaseSelectRating,
         ),
       );
       return;
     }
 
-    emit(SubmitReviewLoadingState());
+    emit(SubmitReviewLoading());
 
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
@@ -93,10 +93,10 @@ class ReviewsCubit extends Cubit<ReviewsState> {
         rating: rating,
       );
 
-      emit(SubmitReviewSuccessState());
+      emit(SubmitReviewSuccess());
       await loadProductReviews(product.id, showLoading: false);
     } catch (e) {
-      emit(SubmitReviewErrorState(errorMessage: _formatError(e)));
+      emit(SubmitReviewError(message: _formatError(e)));
     }
   }
 

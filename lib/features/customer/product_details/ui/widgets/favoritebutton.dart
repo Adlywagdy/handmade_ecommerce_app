@@ -28,9 +28,9 @@ class FavoriteButton extends StatelessWidget {
       ),
       icon: BlocBuilder<WishListCubit, WishListState>(
         buildWhen: (previous, current) {
-          return current is GetWishlistSuccessedstate ||
-              current is AddOrDeleteWishlistSuccessedstate ||
-              current is AddOrDeleteWishlistFailedstate;
+          return current is WishlistSuccess ||
+              current is ToggleWishlistSuccess ||
+              current is ToggleWishlistError;
         },
         builder: (context, state) {
           return Icon(

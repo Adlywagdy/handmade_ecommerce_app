@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:firebase_ai/firebase_ai.dart';
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 import '../models/user_preferences_model.dart';
 
 class FirebaseAIService {
@@ -8,8 +9,7 @@ class FirebaseAIService {
   );
 
   Future<UserPreferencesModel?> extractPreferences(String userMessage) async {
-    final prompt =
-        '''
+    final prompt = '''
 You are an AI assistant for a handmade e-commerce app.
 
 Your task is to extract the user's shopping and room preferences from their message.
@@ -76,14 +76,13 @@ Now extract preferences from this user message:
 
     try {
       final response = await _model.generateContent([Content.text(prompt)]);
-
       final responseText = response.text;
 
       if (responseText == null || responseText.trim().isEmpty) {
         return null;
       }
 
-      final cleanedJson = _cleanJsonText(responseText);
+      final cleanedJson = responseText.replaceAll('```json', '').replaceAll('```', '').trim();
       final decodedJson = jsonDecode(cleanedJson) as Map<String, dynamic>;
 
       return UserPreferencesModel(
@@ -92,33 +91,11 @@ Now extract preferences from this user message:
         roomSize: decodedJson['roomSize'] as String?,
         colors: List<String>.from(decodedJson['colors'] ?? []),
         style: decodedJson['style'] as String?,
-        budget: _parseBudget(decodedJson['budget']),
+        budget: parseInt(decodedJson['budget']),
         tags: List<String>.from(decodedJson['tags'] ?? []),
       );
     } catch (e) {
       return null;
     }
-  }
-
-  String _cleanJsonText(String text) {
-    return text.replaceAll('```json', '').replaceAll('```', '').trim();
-  }
-
-  int? _parseBudget(dynamic value) {
-    if (value == null) return null;
-
-    if (value is int) {
-      return value;
-    }
-
-    if (value is double) {
-      return value.toInt();
-    }
-
-    if (value is String) {
-      return int.tryParse(value);
-    }
-
-    return null;
   }
 }
