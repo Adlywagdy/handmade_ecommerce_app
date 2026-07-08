@@ -1489,6 +1489,10 @@
   "@pleaseEnterValidZipCode": {
     "description": "Validation error for invalid ZIP code input."
   },
+  "pleaseEnterValidPhoneNumber": "يرجى إدخال رقم هاتف صالح",
+  "@pleaseEnterValidPhoneNumber": {
+    "description": "Validation error for invalid phone number input."
+  },
   "setAsDefaultAddress": "تعيين كعنوان افتراضي",
   "@setAsDefaultAddress": {
     "description": "Checkbox label to mark an address as default."

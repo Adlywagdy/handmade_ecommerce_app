@@ -1272,6 +1272,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get pleaseEnterValidZipCode => 'يرجى إدخال رمز بريدي صالح';
 
   @override
+  String get pleaseEnterValidPhoneNumber => 'يرجى إدخال رقم هاتف صالح';
+
+  @override
   String get setAsDefaultAddress => 'تعيين كعنوان افتراضي';
 
   @override

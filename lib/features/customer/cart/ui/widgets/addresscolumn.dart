@@ -268,7 +268,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                         return context.l10n.thisFieldIsRequired;
                       }
                       if (!value.phoneValid()) {
-                        return context.l10n.pleaseEnterValidZipCode;
+                        return context.l10n.pleaseEnterValidPhoneNumber;
                       }
                       return null;
                     },
@@ -356,14 +356,16 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                                     color: blackDegree.withValues(alpha: .65),
                                   ),
                                 ),
-                            Text(
-                              _setAsDefault ? context.l10n.toggleOn : context.l10n.toggleOff,
-                            style: AppTextStyles.t_12w700.copyWith(
-                              color: _setAsDefault
-                                  ? commonColor
-                                  : blackDegree.withValues(alpha: .45),
-                            ),
-                          ),
+                                Text(
+                                  _setAsDefault
+                                      ? context.l10n.toggleOn
+                                      : context.l10n.toggleOff,
+                                  style: AppTextStyles.t_12w700.copyWith(
+                                    color: _setAsDefault
+                                        ? commonColor
+                                        : blackDegree.withValues(alpha: .45),
+                                  ),
+                                ),
                               ],
                             ),
                           ),

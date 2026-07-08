@@ -1279,6 +1279,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get pleaseEnterValidZipCode => 'Please enter a valid ZIP code';
 
   @override
+  String get pleaseEnterValidPhoneNumber => 'Please enter a valid phone number';
+
+  @override
   String get setAsDefaultAddress => 'Set as default address';
 
   @override

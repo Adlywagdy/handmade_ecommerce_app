@@ -8,7 +8,7 @@ import 'package:handmade_ecommerce_app/features/admin/ui/screens/coupons/coupons
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/forget_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/login_screen.dart';
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/register_screen.dart';
-import 'package:handmade_ecommerce_app/features/auth/ui/screens/reset_password_screen.dart';
+
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_notifications_screen.dart';
@@ -54,10 +54,6 @@ class AppPages {
     GetPage(
       name: AppRoutes.verifyPassword,
       page: () => const VerifyPasswordScreen(),
-    ),
-    GetPage(
-      name: AppRoutes.resetPassword,
-      page: () => const ResetPasswordScreen(),
     ),
 
     // customer

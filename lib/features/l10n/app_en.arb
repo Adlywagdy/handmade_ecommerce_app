@@ -1485,6 +1485,10 @@
   "@pleaseEnterValidZipCode": {
     "description": "Validation error for invalid ZIP code input."
   },
+  "pleaseEnterValidPhoneNumber": "Please enter a valid phone number",
+  "@pleaseEnterValidPhoneNumber": {
+    "description": "Validation error for invalid phone number input."
+  },
   "setAsDefaultAddress": "Set as default address",
   "@setAsDefaultAddress": {
     "description": "Checkbox label to mark an address as default."

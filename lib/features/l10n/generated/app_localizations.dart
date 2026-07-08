@@ -2498,6 +2498,12 @@ abstract class AppLocalizations {
   /// **'Please enter a valid ZIP code'**
   String get pleaseEnterValidZipCode;
 
+  /// Validation error for invalid phone number input.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid phone number'**
+  String get pleaseEnterValidPhoneNumber;
+
   /// Checkbox label to mark an address as default.
   ///
   /// In en, this message translates to:
