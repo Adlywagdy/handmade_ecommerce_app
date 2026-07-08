@@ -1924,5 +1924,490 @@
   "admDashboard": "لوحة التحكم",
   "admSellers": "البائعون",
   "admProducts": "المنتجات",
-  "admSettingsNav": "الإعدادات"
+  "admSettingsNav": "الإعدادات",
+
+  "selGlobalReach": "انتشار عالمي",
+  "@selGlobalReach": {
+    "description": "Info card title for seller registration."
+  },
+  "selSellToCustomersWorldwide": "بيع للعملاء حول العالم",
+  "@selSellToCustomersWorldwide": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSecureSales": "مبيعات آمنة",
+  "@selSecureSales": {
+    "description": "Info card title for seller registration."
+  },
+  "selGuaranteedSafePayments": "دفع آمن مضمون",
+  "@selGuaranteedSafePayments": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSupport247": "دعم على مدار الساعة",
+  "@selSupport247": {
+    "description": "Info card title for seller registration."
+  },
+  "selEmailHint": "مثال: seller@mail.com",
+  "@selEmailHint": {
+    "description": "Hint text for email field in seller registration."
+  },
+  "selPleaseEnterValidEmail": "يرجى إدخال بريد إلكتروني صالح",
+  "@selPleaseEnterValidEmail": {
+    "description": "Validation message for invalid email in seller registration."
+  },
+  "selPasswordHint": "6 أحرف على الأقل",
+  "@selPasswordHint": {
+    "description": "Hint text for password field in seller registration."
+  },
+  "selPasswordMin6Chars": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "@selPasswordMin6Chars": {
+    "description": "Validation message for short password in seller registration."
+  },
+  "selShopNameHint": "مثال: حرف دمشق",
+  "@selShopNameHint": {
+    "description": "Hint text for shop name field in seller registration."
+  },
+  "selCraftSpecialty": "التخصص الحرفي",
+  "@selCraftSpecialty": {
+    "description": "Label for craft specialty field in seller registration."
+  },
+  "selSelectYourPrimaryCraft": "اختر تخصصك الرئيسي",
+  "@selSelectYourPrimaryCraft": {
+    "description": "Hint text for craft specialty field."
+  },
+  "selArtisanBio": "سيرة الحرفي",
+  "@selArtisanBio": {
+    "description": "Label for artisan bio field in seller registration."
+  },
+  "selArtisanBioHint": "أخبرنا عن رحلتك وحرفتك وما يجعل منتجاتك فريدة...",
+  "@selArtisanBioHint": {
+    "description": "Hint text for artisan bio field."
+  },
+  "selPortfolioAndProductSamples": "المحفظة وعينات المنتجات",
+  "@selPortfolioAndProductSamples": {
+    "description": "Label for portfolio section in seller registration."
+  },
+  "selPngJpgOrPdfMax10Mb": "PNG، JPG أو PDF (حد أقصى 10 ميجا)",
+  "@selPngJpgOrPdfMax10Mb": {
+    "description": "Subtitle text for upload area in seller registration."
+  },
+  "selISellerTermsOfService": "شروط خدمة البائع",
+  "@selISellerTermsOfService": {
+    "description": "Link text for seller terms of service."
+  },
+  "selAndAcknowledgeCommissionRates": " والاعتراف\nبمعدلات عمولة المنصة على المبيعات.",
+  "@selAndAcknowledgeCommissionRates": {
+    "description": "Text after seller terms link in registration."
+  },
+  "selSubmitRequest": "إرسال الطلب",
+  "@selSubmitRequest": {
+    "description": "Button text for seller registration submission."
+  },
+  "selOrderDetails": "تفاصيل الطلب",
+  "@selOrderDetails": {
+    "description": "AppBar title for order details screen."
+  },
+  "selOrderItems": "عناصر الطلب",
+  "@selOrderItems": {
+    "description": "Section heading for order items list."
+  },
+  "selTotalEarnings": "إجمالي الأرباح",
+  "@selTotalEarnings": {
+    "description": "Label for total earnings in order details."
+  },
+  "selMarkAsShipped": "وضع تم الشحن",
+  "@selMarkAsShipped": {
+    "description": "Button text to mark an order as shipped."
+  },
+  "selMarkAsCompleted": "وضع تم الإنجاز",
+  "@selMarkAsCompleted": {
+    "description": "Button text to mark an order as completed."
+  },
+  "selArchive": "أرشفة",
+  "@selArchive": {
+    "description": "Button text to archive a completed order."
+  },
+  "selCancelOrderTitle": "إلغاء الطلب",
+  "@selCancelOrderTitle": {
+    "description": "Dialog title for order cancellation."
+  },
+  "selCancelOrderContent": "هل أنت متأكد أنك تريد إلغاء الطلب {orderId}؟",
+  "@selCancelOrderContent": {
+    "description": "Dialog content for order cancellation confirmation.",
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "selYesCancel": "نعم، إلغاء",
+  "@selYesCancel": {
+    "description": "Button text to confirm order cancellation."
+  },
+  "selOrderCancelledAndStockRestored": "تم إلغاء الطلب واستعادة المخزون",
+  "@selOrderCancelledAndStockRestored": {
+    "description": "Snackbar message after order cancellation."
+  },
+  "selFailedToCancelOrder": "فشل إلغاء الطلب: {error}",
+  "@selFailedToCancelOrder": {
+    "description": "Snackbar message when order cancellation fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selOrderArchivedSuccessfully": "تم أرشفة الطلب بنجاح",
+  "@selOrderArchivedSuccessfully": {
+    "description": "Snackbar message after order archival."
+  },
+  "selOrderStatusUpdatedTo": "تم تحديث حالة الطلب إلى {status}",
+  "@selOrderStatusUpdatedTo": {
+    "description": "Snackbar message after order status update.",
+    "placeholders": {
+      "status": { "type": "String" }
+    }
+  },
+  "selNoTabOrders": "لا توجد طلبات {tabName}",
+  "@selNoTabOrders": {
+    "description": "Empty state text when no orders in a tab.",
+    "placeholders": {
+      "tabName": { "type": "String" }
+    }
+  },
+  "selQtyLabel": "الكمية: {quantity}",
+  "@selQtyLabel": {
+    "description": "Label for quantity display.",
+    "placeholders": {
+      "quantity": { "type": "int" }
+    }
+  },
+  "selCustomerFallback": "العميل",
+  "@selCustomerFallback": {
+    "description": "Fallback customer name when not available."
+  },
+  "selOrderPrefix": "الطلب",
+  "@selOrderPrefix": {
+    "description": "Prefix for order ID display."
+  },
+  "selItemSingular": "عنصر",
+  "@selItemSingular": {
+    "description": "Singular form of item."
+  },
+  "selItemPlural": "عناصر",
+  "@selItemPlural": {
+    "description": "Plural form of items."
+  },
+  "selAvailableBalance": "الرصيد المتاح: {amount} جنيه",
+  "@selAvailableBalance": {
+    "description": "Subtitle showing available balance in withdraw sheet.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selWithdrawTo": "السحب إلى",
+  "@selWithdrawTo": {
+    "description": "Section label for withdraw destination."
+  },
+  "selWithdrawAmount": "سحب {amount} جنيه",
+  "@selWithdrawAmount": {
+    "description": "Button text for withdraw confirmation.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selEnterAmount": "أدخل المبلغ",
+  "@selEnterAmount": {
+    "description": "Button text when no amount is entered."
+  },
+  "selDone": "تم",
+  "@selDone": {
+    "description": "Button text in withdrawal success dialog."
+  },
+  "selApplicationNotApproved": "الطلب غير مقبول",
+  "@selApplicationNotApproved": {
+    "description": "Title for rejected seller application."
+  },
+  "selAccountUnderReview": "الحساب قيد المراجعة",
+  "@selAccountUnderReview": {
+    "description": "Title for pending seller application."
+  },
+  "selApplicationRejectedMessage": "لم نتمكن من الموافقة على طلب البائع الخاص بك في الوقت الحالي. تواصل مع فريقنا إذا كنت تريد معرفة المزيد.",
+  "@selApplicationRejectedMessage": {
+    "description": "Description for rejected seller application."
+  },
+  "selApplicationPendingMessage": "شكراً للانضمام إلى أيادي. فريق التدقيق لدينا يراجع طلبك — سيتم إبلاغك في اللحظة التي يوافق فيها.",
+  "@selApplicationPendingMessage": {
+    "description": "Description for pending seller application."
+  },
+  "selSignOut": "تسجيل الخروج",
+  "@selSignOut": {
+    "description": "Button text to sign out from pending screen."
+  },
+  "selEstimatedReviewTime": "وقت المراجعة المقدر: 3-5 أيام عمل",
+  "@selEstimatedReviewTime": {
+    "description": "Info text for estimated review time."
+  },
+  "selRefreshStatus": "تحديث الحالة",
+  "@selRefreshStatus": {
+    "description": "Button text to refresh seller status."
+  },
+  "selNotApproved": "غير مقبول",
+  "@selNotApproved": {
+    "description": "Status pill label for rejected application."
+  },
+  "selPendingApproval": "في انتظار الموافقة",
+  "@selPendingApproval": {
+    "description": "Status pill label for pending application."
+  },
+  "selApplicationSubmitted": "تم تقديم الطلب",
+  "@selApplicationSubmitted": {
+    "description": "Timeline step label for submitted application."
+  },
+  "selReviewed": "تمت المراجعة",
+  "@selReviewed": {
+    "description": "Timeline step label for reviewed application (rejected)."
+  },
+  "selUnderReview": "قيد المراجعة",
+  "@selUnderReview": {
+    "description": "Timeline step label for under review application."
+  },
+  "selApprovedWelcomeAboard": "تمت الموافقة — مرحباً بك",
+  "@selApprovedWelcomeAboard": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApproved": "مقبول",
+  "@selApproved": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApplicationNotApprovedSnack": "لم يتم قبول طلبك. يرجى الاتصال بالدعم.",
+  "@selApplicationNotApprovedSnack": {
+    "description": "Snackbar message for rejected application."
+  },
+  "selStillUnderReview": "أنت لا تزال قيد المراجعة. سنخبرك قريباً.",
+  "@selStillUnderReview": {
+    "description": "Snackbar message for pending application."
+  },
+  "selCouldNotRefreshStatus": "تعذر تحديث الحالة: {error}",
+  "@selCouldNotRefreshStatus": {
+    "description": "Snackbar message when status refresh fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDeleteProduct": "حذف المنتج",
+  "@selDeleteProduct": {
+    "description": "Dialog title for product deletion."
+  },
+  "selDeleteProductConfirm": "هل أنت متأكد أنك تريد حذف هذا المنتج؟ لا يمكن التراجع عن هذا الإجراء.",
+  "@selDeleteProductConfirm": {
+    "description": "Dialog content for product deletion confirmation."
+  },
+  "selProductDeletedSuccessfully": "تم حذف المنتج بنجاح",
+  "@selProductDeletedSuccessfully": {
+    "description": "Snackbar message after product deletion."
+  },
+  "selFailedToDeleteProduct": "فشل حذف المنتج: {error}",
+  "@selFailedToDeleteProduct": {
+    "description": "Snackbar message when product deletion fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selEditProduct": "تعديل المنتج",
+  "@selEditProduct": {
+    "description": "Popup menu item and AppBar title for editing product."
+  },
+  "selDelete": "حذف",
+  "@selDelete": {
+    "description": "Popup menu item for deleting product."
+  },
+  "selStockUnits": "المخزون: {stock} وحدة",
+  "@selStockUnits": {
+    "description": "Label showing stock quantity.",
+    "placeholders": {
+      "stock": { "type": "int" }
+    }
+  },
+  "selActiveListing": "إعلان نشط",
+  "@selActiveListing": {
+    "description": "Label for active listing toggle."
+  },
+  "selVisibleToCustomers": "مرئي للعملاء في السوق",
+  "@selVisibleToCustomers": {
+    "description": "Description for active listing toggle."
+  },
+  "selPriceEgp": "السعر (جنيه)",
+  "@selPriceEgp": {
+    "description": "Label for price field in EGP."
+  },
+  "selProductTitle": "عنوان المنتج",
+  "@selProductTitle": {
+    "description": "Label for product title field."
+  },
+  "selProductTitleHint": "مثال: طبق تقديم خزفي مرسوم يدوياً",
+  "@selProductTitleHint": {
+    "description": "Hint text for product title field."
+  },
+  "selProductTitleRequired": "عنوان المنتج مطلوب",
+  "@selProductTitleRequired": {
+    "description": "Validation message for missing product title."
+  },
+  "selTitleMin3Chars": "يجب أن يكون العنوان 3 أحرف على الأقل",
+  "@selTitleMin3Chars": {
+    "description": "Validation message for short product title."
+  },
+  "selPriceRequired": "السعر مطلوب",
+  "@selPriceRequired": {
+    "description": "Validation message for missing price."
+  },
+  "selEnterValidNumber": "أدخل رقماً صالحاً",
+  "@selEnterValidNumber": {
+    "description": "Validation message for invalid number format."
+  },
+  "selPriceCannotBeNegative": "لا يمكن أن يكون السعر سالباً",
+  "@selPriceCannotBeNegative": {
+    "description": "Validation message for negative price."
+  },
+  "selStockRequired": "المخزون مطلوب",
+  "@selStockRequired": {
+    "description": "Validation message for missing stock."
+  },
+  "selEnterValidInteger": "أدخل رقماً صحيحاً",
+  "@selEnterValidInteger": {
+    "description": "Validation message for invalid integer format."
+  },
+  "selStockCannotBeNegative": "لا يمكن أن يكون المخزون سالباً",
+  "@selStockCannotBeNegative": {
+    "description": "Validation message for negative stock."
+  },
+  "selDescriptionRequired": "الوصف مطلوب",
+  "@selDescriptionRequired": {
+    "description": "Validation message for missing description."
+  },
+  "selDescriptionMin10Chars": "يجب أن يكون الوصف 10 أحرف على الأقل",
+  "@selDescriptionMin10Chars": {
+    "description": "Validation message for short description."
+  },
+  "selProductImages": "صور المنتج",
+  "@selProductImages": {
+    "description": "Section heading for product images."
+  },
+  "selAddPhoto": "إضافة صورة",
+  "@selAddPhoto": {
+    "description": "Text on add photo button."
+  },
+  "selPleaseAddAtLeastOneImage": "يرجى إضافة صورة واحدة على الأقل للمنتج",
+  "@selPleaseAddAtLeastOneImage": {
+    "description": "Snackbar message when no images added."
+  },
+  "selProductAddedSuccessfully": "تم إضافة المنتج بنجاح!",
+  "@selProductAddedSuccessfully": {
+    "description": "Snackbar message after product creation."
+  },
+  "selSaveProduct": "حفظ المنتج",
+  "@selSaveProduct": {
+    "description": "Button text to save a product."
+  },
+  "selDiscardChanges": "تجاهل التغييرات",
+  "@selDiscardChanges": {
+    "description": "Button text to discard product changes."
+  },
+  "selOutOfStock": "غير متوفر",
+  "@selOutOfStock": {
+    "description": "Product stock status when stock is zero."
+  },
+  "selLowStock": "مخزون منخفض",
+  "@selLowStock": {
+    "description": "Product stock status when stock is low."
+  },
+  "selInStock": "متوفر",
+  "@selInStock": {
+    "description": "Product stock status when stock is available."
+  },
+  "selNameMin3Chars": "يجب أن يكون الاسم 3 أحرف على الأقل",
+  "@selNameMin3Chars": {
+    "description": "Validation message for short product name."
+  },
+  "selInvalidPrice": "سعر غير صالح",
+  "@selInvalidPrice": {
+    "description": "Validation message for invalid price."
+  },
+  "selInvalidNumber": "رقم غير صالح",
+  "@selInvalidNumber": {
+    "description": "Validation message for invalid number."
+  },
+  "selPleaseSelectCategory": "يرجى اختيار فئة",
+  "@selPleaseSelectCategory": {
+    "description": "Validation message for unselected category."
+  },
+  "selSelectCategory": "اختر الفئة",
+  "@selSelectCategory": {
+    "description": "Hint text for category selection."
+  },
+  "selProductUpdatedSuccessfully": "تم تحديث المنتج بنجاح",
+  "@selProductUpdatedSuccessfully": {
+    "description": "Snackbar message after product update."
+  },
+  "selErrorSavingProduct": "حدث خطأ أثناء حفظ المنتج: {error}",
+  "@selErrorSavingProduct": {
+    "description": "Snackbar message when product save fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDiscard": "تجاهل",
+  "@selDiscard": {
+    "description": "Button text to discard changes."
+  },
+  "selClickToUpload": "انقر للتحميل أو اسحب وأفلت",
+  "@selClickToUpload": {
+    "description": "Instruction text for file upload area."
+  },
+  "selPngJpgOrPdfMax5Mb": "PNG، JPG أو PDF (حد أقصى 5 ميجا)",
+  "@selPngJpgOrPdfMax5Mb": {
+    "description": "Subtitle text for upload area in edit product."
+  },
+  "selWelcomeSeller": "مرحباً بعودتك، {name}",
+  "@selWelcomeSeller": {
+    "description": "Welcome message for seller dashboard.",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "selHereWhatIsHappening": "إليك ما يحدث في متجرك اليوم.",
+  "@selHereWhatIsHappening": {
+    "description": "Subtitle for seller dashboard."
+  },
+  "selTotalOrders": "إجمالي الطلبات",
+  "@selTotalOrders": {
+    "description": "Stat card title for total orders."
+  },
+  "selNoRecentOrders": "لا توجد طلبات حديثة",
+  "@selNoRecentOrders": {
+    "description": "Empty state text for no recent orders."
+  },
+  "selOrderItem": "عنصر الطلب",
+  "@selOrderItem": {
+    "description": "Fallback order item name."
+  },
+  "selUnexpectedState": "حالة غير متوقعة",
+  "@selUnexpectedState": {
+    "description": "Text shown when state is unexpected."
+  },
+  "selAyadySeller": "بائع أيادي",
+  "@selAyadySeller": {
+    "description": "Fallback seller display name."
+  },
+  "selPleaseAgreeToTerms": "يرجى الموافقة على شروط الخدمة",
+  "@selPleaseAgreeToTerms": {
+    "description": "Snackbar message when terms not accepted."
+  },
+  "selThisFieldIsRequired": "هذا الحقل مطلوب",
+  "@selThisFieldIsRequired": {
+    "description": "Default validation message for required fields."
+  },
+  "selManageProducts": "إدارة المنتجات",
+  "@selManageProducts": {
+    "description": "AppBar title for manage products screen."
+  },
+  "selNoProductsFound": "لم يتم العثور على منتجات",
+  "@selNoProductsFound": {
+    "description": "Empty state text when no products found."
+  }
 }

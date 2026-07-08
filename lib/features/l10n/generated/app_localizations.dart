@@ -3541,6 +3541,678 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Settings'**
   String get admSettingsNav;
+
+  /// Info card title for seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Global Reach'**
+  String get selGlobalReach;
+
+  /// Info card subtitle for seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Sell to customers worldwide'**
+  String get selSellToCustomersWorldwide;
+
+  /// Info card title for seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Secure Sales'**
+  String get selSecureSales;
+
+  /// Info card subtitle for seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Guaranteed safe payments'**
+  String get selGuaranteedSafePayments;
+
+  /// Info card title for seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'24/7 Support'**
+  String get selSupport247;
+
+  /// Hint text for email field in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. seller@mail.com'**
+  String get selEmailHint;
+
+  /// Validation message for invalid email in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a valid email address'**
+  String get selPleaseEnterValidEmail;
+
+  /// Hint text for password field in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Min 6 characters'**
+  String get selPasswordHint;
+
+  /// Validation message for short password in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Password must be at least 6 characters'**
+  String get selPasswordMin6Chars;
+
+  /// Hint text for shop name field in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Damascus Woodcrafts'**
+  String get selShopNameHint;
+
+  /// Label for craft specialty field in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Craft Specialty'**
+  String get selCraftSpecialty;
+
+  /// Hint text for craft specialty field.
+  ///
+  /// In en, this message translates to:
+  /// **'Select your primary craft'**
+  String get selSelectYourPrimaryCraft;
+
+  /// Label for artisan bio field in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Artisan Bio'**
+  String get selArtisanBio;
+
+  /// Hint text for artisan bio field.
+  ///
+  /// In en, this message translates to:
+  /// **'Tell us about your journey, your craft, and\nwhat makes your products unique...'**
+  String get selArtisanBioHint;
+
+  /// Label for portfolio section in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'Portfolio & Product Samples'**
+  String get selPortfolioAndProductSamples;
+
+  /// Subtitle text for upload area in seller registration.
+  ///
+  /// In en, this message translates to:
+  /// **'PNG, JPG or PDF (max. 10MB)'**
+  String get selPngJpgOrPdfMax10Mb;
+
+  /// Link text for seller terms of service.
+  ///
+  /// In en, this message translates to:
+  /// **'Seller Terms of Service'**
+  String get selISellerTermsOfService;
+
+  /// Text after seller terms link in registration.
+  ///
+  /// In en, this message translates to:
+  /// **' and acknowledge\nthe platform commission rates on sales.'**
+  String get selAndAcknowledgeCommissionRates;
+
+  /// Button text for seller registration submission.
+  ///
+  /// In en, this message translates to:
+  /// **'Submit Request'**
+  String get selSubmitRequest;
+
+  /// AppBar title for order details screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Details'**
+  String get selOrderDetails;
+
+  /// Section heading for order items list.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Items'**
+  String get selOrderItems;
+
+  /// Label for total earnings in order details.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Earnings'**
+  String get selTotalEarnings;
+
+  /// Button text to mark an order as shipped.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Shipped'**
+  String get selMarkAsShipped;
+
+  /// Button text to mark an order as completed.
+  ///
+  /// In en, this message translates to:
+  /// **'Mark as Completed'**
+  String get selMarkAsCompleted;
+
+  /// Button text to archive a completed order.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get selArchive;
+
+  /// Dialog title for order cancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel Order'**
+  String get selCancelOrderTitle;
+
+  /// Dialog content for order cancellation confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to cancel order {orderId}?'**
+  String selCancelOrderContent(String orderId);
+
+  /// Button text to confirm order cancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes, Cancel'**
+  String get selYesCancel;
+
+  /// Snackbar message after order cancellation.
+  ///
+  /// In en, this message translates to:
+  /// **'Order has been cancelled and stock restored'**
+  String get selOrderCancelledAndStockRestored;
+
+  /// Snackbar message when order cancellation fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to cancel order: {error}'**
+  String selFailedToCancelOrder(String error);
+
+  /// Snackbar message after order archival.
+  ///
+  /// In en, this message translates to:
+  /// **'Order archived successfully'**
+  String get selOrderArchivedSuccessfully;
+
+  /// Snackbar message after order status update.
+  ///
+  /// In en, this message translates to:
+  /// **'Order status updated to {status}'**
+  String selOrderStatusUpdatedTo(String status);
+
+  /// Empty state text when no orders in a tab.
+  ///
+  /// In en, this message translates to:
+  /// **'No {tabName} Orders'**
+  String selNoTabOrders(String tabName);
+
+  /// Label for quantity display.
+  ///
+  /// In en, this message translates to:
+  /// **'Qty: {quantity}'**
+  String selQtyLabel(int quantity);
+
+  /// Fallback customer name when not available.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get selCustomerFallback;
+
+  /// Prefix for order ID display.
+  ///
+  /// In en, this message translates to:
+  /// **'Order'**
+  String get selOrderPrefix;
+
+  /// Singular form of item.
+  ///
+  /// In en, this message translates to:
+  /// **'item'**
+  String get selItemSingular;
+
+  /// Plural form of items.
+  ///
+  /// In en, this message translates to:
+  /// **'items'**
+  String get selItemPlural;
+
+  /// Subtitle showing available balance in withdraw sheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Available balance: EGP {amount}'**
+  String selAvailableBalance(String amount);
+
+  /// Section label for withdraw destination.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw to'**
+  String get selWithdrawTo;
+
+  /// Button text for withdraw confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Withdraw EGP {amount}'**
+  String selWithdrawAmount(String amount);
+
+  /// Button text when no amount is entered.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter amount'**
+  String get selEnterAmount;
+
+  /// Button text in withdrawal success dialog.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get selDone;
+
+  /// Title for rejected seller application.
+  ///
+  /// In en, this message translates to:
+  /// **'Application Not Approved'**
+  String get selApplicationNotApproved;
+
+  /// Title for pending seller application.
+  ///
+  /// In en, this message translates to:
+  /// **'Account Under Review'**
+  String get selAccountUnderReview;
+
+  /// Description for rejected seller application.
+  ///
+  /// In en, this message translates to:
+  /// **'We were unable to approve your seller application at this time. Reach out to our team if you\'d like to know more.'**
+  String get selApplicationRejectedMessage;
+
+  /// Description for pending seller application.
+  ///
+  /// In en, this message translates to:
+  /// **'Thanks for joining Ayady. Our curation team is reviewing your application — you\'ll be notified the moment it\'s approved.'**
+  String get selApplicationPendingMessage;
+
+  /// Button text to sign out from pending screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Sign out'**
+  String get selSignOut;
+
+  /// Info text for estimated review time.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated review time: 3–5 business days'**
+  String get selEstimatedReviewTime;
+
+  /// Button text to refresh seller status.
+  ///
+  /// In en, this message translates to:
+  /// **'Refresh Status'**
+  String get selRefreshStatus;
+
+  /// Status pill label for rejected application.
+  ///
+  /// In en, this message translates to:
+  /// **'NOT APPROVED'**
+  String get selNotApproved;
+
+  /// Status pill label for pending application.
+  ///
+  /// In en, this message translates to:
+  /// **'PENDING APPROVAL'**
+  String get selPendingApproval;
+
+  /// Timeline step label for submitted application.
+  ///
+  /// In en, this message translates to:
+  /// **'Application submitted'**
+  String get selApplicationSubmitted;
+
+  /// Timeline step label for reviewed application (rejected).
+  ///
+  /// In en, this message translates to:
+  /// **'Reviewed'**
+  String get selReviewed;
+
+  /// Timeline step label for under review application.
+  ///
+  /// In en, this message translates to:
+  /// **'Under review'**
+  String get selUnderReview;
+
+  /// Timeline step label for approved application.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved — welcome aboard'**
+  String get selApprovedWelcomeAboard;
+
+  /// Timeline step label for approved application.
+  ///
+  /// In en, this message translates to:
+  /// **'Approved'**
+  String get selApproved;
+
+  /// Snackbar message for rejected application.
+  ///
+  /// In en, this message translates to:
+  /// **'Your application was not approved. Please contact support.'**
+  String get selApplicationNotApprovedSnack;
+
+  /// Snackbar message for pending application.
+  ///
+  /// In en, this message translates to:
+  /// **'You\'re still under review. We\'ll notify you soon.'**
+  String get selStillUnderReview;
+
+  /// Snackbar message when status refresh fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not refresh status: {error}'**
+  String selCouldNotRefreshStatus(String error);
+
+  /// Dialog title for product deletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete Product'**
+  String get selDeleteProduct;
+
+  /// Dialog content for product deletion confirmation.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to delete this product? This action cannot be undone.'**
+  String get selDeleteProductConfirm;
+
+  /// Snackbar message after product deletion.
+  ///
+  /// In en, this message translates to:
+  /// **'Product deleted successfully'**
+  String get selProductDeletedSuccessfully;
+
+  /// Snackbar message when product deletion fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to delete product: {error}'**
+  String selFailedToDeleteProduct(String error);
+
+  /// Popup menu item and AppBar title for editing product.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit Product'**
+  String get selEditProduct;
+
+  /// Popup menu item for deleting product.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get selDelete;
+
+  /// Label showing stock quantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock: {stock} units'**
+  String selStockUnits(int stock);
+
+  /// Label for active listing toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active Listing'**
+  String get selActiveListing;
+
+  /// Description for active listing toggle.
+  ///
+  /// In en, this message translates to:
+  /// **'Visible to customers in the marketplace'**
+  String get selVisibleToCustomers;
+
+  /// Label for price field in EGP.
+  ///
+  /// In en, this message translates to:
+  /// **'Price (EGP)'**
+  String get selPriceEgp;
+
+  /// Label for product title field.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Title'**
+  String get selProductTitle;
+
+  /// Hint text for product title field.
+  ///
+  /// In en, this message translates to:
+  /// **'e.g. Hand-painted Ceramic Serving Dish'**
+  String get selProductTitleHint;
+
+  /// Validation message for missing product title.
+  ///
+  /// In en, this message translates to:
+  /// **'Product title is required'**
+  String get selProductTitleRequired;
+
+  /// Validation message for short product title.
+  ///
+  /// In en, this message translates to:
+  /// **'Title must be at least 3 characters'**
+  String get selTitleMin3Chars;
+
+  /// Validation message for missing price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price is required'**
+  String get selPriceRequired;
+
+  /// Validation message for invalid number format.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid number'**
+  String get selEnterValidNumber;
+
+  /// Validation message for negative price.
+  ///
+  /// In en, this message translates to:
+  /// **'Price cannot be negative'**
+  String get selPriceCannotBeNegative;
+
+  /// Validation message for missing stock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock is required'**
+  String get selStockRequired;
+
+  /// Validation message for invalid integer format.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid integer'**
+  String get selEnterValidInteger;
+
+  /// Validation message for negative stock.
+  ///
+  /// In en, this message translates to:
+  /// **'Stock cannot be negative'**
+  String get selStockCannotBeNegative;
+
+  /// Validation message for missing description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description is required'**
+  String get selDescriptionRequired;
+
+  /// Validation message for short description.
+  ///
+  /// In en, this message translates to:
+  /// **'Description must be at least 10 characters'**
+  String get selDescriptionMin10Chars;
+
+  /// Section heading for product images.
+  ///
+  /// In en, this message translates to:
+  /// **'Product Images'**
+  String get selProductImages;
+
+  /// Text on add photo button.
+  ///
+  /// In en, this message translates to:
+  /// **'ADD PHOTO'**
+  String get selAddPhoto;
+
+  /// Snackbar message when no images added.
+  ///
+  /// In en, this message translates to:
+  /// **'Please add at least one product image'**
+  String get selPleaseAddAtLeastOneImage;
+
+  /// Snackbar message after product creation.
+  ///
+  /// In en, this message translates to:
+  /// **'Product added successfully!'**
+  String get selProductAddedSuccessfully;
+
+  /// Button text to save a product.
+  ///
+  /// In en, this message translates to:
+  /// **'Save Product'**
+  String get selSaveProduct;
+
+  /// Button text to discard product changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard Changes'**
+  String get selDiscardChanges;
+
+  /// Product stock status when stock is zero.
+  ///
+  /// In en, this message translates to:
+  /// **'Out of Stock'**
+  String get selOutOfStock;
+
+  /// Product stock status when stock is low.
+  ///
+  /// In en, this message translates to:
+  /// **'Low Stock'**
+  String get selLowStock;
+
+  /// Product stock status when stock is available.
+  ///
+  /// In en, this message translates to:
+  /// **'In Stock'**
+  String get selInStock;
+
+  /// Validation message for short product name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name must be at least 3 characters'**
+  String get selNameMin3Chars;
+
+  /// Validation message for invalid price.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid price'**
+  String get selInvalidPrice;
+
+  /// Validation message for invalid number.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid number'**
+  String get selInvalidNumber;
+
+  /// Validation message for unselected category.
+  ///
+  /// In en, this message translates to:
+  /// **'Please select a category'**
+  String get selPleaseSelectCategory;
+
+  /// Hint text for category selection.
+  ///
+  /// In en, this message translates to:
+  /// **'Select category'**
+  String get selSelectCategory;
+
+  /// Snackbar message after product update.
+  ///
+  /// In en, this message translates to:
+  /// **'Product updated successfully'**
+  String get selProductUpdatedSuccessfully;
+
+  /// Snackbar message when product save fails.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving product: {error}'**
+  String selErrorSavingProduct(String error);
+
+  /// Button text to discard changes.
+  ///
+  /// In en, this message translates to:
+  /// **'Discard'**
+  String get selDiscard;
+
+  /// Instruction text for file upload area.
+  ///
+  /// In en, this message translates to:
+  /// **'Click to upload or drag and drop'**
+  String get selClickToUpload;
+
+  /// Subtitle text for upload area in edit product.
+  ///
+  /// In en, this message translates to:
+  /// **'PNG, JPG or PDF (max. 5MB)'**
+  String get selPngJpgOrPdfMax5Mb;
+
+  /// Welcome message for seller dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Welcome back, {name}'**
+  String selWelcomeSeller(String name);
+
+  /// Subtitle for seller dashboard.
+  ///
+  /// In en, this message translates to:
+  /// **'Here\'s what\'s happening with your shop today.'**
+  String get selHereWhatIsHappening;
+
+  /// Stat card title for total orders.
+  ///
+  /// In en, this message translates to:
+  /// **'Total Orders'**
+  String get selTotalOrders;
+
+  /// Empty state text for no recent orders.
+  ///
+  /// In en, this message translates to:
+  /// **'No recent orders'**
+  String get selNoRecentOrders;
+
+  /// Fallback order item name.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Item'**
+  String get selOrderItem;
+
+  /// Text shown when state is unexpected.
+  ///
+  /// In en, this message translates to:
+  /// **'Unexpected State'**
+  String get selUnexpectedState;
+
+  /// Fallback seller display name.
+  ///
+  /// In en, this message translates to:
+  /// **'Ayady Seller'**
+  String get selAyadySeller;
+
+  /// Snackbar message when terms not accepted.
+  ///
+  /// In en, this message translates to:
+  /// **'Please agree to the Terms of Service'**
+  String get selPleaseAgreeToTerms;
+
+  /// Default validation message for required fields.
+  ///
+  /// In en, this message translates to:
+  /// **'This field is required'**
+  String get selThisFieldIsRequired;
+
+  /// AppBar title for manage products screen.
+  ///
+  /// In en, this message translates to:
+  /// **'Manage Products'**
+  String get selManageProducts;
+
+  /// Empty state text when no products found.
+  ///
+  /// In en, this message translates to:
+  /// **'No products found'**
+  String get selNoProductsFound;
 }
 
 class _AppLocalizationsDelegate

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerManageOrderCard extends StatelessWidget {
   final String orderId;
@@ -149,7 +150,7 @@ class SellerManageOrderCard extends StatelessWidget {
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        'Customer: $customerName',
+                        '${context.l10n.customerLabel} $customerName',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: TextStyle(
@@ -163,7 +164,7 @@ class SellerManageOrderCard extends StatelessWidget {
                       RichText(
                         text: TextSpan(
                           text:
-                              '$itemCount item${itemCount > 1 ? 's' : ''} • Total: ',
+                              '$itemCount ${itemCount > 1 ? context.l10n.items : context.l10n.item} • ${context.l10n.totalLabel} ',
                           style: TextStyle(
                             color: const Color(0xFF64748B),
                             fontSize: 13.sp,
@@ -230,7 +231,7 @@ class SellerManageOrderCard extends StatelessWidget {
                               border: Border.all(color: const Color(0xFFD32F2F), width: 1),
                             ),
                             child: Text(
-                              'Cancel',
+                              context.l10n.cancel,
                               style: TextStyle(
                                 color: const Color(0xFFD32F2F),
                                 fontSize: 13.sp,

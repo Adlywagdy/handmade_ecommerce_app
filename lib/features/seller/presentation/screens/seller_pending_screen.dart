@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerPendingScreen extends StatefulWidget {
   const SellerPendingScreen({super.key});
@@ -108,8 +109,8 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
           backgroundColor: commonColor,
           content: Text(
             status == SellerStatus.rejected
-                ? 'Your application was not approved. Please contact support.'
-                : 'You\'re still under review. We\'ll notify you soon.',
+                ? context.l10n.selApplicationNotApprovedSnack
+                : context.l10n.selStillUnderReview,
             style: const TextStyle(color: Colors.white),
           ),
         ),
@@ -117,7 +118,7 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
     } catch (e) {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Could not refresh status: $e')),
+        SnackBar(content: Text(context.l10n.selCouldNotRefreshStatus(e.toString()))),
       );
     } finally {
       if (mounted) setState(() => _isRefreshing = false);
@@ -167,8 +168,8 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
                               fit: BoxFit.scaleDown,
                               child: Text(
                                 isRejected
-                                    ? 'Application Not Approved'
-                                    : 'Account Under Review',
+                                    ? context.l10n.selApplicationNotApproved
+                                    : context.l10n.selAccountUnderReview,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: commonColor,
@@ -184,8 +185,8 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
                               padding: EdgeInsets.symmetric(horizontal: 12.w),
                               child: Text(
                                 isRejected
-                                    ? 'We were unable to approve your seller application at this time. Reach out to our team if you\'d like to know more.'
-                                    : 'Thanks for joining Ayady. Our curation team is reviewing your application — you\'ll be notified the moment it\'s approved.',
+                                    ? context.l10n.selApplicationRejectedMessage
+                                    : context.l10n.selApplicationPendingMessage,
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: subTitleColor,
@@ -214,7 +215,7 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
                                 foregroundColor: commonColor,
                               ),
                               child: Text(
-                                'Sign out',
+                                context.l10n.selSignOut,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w600,
@@ -317,7 +318,7 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
           SizedBox(width: 12.w),
           Expanded(
             child: Text(
-              'Estimated review time: 3–5 business days',
+              context.l10n.selEstimatedReviewTime,
               style: TextStyle(
                 color: const Color(0xFF1E293B),
                 fontSize: 13.sp,
@@ -364,7 +365,7 @@ class _SellerPendingScreenState extends State<SellerPendingScreen>
                     child: FittedBox(
                       fit: BoxFit.scaleDown,
                       child: Text(
-                        'Refresh Status',
+                        context.l10n.selRefreshStatus,
                         style: TextStyle(
                           fontSize: 15.sp,
                           fontWeight: FontWeight.w700,
@@ -390,7 +391,7 @@ class _StatusPill extends StatelessWidget {
   Widget build(BuildContext context) {
     final isRejected = status == SellerStatus.rejected;
     final baseColor = isRejected ? redDegree : primaryColor;
-    final label = isRejected ? 'NOT APPROVED' : 'PENDING APPROVAL';
+    final label = isRejected ? context.l10n.selNotApproved : context.l10n.selPendingApproval;
 
     return AnimatedBuilder(
       animation: controller,
@@ -469,14 +470,14 @@ class _TimelineCard extends StatelessWidget {
       child: Column(
         children: [
           _TimelineStep(
-            label: 'Application submitted',
+            label: context.l10n.selApplicationSubmitted,
             isDone: true,
             isActive: false,
             isFirst: true,
             isLast: false,
           ),
           _TimelineStep(
-            label: isRejected ? 'Reviewed' : 'Under review',
+            label: isRejected ? context.l10n.selReviewed : context.l10n.selUnderReview,
             isDone: isApproved || isRejected,
             isActive: !isApproved && !isRejected,
             isFirst: false,
@@ -484,7 +485,7 @@ class _TimelineCard extends StatelessWidget {
             isError: isRejected,
           ),
           _TimelineStep(
-            label: isApproved ? 'Approved — welcome aboard' : 'Approved',
+            label: isApproved ? context.l10n.selApprovedWelcomeAboard : context.l10n.selApproved,
             isDone: isApproved,
             isActive: false,
             isFirst: false,

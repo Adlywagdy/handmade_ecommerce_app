@@ -1920,5 +1920,490 @@
   "admDashboard": "Dashboard",
   "admSellers": "Sellers",
   "admProducts": "Products",
-  "admSettingsNav": "Settings"
+  "admSettingsNav": "Settings",
+
+  "selGlobalReach": "Global Reach",
+  "@selGlobalReach": {
+    "description": "Info card title for seller registration."
+  },
+  "selSellToCustomersWorldwide": "Sell to customers worldwide",
+  "@selSellToCustomersWorldwide": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSecureSales": "Secure Sales",
+  "@selSecureSales": {
+    "description": "Info card title for seller registration."
+  },
+  "selGuaranteedSafePayments": "Guaranteed safe payments",
+  "@selGuaranteedSafePayments": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSupport247": "24/7 Support",
+  "@selSupport247": {
+    "description": "Info card title for seller registration."
+  },
+  "selEmailHint": "e.g. seller@mail.com",
+  "@selEmailHint": {
+    "description": "Hint text for email field in seller registration."
+  },
+  "selPleaseEnterValidEmail": "Please enter a valid email address",
+  "@selPleaseEnterValidEmail": {
+    "description": "Validation message for invalid email in seller registration."
+  },
+  "selPasswordHint": "Min 6 characters",
+  "@selPasswordHint": {
+    "description": "Hint text for password field in seller registration."
+  },
+  "selPasswordMin6Chars": "Password must be at least 6 characters",
+  "@selPasswordMin6Chars": {
+    "description": "Validation message for short password in seller registration."
+  },
+  "selShopNameHint": "e.g. Damascus Woodcrafts",
+  "@selShopNameHint": {
+    "description": "Hint text for shop name field in seller registration."
+  },
+  "selCraftSpecialty": "Craft Specialty",
+  "@selCraftSpecialty": {
+    "description": "Label for craft specialty field in seller registration."
+  },
+  "selSelectYourPrimaryCraft": "Select your primary craft",
+  "@selSelectYourPrimaryCraft": {
+    "description": "Hint text for craft specialty field."
+  },
+  "selArtisanBio": "Artisan Bio",
+  "@selArtisanBio": {
+    "description": "Label for artisan bio field in seller registration."
+  },
+  "selArtisanBioHint": "Tell us about your journey, your craft, and\nwhat makes your products unique...",
+  "@selArtisanBioHint": {
+    "description": "Hint text for artisan bio field."
+  },
+  "selPortfolioAndProductSamples": "Portfolio & Product Samples",
+  "@selPortfolioAndProductSamples": {
+    "description": "Label for portfolio section in seller registration."
+  },
+  "selPngJpgOrPdfMax10Mb": "PNG, JPG or PDF (max. 10MB)",
+  "@selPngJpgOrPdfMax10Mb": {
+    "description": "Subtitle text for upload area in seller registration."
+  },
+  "selISellerTermsOfService": "Seller Terms of Service",
+  "@selISellerTermsOfService": {
+    "description": "Link text for seller terms of service."
+  },
+  "selAndAcknowledgeCommissionRates": " and acknowledge\nthe platform commission rates on sales.",
+  "@selAndAcknowledgeCommissionRates": {
+    "description": "Text after seller terms link in registration."
+  },
+  "selSubmitRequest": "Submit Request",
+  "@selSubmitRequest": {
+    "description": "Button text for seller registration submission."
+  },
+  "selOrderDetails": "Order Details",
+  "@selOrderDetails": {
+    "description": "AppBar title for order details screen."
+  },
+  "selOrderItems": "Order Items",
+  "@selOrderItems": {
+    "description": "Section heading for order items list."
+  },
+  "selTotalEarnings": "Total Earnings",
+  "@selTotalEarnings": {
+    "description": "Label for total earnings in order details."
+  },
+  "selMarkAsShipped": "Mark as Shipped",
+  "@selMarkAsShipped": {
+    "description": "Button text to mark an order as shipped."
+  },
+  "selMarkAsCompleted": "Mark as Completed",
+  "@selMarkAsCompleted": {
+    "description": "Button text to mark an order as completed."
+  },
+  "selArchive": "Archive",
+  "@selArchive": {
+    "description": "Button text to archive a completed order."
+  },
+  "selCancelOrderTitle": "Cancel Order",
+  "@selCancelOrderTitle": {
+    "description": "Dialog title for order cancellation."
+  },
+  "selCancelOrderContent": "Are you sure you want to cancel order {orderId}?",
+  "@selCancelOrderContent": {
+    "description": "Dialog content for order cancellation confirmation.",
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "selYesCancel": "Yes, Cancel",
+  "@selYesCancel": {
+    "description": "Button text to confirm order cancellation."
+  },
+  "selOrderCancelledAndStockRestored": "Order has been cancelled and stock restored",
+  "@selOrderCancelledAndStockRestored": {
+    "description": "Snackbar message after order cancellation."
+  },
+  "selFailedToCancelOrder": "Failed to cancel order: {error}",
+  "@selFailedToCancelOrder": {
+    "description": "Snackbar message when order cancellation fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selOrderArchivedSuccessfully": "Order archived successfully",
+  "@selOrderArchivedSuccessfully": {
+    "description": "Snackbar message after order archival."
+  },
+  "selOrderStatusUpdatedTo": "Order status updated to {status}",
+  "@selOrderStatusUpdatedTo": {
+    "description": "Snackbar message after order status update.",
+    "placeholders": {
+      "status": { "type": "String" }
+    }
+  },
+  "selNoTabOrders": "No {tabName} Orders",
+  "@selNoTabOrders": {
+    "description": "Empty state text when no orders in a tab.",
+    "placeholders": {
+      "tabName": { "type": "String" }
+    }
+  },
+  "selQtyLabel": "Qty: {quantity}",
+  "@selQtyLabel": {
+    "description": "Label for quantity display.",
+    "placeholders": {
+      "quantity": { "type": "int" }
+    }
+  },
+  "selCustomerFallback": "Customer",
+  "@selCustomerFallback": {
+    "description": "Fallback customer name when not available."
+  },
+  "selOrderPrefix": "Order",
+  "@selOrderPrefix": {
+    "description": "Prefix for order ID display."
+  },
+  "selItemSingular": "item",
+  "@selItemSingular": {
+    "description": "Singular form of item."
+  },
+  "selItemPlural": "items",
+  "@selItemPlural": {
+    "description": "Plural form of items."
+  },
+  "selAvailableBalance": "Available balance: EGP {amount}",
+  "@selAvailableBalance": {
+    "description": "Subtitle showing available balance in withdraw sheet.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selWithdrawTo": "Withdraw to",
+  "@selWithdrawTo": {
+    "description": "Section label for withdraw destination."
+  },
+  "selWithdrawAmount": "Withdraw EGP {amount}",
+  "@selWithdrawAmount": {
+    "description": "Button text for withdraw confirmation.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selEnterAmount": "Enter amount",
+  "@selEnterAmount": {
+    "description": "Button text when no amount is entered."
+  },
+  "selDone": "Done",
+  "@selDone": {
+    "description": "Button text in withdrawal success dialog."
+  },
+  "selApplicationNotApproved": "Application Not Approved",
+  "@selApplicationNotApproved": {
+    "description": "Title for rejected seller application."
+  },
+  "selAccountUnderReview": "Account Under Review",
+  "@selAccountUnderReview": {
+    "description": "Title for pending seller application."
+  },
+  "selApplicationRejectedMessage": "We were unable to approve your seller application at this time. Reach out to our team if you'd like to know more.",
+  "@selApplicationRejectedMessage": {
+    "description": "Description for rejected seller application."
+  },
+  "selApplicationPendingMessage": "Thanks for joining Ayady. Our curation team is reviewing your application — you'll be notified the moment it's approved.",
+  "@selApplicationPendingMessage": {
+    "description": "Description for pending seller application."
+  },
+  "selSignOut": "Sign out",
+  "@selSignOut": {
+    "description": "Button text to sign out from pending screen."
+  },
+  "selEstimatedReviewTime": "Estimated review time: 3–5 business days",
+  "@selEstimatedReviewTime": {
+    "description": "Info text for estimated review time."
+  },
+  "selRefreshStatus": "Refresh Status",
+  "@selRefreshStatus": {
+    "description": "Button text to refresh seller status."
+  },
+  "selNotApproved": "NOT APPROVED",
+  "@selNotApproved": {
+    "description": "Status pill label for rejected application."
+  },
+  "selPendingApproval": "PENDING APPROVAL",
+  "@selPendingApproval": {
+    "description": "Status pill label for pending application."
+  },
+  "selApplicationSubmitted": "Application submitted",
+  "@selApplicationSubmitted": {
+    "description": "Timeline step label for submitted application."
+  },
+  "selReviewed": "Reviewed",
+  "@selReviewed": {
+    "description": "Timeline step label for reviewed application (rejected)."
+  },
+  "selUnderReview": "Under review",
+  "@selUnderReview": {
+    "description": "Timeline step label for under review application."
+  },
+  "selApprovedWelcomeAboard": "Approved — welcome aboard",
+  "@selApprovedWelcomeAboard": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApproved": "Approved",
+  "@selApproved": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApplicationNotApprovedSnack": "Your application was not approved. Please contact support.",
+  "@selApplicationNotApprovedSnack": {
+    "description": "Snackbar message for rejected application."
+  },
+  "selStillUnderReview": "You're still under review. We'll notify you soon.",
+  "@selStillUnderReview": {
+    "description": "Snackbar message for pending application."
+  },
+  "selCouldNotRefreshStatus": "Could not refresh status: {error}",
+  "@selCouldNotRefreshStatus": {
+    "description": "Snackbar message when status refresh fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDeleteProduct": "Delete Product",
+  "@selDeleteProduct": {
+    "description": "Dialog title for product deletion."
+  },
+  "selDeleteProductConfirm": "Are you sure you want to delete this product? This action cannot be undone.",
+  "@selDeleteProductConfirm": {
+    "description": "Dialog content for product deletion confirmation."
+  },
+  "selProductDeletedSuccessfully": "Product deleted successfully",
+  "@selProductDeletedSuccessfully": {
+    "description": "Snackbar message after product deletion."
+  },
+  "selFailedToDeleteProduct": "Failed to delete product: {error}",
+  "@selFailedToDeleteProduct": {
+    "description": "Snackbar message when product deletion fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selEditProduct": "Edit Product",
+  "@selEditProduct": {
+    "description": "Popup menu item and AppBar title for editing product."
+  },
+  "selDelete": "Delete",
+  "@selDelete": {
+    "description": "Popup menu item for deleting product."
+  },
+  "selStockUnits": "Stock: {stock} units",
+  "@selStockUnits": {
+    "description": "Label showing stock quantity.",
+    "placeholders": {
+      "stock": { "type": "int" }
+    }
+  },
+  "selActiveListing": "Active Listing",
+  "@selActiveListing": {
+    "description": "Label for active listing toggle."
+  },
+  "selVisibleToCustomers": "Visible to customers in the marketplace",
+  "@selVisibleToCustomers": {
+    "description": "Description for active listing toggle."
+  },
+  "selPriceEgp": "Price (EGP)",
+  "@selPriceEgp": {
+    "description": "Label for price field in EGP."
+  },
+  "selProductTitle": "Product Title",
+  "@selProductTitle": {
+    "description": "Label for product title field."
+  },
+  "selProductTitleHint": "e.g. Hand-painted Ceramic Serving Dish",
+  "@selProductTitleHint": {
+    "description": "Hint text for product title field."
+  },
+  "selProductTitleRequired": "Product title is required",
+  "@selProductTitleRequired": {
+    "description": "Validation message for missing product title."
+  },
+  "selTitleMin3Chars": "Title must be at least 3 characters",
+  "@selTitleMin3Chars": {
+    "description": "Validation message for short product title."
+  },
+  "selPriceRequired": "Price is required",
+  "@selPriceRequired": {
+    "description": "Validation message for missing price."
+  },
+  "selEnterValidNumber": "Enter a valid number",
+  "@selEnterValidNumber": {
+    "description": "Validation message for invalid number format."
+  },
+  "selPriceCannotBeNegative": "Price cannot be negative",
+  "@selPriceCannotBeNegative": {
+    "description": "Validation message for negative price."
+  },
+  "selStockRequired": "Stock is required",
+  "@selStockRequired": {
+    "description": "Validation message for missing stock."
+  },
+  "selEnterValidInteger": "Enter a valid integer",
+  "@selEnterValidInteger": {
+    "description": "Validation message for invalid integer format."
+  },
+  "selStockCannotBeNegative": "Stock cannot be negative",
+  "@selStockCannotBeNegative": {
+    "description": "Validation message for negative stock."
+  },
+  "selDescriptionRequired": "Description is required",
+  "@selDescriptionRequired": {
+    "description": "Validation message for missing description."
+  },
+  "selDescriptionMin10Chars": "Description must be at least 10 characters",
+  "@selDescriptionMin10Chars": {
+    "description": "Validation message for short description."
+  },
+  "selProductImages": "Product Images",
+  "@selProductImages": {
+    "description": "Section heading for product images."
+  },
+  "selAddPhoto": "ADD PHOTO",
+  "@selAddPhoto": {
+    "description": "Text on add photo button."
+  },
+  "selPleaseAddAtLeastOneImage": "Please add at least one product image",
+  "@selPleaseAddAtLeastOneImage": {
+    "description": "Snackbar message when no images added."
+  },
+  "selProductAddedSuccessfully": "Product added successfully!",
+  "@selProductAddedSuccessfully": {
+    "description": "Snackbar message after product creation."
+  },
+  "selSaveProduct": "Save Product",
+  "@selSaveProduct": {
+    "description": "Button text to save a product."
+  },
+  "selDiscardChanges": "Discard Changes",
+  "@selDiscardChanges": {
+    "description": "Button text to discard product changes."
+  },
+  "selOutOfStock": "Out of Stock",
+  "@selOutOfStock": {
+    "description": "Product stock status when stock is zero."
+  },
+  "selLowStock": "Low Stock",
+  "@selLowStock": {
+    "description": "Product stock status when stock is low."
+  },
+  "selInStock": "In Stock",
+  "@selInStock": {
+    "description": "Product stock status when stock is available."
+  },
+  "selNameMin3Chars": "Name must be at least 3 characters",
+  "@selNameMin3Chars": {
+    "description": "Validation message for short product name."
+  },
+  "selInvalidPrice": "Invalid price",
+  "@selInvalidPrice": {
+    "description": "Validation message for invalid price."
+  },
+  "selInvalidNumber": "Invalid number",
+  "@selInvalidNumber": {
+    "description": "Validation message for invalid number."
+  },
+  "selPleaseSelectCategory": "Please select a category",
+  "@selPleaseSelectCategory": {
+    "description": "Validation message for unselected category."
+  },
+  "selSelectCategory": "Select category",
+  "@selSelectCategory": {
+    "description": "Hint text for category selection."
+  },
+  "selProductUpdatedSuccessfully": "Product updated successfully",
+  "@selProductUpdatedSuccessfully": {
+    "description": "Snackbar message after product update."
+  },
+  "selErrorSavingProduct": "Error saving product: {error}",
+  "@selErrorSavingProduct": {
+    "description": "Snackbar message when product save fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDiscard": "Discard",
+  "@selDiscard": {
+    "description": "Button text to discard changes."
+  },
+  "selClickToUpload": "Click to upload or drag and drop",
+  "@selClickToUpload": {
+    "description": "Instruction text for file upload area."
+  },
+  "selPngJpgOrPdfMax5Mb": "PNG, JPG or PDF (max. 5MB)",
+  "@selPngJpgOrPdfMax5Mb": {
+    "description": "Subtitle text for upload area in edit product."
+  },
+  "selWelcomeSeller": "Welcome back, {name}",
+  "@selWelcomeSeller": {
+    "description": "Welcome message for seller dashboard.",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "selHereWhatIsHappening": "Here's what's happening with your shop today.",
+  "@selHereWhatIsHappening": {
+    "description": "Subtitle for seller dashboard."
+  },
+  "selTotalOrders": "Total Orders",
+  "@selTotalOrders": {
+    "description": "Stat card title for total orders."
+  },
+  "selNoRecentOrders": "No recent orders",
+  "@selNoRecentOrders": {
+    "description": "Empty state text for no recent orders."
+  },
+  "selOrderItem": "Order Item",
+  "@selOrderItem": {
+    "description": "Fallback order item name."
+  },
+  "selUnexpectedState": "Unexpected State",
+  "@selUnexpectedState": {
+    "description": "Text shown when state is unexpected."
+  },
+  "selAyadySeller": "Ayady Seller",
+  "@selAyadySeller": {
+    "description": "Fallback seller display name."
+  },
+  "selPleaseAgreeToTerms": "Please agree to the Terms of Service",
+  "@selPleaseAgreeToTerms": {
+    "description": "Snackbar message when terms not accepted."
+  },
+  "selThisFieldIsRequired": "This field is required",
+  "@selThisFieldIsRequired": {
+    "description": "Default validation message for required fields."
+  },
+  "selManageProducts": "Manage Products",
+  "@selManageProducts": {
+    "description": "AppBar title for manage products screen."
+  },
+  "selNoProductsFound": "No products found",
+  "@selNoProductsFound": {
+    "description": "Empty state text when no products found."
+  }
 }

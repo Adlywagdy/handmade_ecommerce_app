@@ -14,6 +14,7 @@ import 'package:handmade_ecommerce_app/features/seller/presentation/screens/sell
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_manage_products_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_orders_screen.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_profile_screen.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerBottomNav extends StatefulWidget {
   const SellerBottomNav({super.key});
@@ -108,7 +109,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             _buildNavIcon(
               Icons.dashboard_outlined,
               Icons.dashboard_rounded,
-              'Home',
+              context.l10n.home,
               _activeScreenIndex == 0,
               () => _switchTab(0),
               false,
@@ -117,7 +118,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             _buildNavIcon(
               Icons.inventory_2_outlined,
               Icons.inventory_2_rounded,
-              'Products',
+              context.l10n.products,
               _activeScreenIndex == 1,
               () => _switchTab(1),
               false,
@@ -126,7 +127,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             _buildNavIcon(
               Icons.shopping_bag_outlined,
               Icons.shopping_bag_rounded,
-              'Orders',
+              context.l10n.orders,
               _activeScreenIndex == 2,
               () => _switchTab(2),
               hasPendingOrders, // Now dynamic!
@@ -135,7 +136,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             _buildNavIcon(
               Icons.payments_outlined,
               Icons.payments_rounded,
-              'Earnings',
+              context.l10n.earnings,
               _activeScreenIndex == 4,
               () => _switchTab(4),
               false,
@@ -144,7 +145,7 @@ class _SellerBottomNavState extends State<SellerBottomNav> {
             _buildNavIcon(
               Icons.person_outline_rounded,
               Icons.person_rounded,
-              'Profile',
+              context.l10n.profile,
               _activeScreenIndex == 3,
               () => _switchTab(3),
               false,

@@ -9,6 +9,7 @@ import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 
 import 'package:handmade_ecommerce_app/features/seller/models/data/seller_mock_data.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerAddProductScreen extends StatefulWidget {
   const SellerAddProductScreen({super.key});
@@ -66,7 +67,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           },
         ),
         title: Text(
-          'Add Product',
+          context.l10n.addProduct,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -96,16 +97,16 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 SizedBox(height: 24.h),
 
                 // Product Title
-                _buildLabel('Product Title'),
+                _buildLabel(context.l10n.selProductTitle),
                 _buildTextField(
-                  hint: 'e.g. Hand-painted Ceramic Serving Dish',
+                  hint: context.l10n.selProductTitleHint,
                   controller: _titleController,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Product title is required';
+                      return context.l10n.selProductTitleRequired;
                     }
                     if (value.trim().length < 3) {
-                      return 'Title must be at least 3 characters';
+                      return context.l10n.selTitleMin3Chars;
                     }
                     return null;
                   },
@@ -113,7 +114,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 SizedBox(height: 20.h),
 
                 // Category dropdown (full-width)
-                _buildLabel('Category'),
+                _buildLabel(context.l10n.category),
                 DropdownButtonFormField<String>(
                   initialValue: _categoryController.text.isEmpty ? 'Ceramics' : _categoryController.text,
                   dropdownColor: Colors.white,
@@ -168,7 +169,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Price (EGP)'),
+                          _buildLabel(context.l10n.selPriceEgp),
                           _buildTextField(
                             hint: '450.00',
                             controller: _priceController,
@@ -176,14 +177,14 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                             keyboardType: const TextInputType.numberWithOptions(decimal: true),
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'Price is required';
+                                return context.l10n.selPriceRequired;
                               }
                               final price = double.tryParse(value);
                               if (price == null) {
-                                return 'Enter a valid number';
+                                return context.l10n.selEnterValidNumber;
                               }
                               if (price < 0) {
-                                return 'Price cannot be negative';
+                                return context.l10n.selPriceCannotBeNegative;
                               }
                               return null;
                             },
@@ -196,21 +197,21 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _buildLabel('Stock'),
+                          _buildLabel(context.l10n.stock),
                           _buildTextField(
                             hint: '10',
                             controller: _stockController,
                             keyboardType: TextInputType.number,
                             validator: (value) {
                               if (value == null || value.trim().isEmpty) {
-                                return 'Stock is required';
+                                return context.l10n.selStockRequired;
                               }
                               final stock = int.tryParse(value);
                               if (stock == null) {
-                                return 'Enter a valid integer';
+                                return context.l10n.selEnterValidInteger;
                               }
                               if (stock < 0) {
-                                return 'Stock cannot be negative';
+                                return context.l10n.selStockCannotBeNegative;
                               }
                               return null;
                             },
@@ -223,17 +224,17 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 SizedBox(height: 20.h),
 
                 // Description
-                _buildLabel('Description'),
+                _buildLabel(context.l10n.description),
                 _buildTextField(
-                  hint: 'Describe your product...',
+                  hint: context.l10n.describeYourProduct,
                   controller: _descriptionController,
                   maxLines: 5,
                   validator: (value) {
                     if (value == null || value.trim().isEmpty) {
-                      return 'Description is required';
+                      return context.l10n.selDescriptionRequired;
                     }
                     if (value.trim().length < 10) {
-                      return 'Description must be at least 10 characters';
+                      return context.l10n.selDescriptionMin10Chars;
                     }
                     return null;
                   },
@@ -263,7 +264,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Product Images',
+              context.l10n.selProductImages,
               style: TextStyle(
                 fontSize: 16.sp,
                 fontWeight: FontWeight.w700,
@@ -371,7 +372,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
             Icon(Icons.add_a_photo_outlined, color: commonColor, size: 24.w),
             SizedBox(height: 6.h),
             Text(
-              'ADD PHOTO',
+              context.l10n.selAddPhoto,
               style: TextStyle(
                 color: commonColor,
                 fontSize: 10.sp,
@@ -415,7 +416,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
       keyboardType: keyboardType,
       validator: validator ?? (value) {
         if (value == null || value.isEmpty) {
-          return 'This field is required';
+          return context.l10n.thisFieldIsRequired;
         }
         return null;
       },
@@ -471,7 +472,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Active Listing',
+                  context.l10n.selActiveListing,
                   style: TextStyle(
                     color: const Color(0xFF0F172A),
                     fontSize: 15.sp,
@@ -481,7 +482,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Visible to customers in the marketplace',
+                  context.l10n.selVisibleToCustomers,
                   style: TextStyle(
                     color: const Color(0xFF64748B),
                     fontSize: 12.sp,
@@ -513,7 +514,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
       listener: (context, state) {
         if (state is SellerError) {
           Get.snackbar(
-            'Error',
+            context.l10n.error,
             state.message,
             backgroundColor: Colors.redAccent,
             colorText: Colors.white,
@@ -534,7 +535,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 onPressed: () async {
                   if (_formKey.currentState!.validate()) {
                     if (_selectedImages.isEmpty) {
-                      Get.snackbar('Error', 'Please add at least one product image', backgroundColor: Colors.redAccent, colorText: Colors.white);
+                      Get.snackbar(context.l10n.error, context.l10n.selPleaseAddAtLeastOneImage, backgroundColor: Colors.redAccent, colorText: Colors.white);
                       return;
                     }
 
@@ -555,8 +556,8 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                     if (mounted && cubit.state is! SellerError) {
                       Get.back(); // Return to previous screen only on success
                       Get.snackbar(
-                        'Success',
-                        'Product added successfully!',
+                        context.l10n.success,
+                        context.l10n.selProductAddedSuccessfully,
                         backgroundColor: Colors.green,
                         colorText: Colors.white,
                       );
@@ -565,7 +566,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                 },
                 icon: Icon(Icons.save_outlined, color: Colors.white, size: 20.w),
                 label: Text(
-                  'Save Product',
+                  context.l10n.selSaveProduct,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,
@@ -598,7 +599,7 @@ class _SellerAddProductScreenState extends State<SellerAddProductScreen> {
                   ),
                 ),
                 child: Text(
-                  'Discard Changes',
+                  context.l10n.selDiscardChanges,
                   style: TextStyle(
                     color: commonColor,
                     fontSize: 16.sp,
