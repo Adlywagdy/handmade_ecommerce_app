@@ -1034,6 +1034,12 @@ abstract class AppLocalizations {
   /// **'Phone'**
   String get phone;
 
+  /// Hint text for phone number field.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your phone number'**
+  String get phoneHint;
+
   /// Label for location field.
   ///
   /// In en, this message translates to:
@@ -2377,6 +2383,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Delivery Address'**
   String get deliveryAddress;
+
+  /// Section title for delivery details on cart and order screens.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Details'**
+  String get deliveryDetails;
 
   /// Button text to change an existing address.
   ///

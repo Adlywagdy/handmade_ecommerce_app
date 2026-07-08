@@ -52,7 +52,7 @@ class _AddressColumnState extends State<AddressColumn> {
           spacing: 8.h,
           children: [
             CustomFeatureRow(
-              title: context.l10n.deliveryAddress,
+              title: context.l10n.deliveryDetails,
               buttontext: displayAddress != null ? context.l10n.change : 'Add',
               onTap: () => _openAddressBottomSheet(context),
               buttontextstyle: AppTextStyles.t_16w600.copyWith(
@@ -152,6 +152,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
   late final TextEditingController _city;
   late final TextEditingController _country;
   late final TextEditingController _zip;
+  late final TextEditingController _phone;
   bool _setAsDefault = false;
 
   @override
@@ -163,6 +164,9 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
     _city = TextEditingController(text: addr?.city ?? '');
     _country = TextEditingController(text: addr?.country ?? '');
     _zip = TextEditingController(text: addr?.zipCode.toString() ?? '');
+    _phone = TextEditingController(
+      text: context.read<CartCubit>().selectedOrderPhone,
+    );
   }
 
   @override
@@ -172,6 +176,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
     _city.dispose();
     _country.dispose();
     _zip.dispose();
+    _phone.dispose();
     super.dispose();
   }
 
@@ -209,7 +214,7 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                   ),
                   SizedBox(height: 16.h),
                   Text(
-                    context.l10n.deliveryAddress,
+                    context.l10n.deliveryDetails,
                     style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
                   ),
                   SizedBox(height: 14.h),
@@ -251,6 +256,23 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                         ),
                       ),
                     ],
+                  ),
+                  SizedBox(height: 12.h),
+                  AddressTextField(
+                    controller: _phone,
+                    label: context.l10n.phone,
+                    hint: context.l10n.phoneHint,
+                    keyboardType: TextInputType.phone,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return context.l10n.thisFieldIsRequired;
+                      }
+                      if (!value.phoneValid()) {
+                        return context.l10n.pleaseEnterValidZipCode;
+                      }
+                      return null;
+                    },
+                    required: true,
                   ),
                   SizedBox(height: 12.h),
                   AddressTextField(
@@ -377,6 +399,9 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                         );
                         await context.read<CartCubit>().getOrderaddress(
                           address: addressData,
+                        );
+                        context.read<CartCubit>().setOrderPhone(
+                          _phone.text.trim(),
                         );
 
                         if (_setAsDefault) {

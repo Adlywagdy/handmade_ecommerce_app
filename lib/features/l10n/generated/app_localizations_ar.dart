@@ -496,6 +496,9 @@ class AppLocalizationsAr extends AppLocalizations {
   String get phone => 'الهاتف';
 
   @override
+  String get phoneHint => 'أدخل رقم هاتفك';
+
+  @override
   String get location => 'الموقع';
 
   @override
@@ -1209,6 +1212,9 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get deliveryAddress => 'عنوان التوصيل';
+
+  @override
+  String get deliveryDetails => 'تفاصيل التوصيل';
 
   @override
   String get change => 'تغيير';

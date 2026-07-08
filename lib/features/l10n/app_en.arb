@@ -472,6 +472,10 @@
   "@phone": {
     "description": "Label for phone number field."
   },
+  "phoneHint": "Enter your phone number",
+  "@phoneHint": {
+    "description": "Hint text for phone number field."
+  },
   "location": "Location",
   "@location": {
     "description": "Label for location field."
@@ -1418,6 +1422,10 @@
   "deliveryAddress": "Delivery Address",
   "@deliveryAddress": {
     "description": "Section title for delivery address on cart and order screens."
+  },
+  "deliveryDetails": "Delivery Details",
+  "@deliveryDetails": {
+    "description": "Section title for delivery details on cart and order screens."
   },
   "change": "Change",
   "@change": {

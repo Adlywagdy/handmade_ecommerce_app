@@ -28,6 +28,7 @@ class CartCubit extends Cubit<CartState> {
   String selectedPaymentMethod = "Visa";
   PaymentDetailsModel? currentOrderSummary;
   String walletPhonenumber = "";
+  String selectedOrderPhone = "";
   String _appliedCoupon = "";
 
   /* ------------------------------------------- */
@@ -150,6 +151,11 @@ class CartCubit extends Cubit<CartState> {
     } catch (e) {
       emit(GetOrderaddressFailedState(errorMessage: e.toString()));
     }
+  }
+
+  /*------------------------------------------- */
+  void setOrderPhone(String phone) {
+    selectedOrderPhone = phone;
   }
 
   /*------------------------------------------- */
@@ -289,6 +295,7 @@ class CartCubit extends Cubit<CartState> {
     selectedOrderAddress = null;
     selectedPaymentMethod = "Visa";
     walletPhonenumber = "";
+    selectedOrderPhone = "";
     _appliedCoupon = "";
     emit(GetcartSuccessedstate(cartproducts: cartProductsList));
   }

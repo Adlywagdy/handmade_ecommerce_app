@@ -476,6 +476,10 @@
   "@phone": {
     "description": "Label for phone number field."
   },
+  "phoneHint": "أدخل رقم هاتفك",
+  "@phoneHint": {
+    "description": "Hint text for phone number field."
+  },
   "location": "الموقع",
   "@location": {
     "description": "Label for location field."
@@ -1422,6 +1426,10 @@
   "deliveryAddress": "عنوان التوصيل",
   "@deliveryAddress": {
     "description": "Section title for delivery address on cart and order screens."
+  },
+  "deliveryDetails": "تفاصيل التوصيل",
+  "@deliveryDetails": {
+    "description": "Section title for delivery details on cart and order screens."
   },
   "change": "تغيير",
   "@change": {

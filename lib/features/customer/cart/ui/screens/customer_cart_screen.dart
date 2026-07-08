@@ -328,6 +328,15 @@ class CheckoutButton extends StatelessWidget {
                       paymentMethod: cartCubit.selectedPaymentMethod,
                     );
 
+                    if (cartCubit.selectedOrderPhone.isEmpty) {
+                      showSnack(
+                        title: l10n.phone,
+                        message: l10n.phoneHint,
+                        bgColor: redDegree,
+                      );
+                      return;
+                    }
+
                     // fetch a new numeric order ID and set display id
                     orderCubit.orderID = await orderCubit.getNewOrderID();
 
@@ -337,6 +346,7 @@ class CheckoutButton extends StatelessWidget {
                         products: cartCubit.cartProductsList,
                         status: OrderStatus.pending,
                         address: effectiveAddress,
+                        phone: cartCubit.selectedOrderPhone,
                         orderid: "#AY-${orderCubit.orderID}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),

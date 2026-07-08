@@ -499,6 +499,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get phone => 'Phone';
 
   @override
+  String get phoneHint => 'Enter your phone number';
+
+  @override
   String get location => 'Location';
 
   @override
@@ -1215,6 +1218,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get deliveryAddress => 'Delivery Address';
+
+  @override
+  String get deliveryDetails => 'Delivery Details';
 
   @override
   String get change => 'Change';

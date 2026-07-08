@@ -13,6 +13,7 @@ class CustomerOrderModel {
   final DateTime orderDate;
   final PaymentDetailsModel payment;
   final AddressModel address;
+  final String phone;
   CustomerOrderModel({
     required this.customer,
     required this.products,
@@ -21,6 +22,7 @@ class CustomerOrderModel {
     required this.orderDate,
     required this.payment,
     required this.address,
+    required this.phone,
   });
 
   double get totalAmount => payment.totalPrice ?? 0;
@@ -115,6 +117,7 @@ class CustomerOrderModel {
               addressdescription: (map['deliveryAddress'] ?? '').toString(),
               zipCode: 0,
             ),
+      phone: (map['phone'] ?? map['customerPhone'] ?? '').toString(),
     );
   }
 
@@ -146,6 +149,7 @@ class CustomerOrderModel {
         'zipCode': address.zipCode,
         'country': address.country,
       },
+      'phone': phone,
       'customerId': customer.id,
       'status': status.name,
       'subtotal': subtotalAmount,
