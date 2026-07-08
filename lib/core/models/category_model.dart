@@ -1,3 +1,5 @@
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
+
 class CategoryModel {
   final String? id;
   final String categorytitle;
@@ -7,6 +9,7 @@ class CategoryModel {
   final int? order;
   final int? productsCount;
   final List<CategoryModel>? subcategories;
+
   const CategoryModel({
     this.id,
     required this.categorytitle,
@@ -18,10 +21,14 @@ class CategoryModel {
     this.subcategories,
   });
 
-  factory CategoryModel.fromMap(Map<String, dynamic> map, {String? id}) {
-    final orderValue = map['order'];
-    final productsCountValue = map['productsCount'];
+  String localizedTitle(bool isArabic) {
+    if (isArabic && categoryTitleAR != null && categoryTitleAR!.isNotEmpty) {
+      return categoryTitleAR!;
+    }
+    return categorytitle;
+  }
 
+  factory CategoryModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return CategoryModel(
       id: id ?? map['categoryId']?.toString() ?? map['id']?.toString(),
       categorytitle:
@@ -32,26 +39,20 @@ class CategoryModel {
               ?.toString(),
       categoryiconpath: map['icon']?.toString(),
       isActive: map['isActive'] as bool?,
-      order: orderValue is int ? orderValue : int.tryParse('$orderValue'),
-      productsCount: productsCountValue is int
-          ? productsCountValue
-          : int.tryParse('$productsCountValue'),
+      order: parseInt(map['order']),
+      productsCount: parseInt(map['productsCount']),
     );
   }
 
   static String? normalizeReferenceId(dynamic value) {
-    if (value == null) return null;
+    final text = cleanString(value);
+    if (text == null) return null;
 
-    final text = value.toString().trim();
-    if (text.isEmpty) return null;
+    final path = RegExp(r'^/?categories/([^/]+)$').firstMatch(text);
+    if (path != null) return path.group(1);
 
-    final categoriesPath = RegExp(r'^/?categories/([^/]+)$');
-    final pathMatch = categoriesPath.firstMatch(text);
-    if (pathMatch != null) return pathMatch.group(1);
-
-    final embeddedPath = RegExp(r'categories/([^/\s)]+)');
-    final embeddedMatch = embeddedPath.firstMatch(text);
-    if (embeddedMatch != null) return embeddedMatch.group(1);
+    final embedded = RegExp(r'categories/([^/\s)]+)').firstMatch(text);
+    if (embedded != null) return embedded.group(1);
 
     return text;
   }

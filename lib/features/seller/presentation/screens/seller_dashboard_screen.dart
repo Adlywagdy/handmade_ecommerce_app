@@ -7,7 +7,6 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_cubit.dart';
 import 'package:handmade_ecommerce_app/features/notifications/cubit/notifications_state.dart';
 import 'package:handmade_ecommerce_app/features/notifications/presentation/widgets/notification_badge.dart';
-import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_stat_card.dart';
@@ -57,20 +56,28 @@ class SellerDashboardScreen extends StatelessWidget {
                     SizedBox(height: 16.h),
 
                     // ── Profile Header ──
-                    _buildProfileHeader(),
+                    _buildProfileHeader(context),
 
                     SizedBox(height: 24.h),
 
                     // ── Welcome Text ──
                     Text(
-                      'Welcome back, ${FirebaseAuth.instance.currentUser?.displayName ?? 'Seller'}',
-                      style: AppTextStyles.t_24w700.copyWith(fontSize: 22.sp),
+                      context.l10n.welcomeBack + (FirebaseAuth.instance.currentUser?.displayName ?? context.l10n.seller),
+                      style: TextStyle(
+                        color: const Color(0xFF0F172A),
+                        fontSize: 22.sp,
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      "Here's what's happening with your shop today.",
-                      style: AppTextStyles.t_14w400.copyWith(
-                        color: AppColors.textMuted,
+                      context.l10n.hereWhatIsHappeningWithYourShopToday,
+                      style: TextStyle(
+                        color: const Color(0xFF94A3B8),
+                        fontSize: 14.sp,
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w400,
                       ),
                     ),
 
@@ -92,7 +99,7 @@ class SellerDashboardScreen extends StatelessWidget {
                         SizedBox(width: 12.w),
                         Expanded(
                           child: SellerStatCard(
-                            title: context.l10n.totalOrders,
+                            title: context.l10n.selTotalOrders,
                             value: stats.totalOrders.toString(),
                             percentage: stats.ordersGrowth,
                             icon: Icons.shopping_cart_outlined,
@@ -119,8 +126,13 @@ class SellerDashboardScreen extends StatelessWidget {
 
                     // ── Quick Actions ──
                     Text(
-                      'Quick Actions',
-                      style: AppTextStyles.t_18w700,
+                      context.l10n.quickActions,
+                      style: TextStyle(
+                        color: const Color(0xFF0F172A),
+                        fontSize: 18.sp,
+                        fontFamily: 'Plus Jakarta Sans',
+                        fontWeight: FontWeight.w700,
+                      ),
                     ),
                     SizedBox(height: 12.h),
                     Row(
@@ -170,8 +182,13 @@ class SellerDashboardScreen extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          'Recent Orders',
-                          style: AppTextStyles.t_18w700,
+                          context.l10n.recentOrders,
+                          style: TextStyle(
+                            color: const Color(0xFF0F172A),
+                            fontSize: 18.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w700,
+                          ),
                         ),
                         TextButton(
                           onPressed: () {
@@ -182,7 +199,7 @@ class SellerDashboardScreen extends StatelessWidget {
                             Get.toNamed(AppRoutes.sellerorders);
                           },
                           child: Text(
-                            'See All',
+                            context.l10n.seeAll,
                             style: TextStyle(
                               color: commonColor,
                               fontSize: 14.sp,
@@ -201,7 +218,7 @@ class SellerDashboardScreen extends StatelessWidget {
                         child: Padding(
                           padding: EdgeInsets.symmetric(vertical: 24.h),
                           child: Text(
-                            'No recent orders',
+                            context.l10n.noRecentOrders,
                             style: TextStyle(
                               color: const Color(0xFF64748B),
                               fontSize: 14.sp,
@@ -230,7 +247,7 @@ class SellerDashboardScreen extends StatelessWidget {
                             },
                             orderId: 'Order #$shortOrderId',
                             status: order.status.toUpperCase(),
-                            productName: order.items.isNotEmpty ? order.items.first.productName : 'Order Item',
+                            productName: order.items.isNotEmpty ? order.items.first.productName : context.l10n.orderItem,
                             timeAgo: formattedDate,
                             price: 'EGP ${order.totalAmount}',
                           ),
@@ -241,14 +258,14 @@ class SellerDashboardScreen extends StatelessWidget {
                 ),
               );
             }
-            return Center(child: Text(context.l10n.unexpectedState));
+            return Center(child: Text(context.l10n.selUnexpectedState));
           },
         ),
       ),
     );
   }
 
-  Widget _buildProfileHeader() {
+  Widget _buildProfileHeader(BuildContext context) {
     final user = FirebaseAuth.instance.currentUser;
 
     return Row(
@@ -301,7 +318,7 @@ class SellerDashboardScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                FirebaseAuth.instance.currentUser?.displayName ?? 'Ayady Seller',
+                FirebaseAuth.instance.currentUser?.displayName ?? context.l10n.selAyadySeller,
                 style: TextStyle(
                   color: const Color(0xFF0F172A),
                   fontSize: 16.sp,
@@ -311,7 +328,7 @@ class SellerDashboardScreen extends StatelessWidget {
               ),
               SizedBox(height: 2.h),
               Text(
-                'PREMIUM ARTISAN',
+                context.l10n.premiumArtisan,
                 style: TextStyle(
                   color: commonColor,
                   fontSize: 10.sp,

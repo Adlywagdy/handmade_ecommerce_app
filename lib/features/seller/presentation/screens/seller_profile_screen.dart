@@ -9,6 +9,7 @@ import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
 import 'package:handmade_ecommerce_app/features/auth/services/auth_service.dart';
 
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
+import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerProfileScreen extends StatelessWidget {
@@ -20,7 +21,7 @@ class SellerProfileScreen extends StatelessWidget {
       builder: (context) {
         return AlertDialog(
           title: Text(context.l10n.logout),
-          content: Text(context.l10n.logoutConfirmation),
+          content: Text(context.l10n.areYouSureYouWantToLogout),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
@@ -90,7 +91,7 @@ class SellerProfileScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 16.h),
-            Text(user?.displayName ?? 'Seller', style: AppTextStyles.t_20w700),
+            Text(user?.displayName ?? context.l10n.seller, style: AppTextStyles.t_20w700),
             SizedBox(height: 4.h),
             if (user?.email != null)
               Text(
@@ -101,19 +102,26 @@ class SellerProfileScreen extends StatelessWidget {
             _ProfileMenuTile(
               icon: Icons.storefront_outlined,
               title: context.l10n.shopSettings,
-              subtitle: context.l10n.viewShopInformation,
+              subtitle: context.l10n.viewYourShopInformation,
               onTap: () {},
             ),
             _ProfileMenuTile(
               icon: Icons.notifications_none_rounded,
-              title: context.l10n.notificationsCenter,
-              subtitle: context.l10n.openNotificationsCenter,
+              title: context.l10n.notifications,
+              subtitle: context.l10n.openYourNotificationsCenter,
               onTap: () => Get.toNamed(AppRoutes.notifications),
             ),
             _ProfileMenuTile(
               icon: Icons.help_outline_rounded,
               title: context.l10n.helpAndSupport,
-              subtitle: context.l10n.contactSupport,
+              subtitle: context.l10n.contactSupportAndReviewHelpInfo,
+              onTap: () {},
+            ),
+            _ProfileMenuTile(
+              icon: Icons.language_rounded,
+              title: context.l10n.language,
+              subtitle: context.l10n.changeAppLanguage,
+              trailing: const ChangeLanguageWidget(),
               onTap: () {},
             ),
             SizedBox(height: 24.h),
@@ -128,7 +136,7 @@ class SellerProfileScreen extends StatelessWidget {
                   Icon(Icons.logout_rounded, color: redDegree, size: 22.r),
                   SizedBox(width: 8.w),
                   Text(
-                    'Logout',
+                    context.l10n.logout,
                     style: AppTextStyles.t_16w600.copyWith(color: redDegree),
                   ),
                 ],
@@ -146,12 +154,14 @@ class _ProfileMenuTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final Widget? trailing;
 
   const _ProfileMenuTile({
     required this.icon,
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.trailing,
   });
 
   @override
@@ -194,11 +204,14 @@ class _ProfileMenuTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                color: greyTextColor,
-                size: 22.w,
-              ),
+              if (trailing != null)
+                trailing!
+              else
+                Icon(
+                  Icons.chevron_right_rounded,
+                  color: greyTextColor,
+                  size: 22.w,
+                ),
             ],
           ),
         ),

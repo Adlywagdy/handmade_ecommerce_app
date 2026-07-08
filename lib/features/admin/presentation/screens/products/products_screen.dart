@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../core/theme/colors.dart';
 import '../../../../../core/widgets/custom_searc_bar.dart';
 import '../../../cubit/admin_cubit.dart';
@@ -22,7 +23,7 @@ class AdminProductsScreen extends StatelessWidget {
           backgroundColor: Colors.white,
           elevation: 0,
           title: Text(
-            'Approve Products',
+            AppLocalizations.of(context)!.admApproveProducts,
             style: TextStyle(
               fontSize: 20.sp,
               fontWeight: FontWeight.bold,
@@ -46,17 +47,17 @@ class AdminProductsScreen extends StatelessWidget {
               fontSize: 15.sp,
               fontWeight: FontWeight.w500,
             ),
-            tabs: const [
-              Tab(text: 'Pending'),
-              Tab(text: 'Approved'),
-              Tab(text: 'Rejected'),
+            tabs: [
+              Tab(text: AppLocalizations.of(context)!.admPending),
+              Tab(text: AppLocalizations.of(context)!.admApproved),
+              Tab(text: AppLocalizations.of(context)!.admRejected),
             ],
           ),
         ),
         body: Column(
           children: [
             CustomSearchBar(
-              hintText: 'Search products...',
+              hintText: AppLocalizations.of(context)!.admSearchProductsHint,
               onChanged: (v) => context.read<AdminCubit>().setProductsQuery(v),
             ),
             Expanded(
@@ -105,7 +106,7 @@ class _ProductsGrid extends StatelessWidget {
     if (products.isEmpty) {
       return Center(
         child: Text(
-          'No products found',
+          AppLocalizations.of(context)!.admNoProductsFound,
           style: TextStyle(fontSize: 14.sp, color: subTitleColor),
         ),
       );

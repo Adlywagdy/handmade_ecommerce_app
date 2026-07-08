@@ -1,6 +1,7 @@
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/reviews/models/reviews_model.dart';
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
+import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 
 class ProductModel {
   final String id;
@@ -103,82 +104,86 @@ class ProductModel {
   String get sellerId => seller.primaryIdentifier;
   String? get categoryId => category?.id ?? category?.categorytitle;
 
-  factory ProductModel.fromMap(Map<String, dynamic> map, {String? id}) {
-    final imagesField = map['images'];
-    final singleImage =
-        map['productImage']?.toString() ?? map['imageUrl']?.toString();
-    final normalizedImages = imagesField is List
-        ? imagesField.map((e) => e.toString()).toList()
-        : (singleImage != null && singleImage.isNotEmpty)
-        ? <String>[singleImage]
-        : <String>[];
+  String localizedName(bool isArabic) {
+    if (isArabic && nameAR != null && nameAR!.isNotEmpty) return nameAR!;
+    return name;
+  }
 
-    final parsedPrice = _parseDouble(map['price']) ?? 0;
-    final parsedDiscountedPrice = _parseDouble(map['discountedPrice']);
-    final parsedQuantity = _parseInt(map['stock'] ?? map['quantity']) ?? 0;
-    final parsedRating = _parseDouble(map['rating'] ?? map['totalrate']);
+  String localizedDescription(bool isArabic) {
+    if (isArabic && descriptionAR != null && descriptionAR!.isNotEmpty) {
+      return descriptionAR!;
+    }
+    return description;
+  }
 
+  static List<String> _parseImages(Map<String, dynamic> map) {
+    if (map['images'] is List) {
+      return (map['images'] as List).map((e) => e.toString()).toList();
+    }
+    final single = map['productImage']?.toString() ?? map['imageUrl']?.toString();
+    return (single != null && single.isNotEmpty) ? [single] : [];
+  }
+
+  static SellerModel _parseSeller(Map<String, dynamic> map) {
     final sellerMap = map['seller'];
-    final sellerReferenceId =
-        SellerModel.normalizeReferenceId(sellerMap) ??
+    final refId = SellerModel.normalizeReferenceId(sellerMap) ??
         SellerModel.normalizeReferenceId(map['sellerId']);
-    final sellerData = sellerMap is Map<String, dynamic>
-        ? sellerMap
-        : <String, dynamic>{
-            'id': sellerReferenceId ?? map['sellerId'],
-            'sellerId': sellerReferenceId ?? map['sellerId'],
-            'name': map['sellerName'],
-            'email': map['sellerEmail'] ?? sellerReferenceId ?? map['sellerId'],
-            'specialty': map['sellerSpecialty'],
-            'image': map['sellerImage'],
-            'badge': map['sellerBadge'],
-            'location': map['sellerLocation'],
-          };
-    final seller = SellerModel.fromMap(
-      sellerData,
-      fallbackId: (sellerReferenceId ?? map['sellerId'])?.toString(),
-    );
+    if (sellerMap is Map<String, dynamic>) {
+      return SellerModel.fromMap(sellerMap, fallbackId: refId?.toString());
+    }
+    return SellerModel.fromMap({
+      'id': refId ?? map['sellerId'],
+      'sellerId': refId ?? map['sellerId'],
+      'name': map['sellerName'],
+      'email': map['sellerEmail'] ?? refId ?? map['sellerId'],
+      'specialty': map['sellerSpecialty'],
+      'image': map['sellerImage'],
+      'badge': map['sellerBadge'],
+      'location': map['sellerLocation'],
+    }, fallbackId: (refId ?? map['sellerId'])?.toString());
+  }
 
+  static CategoryModel? _parseCategory(Map<String, dynamic> map) {
     final categoryMap = map['category'];
-    final categoryReferenceId =
-        CategoryModel.normalizeReferenceId(categoryMap) ??
+    final refId = CategoryModel.normalizeReferenceId(categoryMap) ??
         CategoryModel.normalizeReferenceId(map['categoryId']);
-    final category = categoryMap is Map<String, dynamic>
-        ? CategoryModel.fromMap(categoryMap, id: categoryReferenceId)
-        : (categoryReferenceId != null || map['categoryName'] != null)
-        ? CategoryModel(
-            id: categoryReferenceId,
-            categorytitle:
-                (map['categoryName'] ?? categoryReferenceId ?? 'General')
-                    .toString(),
-          )
-        : null;
+    if (categoryMap is Map<String, dynamic>) {
+      return CategoryModel.fromMap(categoryMap, id: refId);
+    }
+    if (refId != null || map['categoryName'] != null) {
+      return CategoryModel(
+        id: refId,
+        categorytitle: (map['categoryName'] ?? refId ?? 'General').toString(),
+      );
+    }
+    return null;
+  }
 
+  factory ProductModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return ProductModel(
       id: id ?? map['id']?.toString() ?? map['productId']?.toString() ?? '',
-      name:
-          map['name']?.toString() ??
+      name: map['name']?.toString() ??
           map['productName']?.toString() ??
           map['title']?.toString() ??
           '',
       nameAR: map['nameAR']?.toString() ?? map['name_ar']?.toString(),
       description: map['description']?.toString() ?? '',
-      descriptionAR:
-          map['descriptionAR']?.toString() ?? map['description_ar']?.toString(),
-      price: parsedPrice,
-      discountedPrice: parsedDiscountedPrice,
+      descriptionAR: map['descriptionAR']?.toString() ??
+          map['description_ar']?.toString(),
+      price: parseDouble(map['price']) ?? 0,
+      discountedPrice: parseDouble(map['discountedPrice']),
       currency: map['currency']?.toString() ?? 'EGP',
-      totalrate: parsedRating,
-      salesCount: _parseInt(map['salesCount']),
-      reviewsCount: _parseInt(map['reviewsCount']),
+      totalrate: parseDouble(map['rating'] ?? map['totalrate']),
+      salesCount: parseInt(map['salesCount']),
+      reviewsCount: parseInt(map['reviewsCount']),
       status: map['status']?.toString(),
       isActive: map['isActive'] as bool? ?? true,
-      createdAt: _parseDateTime(map['createdAt']),
-      updatedAt: _parseDateTime(map['updatedAt']),
-      quantity: parsedQuantity,
-      images: normalizedImages,
-      category: category,
-      seller: seller,
+      createdAt: parseDateTime(map['createdAt']),
+      updatedAt: parseDateTime(map['updatedAt']),
+      quantity: parseInt(map['stock'] ?? map['quantity']) ?? 0,
+      images: _parseImages(map),
+      category: _parseCategory(map),
+      seller: _parseSeller(map),
       tags: map['tags'] is List
           ? (map['tags'] as List).map((e) => e.toString()).toList()
           : null,
@@ -212,34 +217,5 @@ class ProductModel {
     data['discountedPrice'] = discountedPrice;
 
     return data;
-  }
-
-  static double? _parseDouble(dynamic value) {
-    if (value == null) return null;
-    if (value is num) return value.toDouble();
-    return double.tryParse(value.toString());
-  }
-
-  static int? _parseInt(dynamic value) {
-    if (value == null) return null;
-    if (value is int) return value;
-    if (value is num) return value.toInt();
-    return int.tryParse(value.toString());
-  }
-
-  static DateTime? _parseDateTime(dynamic value) {
-    if (value == null) return null;
-    if (value is DateTime) return value;
-    if (value is int) return DateTime.fromMillisecondsSinceEpoch(value);
-    if (value is String) return DateTime.tryParse(value);
-
-    try {
-      final parsed = value.toDate();
-      if (parsed is DateTime) return parsed;
-    } catch (_) {
-      // Ignore unsupported types.
-    }
-
-    return null;
   }
 }

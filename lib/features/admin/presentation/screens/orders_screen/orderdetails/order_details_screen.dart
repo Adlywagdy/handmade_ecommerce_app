@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/orders_screen/orderdetails/widgets/order_details_body.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../cubit/admin_cubit.dart';
 
@@ -17,8 +18,8 @@ class OrderDetailsScreen extends StatelessWidget {
         final order = cubit.orderById(orderId);
         if (order == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Order')),
-            body: const Center(child: Text('Order not found')),
+            appBar: AppBar(title: Text(AppLocalizations.of(context)!.admOrderTitle)),
+            body: Center(child: Text(AppLocalizations.of(context)!.admOrderNotFound)),
           );
         }
         return Scaffold(
@@ -27,7 +28,7 @@ class OrderDetailsScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              order.displayId.isNotEmpty ? order.displayId : 'Order',
+              order.displayId.isNotEmpty ? order.displayId : AppLocalizations.of(context)!.admOrderTitle,
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,

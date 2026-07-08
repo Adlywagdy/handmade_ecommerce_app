@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/widgets/seller_manage_order_card.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
@@ -67,15 +66,20 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
           ),
         ),
         title: Text(
-          'Orders',
-          style: AppTextStyles.t_20w700,
+          context.l10n.orders,
+          style: TextStyle(
+            color: const Color(0xFF0F172A),
+            fontSize: 20.sp,
+            fontWeight: FontWeight.w700,
+            fontFamily: 'Plus Jakarta Sans',
+          ),
         ),
         centerTitle: false,
         actions: [
           IconButton(
             icon: Icon(
               Icons.search,
-              color: AppColors.textSecondary,
+              color: const Color(0xFF334155),
               size: 24.w,
             ),
             onPressed: () {},
@@ -83,7 +87,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
           IconButton(
             icon: Icon(
               Icons.filter_list,
-              color: AppColors.textSecondary,
+              color: const Color(0xFF334155),
               size: 24.w,
             ),
             onPressed: () {},
@@ -115,18 +119,26 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                   isScrollable: true,
                   tabAlignment: TabAlignment.start,
                   labelColor: commonColor,
-                  unselectedLabelColor: AppColors.textMuted,
-                  labelStyle: AppTextStyles.t_14w700,
-                  unselectedLabelStyle: AppTextStyles.t_14w500,
+                  unselectedLabelColor: const Color(0xFF64748B),
+                  labelStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w700,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
+                  unselectedLabelStyle: TextStyle(
+                    fontSize: 14.sp,
+                    fontWeight: FontWeight.w500,
+                    fontFamily: 'Plus Jakarta Sans',
+                  ),
                   indicatorColor: commonColor,
                   indicatorWeight: 2,
                   indicatorSize: TabBarIndicatorSize.tab,
                   dividerColor: Colors.transparent, // manually added border below
                   tabs: [
-                    Tab(text: pendingCount > 0 ? 'Pending ($pendingCount)' : 'Pending'),
-                    Tab(text: shippedCount > 0 ? 'Shipped ($shippedCount)' : 'Shipped'),
-                    Tab(text: completedCount > 0 ? 'Completed ($completedCount)' : 'Completed'),
-                    Tab(text: cancelledCount > 0 ? 'Cancelled ($cancelledCount)' : 'Cancelled'),
+                    Tab(text: pendingCount > 0 ? '${context.l10n.pending} ($pendingCount)' : context.l10n.pending),
+                    Tab(text: shippedCount > 0 ? '${context.l10n.shipped} ($shippedCount)' : context.l10n.shipped),
+                    Tab(text: completedCount > 0 ? '${context.l10n.completed} ($completedCount)' : context.l10n.completed),
+                    Tab(text: cancelledCount > 0 ? '${context.l10n.cancelled} ($cancelledCount)' : context.l10n.cancelled),
                   ],
                 );
               },
@@ -195,9 +207,12 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
             SizedBox(height: 12.h),
             Center(
               child: Text(
-                'No $tabName Orders',
-                style: AppTextStyles.t_16w500.copyWith(
-                  color: AppColors.textMuted,
+                context.l10n.selNoTabOrders(tabName),
+                style: TextStyle(
+                  color: const Color(0xFF64748B),
+                  fontSize: 16.sp,
+                  fontWeight: FontWeight.w500,
+                  fontFamily: 'Plus Jakarta Sans',
                 ),
               ),
             ),
@@ -226,7 +241,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
             : order.orderId.toUpperCase();
             
         final displayCustomer = (order.customerName.length > 20 && !order.customerName.contains(' '))
-            ? 'Customer'
+            ? context.l10n.selCustomerFallback
             : order.customerName;
 
         String formattedDate = order.orderDate;
@@ -246,22 +261,22 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
           status: order.status.toUpperCase(),
           timeAgo: formattedDate,
           buttonText: statusLower == 'pending' 
-              ? 'Mark as Shipped' 
+              ? context.l10n.selMarkAsShipped
               : statusLower == 'shipped'
-                  ? 'Mark as Completed'
-                  : 'Archive',
+                  ? context.l10n.selMarkAsCompleted
+                  : context.l10n.selArchive,
           isButtonFilled: statusLower == 'pending' || statusLower == 'shipped',
           imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop',
           onCancelPressed: canCancel ? () {
             showDialog(
               context: context,
               builder: (ctx) => AlertDialog(
-                title: Text(context.l10n.cancelOrder),
-                content: Text(context.l10n.cancelOrderConfirmation(order.orderId)),
+                title: Text(context.l10n.selCancelOrderTitle),
+                content: Text(context.l10n.selCancelOrderContent(order.orderId)),
                 actions: [
                   TextButton(
                     onPressed: () => Navigator.of(ctx).pop(),
-                    child: Text(context.l10n.no),
+                  child: Text(context.l10n.no),
                   ),
                   TextButton(
                     onPressed: () async {
@@ -270,8 +285,8 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                         await context.read<SellerCubit>().updateOrderStatus(order.orderId, 'Cancelled');
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text(context.l10n.orderCancelledSuccess),
+                            SnackBar(
+                              content: Text(context.l10n.selOrderCancelledAndStockRestored),
                               backgroundColor: Color(0xFFD32F2F),
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -281,7 +296,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                         if (context.mounted) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content: Text(context.l10n.failedToCancelOrder(e.toString())),
+                              content: Text(context.l10n.selFailedToCancelOrder(e.toString())),
                               backgroundColor: Colors.red,
                               behavior: SnackBarBehavior.floating,
                             ),
@@ -289,7 +304,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                         }
                       }
                     },
-                    child: Text(context.l10n.yesCancel, style: const TextStyle(color: Color(0xFFD32F2F))),
+                    child: Text(context.l10n.selYesCancel, style: const TextStyle(color: Color(0xFFD32F2F))),
                   ),
                 ],
               ),
@@ -300,8 +315,8 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
               // Archive the order
               context.read<SellerCubit>().archiveOrder(order.orderId);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text(context.l10n.orderArchivedSuccessfully),
+                SnackBar(
+                  content: Text(context.l10n.selOrderArchivedSuccessfully),
                   backgroundColor: Color(0xFF64748B),
                   behavior: SnackBarBehavior.floating,
                 ),
@@ -320,7 +335,7 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
               context.read<SellerCubit>().updateOrderStatus(order.orderId, newStatus);
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: Text(context.l10n.orderStatusUpdated(newStatus)),
+                  content: Text(context.l10n.selOrderStatusUpdatedTo(newStatus)),
                   backgroundColor: const Color(0xff07880E),
                   behavior: SnackBarBehavior.floating,
                 ),

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../../core/theme/colors.dart';
 import '../../../../cubit/admin_cubit.dart';
 import 'widgets/seller_details_body.dart';
@@ -20,8 +21,12 @@ class SellerDetailsScreen extends StatelessWidget {
 
         if (seller == null) {
           return Scaffold(
-            appBar: AppBar(title: const Text('Seller')),
-            body: const Center(child: Text('Seller not found')),
+            appBar: AppBar(
+              title: Text(AppLocalizations.of(context)!.admSeller),
+            ),
+            body: Center(
+              child: Text(AppLocalizations.of(context)!.admSellerNotFound),
+            ),
           );
         }
 
@@ -31,7 +36,7 @@ class SellerDetailsScreen extends StatelessWidget {
             backgroundColor: Colors.white,
             elevation: 0,
             title: Text(
-              'Seller Details',
+              AppLocalizations.of(context)!.admSellerDetails,
               style: TextStyle(
                 fontSize: 18.sp,
                 fontWeight: FontWeight.bold,

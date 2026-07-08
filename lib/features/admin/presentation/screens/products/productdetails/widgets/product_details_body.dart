@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import '../../../../../cubit/admin_cubit.dart';
 import '../../../../../models/products_model.dart';
 import 'info_row.dart';
@@ -31,20 +32,20 @@ class ProductDetailsBody extends StatelessWidget {
         SizedBox(height: 12.h),
 
         SectionWidget(
-          title: 'Inventory',
+          title: AppLocalizations.of(context)!.admInventory,
           rows: [
-            InfoRow(label: 'Stock', value: product.stock.toString()),
-            InfoRow(label: 'Category', value: product.categoryId.isNotEmpty ? product.categoryId : '—'),
-            InfoRow(label: 'Active', value: product.isActive ? 'Yes' : 'No'),
+            InfoRow(label: AppLocalizations.of(context)!.admStock, value: product.stock.toString()),
+            InfoRow(label: AppLocalizations.of(context)!.admCategory, value: product.categoryId.isNotEmpty ? product.categoryId : '—'),
+            InfoRow(label: AppLocalizations.of(context)!.admActive, value: product.isActive ? AppLocalizations.of(context)!.admYes : AppLocalizations.of(context)!.admNo),
           ],
         ),
         SizedBox(height: 12.h),
         SectionWidget(
-          title: 'Stats',
+          title: AppLocalizations.of(context)!.admStats,
           rows: [
-            InfoRow(label: 'Rating', value: product.rating.toStringAsFixed(1)),
-            InfoRow(label: 'Reviews', value: product.reviewsCount.toString()),
-            InfoRow(label: 'Sales', value: product.salesCount.toString()),
+            InfoRow(label: AppLocalizations.of(context)!.admRating, value: product.rating.toStringAsFixed(1)),
+            InfoRow(label: AppLocalizations.of(context)!.admReviews, value: product.reviewsCount.toString()),
+            InfoRow(label: AppLocalizations.of(context)!.admSales, value: product.salesCount.toString()),
           ],
         ),
         SizedBox(height: 12.h),

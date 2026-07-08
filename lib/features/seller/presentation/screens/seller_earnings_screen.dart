@@ -43,7 +43,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
             : null,
         centerTitle: true,
         title: Text(
-          'Earnings',
+          context.l10n.earnings,
           style: TextStyle(
             color: commonColor,
             fontSize: 20.sp,
@@ -166,7 +166,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Recent Transactions',
+                        context.l10n.recentTransactions,
                         style: TextStyle(
                           color: const Color(0xFF0F172A),
                           fontSize: 16.sp,
@@ -179,7 +179,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                           // TODO: Navigate to all transactions
                         },
                         child: Text(
-                          'View All ›',
+                          context.l10n.viewAll,
                           style: TextStyle(
                             color: commonColor,
                             fontSize: 13.sp,
@@ -198,7 +198,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                       child: Padding(
                         padding: EdgeInsets.all(20.w),
                         child: Text(
-                          'No recent transactions',
+                          context.l10n.noRecentTransactions,
                           style: TextStyle(
                             color: const Color(0xFF94A3B8),
                             fontSize: 14.sp,
@@ -244,7 +244,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
       child: Column(
         children: [
           Text(
-            'TOTAL BALANCE',
+            context.l10n.totalBalance,
             style: TextStyle(
               color: Colors.white.withValues(alpha: 0.7),
               fontSize: 11.sp,
@@ -286,9 +286,9 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     size: 16.w,
                   ),
                   SizedBox(width: 8.w),
-                  Text(
-                    'Withdraw Funds',
-                    style: TextStyle(
+                    Text(
+                      context.l10n.withdrawFunds,
+                      style: TextStyle(
                       color: Colors.white,
                       fontSize: 13.sp,
                       fontFamily: 'Plus Jakarta Sans',
@@ -310,7 +310,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
-          'Revenue Statistics',
+          context.l10n.revenueStatistics,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 16.sp,
@@ -327,8 +327,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
           padding: EdgeInsets.all(3.w),
           child: Row(
             children: [
-              _buildToggleButton('Weekly', 0),
-              _buildToggleButton('Monthly', 1),
+              _buildToggleButton(context.l10n.weekly, 0),
+              _buildToggleButton(context.l10n.monthly, 1),
             ],
           ),
         ),
@@ -577,7 +577,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
 
                     // Title
                     Text(
-                      'Withdraw Funds',
+                    context.l10n.withdrawFunds,
                       style: TextStyle(
                         color: const Color(0xFF0F172A),
                         fontSize: 20.sp,
@@ -587,7 +587,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                     ),
                     SizedBox(height: 4.h),
                     Text(
-                      'Available balance: EGP ${stats.totalRevenue}',
+                      context.l10n.selAvailableBalance(stats.totalRevenue),
                       style: TextStyle(
                         color: const Color(0xFF64748B),
                         fontSize: 14.sp,
@@ -636,7 +636,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                             fontFamily: 'Plus Jakarta Sans',
                             fontWeight: FontWeight.w600,
                           ),
-                          hintText: context.l10n.zeroPriceHint,
+                          hintText: context.l10n.zeroPointZeroZero,
                           hintStyle: TextStyle(
                             color: const Color(0xFFCBD5E1),
                             fontSize: 18.sp,
@@ -714,7 +714,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
 
                     // ── Withdraw To ──
                     Text(
-                      'Withdraw to',
+                      context.l10n.selWithdrawTo,
                       style: TextStyle(
                         color: const Color(0xFF334155),
                         fontSize: 13.sp,
@@ -769,8 +769,8 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                         ),
                         child: Text(
                           selectedAmount > 0
-                              ? 'Withdraw EGP ${selectedAmount.toStringAsFixed(2)}'
-                              : 'Enter amount',
+                              ? context.l10n.selWithdrawAmount(selectedAmount.toStringAsFixed(2))
+                              : context.l10n.selEnterAmount,
                           style: TextStyle(
                             fontSize: 15.sp,
                             fontFamily: 'Plus Jakarta Sans',
@@ -905,7 +905,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
             ),
             SizedBox(height: 16.h),
             Text(
-              'Withdrawal Requested!',
+              context.l10n.withdrawalRequested,
               style: TextStyle(
                 color: const Color(0xFF0F172A),
                 fontSize: 18.sp,
@@ -915,7 +915,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
             ),
             SizedBox(height: 8.h),
             Text(
-              'EGP ${amount.toStringAsFixed(2)} will be transferred to your account within 2-3 business days.',
+              context.l10n.withdrawalMessage(amount.toStringAsFixed(2)),
               textAlign: TextAlign.center,
               style: TextStyle(
                 color: const Color(0xFF64748B),
@@ -940,7 +940,7 @@ class _SellerEarningsScreenState extends State<SellerEarningsScreen> {
                   ),
                 ),
                 child: Text(
-                  'Done',
+                  context.l10n.selDone,
                   style: TextStyle(
                     fontSize: 14.sp,
                     fontFamily: 'Plus Jakarta Sans',
@@ -1072,7 +1072,7 @@ class _EarningsChartState extends State<_EarningsChart> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    isW ? 'Weekly Earnings' : 'Monthly Earnings',
+                    isW ? context.l10n.weeklyEarnings : context.l10n.monthlyEarnings,
                     style: TextStyle(
                       color: const Color(0xFF0F172A),
                       fontSize: 15.sp,

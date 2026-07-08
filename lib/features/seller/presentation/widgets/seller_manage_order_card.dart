@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerManageOrderCard extends StatelessWidget {
   final String orderId;
@@ -117,12 +117,17 @@ class SellerManageOrderCard extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Expanded(
-                              child: Text(
-                                orderId,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: AppTextStyles.t_16w700,
+                            child: Text(
+                              orderId,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: const Color(0xFF0F172A),
+                                fontSize: 16.sp,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Plus Jakarta Sans',
                               ),
+                            ),
                           ),
                           Container(
                             padding: EdgeInsets.symmetric(
@@ -131,37 +136,47 @@ class SellerManageOrderCard extends StatelessWidget {
                               color: _getStatusBgColor(),
                               borderRadius: BorderRadius.circular(100.r),
                             ),
-                              child: Text(
-                                status.toUpperCase(),
-                                style: AppTextStyles.t_10w700.copyWith(
-                                  color: _getStatusColor(),
-                                ),
+                            child: Text(
+                              status.toUpperCase(),
+                              style: TextStyle(
+                                color: _getStatusColor(),
+                                fontSize: 10.sp,
+                                fontWeight: FontWeight.w700,
+                                fontFamily: 'Plus Jakarta Sans',
                               ),
+                            ),
                           ),
                         ],
                       ),
                       SizedBox(height: 4.h),
                       Text(
-                        'Customer: $customerName',
+                        '${context.l10n.customerLabel} $customerName',
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: AppTextStyles.t_14w400.copyWith(
-                          color: AppColors.textMuted,
+                        style: TextStyle(
+                          color: const Color(0xFF64748B),
+                          fontSize: 13.sp,
+                          fontWeight: FontWeight.w400,
+                          fontFamily: 'Plus Jakarta Sans',
                         ),
                       ),
                       SizedBox(height: 4.h),
                       RichText(
                         text: TextSpan(
                           text:
-                              '$itemCount item${itemCount > 1 ? 's' : ''} • Total: ',
-                          style: AppTextStyles.t_14w400.copyWith(
-                            color: AppColors.textMuted,
+                              '$itemCount ${itemCount > 1 ? context.l10n.items : context.l10n.item} • ${context.l10n.totalLabel} ',
+                          style: TextStyle(
+                            color: const Color(0xFF64748B),
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w400,
+                            fontFamily: 'Plus Jakarta Sans',
                           ),
                           children: [
                             TextSpan(
                               text: 'EGP $totalAmount',
-                              style: AppTextStyles.t_14w700.copyWith(
+                              style: TextStyle(
                                 color: commonColor,
+                                fontWeight: FontWeight.w700,
                               ),
                             ),
                           ],
@@ -190,8 +205,11 @@ class SellerManageOrderCard extends StatelessWidget {
                     timeAgo,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.t_12w400.copyWith(
-                      color: AppColors.textMuted,
+                    style: TextStyle(
+                      color: const Color(0xFF64748B),
+                      fontSize: 12.sp,
+                      fontWeight: FontWeight.w400,
+                      fontFamily: 'Plus Jakarta Sans',
                     ),
                   ),
                 ),
@@ -213,9 +231,12 @@ class SellerManageOrderCard extends StatelessWidget {
                               border: Border.all(color: const Color(0xFFD32F2F), width: 1),
                             ),
                             child: Text(
-                              'Cancel',
-                              style: AppTextStyles.t_14w600.copyWith(
-                                color: AppColors.errorMain,
+                              context.l10n.cancel,
+                              style: TextStyle(
+                                color: const Color(0xFFD32F2F),
+                                fontSize: 13.sp,
+                                fontWeight: FontWeight.w600,
+                                fontFamily: 'Plus Jakarta Sans',
                               ),
                             ),
                           ),
@@ -235,8 +256,11 @@ class SellerManageOrderCard extends StatelessWidget {
                         ),
                         child: Text(
                           buttonText,
-                          style: AppTextStyles.t_14w600.copyWith(
+                          style: TextStyle(
                             color: isButtonFilled ? Colors.white : commonColor,
+                            fontSize: 13.sp,
+                            fontWeight: FontWeight.w600,
+                            fontFamily: 'Plus Jakarta Sans',
                           ),
                         ),
                       ),

@@ -4,6 +4,9 @@ class HiveHelper {
   static const onboardingBox = "onboardingBox";
   static const login = "login";
   static const email = "email";
+  static const role = "role";
+  static const status = "status";
+  static const language = "language";
 
   static void setOnboardingBox() {
     Hive.box(onboardingBox).put(onboardingBox, true);
@@ -31,6 +34,42 @@ class HiveHelper {
 
   static void clearEmailBox() {
     Hive.box(email).delete(email);
+  }
+
+  static void setRoleBoxValue(String value) {
+    Hive.box(role).put(role, value);
+  }
+
+  static String? getRoleBoxValue() {
+    return Hive.box(role).get(role) as String?;
+  }
+
+  static void clearRoleBox() {
+    Hive.box(role).delete(role);
+  }
+
+  static void setStatusBoxValue(String value) {
+    Hive.box(status).put(status, value);
+  }
+
+  static String? getStatusBoxValue() {
+    return Hive.box(status).get(status) as String?;
+  }
+
+  static void clearStatusBox() {
+    Hive.box(status).delete(status);
+  }
+
+  static void setLanguageBoxValue(String value) {
+    Hive.box(language).put(language, value);
+  }
+
+  static String? getLanguageBoxValue() {
+    return Hive.box(language).get(language) as String?;
+  }
+
+  static void clearLanguageBox() {
+    Hive.box(language).delete(language);
   }
 }
 

@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/routes/routes.dart';
+import 'package:handmade_ecommerce_app/core/services/auth_redirect_service.dart';
+import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/auth/cubit/auth_cubit.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
@@ -59,7 +60,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
           },
         ),
         title: Text(
-          'Seller Registration',
+          context.l10n.sellerRegistration,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -80,17 +81,17 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                 // Info Cards
               _buildInfoCard(
                 icon: Icons.language,
-                title: context.l10n.globalReach,
-                subtitle: context.l10n.sellWorldwide,
+                title: context.l10n.selGlobalReach,
+                subtitle: context.l10n.selSellToCustomersWorldwide,
               ),
               _buildInfoCard(
                 icon: Icons.verified_user_outlined,
-                title: context.l10n.secureSales,
-                subtitle: context.l10n.guaranteedSafePayments,
+                title: context.l10n.selSecureSales,
+                subtitle: context.l10n.selGuaranteedSafePayments,
               ),
               _buildInfoCard(
                 icon: Icons.support_agent_outlined,
-                title: context.l10n.support247,
+                title: context.l10n.selSupport247,
                 subtitle: context.l10n.dedicatedArtisanAssistance,
               ),
 
@@ -98,7 +99,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
 
               // Account Details Section
               Text(
-                'Account Details',
+                context.l10n.accountDetails,
                 style: TextStyle(
                   color: const Color(0xFF0F172A),
                   fontSize: 18.sp,
@@ -108,34 +109,34 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               ),
               SizedBox(height: 16.h),
               
-              _buildLabel('Email Address'),
+              _buildLabel(context.l10n.emailAddress),
               _buildTextField(
-                hint: 'e.g. seller@mail.com', 
+                hint: context.l10n.selEmailHint, 
                 controller: _emailController,
                 validator: (value) {
                   if (value == null || value.trim().isEmpty) {
-                    return 'Email is required';
+                    return context.l10n.emailIsRequired;
                   }
                   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
                   if (!emailRegex.hasMatch(value.trim())) {
-                    return 'Please enter a valid email address';
+                    return context.l10n.selPleaseEnterValidEmail;
                   }
                   return null;
                 },
               ),
               SizedBox(height: 16.h),
               
-              _buildLabel('Password'),
+              _buildLabel(context.l10n.password),
               _buildTextField(
-                hint: 'Min 6 characters', 
+                hint: context.l10n.selPasswordHint, 
                 isPassword: true, 
                 controller: _passwordController,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Password is required';
+                    return context.l10n.passwordIsRequired;
                   }
                   if (value.length < 6) {
-                    return 'Password must be at least 6 characters';
+                    return context.l10n.selPasswordMin6Chars;
                   }
                   return null;
                 },
@@ -144,7 +145,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
 
               // Shop Profile Section
               Text(
-                'Shop Profile',
+                context.l10n.shopProfile,
                 style: TextStyle(
                   color: const Color(0xFF0F172A),
                   fontSize: 18.sp,
@@ -155,14 +156,14 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               SizedBox(height: 20.h),
 
               // Shop Name
-              _buildLabel('Shop Name'),
-              _buildTextField(hint: 'e.g. Damascus Woodcrafts', controller: _shopNameController),
+              _buildLabel(context.l10n.shopName),
+              _buildTextField(hint: context.l10n.selShopNameHint, controller: _shopNameController),
               SizedBox(height: 16.h),
 
               // Craft Specialty
-              _buildLabel('Craft Specialty'),
+              _buildLabel(context.l10n.selCraftSpecialty),
               _buildTextField(
-                hint: 'Select your primary craft',
+                hint: context.l10n.selSelectYourPrimaryCraft,
                 controller: _specialtyController,
                 suffixIcon: Icon(Icons.keyboard_arrow_down,
                     color: commonColor, size: 24.w),
@@ -170,17 +171,16 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               SizedBox(height: 16.h),
 
               // Artisan Bio
-              _buildLabel('Artisan Bio'),
+              _buildLabel(context.l10n.selArtisanBio),
               _buildTextField(
-                hint:
-                    'Tell us about your journey, your craft, and\nwhat makes your products unique...',
+                hint: context.l10n.selArtisanBioHint,
                 maxLines: 4,
                 controller: _bioController,
               ),
               SizedBox(height: 16.h),
 
               // Portfolio
-              _buildLabel('Portfolio & Product Samples'),
+              _buildLabel(context.l10n.selPortfolioAndProductSamples),
               _buildUploadBox(),
               _buildThumbnailsRow(),
 
@@ -199,7 +199,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                 child: Padding(
                   padding: EdgeInsets.symmetric(vertical: 16.h),
                   child: Text(
-                    'Our curation team will review your application within 3–5\nbusiness days.',
+                    context.l10n.curationTeamReview,
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: const Color(0xFFC6A18C),
@@ -297,7 +297,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
       ),
       validator: validator ?? (value) {
         if (value == null || value.isEmpty) {
-          return 'This field is required';
+          return context.l10n.thisFieldIsRequired;
         }
         return null;
       },
@@ -362,8 +362,8 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               ),
             ),
             SizedBox(height: 4.h),
-            Text(
-              'PNG, JPG or PDF (max. 10MB)',
+              Text(
+                context.l10n.selPngJpgOrPdfMax10Mb,
               style: TextStyle(
                 color: const Color(0xFFC6A18C),
                 fontSize: 12.sp,
@@ -456,7 +456,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               ),
               children: [
                 TextSpan(
-                  text: 'Seller Terms of Service',
+                  text: context.l10n.selISellerTermsOfService,
                   style: TextStyle(
                     color: commonColor,
                     decoration: TextDecoration.underline,
@@ -477,14 +477,12 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
     return BlocConsumer<AuthCubit, AuthState>(
       listener: (context, state) {
         if (state is RegisterSuccessState) {
-          Get.snackbar(
-            'Success',
-            'Registration complete! Awaiting admin approval.',
-            backgroundColor: Colors.green,
-            colorText: Colors.white,
+          Get.offAllNamed(
+            AuthRedirectService.routeForRoleAndStatus(
+              state.role,
+              HiveHelper.getStatusBoxValue(),
+            ),
           );
-          // Go to dashboard or wait screen
-          Get.offAllNamed(AppRoutes.sellerdashboard);
         } else if (state is RegisterErrorState) {
           Get.snackbar(
             'Error',
@@ -510,7 +508,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
                   role: 'seller',
                 );
               } else if (!_agreedToTerms) {
-                Get.snackbar('Error', 'Please agree to the Terms of Service');
+                Get.snackbar(context.l10n.error, context.l10n.selPleaseAgreeToTerms);
               }
             },
             style: ElevatedButton.styleFrom(
@@ -525,7 +523,7 @@ class _SellerRegistrationScreenState extends State<SellerRegistrationScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
-                  'Submit Request',
+                  context.l10n.selSubmitRequest,
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: 16.sp,

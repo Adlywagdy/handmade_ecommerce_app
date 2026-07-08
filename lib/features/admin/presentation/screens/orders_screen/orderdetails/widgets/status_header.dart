@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/models/orders_model.dart';
 import 'package:handmade_ecommerce_app/features/admin/presentation/screens/orders_screen/widget/orders_status_badge.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 import 'formatters.dart';
 
 // Top card of the details page Shows the order id, the total price
@@ -34,7 +35,7 @@ class StatusHeader extends StatelessWidget {
               ),
               SizedBox(height: 4.h),
               Text(
-                '${formatMoney(order.totalPrice, order.currency)} • ${order.items.length} items',
+                AppLocalizations.of(context)!.admStatusHeaderSubtitle(formatMoney(order.totalPrice, order.currency), order.items.length),
                 style: TextStyle(fontSize: 12.sp, color: subTitleColor),
               ),
             ],

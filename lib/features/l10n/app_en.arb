@@ -26,6 +26,43 @@
   "technicalDifficulties": "We're experiencing technical difficulties on our end. Our team is working on it.",
   "goBack": "Go Back",
   "noInternetConnection": "No internet connection",
+  "earnings": "Earnings",
+  "welcomeBack": "Welcome back, ",
+  "hereWhatIsHappeningWithYourShopToday": "Here's what's happening with your shop today.",
+  "totalRevenue": "Total Revenue",
+  "premiumArtisan": "PREMIUM ARTISAN",
+  "noTapnameOrders": "No {tapname} orders",
+  "@noTapnameOrders": {
+    "description": "Message shown when there are no orders for a specific tab.",
+    "placeholders": {
+      "tapname": {
+        "type": "String"
+      }
+    }
+  },
+  "totalBalance": "Total Balance",
+  "withdrawFunds": "Withdraw Funds",
+  "recentTransactions": "Recent Transactions",
+  "viewAll": "View All ›",
+  "noRecentTransactions": "No recent transactions",
+  "revenueStatistics": "Revenue Statistics",
+  "weekly": "Weekly",
+  "monthly": "Monthly",
+  "weeklyEarnings": "Weekly Earnings",
+  "monthlyEarnings": "Monthly Earnings",
+  "ordersProcessed": "Orders Processed",
+  "avgOrderValue": "Avg. Order Value",
+  "startTypingToSeeMatchingProducts": "Start typing to see matching products",
+  "resultsFound": "results found",
+  "noOrdersFoundInThisTab": "No orders found in this tab.",
+  "failedToLoadOrders": "Failed to load orders. Pull to refresh.",
+  "confirmed": "Confirmed",
+  "preparing": "Preparing",
+  "allCategories": "All Categories",
+  "noLineItems": "No line items",
+  "updateStatus": "Update Status",
+  "productDetails": "Product Details",
+  
   "offlineMessage": "It looks like you're offline. Please check your network settings and try again.",
   "@offlineMessage": {
     "description": "Message shown when the user is offline."
@@ -135,6 +172,46 @@
   "@seller": {
     "description": "Role selection option text for seller registration."
   },
+  "sellerDetailsSectionTitle": "Seller details",
+  "@sellerDetailsSectionTitle": {
+    "description": "Section title for seller registration details."
+  },
+  "sellerDetailsSectionHint": "Complete your details so we can review your application.",
+  "@sellerDetailsSectionHint": {
+    "description": "Hint text for seller details section."
+  },
+  "specialtyLabel": "Specialty / Craft",
+  "@specialtyLabel": {
+    "description": "Label for specialty field."
+  },
+  "specialtyHint": "e.g. Handmade pottery",
+  "@specialtyHint": {
+    "description": "Hint text for specialty field."
+  },
+  "specialtyIsRequired": "Specialty is required",
+  "@specialtyIsRequired": {
+    "description": "Validation message for missing specialty."
+  },
+  "phoneNumberLabel": "Phone Number",
+  "@phoneNumberLabel": {
+    "description": "Label for phone number field."
+  },
+  "phoneNumberHint": "+20 1XX XXX XXXX",
+  "@phoneNumberHint": {
+    "description": "Hint text for phone number field."
+  },
+  "phoneIsRequired": "Phone number is required",
+  "@phoneIsRequired": {
+    "description": "Validation message for missing phone."
+  },
+  "cityLabelOptional": "City (optional)",
+  "@cityLabelOptional": {
+    "description": "Label for optional city field."
+  },
+  "countryLabelOptional": "Country (optional)",
+  "@countryLabelOptional": {
+    "description": "Label for optional country field."
+  },
   "agreeToTerms": "I agree to the Terms of Service and Privacy Policy.",
   "@agreeToTerms": {
     "description": "Text shown next to the terms and privacy checkbox."
@@ -215,96 +292,2122 @@
   "@setPassword": {
     "description": "Button text used to save the new password."
   },
-  "productUpdatedSuccessfully": "Product updated successfully",
-  "errorSavingProduct": "Error saving product: {error}",
-  "@errorSavingProduct": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
+  "ayady": "Ayady",
+  "@ayady": {
+    "description": "App title displayed in the home screen app bar."
   },
-  "unexpectedState": "Unexpected State",
-  "noProductsFound": "No products found",
-  "deleteProduct": "Delete Product",
-  "deleteProductConfirmation": "Are you sure you want to delete this product? This action cannot be undone.",
-  "editProduct": "Edit Product",
-  "cancelOrder": "Cancel Order",
-  "cancelOrderConfirmation": "Are you sure you want to cancel order {orderId}?",
-  "@cancelOrderConfirmation": {
-    "placeholders": {
-      "orderId": {
-        "type": "String"
-      }
-    }
+  "searchUniqueHandmadeCrafts": "Search unique handmade crafts",
+  "@searchUniqueHandmadeCrafts": {
+    "description": "Hint text for the search field on the home screen."
   },
-  "no": "No",
-  "orderCancelledSuccess": "Order has been cancelled and stock restored",
-  "failedToCancelOrder": "Failed to cancel order: {error}",
-  "@failedToCancelOrder": {
-    "placeholders": {
-      "error": {
-        "type": "String"
-      }
-    }
+  "categories": "Categories",
+  "@categories": {
+    "description": "Section title for the categories list."
   },
-  "yesCancel": "Yes, Cancel",
-  "orderArchivedSuccessfully": "Order archived successfully",
-  "orderStatusUpdated": "Order status updated to {newStatus}",
-  "@orderStatusUpdated": {
-    "placeholders": {
-      "newStatus": {
-        "type": "String"
-      }
-    }
+  "seeAll": "See All",
+  "@seeAll": {
+    "description": "Button text to view all items in a section."
+  },
+  "featuredProducts": "Featured Products",
+  "@featuredProducts": {
+    "description": "Section title for featured products."
+  },
+  "handpickedForYourStyle": "Handpicked for your style",
+  "@handpickedForYourStyle": {
+    "description": "Subtitle for the featured products section."
+  },
+  "topRated": "Top Rated",
+  "@topRated": {
+    "description": "Section title for top rated products."
+  },
+  "exploreAll": "Explore All",
+  "@exploreAll": {
+    "description": "Button text to explore all items in a section."
+  },
+  "error": "Error",
+  "@error": {
+    "description": "Generic error title for snackbar messages."
+  },
+  "searchForProducts": "Search for products",
+  "@searchForProducts": {
+    "description": "Hint text for the search field in the search screen."
+  },
+  "noFilters": "No filters",
+  "@noFilters": {
+    "description": "Title for snackbar when trying to filter without search criteria."
+  },
+  "pleaseEnterSearchQueryOrSelectCategory": "Please enter a search query or select a category to filter.",
+  "@pleaseEnterSearchQueryOrSelectCategory": {
+    "description": "Message shown when trying to filter without proper criteria."
+  },
+  "editProfile": "Edit Profile",
+  "@editProfile": {
+    "description": "Title for the edit profile bottom sheet."
+  },
+  "name": "Name",
+  "@name": {
+    "description": "Label for name input field."
+  },
+  "saveChanges": "Save Changes",
+  "@saveChanges": {
+    "description": "Button text to save profile changes."
   },
   "logout": "Logout",
-  "logoutConfirmation": "Are you sure you want to logout?",
+  "@logout": {
+    "description": "Button text and dialog title for logout action."
+  },
+  "areYouSureYouWantToLogout": "Are you sure you want to logout?",
+  "@areYouSureYouWantToLogout": {
+    "description": "Confirmation message in logout dialog."
+  },
   "profile": "Profile",
-  "productName": "Product Name",
-  "priceWithCurrency": "Price ($)",
+  "@profile": {
+    "description": "Title for the profile screen."
+  },
+  "myOrders": "My Orders",
+  "@myOrders": {
+    "description": "Menu item title for orders section."
+  },
+  "trackAndManageYourPurchases": "Track and manage your purchases",
+  "@trackAndManageYourPurchases": {
+    "description": "Subtitle for the orders menu item."
+  },
+  "favorites": "Favorites",
+  "@favorites": {
+    "description": "Menu item title for favorites section."
+  },
+  "itemsYouHaveSavedForLater": "Items you've saved for later",
+  "@itemsYouHaveSavedForLater": {
+    "description": "Subtitle for the favorites menu item."
+  },
+  "settings": "Settings",
+  "@settings": {
+    "description": "Menu item title for settings section."
+  },
+  "notificationsAndPrivacy": "Notifications and privacy",
+  "@notificationsAndPrivacy": {
+    "description": "Subtitle for the settings menu item."
+  },
+  "nameBio": "Name, bio ",
+  "@nameBio": {
+    "description": "Subtitle for the edit profile menu item."
+  },
+  "home": "Home",
+  "@home": {
+    "description": "Bottom navigation bar label for home tab."
+  },
+  "wishlist": "Wishlist",
+  "@wishlist": {
+    "description": "Bottom navigation bar label for wishlist tab."
+  },
+  "cart": "Cart",
+  "@cart": {
+    "description": "Bottom navigation bar label for cart tab."
+  },
+  "productUpdatedSuccessfully": "Product updated successfully",
+  "@productUpdatedSuccessfully": {
+    "description": "Success message when product is updated."
+  },
+  "errorSavingProduct": "Error saving product",
+  "@errorSavingProduct": {
+    "description": "Error message when saving product fails."
+  },
+  "prepare": "Prepare",
+  "@prepare": {
+    "description": "Button text to prepare an order."
+  },
+  "ship": "Ship",
+  "@ship": {
+    "description": "Button text to ship an order."
+  },
+  "deliver": "Deliver",
+  "@deliver": {
+    "description": "Button text to deliver an order."
+  },
+  "platformCommission": "Platform Commission",
+  "@platformCommission": {
+    "description": "Label for platform commission setting."
+  },
+  "eg15": "e.g. 15",
+  "@eg15": {
+    "description": "Example hint text for commission input."
+  },
+  "save": "Save",
+  "@save": {
+    "description": "Button text to save changes."
+  },
+  "pleaseAgreeToTermsOfService": "Please agree to the Terms of Service",
+  "@pleaseAgreeToTermsOfService": {
+    "description": "Error message for terms agreement."
+  },
+  "zeroPointZeroZero": "0.00",
+  "@zeroPointZeroZero": {
+    "description": "Default hint text for numeric input."
+  },
+  "deliveryFee": "Delivery Fee",
+  "@deliveryFee": {
+    "description": "Label for delivery fee setting."
+  },
+  "minimumOrderValue": "Minimum Order Value",
+  "@minimumOrderValue": {
+    "description": "Label for minimum order value setting."
+  },
+  "supportEmail": "Support Email",
+  "@supportEmail": {
+    "description": "Label for support email setting."
+  },
+  "approve": "Approve",
+  "@approve": {
+    "description": "Button text to approve something."
+  },
+  "reject": "Reject",
+  "@reject": {
+    "description": "Button text to reject something."
+  },
+  "searchSellers": "Search sellers...",
+  "@searchSellers": {
+    "description": "Hint text for seller search field."
+  },
+  "phone": "Phone",
+  "@phone": {
+    "description": "Label for phone number field."
+  },
+  "location": "Location",
+  "@location": {
+    "description": "Label for location field."
+  },
+  "specialty": "Specialty",
+  "@specialty": {
+    "description": "Label for specialty field."
+  },
+  "totalSales": "Total sales",
+  "@totalSales": {
+    "description": "Label for total sales count."
+  },
+  "totalProducts": "Total products",
+  "@totalProducts": {
+    "description": "Label for total products count."
+  },
+  "walletBalance": "Wallet balance",
+  "@walletBalance": {
+    "description": "Label for wallet balance field."
+  },
+  "commissionRate": "Commission rate",
+  "@commissionRate": {
+    "description": "Label for commission rate field."
+  },
+  "submitted": "Submitted",
+  "@submitted": {
+    "description": "Label for submitted date/status."
+  },
+  "active": "Active",
+  "@active": {
+    "description": "Tab/status label for active items."
+  },
+  "delivered": "Delivered",
+  "@delivered": {
+    "description": "Status label for delivered orders."
+  },
+  "searchOrderIdOrName": "Search order ID or name",
+  "@searchOrderIdOrName": {
+    "description": "Hint text for order search field."
+  },
+  "sellerNotFound": "Seller not found",
+  "@sellerNotFound": {
+    "description": "Error message when seller is not found."
+  },
+  "approveCaps": "APPROVE",
+  "@approveCaps": {
+    "description": "Button text to approve in uppercase."
+  },
+  "rejectCaps": "REJECT",
+  "@rejectCaps": {
+    "description": "Button text to reject in uppercase."
+  },
+  "created": "Created",
+  "@created": {
+    "description": "Label for creation date."
+  },
+  "lastUpdate": "Last update",
+  "@lastUpdate": {
+    "description": "Label for last update date."
+  },
+  "subtotal": "Subtotal",
+  "@subtotal": {
+    "description": "Label for order subtotal."
+  },
+  "deliveryFeeLower": "Delivery fee",
+  "@deliveryFeeLower": {
+    "description": "Label for delivery fee in order details."
+  },
+  "commission": "Commission",
+  "@commission": {
+    "description": "Label for commission amount."
+  },
+  "sellerEarning": "Seller earning",
+  "@sellerEarning": {
+    "description": "Label for seller earning amount."
+  },
+  "total": "Total",
+  "@total": {
+    "description": "Label for total amount."
+  },
+  "method": "Method",
+  "@method": {
+    "description": "Label for payment method."
+  },
+  "street": "Street",
+  "@street": {
+    "description": "Label for street address."
+  },
+  "city": "City",
+  "@city": {
+    "description": "Label for city field."
+  },
+  "governorate": "Governorate",
+  "@governorate": {
+    "description": "Label for governorate field."
+  },
+  "country": "Country",
+  "@country": {
+    "description": "Label for country field."
+  },
+  "zip": "Zip",
+  "@zip": {
+    "description": "Label for zip code field."
+  },
+  "searchProducts": "Search products...",
+  "@searchProducts": {
+    "description": "Hint text for product search field."
+  },
+  "order": "Order",
+  "@order": {
+    "description": "Title for order screen."
+  },
+  "orderNotFound": "Order not found",
+  "@orderNotFound": {
+    "description": "Error message when order is not found."
+  },
+  "product": "Product",
+  "@product": {
+    "description": "Title for product screen."
+  },
+  "productNotFound": "Product not found",
+  "@productNotFound": {
+    "description": "Error message when product is not found."
+  },
+  "totalUsers": "TOTAL USERS",
+  "@totalUsers": {
+    "description": "Dashboard stat label for total users."
+  },
+  "totalSellers": "TOTAL SELLERS",
+  "@totalSellers": {
+    "description": "Dashboard stat label for total sellers."
+  },
+  "totalOrders": "TOTAL ORDERS",
+  "@totalOrders": {
+    "description": "Dashboard stat label for total orders."
+  },
+  "revenue": "REVENUE",
+  "@revenue": {
+    "description": "Dashboard stat label for revenue."
+  },
   "stock": "Stock",
-  "description": "Description",
-  "addProduct": "Add Product",
-  "viewProducts": "View Products",
-  "viewOrders": "View Orders",
-  "enterProductName": "Enter product name",
-  "zeroPriceHint": "0.00",
-  "zeroStockHint": "0",
-  "selectCategory": "Select category",
-  "describeYourProduct": "Describe your product...",
-  "totalRevenue": "Total Revenue",
-  "totalOrders": "Total Orders",
-  "bestSellingItem": "Best selling item",
-  "ordersProcessed": "Orders Processed",
-  "avgOrderValue": "Avg. Order Value",
+  "@stock": {
+    "description": "Label for stock quantity."
+  },
+  "category": "Category",
+  "@category": {
+    "description": "Label for product category."
+  },
+  "yes": "Yes",
+  "@yes": {
+    "description": "Affirmative response."
+  },
+  "no": "No",
+  "@no": {
+    "description": "Negative response."
+  },
+  "reviews": "Reviews",
+  "@reviews": {
+    "description": "Label for reviews count."
+  },
+  "sales": "Sales",
+  "@sales": {
+    "description": "Label for sales count."
+  },
+  "dashboard": "Dashboard",
+  "@dashboard": {
+    "description": "Bottom navigation label for dashboard."
+  },
+  "sellers": "Sellers",
+  "@sellers": {
+    "description": "Bottom navigation label for sellers."
+  },
+  "products": "Products",
+  "@products": {
+    "description": "Bottom navigation label for products."
+  },
+  "withdrawalRequested": "Withdrawal Requested!",
+  "@withdrawalRequested": {
+    "description": "Title for withdrawal success dialog."
+  },
+  "withdrawalMessage": "EGP {amount} will be transferred to your account within 2-3 business days.",
+  "@withdrawalMessage": {
+    "description": "Message for withdrawal success dialog.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "success": "Success",
+  "@success": {
+    "description": "Generic success title for snackbar messages."
+  },
+  "registrationCompleteAwaitingApproval": "Registration complete! Awaiting admin approval.",
+  "@registrationCompleteAwaitingApproval": {
+    "description": "Success message after seller registration."
+  },
   "shopSettings": "Shop Settings",
-  "viewShopInformation": "View your shop information",
-  "notificationsCenter": "Notifications",
-  "openNotificationsCenter": "Open your notifications center",
+  "@shopSettings": {
+    "description": "Menu item title for shop settings."
+  },
+  "viewYourShopInformation": "View your shop information",
+  "@viewYourShopInformation": {
+    "description": "Subtitle for shop settings menu item."
+  },
+  "openYourNotificationsCenter": "Open your notifications center",
+  "@openYourNotificationsCenter": {
+    "description": "Subtitle for notifications menu item."
+  },
   "helpAndSupport": "Help & Support",
-  "contactSupport": "Contact support and review help info",
-  "globalReach": "Global Reach",
-  "sellWorldwide": "Sell to customers worldwide",
-  "secureSales": "Secure Sales",
-  "guaranteedSafePayments": "Guaranteed safe payments",
-  "support247": "24/7 Support",
-  "dedicatedArtisanAssistance": "Dedicated artisan assistance",
-  "notificationsTitle": "Notifications",
+  "@helpAndSupport": {
+    "description": "Menu item title for help and support."
+  },
+  "contactSupportAndReviewHelpInfo": "Contact support and review help info",
+  "@contactSupportAndReviewHelpInfo": {
+    "description": "Subtitle for help and support menu item."
+  },
+  "contact": "Contact",
+  "@contact": {
+    "description": "Label for contact section."
+  },
+  "email": "Email",
+  "@email": {
+    "description": "Label for email field."
+  },
+  "shopInfo": "Shop Info",
+  "@shopInfo": {
+    "description": "Title for shop information section."
+  },
+  "owner": "Owner",
+  "@owner": {
+    "description": "Label for shop owner."
+  },
+  "badge": "Badge",
+  "@badge": {
+    "description": "Label for seller badge."
+  },
+  "status": "Status",
+  "@status": {
+    "description": "Label for status field."
+  },
+  "emailSeller": "Email Seller",
+  "@emailSeller": {
+    "description": "Button text to email seller."
+  },
+  "customOrderRequestSubject": "Custom Order Request",
+  "@customOrderRequestSubject": {
+    "description": "Default subject for custom order email."
+  },
+  "customOrderRequestMessage": "Hello {sellerName},\n\nI am interested in placing a custom order. Please contact me to discuss the details.\n\nThank you!",
+  "@customOrderRequestMessage": {
+    "description": "Default message template for custom order email.",
+    "placeholders": {
+      "sellerName": {
+        "type": "String"
+      }
+    }
+  },
+  "sendEmail": "Send Email",
+  "@sendEmail": {
+    "description": "Button text to send email."
+  },
+  "writeYourCustomRequestAndContinueInYourEmailApp": "Write your custom request and continue in your email app",
+  "@writeYourCustomRequestAndContinueInYourEmailApp": {
+    "description": "Instruction text for custom order email."
+  },
+  "pricePlaceholder": "Enter price",
+  "@pricePlaceholder": {
+    "description": "Placeholder text for price input field."
+  },
+  "priceIsRequired": "Price is required",
+  "@priceIsRequired": {
+    "description": "Validation message for missing price."
+  },
+  "invalidPrice": "Invalid price",
+  "@invalidPrice": {
+    "description": "Validation message for invalid price format."
+  },
+  "stockPlaceholder": "Enter stock quantity",
+  "@stockPlaceholder": {
+    "description": "Placeholder text for stock input field."
+  },
+  "stockIsRequired": "Stock is required",
+  "@stockIsRequired": {
+    "description": "Validation message for missing stock."
+  },
+  "invalidNumber": "Invalid number",
+  "@invalidNumber": {
+    "description": "Validation message for invalid number format."
+  },
+  "selectCategory": "Select category",
+  "@selectCategory": {
+    "description": "Placeholder text for category selection."
+  },
+  "pleaseSelectCategory": "Please select a category",
+  "@pleaseSelectCategory": {
+    "description": "Validation message for unselected category."
+  },
+  "descriptionIsRequired": "Description is required",
+  "@descriptionIsRequired": {
+    "description": "Validation message for missing description."
+  },
+  "pending": "Pending",
+  "@pending": {
+    "description": "Status label for pending items."
+  },
+  "approved": "Approved",
+  "@approved": {
+    "description": "Status label for approved items."
+  },
+  "rejected": "Rejected",
+  "@rejected": {
+    "description": "Status label for rejected items."
+  },
+  "cancelled": "Cancelled",
+  "@cancelled": {
+    "description": "Status label for cancelled items."
+  },
+  "editProduct": "Edit Product",
+  "@editProduct": {
+    "description": "Button or title for editing a product."
+  },
+  "productName": "Product Name",
+  "@productName": {
+    "description": "Label for product name field."
+  },
+  "enterProductName": "Enter product name",
+  "@enterProductName": {
+    "description": "Hint text for the product name input field."
+  },
+  "productNameIsRequired": "Product name is required",
+  "@productNameIsRequired": {
+    "description": "Validation message shown when the product name is empty."
+  },
+  "price": "Price",
+  "@price": {
+    "description": "Label text for the price field."
+  },
+  "discard": "Discard",
+  "@discard": {
+    "description": "Button text to discard changes."
+  },
+  "manageProducts": "Manage Products",
+  "@manageProducts": {
+    "description": "Title for the manage products screen."
+  },
+  "noProductsFound": "No products found",
+  "@noProductsFound": {
+    "description": "Message shown when there are no products available."
+  },
+  "units": "Units",
+  "@units": {
+    "description": "Label text for the unit count display."
+  },
+  "delete": "Delete",
+  "@delete": {
+    "description": "Button text to delete an item."
+  },
+  "markAsShipped": "Mark as Shipped",
+  "@markAsShipped": {
+    "description": "Button text to mark an order as shipped."
+  },
+  "markAsCompleted": "Mark as Completed",
+  "@markAsCompleted": {
+    "description": "Button text to mark an order as completed."
+  },
+  "orderCompleted": "Order Completed",
+  "@orderCompleted": {
+    "description": "Status text for a completed order."
+  },
+  "shipped": "Shipped",
+  "@shipped": {
+    "description": "Status label for shipped orders."
+  },
+  "completed": "Completed",
+  "@completed": {
+    "description": "Status label for completed orders."
+  },
+  "orderStatusUpdatedTo": "Order status updated to {status}",
+  "@orderStatusUpdatedTo": {
+    "description": "Message shown when an order status changes.",
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "bestSellingItem": "Best Selling Item",
+  "@bestSellingItem": {
+    "description": "Title for the best selling item card."
+  },
+  "quickActions": "Quick Actions",
+  "@quickActions": {
+    "description": "Title for the quick actions section."
+  },
+  "addProduct": "Add Product",
+  "@addProduct": {
+    "description": "Button text to add a new product."
+  },
+  "viewProducts": "View Products",
+  "@viewProducts": {
+    "description": "Button text to view products list."
+  },
+  "viewOrders": "View Orders",
+  "@viewOrders": {
+    "description": "Button text to view orders list."
+  },
+  "recentOrders": "Recent Orders",
+  "@recentOrders": {
+    "description": "Section title for recent orders."
+  },
+  "noRecentOrders": "No recent orders",
+  "@noRecentOrders": {
+    "description": "Message shown when there are no recent orders."
+  },
+  "orderItem": "Order Item",
+  "@orderItem": {
+    "description": "Label for an order item in the details list."
+  },
+  "unexpectedState": "Unexpected state",
+  "@unexpectedState": {
+    "description": "Message shown when the state is unexpected."
+  },
+  "inventory": "Inventory",
+  "@inventory": {
+    "description": "Section title for inventory details."
+  },
+  "stats": "Stats",
+  "@stats": {
+    "description": "Section title for product statistics."
+  },
+  "business": "Business",
+  "@business": {
+    "description": "Section title for business information."
+  },
+  "timeline": "Timeline",
+  "@timeline": {
+    "description": "Section title for timeline information."
+  },
+  "parties": "Parties",
+  "@parties": {
+    "description": "Section title for parties involved."
+  },
+  "totals": "Totals",
+  "@totals": {
+    "description": "Section title for totals information."
+  },
+  "payment": "Payment",
+  "@payment": {
+    "description": "Section title for payment information."
+  },
+  "shipping": "Shipping",
+  "@shipping": {
+    "description": "Section title for shipping information."
+  },
+  "newArtisanRegistrations": "New artisan registrations",
+  "@newArtisanRegistrations": {
+    "description": "Subtitle for new artisan registrations notification."
+  },
+  "qualityControlCheckRequired": "Quality control check required",
+  "@qualityControlCheckRequired": {
+    "description": "Subtitle for quality control check notification."
+  },
+  "notifications": "Notifications",
+  "@notifications": {
+    "description": "Screen title for notifications."
+  },
   "markAllAsRead": "Mark all as read",
-  "clearAllNotifications": "Clear all",
-  "filterAll": "All",
-  "filterUnread": "Unread",
-  "filterOrders": "Orders",
-  "filterMessages": "Messages",
-  "filterOffers": "Offers",
-  "today": "TODAY",
-  "yesterday": "YESTERDAY",
-  "earlier": "EARLIER",
-  "clearNotificationsDialogTitle": "Clear All Notifications",
-  "clearNotificationsConfirmation": "Are you sure you want to delete all notifications? This action cannot be undone.",
-  "clearAll": "Clear All",
+  "@markAllAsRead": {
+    "description": "Button label to mark all notifications as read."
+  },
+  "clearAll": "Clear all",
+  "@clearAll": {
+    "description": "Button label to clear all notifications."
+  },
+  "all": "All",
+  "@all": {
+    "description": "Filter label for all notifications."
+  },
+  "unread": "Unread",
+  "@unread": {
+    "description": "Filter label for unread notifications."
+  },
+  "orders": "Orders",
+  "@orders": {
+    "description": "Filter label for order notifications."
+  },
+  "messages": "Messages",
+  "@messages": {
+    "description": "Filter label for message notifications."
+  },
+  "offers": "Offers",
+  "@offers": {
+    "description": "Filter label for offer notifications."
+  },
   "notificationDeleted": "Notification deleted",
-  "noNotificationsYet": "No Notifications Yet",
-  "noNotificationsDescription": "When you receive notifications, they'll appear here. Stay tuned!"
+  "@notificationDeleted": {
+    "description": "Message shown when a notification is deleted."
+  },
+  "today": "TODAY",
+  "@today": {
+    "description": "Date label for notifications from today."
+  },
+  "yesterday": "YESTERDAY",
+  "@yesterday": {
+    "description": "Date label for notifications from yesterday."
+  },
+  "earlier": "EARLIER",
+  "@earlier": {
+    "description": "Date label for notifications from earlier."
+  },
+  "clearAllNotifications": "Clear All Notifications",
+  "@clearAllNotifications": {
+    "description": "Dialog title for clearing all notifications."
+  },
+  "clearAllNotificationsMessage": "Are you sure you want to delete all notifications? This action cannot be undone.",
+  "@clearAllNotificationsMessage": {
+    "description": "Dialog message for clearing all notifications."
+  },
+  "noNotificationsMessage": "When you receive notifications, they'll appear here. Stay tuned!",
+  "@noNotificationsMessage": {
+    "description": "Empty state message for notifications."
+  },
+  "completePayment": "Complete Payment",
+  "@completePayment": {
+    "description": "Title for payment completion screen."
+  },
+  "paymentTransactionDescription": "The payment transaction description.",
+  "@paymentTransactionDescription": {
+    "description": "Description for payment transaction."
+  },
+  "contactUsForQuestions": "Contact us for any questions on your order.",
+  "@contactUsForQuestions": {
+    "description": "Note for payment transaction."
+  },
+  "paymentError": "Payment Error",
+  "@paymentError": {
+    "description": "Error message prefix for payment failures."
+  },
+  "passwordResetLinkSent": "Password reset link sent to your email",
+  "@passwordResetLinkSent": {
+    "description": "Success message for password reset email."
+  },
+  "paymentMethod": "Payment Method",
+  "@paymentMethod": {
+    "description": "Section title for payment method selection."
+  },
+  "emailAppOpenedSuccessfully": "Email app opened successfully",
+  "@emailAppOpenedSuccessfully": {
+    "description": "Success message when email app opens."
+  },
+  "onlyPendingOrdersCanBeCancelled": "Only pending orders can be cancelled.",
+  "@onlyPendingOrdersCanBeCancelled": {
+    "description": "Error message for order cancellation."
+  },
+  "reviewDetails": "Review Details",
+  "@reviewDetails": {
+    "description": "Section title for review details input."
+  },
+  "description": "Description",
+  "@description": {
+    "description": "Section title for product description."
+  },
+  "orderSummary": "Order Summary",
+  "@orderSummary": {
+    "description": "Section title for order summary."
+  },
+  "allReviews": "All Reviews",
+  "@allReviews": {
+    "description": "Screen title for all reviews."
+  },
+  "addPhotos": "Add Photos",
+  "@addPhotos": {
+    "description": "Button label for adding photos."
+  },
+  "yourCart": "Your Cart",
+  "@yourCart": {
+    "description": "Screen title for cart screen."
+  },
+  "promoCode": "Promo code",
+  "@promoCode": {
+    "description": "Hint text for promo code input field."
+  },
+  "failedToLoadCart": "Failed to load cart. Please try again.",
+  "@failedToLoadCart": {
+    "description": "Error message when cart fails to load."
+  },
+  "yourCartIsEmpty": "Your cart is empty.",
+  "@yourCartIsEmpty": {
+    "description": "Message when cart is empty."
+  },
+  "startAddingYourFavoriteProducts": "Start adding your favorite products!",
+  "@startAddingYourFavoriteProducts": {
+    "description": "Suggestion message when cart is empty."
+  },
+  "failedToLoadOrderSummary": "Failed to load order summary. Please try again.",
+  "@failedToLoadOrderSummary": {
+    "description": "Error message when order summary fails to load."
+  },
+  "byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy": "By clicking confirm, you agree to our Terms of Service and Privacy Policy.",
+  "@byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy": {
+    "description": "Terms agreement text for checkout."
+  },
+  "checkoutFailed": "Checkout Failed. Try Again.",
+  "@checkoutFailed": {
+    "description": "Error message for failed checkout."
+  },
+  "checkoutSuccessful": "Checkout Successful!",
+  "@checkoutSuccessful": {
+    "description": "Success message for successful checkout."
+  },
+  "proceedToCheckout": "Proceed to Checkout",
+  "@proceedToCheckout": {
+    "description": "Button label for checkout action."
+  },
+  "noNotificationsYet": "No notifications yet",
+  "@noNotificationsYet": {
+    "description": "Message when there are no notifications."
+  },
+  "weWillNotifyYouAboutOrdersOffersAndUpdates": "We will notify you about orders, offers and updates.",
+  "@weWillNotifyYouAboutOrdersOffersAndUpdates": {
+    "description": "Subtitle message for empty notifications."
+  },
+  "failedToLoadNotifications": "Failed to load notifications",
+  "@failedToLoadNotifications": {
+    "description": "Error message when notifications fail to load."
+  },
+  "justNow": "Just now",
+  "@justNow": {
+    "description": "Time label for recent notifications."
+  },
+  "comingSoon": "Coming Soon",
+  "@comingSoon": {
+    "description": "Title for feature under development."
+  },
+  "notificationsUnderDevelopment": "Notifications feature is under development.",
+  "@notificationsUnderDevelopment": {
+    "description": "Subtitle for notifications under development."
+  },
+  "language": "Language",
+  "@language": {
+    "description": "Label for language settings."
+  },
+  "changeAppLanguage": "Change app language",
+  "@changeAppLanguage": {
+    "description": "Subtitle for language settings tile."
+  },
+  "changeLanguage": "Change app language",
+  "@changeLanguage": {
+    "description": "Subtitle for language settings."
+  },
+  "becomeASeller": "Become a Seller",
+  "@becomeASeller": {
+    "description": "Card title for becoming a seller."
+  },
+  "startSellingYourHandcraftedProductsToday": "Start selling your handcrafted products today.",
+  "@startSellingYourHandcraftedProductsToday": {
+    "description": "Card subtitle for becoming a seller."
+  },
+  "failedToRecoverImage": "Failed to recover image.",
+  "@failedToRecoverImage": {
+    "description": "Error message for image recovery failure."
+  },
+  "imagePickerIsUnavailableNowRestartTheAppAndTryAgain": "Image picker is unavailable now. Restart the app and try again.",
+  "@imagePickerIsUnavailableNowRestartTheAppAndTryAgain": {
+    "description": "Error message for image picker unavailability."
+  },
+  "yourWishlist": "Your Wishlist",
+  "@yourWishlist": {
+    "description": "Screen title for wishlist screen."
+  },
+  "savedItems": "saved items",
+  "@savedItems": {
+    "description": "Label for count of saved items."
+  },
+  "yourFavoriteProductsAreReadyAnytime": "Your favorite products are ready anytime.",
+  "@yourFavoriteProductsAreReadyAnytime": {
+    "description": "Subtitle for wishlist."
+  },
+  "failedToLoadWishlist": "Failed to load wishlist. Please try again.",
+  "@failedToLoadWishlist": {
+    "description": "Error message when wishlist fails to load."
+  },
+  "yourWishlistIsEmpty": "Your wishlist is empty. \nStart adding your favorite products!",
+  "@yourWishlistIsEmpty": {
+    "description": "Message when wishlist is empty."
+  },
+  "checkYourEmail": "Check your email",
+  "@checkYourEmail": {
+    "description": "Title for password reset verification screen."
+  },
+  "weSentAPasswordResetLinkTo": "We sent a password reset link to",
+  "@weSentAPasswordResetLinkTo": {
+    "description": "Message prefix for password reset email."
+  },
+  "pleaseOpenYourEmailAndFollowTheInstructions": "Please open your email and follow the instructions.",
+  "@pleaseOpenYourEmailAndFollowTheInstructions": {
+    "description": "Instruction message for password reset."
+  },
+  "ifYouDontSeeTheEmailCheckYourSpamOrJunkFolder": "If you don't see the email, check your spam or junk folder.",
+  "@ifYouDontSeeTheEmailCheckYourSpamOrJunkFolder": {
+    "description": "Additional instruction for password reset."
+  },
+  "backToLogin": "Back to Login",
+  "@backToLogin": {
+    "description": "Button label to return to login screen."
+  },
+  "customerLabel": "Customer:",
+  "@customerLabel": {
+    "description": "Label for customer name in order details."
+  },
+  "item": "item",
+  "@item": {
+    "description": "Singular form of item."
+  },
+  "items": "items",
+  "@items": {
+    "description": "Plural form of items."
+  },
+  "totalLabel": "Total:",
+  "@totalLabel": {
+    "description": "Label for total amount."
+  },
+  "egp": "EGP",
+  "@egp": {
+    "description": "Egyptian Pound currency code."
+  },
+  "clickToUploadOrDragAndDrop": "Click to upload or drag and drop",
+  "@clickToUploadOrDragAndDrop": {
+    "description": "Instruction text for file upload area."
+  },
+  "sellerRegistration": "Seller Registration",
+  "@sellerRegistration": {
+    "description": "Screen title for seller registration."
+  },
+  "support247": "24/7 Support",
+  "@support247": {
+    "description": "Support feature title."
+  },
+  "dedicatedArtisanAssistance": "Dedicated artisan assistance",
+  "@dedicatedArtisanAssistance": {
+    "description": "Support feature subtitle."
+  },
+  "accountDetails": "Account Details",
+  "@accountDetails": {
+    "description": "Section title for account details."
+  },
+  "shopProfile": "Shop Profile",
+  "@shopProfile": {
+    "description": "Section title for shop profile."
+  },
+  "shopName": "Shop Name",
+  "@shopName": {
+    "description": "Label for shop name field."
+  },
+  "curationTeamReview": "Our curation team will review your application within 3–5\nbusiness days.",
+  "@curationTeamReview": {
+    "description": "Footer text explaining the review process."
+  },
+  "bestSellingProduct": "Best-Selling Product",
+  "@bestSellingProduct": {
+    "description": "Title for the best-selling product section."
+  },
+  "goodMorningAdmin": "Good morning, Admin",
+  "@goodMorningAdmin": {
+    "description": "Dashboard greeting for the admin user."
+  },
+  "pendingActions": "Pending Actions",
+  "@pendingActions": {
+    "description": "Section title for pending admin actions."
+  },
+  "sellersAwaitingApproval": "{count} sellers awaiting approval",
+  "@sellersAwaitingApproval": {
+    "description": "Label showing number of pending seller approvals.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "productsAwaitingReview": "{count} products awaiting review",
+  "@productsAwaitingReview": {
+    "description": "Label showing number of products awaiting review.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "review": "Review",
+  "@review": {
+    "description": "Button text to review pending items."
+  },
+  "sellerApprovals": "Seller Approvals",
+  "@sellerApprovals": {
+    "description": "App bar title for seller approvals screen."
+  },
+  "approveProducts": "Approve Products",
+  "@approveProducts": {
+    "description": "App bar title for approve products screen."
+  },
+  "noSellersFound": "No sellers found",
+  "@noSellersFound": {
+    "description": "Text shown when there are no sellers in the list."
+  },
+  "noOrdersFound": "No orders found",
+  "@noOrdersFound": {
+    "description": "Text shown when there are no orders in the list."
+  },
+  "byVendor": "by {vendor}",
+  "@byVendor": {
+    "description": "Vendor attribution text for product cards.",
+    "placeholders": {
+      "vendor": {
+        "type": "String"
+      }
+    }
+  },
+  "submittedOn": "Submitted: {date}",
+  "@submittedOn": {
+    "description": "Submitted date label for seller cards.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "sellerDetails": "Seller Details",
+  "@sellerDetails": {
+    "description": "Title for the seller details screen."
+  },
+  "sellerLabel": "Seller: {name}",
+  "@sellerLabel": {
+    "description": "Label to show seller name on an order card.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noFurtherActions": "No further actions — {status}",
+  "@noFurtherActions": {
+    "description": "Text shown when no further actions are available for an order.",
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "productTitle": "Product Title",
+  "@productTitle": {
+    "description": "Label for product title field."
+  },
+  "productImages": "Product Images",
+  "@productImages": {
+    "description": "Label for product images section."
+  },
+  "addPhoto": "ADD PHOTO",
+  "@addPhoto": {
+    "description": "Text shown on the add photo button."
+  },
+  "priceEgp": "Price (EGP)",
+  "@priceEgp": {
+    "description": "Label for price field in EGP."
+  },
+  "describeYourProduct": "Describe your product...",
+  "@describeYourProduct": {
+    "description": "Placeholder text for product description field."
+  },
+  "activeListing": "Active Listing",
+  "@activeListing": {
+    "description": "Label for active listing toggle."
+  },
+  "visibleToCustomersInTheMarketplace": "Visible to customers in the marketplace",
+  "@visibleToCustomersInTheMarketplace": {
+    "description": "Description of active listing toggle."
+  },
+  "saveProduct": "Save Product",
+  "@saveProduct": {
+    "description": "Button text to save a new product."
+  },
+  "discardChanges": "Discard Changes",
+  "@discardChanges": {
+    "description": "Button text to discard product changes."
+  },
+  "pleaseAddAtLeastOneProductImage": "Please add at least one product image",
+  "@pleaseAddAtLeastOneProductImage": {
+    "description": "Error message when no product images are added."
+  },
+  "productAddedSuccessfully": "Product added successfully",
+  "@productAddedSuccessfully": {
+    "description": "Success message after adding a product."
+  },
+  "thisFieldIsRequired": "This field is required",
+  "@thisFieldIsRequired": {
+    "description": "Validation message for empty fields."
+  },
+  "hintHandPaintedCeramicServingDish": "e.g. Hand-painted Ceramic Serving Dish",
+  "@hintHandPaintedCeramicServingDish": {
+    "description": "Hint text for product title input field."
+  },
+
+  "buyNow": "Buy Now",
+  "@buyNow": {
+    "description": "Button label for purchasing a product immediately."
+  },
+  "added": "Added",
+  "@added": {
+    "description": "Button state text shown after adding item to cart."
+  },
+  "addToCart": "Add to Cart",
+  "@addToCart": {
+    "description": "Button label for adding a product to the shopping cart."
+  },
+  "viewShop": "View Shop",
+  "@viewShop": {
+    "description": "Button label to navigate to the seller's shop page."
+  },
+  "unableToLoadReviews": "Unable to load reviews right now.",
+  "@unableToLoadReviews": {
+    "description": "Error message when reviews fail to load on product details."
+  },
+  "noReviewsYetForProduct": "No reviews yet for this product. Be the first to share your thoughts!",
+  "@noReviewsYetForProduct": {
+    "description": "Empty state message for product reviews section."
+  },
+  "shareYourExperience": "Share your experience with the craftsmanship, delivery, and overall quality...",
+  "@shareYourExperience": {
+    "description": "Hint text for the review comment field."
+  },
+  "tapToRate": "TAP TO RATE",
+  "@tapToRate": {
+    "description": "Prompt text shown when no rating has been selected."
+  },
+  "checkOutThisProduct": "Check out this product: {productName} for {productPrice} at our store!",
+  "@checkOutThisProduct": {
+    "description": "Share text template for sharing a product link.",
+    "placeholders": {
+      "productName": { "type": "String" },
+      "productPrice": { "type": "String" }
+    }
+  },
+
+  "deliveryAddress": "Delivery Address",
+  "@deliveryAddress": {
+    "description": "Section title for delivery address on cart and order screens."
+  },
+  "change": "Change",
+  "@change": {
+    "description": "Button text to change an existing address."
+  },
+  "formTitle": "Title",
+  "@formTitle": {
+    "description": "Label for the address title form field."
+  },
+  "homeWork": "Home / Work",
+  "@homeWork": {
+    "description": "Hint text for the address title field."
+  },
+  "address": "Address",
+  "@address": {
+    "description": "Label for the street address form field."
+  },
+  "streetBuilding": "Street, building",
+  "@streetBuilding": {
+    "description": "Hint text for the street address field."
+  },
+  "city": "City",
+  "@city": {
+    "description": "Label for the city form field."
+  },
+  "cairo": "Cairo",
+  "@cairo": {
+    "description": "Hint text for the city field."
+  },
+  "zipCode": "ZIP Code",
+  "@zipCode": {
+    "description": "Label for the ZIP code form field."
+  },
+  "zipCodeHint": "12345",
+  "@zipCodeHint": {
+    "description": "Hint text for the ZIP code field."
+  },
+  "pleaseEnterValidZipCode": "Please enter a valid ZIP code",
+  "@pleaseEnterValidZipCode": {
+    "description": "Validation error for invalid ZIP code input."
+  },
+  "setAsDefaultAddress": "Set as default address",
+  "@setAsDefaultAddress": {
+    "description": "Checkbox label to mark an address as default."
+  },
+  "tapToUseThisAddress": "Tap to use this address for future orders.",
+  "@tapToUseThisAddress": {
+    "description": "Subtitle text for the default address checkbox."
+  },
+  "toggleOn": "On",
+  "@toggleOn": {
+    "description": "Toggle state label for enabled state."
+  },
+  "toggleOff": "Off",
+  "@toggleOff": {
+    "description": "Toggle state label for disabled state."
+  },
+  "saveAddress": "Save Address",
+  "@saveAddress": {
+    "description": "Button label to save an address."
+  },
+  "enterWalletPhone": "Enter wallet phone (e.g. +201xxxxxxxxx)",
+  "@enterWalletPhone": {
+    "description": "Hint text for mobile wallet phone number input."
+  },
+  "visa": "Visa",
+  "@visa": {
+    "description": "Payment method name for Visa."
+  },
+  "paypal": "PayPal",
+  "@paypal": {
+    "description": "Payment method name for PayPal."
+  },
+  "mobileWallets": "Mobile Wallets",
+  "@mobileWallets": {
+    "description": "Payment method name for mobile wallets."
+  },
+  "pleaseEnterPromoCode": "Please enter a promo code",
+  "@pleaseEnterPromoCode": {
+    "description": "Snackbar message when promo code field is empty."
+  },
+  "productDeleted": "Product Deleted",
+  "@productDeleted": {
+    "description": "Snackbar title when a product is removed from cart."
+  },
+  "productRemovedFromCart": "{productName} has been removed from your cart.",
+  "@productRemovedFromCart": {
+    "description": "Snackbar message when a product is removed from cart.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "paymentCancelled": "Payment cancelled",
+  "@paymentCancelled": {
+    "description": "Snackbar title when payment is cancelled."
+  },
+  "paymentWasCancelled": "Payment was cancelled. Complete payment to place the order.",
+  "@paymentWasCancelled": {
+    "description": "Snackbar message when payment was cancelled."
+  },
+  "addressRequired": "Address required",
+  "@addressRequired": {
+    "description": "Snackbar title when address is missing."
+  },
+  "pleaseAddAnAddress": "Please add an address to proceed to checkout.",
+  "@pleaseAddAnAddress": {
+    "description": "Snackbar message when address is missing."
+  },
+  "paymentDetailsMissing": "Payment details missing",
+  "@paymentDetailsMissing": {
+    "description": "Snackbar title when payment details are missing."
+  },
+  "pleaseWaitForOrderSummary": "Please wait for the order summary to load.",
+  "@pleaseWaitForOrderSummary": {
+    "description": "Snackbar message for missing payment details."
+  },
+
+  "ordersTab": "Orders",
+  "@ordersTab": {
+    "description": "Bottom navigation bar label for orders tab."
+  },
+  "aiHelp": "AI Help",
+  "@aiHelp": {
+    "description": "FAB button label to open AI recommendation assistant."
+  },
+
+  "placedOn": "Placed on {date}",
+  "@placedOn": {
+    "description": "Label showing the date an order was placed.",
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "orderItems": "Order Items ({count})",
+  "@orderItems": {
+    "description": "Section title showing number of items in an order.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "deliveryAddressSection": "Delivery Address",
+  "@deliveryAddressSection": {
+    "description": "Section title for delivery address in order details."
+  },
+  "cancelOrder": "Cancel Order",
+  "@cancelOrder": {
+    "description": "Button label to cancel an order."
+  },
+  "ordersCanOnlyBeCancelledWhenPending": "Orders can only be cancelled while in 'Pending' status.",
+  "@ordersCanOnlyBeCancelledWhenPending": {
+    "description": "Info message about order cancellation eligibility."
+  },
+  "cancelOrderQuestion": "Cancel order?",
+  "@cancelOrderQuestion": {
+    "description": "Alert dialog title for order cancellation confirmation."
+  },
+  "cancelOrderWarning": "This order will be cancelled and cannot be restored.",
+  "@cancelOrderWarning": {
+    "description": "Alert dialog content for order cancellation confirmation."
+  },
+  "unknownCustomer": "Unknown Customer",
+  "@unknownCustomer": {
+    "description": "Fallback label when customer name is not available."
+  },
+  "discount": "Discount",
+  "@discount": {
+    "description": "Label for discount amount in order summary."
+  },
+  "totalAmount": "Total Amount",
+  "@totalAmount": {
+    "description": "Label for total amount in order summary."
+  },
+  "soldBy": "Sold by {sellerName}",
+  "@soldBy": {
+    "description": "Seller attribution label on product cards.",
+    "placeholders": {
+      "sellerName": { "type": "String" }
+    }
+  },
+  "qty": "Qty: {quantity}",
+  "@qty": {
+    "description": "Label for product quantity display.",
+    "placeholders": {
+      "quantity": { "type": "int" }
+    }
+  },
+  "reviewAfterDelivery": "You can review this product after delivery",
+  "@reviewAfterDelivery": {
+    "description": "Info message when user tries to review an undelivered product."
+  },
+  "writeReview": "Write Review",
+  "@writeReview": {
+    "description": "Button text to write a review for a delivered product."
+  },
+  "orderPlacedSuccessfully": "Order placed successfully.",
+  "@orderPlacedSuccessfully": {
+    "description": "Snackbar message when order is placed."
+  },
+
+  "reviewMissing": "Review Missing",
+  "@reviewMissing": {
+    "description": "Snackbar title when review submission is missing data."
+  },
+  "pleaseSelectStarRating": "Please select a star rating before submitting.",
+  "@pleaseSelectStarRating": {
+    "description": "Snackbar message when no rating is selected."
+  },
+  "pleaseWriteShortComment": "Please write a short comment before submitting.",
+  "@pleaseWriteShortComment": {
+    "description": "Snackbar message when no comment is written."
+  },
+  "thankYou": "Thank You",
+  "@thankYou": {
+    "description": "Snackbar title on successful review submission."
+  },
+  "reviewSubmittedSuccessfully": "Your review was submitted successfully.",
+  "@reviewSubmittedSuccessfully": {
+    "description": "Snackbar message on successful review submission."
+  },
+  "submitFailed": "Submit Failed",
+  "@submitFailed": {
+    "description": "Snackbar title when review submission fails."
+  },
+  "howWasYourExperience": "How was your experience?",
+  "@howWasYourExperience": {
+    "description": "Prompt text on the review screen."
+  },
+  "yourFeedbackHelps": "Your feedback helps our artisan community grow.",
+  "@yourFeedbackHelps": {
+    "description": "Subtitle text on the review screen."
+  },
+  "submitReview": "Submit Review",
+  "@submitReview": {
+    "description": "Button label for submitting a review."
+  },
+  "bySubmittingYouAgree": "By submitting, you agree to Ayady's Terms of Service and Privacy Policy.",
+  "@bySubmittingYouAgree": {
+    "description": "Legal disclaimer text on the review screen."
+  },
+  "noReviewsAvailable": "No reviews available.",
+  "@noReviewsAvailable": {
+    "description": "Empty state message for reviews."
+  },
+  "anonymousUser": "User {userId}",
+  "@anonymousUser": {
+    "description": "Fallback display name for anonymous users.",
+    "placeholders": {
+      "userId": { "type": "String" }
+    }
+  },
+  "viewAllReviews": "View all {count} reviews",
+  "@viewAllReviews": {
+    "description": "Button label to view all reviews.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "youNeedToLoginBeforeReviewing": "You need to login before submitting a review",
+  "@youNeedToLoginBeforeReviewing": {
+    "description": "Error message when not logged in."
+  },
+  "pleaseSelectRating": "Please select a rating between 1 and 5.",
+  "@pleaseSelectRating": {
+    "description": "Validation message for rating selection."
+  },
+
+  "noSubcategoriesFound": "No subcategories found. Showing all items in this category.",
+  "@noSubcategoriesFound": {
+    "description": "Snackbar message when no subcategories exist."
+  },
+
+  "shopDetails": "Shop Details",
+  "@shopDetails": {
+    "description": "Screen title for shop details."
+  },
+  "shopNotFound": "Shop not found",
+  "@shopNotFound": {
+    "description": "Error message when shop is not found."
+  },
+  "weCouldNotLoadThisSeller": "We could not load this seller right now.",
+  "@weCouldNotLoadThisSeller": {
+    "description": "Subtitle when shop fails to load."
+  },
+  "notAvailable": "N/A",
+  "@notAvailable": {
+    "description": "Fallback text when data is not available."
+  },
+  "continueToEmail": "Continue to Email",
+  "@continueToEmail": {
+    "description": "Button label to continue to email app."
+  },
+  "subject": "Subject",
+  "@subject": {
+    "description": "Label for email subject field."
+  },
+
+  "productRemovedFromWishlist": "{productName} has been removed from your wishlist.",
+  "@productRemovedFromWishlist": {
+    "description": "Snackbar message when product is removed from wishlist.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "productAddedToWishlist": "{productName} has been added to your wishlist.",
+  "@productAddedToWishlist": {
+    "description": "Snackbar message when product is added to wishlist.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "chatbotWelcomeMessage": "Hi! Tell me about your room size, colors, style, and what handmade product you are looking for.",
+  "@chatbotWelcomeMessage": {
+    "description": "Initial welcome message from the AI chatbot."
+  },
+  "thinking": "Thinking...",
+  "@thinking": {
+    "description": "Temporary typing indicator shown while the chatbot processes."
+  },
+  "needMoreDetails": "I need more details. Please tell me the room type, size, colors, or product type you want.",
+  "@needMoreDetails": {
+    "description": "Bot reply when no preferences could be extracted."
+  },
+  "noMatchingProductFound": "I understood your preferences:\n\n{preferences}\n\nSorry, I could not find an exact matching product right now. Try changing the color, room type, or product category.",
+  "@noMatchingProductFound": {
+    "description": "Bot reply when no products match the user's preferences.",
+    "placeholders": {
+      "preferences": { "type": "String" }
+    }
+  },
+  "productsFound": "Great! I found {count} handmade products that may match your room:\n\n{preferences}",
+  "@productsFound": {
+    "description": "Bot reply when matching products are found.",
+    "placeholders": {
+      "count": { "type": "int" },
+      "preferences": { "type": "String" }
+    }
+  },
+  "exampleMessage": "I need a delicate product for a small bedroom, in pink and white, with a romantic style.",
+  "@exampleMessage": {
+    "description": "Example message shown as a suggestion in the chatbot."
+  },
+  "recommendationChatbot": "Recommendation Chatbot",
+  "@recommendationChatbot": {
+    "description": "App bar title for the chatbot screen."
+  },
+  "describeYourRoom": "Describe your room...",
+  "@describeYourRoom": {
+    "description": "Hint text for the chatbot input field."
+  },
+  "viewProduct": "View Product",
+  "@viewProduct": {
+    "description": "Button label to view a recommended product."
+  },
+  "productAddedToCart": "{productName} has been added to your cart.",
+  "@productAddedToCart": {
+    "description": "Snackbar message when a product is added to cart.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "admGreetingMorning": "Welcome back!",
+  "admStatLabelTotalUsers": "TOTAL USERS",
+  "admStatLabelTotalSellers": "TOTAL SELLERS",
+  "admStatLabelTotalOrders": "TOTAL ORDERS",
+  "admStatLabelRevenue": "REVENUE",
+  "admLabelPlatformCommission": "Platform Commission",
+  "admSectionPendingActions": "Pending Actions",
+  "admPendingSellersTitle": "{count} Sellers awaiting approval",
+  "@admPendingSellersTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "admPendingSellersSubtitle": "New artisan registrations",
+  "admPendingProductsTitle": "{count} Products awaiting review",
+  "@admPendingProductsTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "admPendingProductsSubtitle": "Quality control check required",
+  "admButtonReview": "Review",
+  "admDialogTitleCommission": "Platform Commission",
+  "admCommissionHintText": "e.g. 15",
+  "admButtonCancel": "Cancel",
+  "admButtonSave": "Save",
+
+  "admSellerApprovals": "Seller Approvals",
+  "admStatusPending": "Pending",
+  "admStatusApproved": "Approved",
+  "admStatusRejected": "Rejected",
+  "admSearchSellersHint": "Search sellers...",
+  "admNoSellersFound": "No sellers found",
+  "admSubmittedLabel": "Submitted: {date}",
+  "@admSubmittedLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
+  "admApproveBtn": "Approve",
+  "admRejectBtn": "Reject",
+  "admSeller": "Seller",
+  "admSellerNotFound": "Seller not found",
+  "admSellerDetails": "Seller Details",
+  "admContactSectionTitle": "Contact",
+  "admBusinessSectionTitle": "Business",
+  "admTimelineSectionTitle": "Timeline",
+  "admEmailLabel": "Email",
+  "admPhoneLabel": "Phone",
+  "admLocationLabel": "Location",
+  "admSpecialtyLabel": "Specialty",
+  "admRatingLabel": "Rating",
+  "admTotalSalesLabel": "Total sales",
+  "admTotalProductsLabel": "Total products",
+  "admWalletBalanceLabel": "Wallet balance",
+  "admCommissionRateLabel": "Commission rate",
+  "admSubmittedDateLabel": "Submitted",
+  "admApprovedDateLabel": "Approved",
+  "admStatusLabel": "Status",
+
+  "admApproveProducts": "Approve Products",
+  "admPending": "Pending",
+  "admApproved": "Approved",
+  "admRejected": "Rejected",
+  "admSearchProductsHint": "Search products...",
+  "admNoProductsFound": "No products found",
+  "admApproveAction": "APPROVE",
+  "admRejectAction": "REJECT",
+  "admProduct": "Product",
+  "admProductNotFound": "Product not found",
+  "admProductDetails": "Product Details",
+  "admInventory": "Inventory",
+  "admStock": "Stock",
+  "admCategory": "Category",
+  "admActive": "Active",
+  "admYes": "Yes",
+  "admNo": "No",
+  "admStats": "Stats",
+  "admRating": "Rating",
+  "admReviews": "Reviews",
+  "admSales": "Sales",
+  "admDescription": "Description",
+  "admApproveButtonLabel": "Approve",
+  "admRejectButtonLabel": "Reject",
+
+  "admOrders": "Orders",
+  "admOrdersTabAll": "All",
+  "admOrdersTabPending": "Pending",
+  "admOrdersTabActive": "Active",
+  "admOrdersTabDelivered": "Delivered",
+  "admOrdersTabCancelled": "Cancelled",
+  "admSearchOrderPlaceholder": "Search order ID or name",
+  "admNoOrdersFound": "No orders found",
+  "admSellerLabel": "Seller: {sellerName}",
+  "@admSellerLabel": {
+    "placeholders": { "sellerName": { "type": "String" } }
+  },
+  "admOrderTitle": "Order",
+  "admOrderNotFound": "Order not found",
+  "admSectionParties": "Parties",
+  "admCustomerLabel": "Customer",
+  "admSellerLabelDetails": "Seller",
+  "admCreatedLabel": "Created",
+  "admLastUpdateLabel": "Last update",
+  "admSectionTotals": "Totals",
+  "admSubtotalLabel": "Subtotal",
+  "admDeliveryFeeLabel": "Delivery fee",
+  "admCommissionLabel": "Commission",
+  "admSellerEarningLabel": "Seller earning",
+  "admTotalLabel": "Total",
+  "admSectionPayment": "Payment",
+  "admPaymentMethodLabel": "Method",
+  "admPaymentStatusLabel": "Status",
+  "admSectionShipping": "Shipping",
+  "admStreetLabel": "Street",
+  "admCityLabel": "City",
+  "admGovernorateLabel": "Governorate",
+  "admCountryLabel": "Country",
+  "admZipLabel": "Zip",
+  "admItemsLabel": "Items ({count})",
+  "@admItemsLabel": {
+    "placeholders": { "count": { "type": "int" } }
+  },
+  "admNoLineItems": "No line items",
+  "admStatusHeaderSubtitle": "{price} • {count} items",
+  "@admStatusHeaderSubtitle": {
+    "placeholders": {
+      "price": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
+  "admUpdateStatusLabel": "Update status",
+  "admNoFurtherActions": "No further actions — {status}",
+  "@admNoFurtherActions": {
+    "placeholders": { "status": { "type": "String" } }
+  },
+
+  "admSettings": "Settings",
+  "admPlatformCommission": "Platform Commission",
+  "admDeliveryFee": "Delivery Fee",
+  "admMinimumOrderValue": "Minimum Order Value",
+  "admSupportEmail": "Support Email",
+  "admLanguageRegion": "Language & Region",
+  "admLogoutTitle": "Logout",
+  "admLogoutConfirmation": "Are you sure you want to logout?",
+  "admCancel": "Cancel",
+  "admLogout": "Logout",
+  "admDashboard": "Dashboard",
+  "admSellers": "Sellers",
+  "admProducts": "Products",
+  "admSettingsNav": "Settings",
+
+  "selGlobalReach": "Global Reach",
+  "@selGlobalReach": {
+    "description": "Info card title for seller registration."
+  },
+  "selSellToCustomersWorldwide": "Sell to customers worldwide",
+  "@selSellToCustomersWorldwide": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSecureSales": "Secure Sales",
+  "@selSecureSales": {
+    "description": "Info card title for seller registration."
+  },
+  "selGuaranteedSafePayments": "Guaranteed safe payments",
+  "@selGuaranteedSafePayments": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSupport247": "24/7 Support",
+  "@selSupport247": {
+    "description": "Info card title for seller registration."
+  },
+  "selEmailHint": "e.g. seller@mail.com",
+  "@selEmailHint": {
+    "description": "Hint text for email field in seller registration."
+  },
+  "selPleaseEnterValidEmail": "Please enter a valid email address",
+  "@selPleaseEnterValidEmail": {
+    "description": "Validation message for invalid email in seller registration."
+  },
+  "selPasswordHint": "Min 6 characters",
+  "@selPasswordHint": {
+    "description": "Hint text for password field in seller registration."
+  },
+  "selPasswordMin6Chars": "Password must be at least 6 characters",
+  "@selPasswordMin6Chars": {
+    "description": "Validation message for short password in seller registration."
+  },
+  "selShopNameHint": "e.g. Damascus Woodcrafts",
+  "@selShopNameHint": {
+    "description": "Hint text for shop name field in seller registration."
+  },
+  "selCraftSpecialty": "Craft Specialty",
+  "@selCraftSpecialty": {
+    "description": "Label for craft specialty field in seller registration."
+  },
+  "selSelectYourPrimaryCraft": "Select your primary craft",
+  "@selSelectYourPrimaryCraft": {
+    "description": "Hint text for craft specialty field."
+  },
+  "selArtisanBio": "Artisan Bio",
+  "@selArtisanBio": {
+    "description": "Label for artisan bio field in seller registration."
+  },
+  "selArtisanBioHint": "Tell us about your journey, your craft, and\nwhat makes your products unique...",
+  "@selArtisanBioHint": {
+    "description": "Hint text for artisan bio field."
+  },
+  "selPortfolioAndProductSamples": "Portfolio & Product Samples",
+  "@selPortfolioAndProductSamples": {
+    "description": "Label for portfolio section in seller registration."
+  },
+  "selPngJpgOrPdfMax10Mb": "PNG, JPG or PDF (max. 10MB)",
+  "@selPngJpgOrPdfMax10Mb": {
+    "description": "Subtitle text for upload area in seller registration."
+  },
+  "selISellerTermsOfService": "Seller Terms of Service",
+  "@selISellerTermsOfService": {
+    "description": "Link text for seller terms of service."
+  },
+  "selAndAcknowledgeCommissionRates": " and acknowledge\nthe platform commission rates on sales.",
+  "@selAndAcknowledgeCommissionRates": {
+    "description": "Text after seller terms link in registration."
+  },
+  "selSubmitRequest": "Submit Request",
+  "@selSubmitRequest": {
+    "description": "Button text for seller registration submission."
+  },
+  "selOrderDetails": "Order Details",
+  "@selOrderDetails": {
+    "description": "AppBar title for order details screen."
+  },
+  "selOrderItems": "Order Items",
+  "@selOrderItems": {
+    "description": "Section heading for order items list."
+  },
+  "selTotalEarnings": "Total Earnings",
+  "@selTotalEarnings": {
+    "description": "Label for total earnings in order details."
+  },
+  "selMarkAsShipped": "Mark as Shipped",
+  "@selMarkAsShipped": {
+    "description": "Button text to mark an order as shipped."
+  },
+  "selMarkAsCompleted": "Mark as Completed",
+  "@selMarkAsCompleted": {
+    "description": "Button text to mark an order as completed."
+  },
+  "selArchive": "Archive",
+  "@selArchive": {
+    "description": "Button text to archive a completed order."
+  },
+  "selCancelOrderTitle": "Cancel Order",
+  "@selCancelOrderTitle": {
+    "description": "Dialog title for order cancellation."
+  },
+  "selCancelOrderContent": "Are you sure you want to cancel order {orderId}?",
+  "@selCancelOrderContent": {
+    "description": "Dialog content for order cancellation confirmation.",
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "selYesCancel": "Yes, Cancel",
+  "@selYesCancel": {
+    "description": "Button text to confirm order cancellation."
+  },
+  "selOrderCancelledAndStockRestored": "Order has been cancelled and stock restored",
+  "@selOrderCancelledAndStockRestored": {
+    "description": "Snackbar message after order cancellation."
+  },
+  "selFailedToCancelOrder": "Failed to cancel order: {error}",
+  "@selFailedToCancelOrder": {
+    "description": "Snackbar message when order cancellation fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selOrderArchivedSuccessfully": "Order archived successfully",
+  "@selOrderArchivedSuccessfully": {
+    "description": "Snackbar message after order archival."
+  },
+  "selOrderStatusUpdatedTo": "Order status updated to {status}",
+  "@selOrderStatusUpdatedTo": {
+    "description": "Snackbar message after order status update.",
+    "placeholders": {
+      "status": { "type": "String" }
+    }
+  },
+  "selNoTabOrders": "No {tabName} Orders",
+  "@selNoTabOrders": {
+    "description": "Empty state text when no orders in a tab.",
+    "placeholders": {
+      "tabName": { "type": "String" }
+    }
+  },
+  "selQtyLabel": "Qty: {quantity}",
+  "@selQtyLabel": {
+    "description": "Label for quantity display.",
+    "placeholders": {
+      "quantity": { "type": "int" }
+    }
+  },
+  "selCustomerFallback": "Customer",
+  "@selCustomerFallback": {
+    "description": "Fallback customer name when not available."
+  },
+  "selOrderPrefix": "Order",
+  "@selOrderPrefix": {
+    "description": "Prefix for order ID display."
+  },
+  "selItemSingular": "item",
+  "@selItemSingular": {
+    "description": "Singular form of item."
+  },
+  "selItemPlural": "items",
+  "@selItemPlural": {
+    "description": "Plural form of items."
+  },
+  "selAvailableBalance": "Available balance: EGP {amount}",
+  "@selAvailableBalance": {
+    "description": "Subtitle showing available balance in withdraw sheet.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selWithdrawTo": "Withdraw to",
+  "@selWithdrawTo": {
+    "description": "Section label for withdraw destination."
+  },
+  "selWithdrawAmount": "Withdraw EGP {amount}",
+  "@selWithdrawAmount": {
+    "description": "Button text for withdraw confirmation.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selEnterAmount": "Enter amount",
+  "@selEnterAmount": {
+    "description": "Button text when no amount is entered."
+  },
+  "selDone": "Done",
+  "@selDone": {
+    "description": "Button text in withdrawal success dialog."
+  },
+  "selApplicationNotApproved": "Application Not Approved",
+  "@selApplicationNotApproved": {
+    "description": "Title for rejected seller application."
+  },
+  "selAccountUnderReview": "Account Under Review",
+  "@selAccountUnderReview": {
+    "description": "Title for pending seller application."
+  },
+  "selApplicationRejectedMessage": "We were unable to approve your seller application at this time. Reach out to our team if you'd like to know more.",
+  "@selApplicationRejectedMessage": {
+    "description": "Description for rejected seller application."
+  },
+  "selApplicationPendingMessage": "Thanks for joining Ayady. Our curation team is reviewing your application — you'll be notified the moment it's approved.",
+  "@selApplicationPendingMessage": {
+    "description": "Description for pending seller application."
+  },
+  "selSignOut": "Sign out",
+  "@selSignOut": {
+    "description": "Button text to sign out from pending screen."
+  },
+  "selEstimatedReviewTime": "Estimated review time: 3–5 business days",
+  "@selEstimatedReviewTime": {
+    "description": "Info text for estimated review time."
+  },
+  "selRefreshStatus": "Refresh Status",
+  "@selRefreshStatus": {
+    "description": "Button text to refresh seller status."
+  },
+  "selNotApproved": "NOT APPROVED",
+  "@selNotApproved": {
+    "description": "Status pill label for rejected application."
+  },
+  "selPendingApproval": "PENDING APPROVAL",
+  "@selPendingApproval": {
+    "description": "Status pill label for pending application."
+  },
+  "selApplicationSubmitted": "Application submitted",
+  "@selApplicationSubmitted": {
+    "description": "Timeline step label for submitted application."
+  },
+  "selReviewed": "Reviewed",
+  "@selReviewed": {
+    "description": "Timeline step label for reviewed application (rejected)."
+  },
+  "selUnderReview": "Under review",
+  "@selUnderReview": {
+    "description": "Timeline step label for under review application."
+  },
+  "selApprovedWelcomeAboard": "Approved — welcome aboard",
+  "@selApprovedWelcomeAboard": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApproved": "Approved",
+  "@selApproved": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApplicationNotApprovedSnack": "Your application was not approved. Please contact support.",
+  "@selApplicationNotApprovedSnack": {
+    "description": "Snackbar message for rejected application."
+  },
+  "selStillUnderReview": "You're still under review. We'll notify you soon.",
+  "@selStillUnderReview": {
+    "description": "Snackbar message for pending application."
+  },
+  "selCouldNotRefreshStatus": "Could not refresh status: {error}",
+  "@selCouldNotRefreshStatus": {
+    "description": "Snackbar message when status refresh fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDeleteProduct": "Delete Product",
+  "@selDeleteProduct": {
+    "description": "Dialog title for product deletion."
+  },
+  "selDeleteProductConfirm": "Are you sure you want to delete this product? This action cannot be undone.",
+  "@selDeleteProductConfirm": {
+    "description": "Dialog content for product deletion confirmation."
+  },
+  "selProductDeletedSuccessfully": "Product deleted successfully",
+  "@selProductDeletedSuccessfully": {
+    "description": "Snackbar message after product deletion."
+  },
+  "selFailedToDeleteProduct": "Failed to delete product: {error}",
+  "@selFailedToDeleteProduct": {
+    "description": "Snackbar message when product deletion fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selEditProduct": "Edit Product",
+  "@selEditProduct": {
+    "description": "Popup menu item and AppBar title for editing product."
+  },
+  "selDelete": "Delete",
+  "@selDelete": {
+    "description": "Popup menu item for deleting product."
+  },
+  "selStockUnits": "Stock: {stock} units",
+  "@selStockUnits": {
+    "description": "Label showing stock quantity.",
+    "placeholders": {
+      "stock": { "type": "int" }
+    }
+  },
+  "selActiveListing": "Active Listing",
+  "@selActiveListing": {
+    "description": "Label for active listing toggle."
+  },
+  "selVisibleToCustomers": "Visible to customers in the marketplace",
+  "@selVisibleToCustomers": {
+    "description": "Description for active listing toggle."
+  },
+  "selPriceEgp": "Price (EGP)",
+  "@selPriceEgp": {
+    "description": "Label for price field in EGP."
+  },
+  "selProductTitle": "Product Title",
+  "@selProductTitle": {
+    "description": "Label for product title field."
+  },
+  "selProductTitleHint": "e.g. Hand-painted Ceramic Serving Dish",
+  "@selProductTitleHint": {
+    "description": "Hint text for product title field."
+  },
+  "selProductTitleRequired": "Product title is required",
+  "@selProductTitleRequired": {
+    "description": "Validation message for missing product title."
+  },
+  "selTitleMin3Chars": "Title must be at least 3 characters",
+  "@selTitleMin3Chars": {
+    "description": "Validation message for short product title."
+  },
+  "selPriceRequired": "Price is required",
+  "@selPriceRequired": {
+    "description": "Validation message for missing price."
+  },
+  "selEnterValidNumber": "Enter a valid number",
+  "@selEnterValidNumber": {
+    "description": "Validation message for invalid number format."
+  },
+  "selPriceCannotBeNegative": "Price cannot be negative",
+  "@selPriceCannotBeNegative": {
+    "description": "Validation message for negative price."
+  },
+  "selStockRequired": "Stock is required",
+  "@selStockRequired": {
+    "description": "Validation message for missing stock."
+  },
+  "selEnterValidInteger": "Enter a valid integer",
+  "@selEnterValidInteger": {
+    "description": "Validation message for invalid integer format."
+  },
+  "selStockCannotBeNegative": "Stock cannot be negative",
+  "@selStockCannotBeNegative": {
+    "description": "Validation message for negative stock."
+  },
+  "selDescriptionRequired": "Description is required",
+  "@selDescriptionRequired": {
+    "description": "Validation message for missing description."
+  },
+  "selDescriptionMin10Chars": "Description must be at least 10 characters",
+  "@selDescriptionMin10Chars": {
+    "description": "Validation message for short description."
+  },
+  "selProductImages": "Product Images",
+  "@selProductImages": {
+    "description": "Section heading for product images."
+  },
+  "selAddPhoto": "ADD PHOTO",
+  "@selAddPhoto": {
+    "description": "Text on add photo button."
+  },
+  "selPleaseAddAtLeastOneImage": "Please add at least one product image",
+  "@selPleaseAddAtLeastOneImage": {
+    "description": "Snackbar message when no images added."
+  },
+  "selProductAddedSuccessfully": "Product added successfully!",
+  "@selProductAddedSuccessfully": {
+    "description": "Snackbar message after product creation."
+  },
+  "selSaveProduct": "Save Product",
+  "@selSaveProduct": {
+    "description": "Button text to save a product."
+  },
+  "selDiscardChanges": "Discard Changes",
+  "@selDiscardChanges": {
+    "description": "Button text to discard product changes."
+  },
+  "selOutOfStock": "Out of Stock",
+  "@selOutOfStock": {
+    "description": "Product stock status when stock is zero."
+  },
+  "selLowStock": "Low Stock",
+  "@selLowStock": {
+    "description": "Product stock status when stock is low."
+  },
+  "selInStock": "In Stock",
+  "@selInStock": {
+    "description": "Product stock status when stock is available."
+  },
+  "selNameMin3Chars": "Name must be at least 3 characters",
+  "@selNameMin3Chars": {
+    "description": "Validation message for short product name."
+  },
+  "selInvalidPrice": "Invalid price",
+  "@selInvalidPrice": {
+    "description": "Validation message for invalid price."
+  },
+  "selInvalidNumber": "Invalid number",
+  "@selInvalidNumber": {
+    "description": "Validation message for invalid number."
+  },
+  "selPleaseSelectCategory": "Please select a category",
+  "@selPleaseSelectCategory": {
+    "description": "Validation message for unselected category."
+  },
+  "selSelectCategory": "Select category",
+  "@selSelectCategory": {
+    "description": "Hint text for category selection."
+  },
+  "selProductUpdatedSuccessfully": "Product updated successfully",
+  "@selProductUpdatedSuccessfully": {
+    "description": "Snackbar message after product update."
+  },
+  "selErrorSavingProduct": "Error saving product: {error}",
+  "@selErrorSavingProduct": {
+    "description": "Snackbar message when product save fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDiscard": "Discard",
+  "@selDiscard": {
+    "description": "Button text to discard changes."
+  },
+  "selClickToUpload": "Click to upload or drag and drop",
+  "@selClickToUpload": {
+    "description": "Instruction text for file upload area."
+  },
+  "selPngJpgOrPdfMax5Mb": "PNG, JPG or PDF (max. 5MB)",
+  "@selPngJpgOrPdfMax5Mb": {
+    "description": "Subtitle text for upload area in edit product."
+  },
+  "selWelcomeSeller": "Welcome back, {name}",
+  "@selWelcomeSeller": {
+    "description": "Welcome message for seller dashboard.",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "selHereWhatIsHappening": "Here's what's happening with your shop today.",
+  "@selHereWhatIsHappening": {
+    "description": "Subtitle for seller dashboard."
+  },
+  "selTotalOrders": "Total Orders",
+  "@selTotalOrders": {
+    "description": "Stat card title for total orders."
+  },
+  "selNoRecentOrders": "No recent orders",
+  "@selNoRecentOrders": {
+    "description": "Empty state text for no recent orders."
+  },
+  "selOrderItem": "Order Item",
+  "@selOrderItem": {
+    "description": "Fallback order item name."
+  },
+  "selUnexpectedState": "Unexpected State",
+  "@selUnexpectedState": {
+    "description": "Text shown when state is unexpected."
+  },
+  "selAyadySeller": "Ayady Seller",
+  "@selAyadySeller": {
+    "description": "Fallback seller display name."
+  },
+  "selPleaseAgreeToTerms": "Please agree to the Terms of Service",
+  "@selPleaseAgreeToTerms": {
+    "description": "Snackbar message when terms not accepted."
+  },
+  "selThisFieldIsRequired": "This field is required",
+  "@selThisFieldIsRequired": {
+    "description": "Default validation message for required fields."
+  },
+  "selManageProducts": "Manage Products",
+  "@selManageProducts": {
+    "description": "AppBar title for manage products screen."
+  },
+  "selNoProductsFound": "No products found",
+  "@selNoProductsFound": {
+    "description": "Empty state text when no products found."
+  }
 }

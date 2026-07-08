@@ -55,11 +55,3 @@ double applyCoupon(String coupon) {
 
   return 0;
 }
-
-double applycoupon(String coupon) {
-  return applyCoupon(coupon);
-}
-
-bool checkcopoun(String coupon) {
-  return isValidCoupon(coupon);
-}

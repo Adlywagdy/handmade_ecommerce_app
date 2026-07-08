@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 import '../../../../core/theme/colors.dart';
 import '../../cubit/admin_cubit.dart';
@@ -54,21 +55,21 @@ class _CommissionEditorDialogState extends State<_CommissionEditorDialog> {
       builder: (context, state) {
         final saving = context.read<AdminCubit>().savingCommission;
         return AlertDialog(
-          title: const Text('Platform Commission'),
+          title: Text(AppLocalizations.of(context)!.admDialogTitleCommission),
           content: TextField(
             controller: _controller,
             enabled: !saving,
             keyboardType:
                 const TextInputType.numberWithOptions(decimal: true),
-            decoration: const InputDecoration(
+            decoration: InputDecoration(
               suffixText: '%',
-              hintText: 'e.g. 15',
+              hintText: AppLocalizations.of(context)!.admCommissionHintText,
             ),
           ),
           actions: [
             TextButton(
               onPressed: saving ? null : () => Navigator.of(context).pop(),
-              child: const Text('Cancel'),
+              child: Text(AppLocalizations.of(context)!.admButtonCancel),
             ),
             TextButton(
               onPressed: saving ? null : () => _save(context),
@@ -82,7 +83,7 @@ class _CommissionEditorDialogState extends State<_CommissionEditorDialog> {
                             AlwaysStoppedAnimation<Color>(commonColor),
                       ),
                     )
-                  : const Text('Save'),
+                  : Text(AppLocalizations.of(context)!.admButtonSave),
             ),
           ],
         );
