@@ -16,18 +16,15 @@ class PaymentDetailsModel {
     this.currency = "USD",
   });
 
-  factory PaymentDetailsModel.copywith(
-    PaymentDetailsModel product, {
-    String? paymentMethod,
-  }) {
+  PaymentDetailsModel copyWith({String? paymentMethod}) {
     return PaymentDetailsModel(
-      paymentMethod: paymentMethod ?? product.paymentMethod,
-      subtotalPrice: product.subtotalPrice,
-      totalPrice: product.totalPrice,
-      deliveryFee: product.deliveryFee,
-      discount: product.discount,
-      imagePath: product.imagePath,
-      currency: product.currency,
+      paymentMethod: paymentMethod ?? this.paymentMethod,
+      subtotalPrice: subtotalPrice,
+      totalPrice: totalPrice,
+      deliveryFee: deliveryFee,
+      discount: discount,
+      imagePath: imagePath,
+      currency: currency,
     );
   }
 

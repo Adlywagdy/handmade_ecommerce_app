@@ -110,34 +110,6 @@ class SellerModel {
     );
   }
 
-  // SellerModel mergedWith(SellerModel fallback) {
-  //   return SellerModel(
-  //     id: cleanString(id) ?? cleanString(fallback.id),
-  //     name: cleanString(name) ?? cleanString(fallback.name) ?? '',
-  //     email: cleanString(email) ?? cleanString(fallback.email) ?? '',
-  //     specialty: cleanString(specialty) ?? cleanString(fallback.specialty) ?? '',
-  //     submittedDate:
-  //         cleanString(submittedDate) ?? cleanString(fallback.submittedDate) ?? '',
-  //     ownerName: cleanString(ownerName) ?? cleanString(fallback.ownerName),
-  //     phone: cleanString(phone) ?? cleanString(fallback.phone),
-  //     badge: cleanString(badge) ?? cleanString(fallback.badge),
-  //     image: cleanString(image) ?? cleanString(fallback.image),
-  //     city: cleanString(city) ?? cleanString(fallback.city),
-  //     country: cleanString(country) ?? cleanString(fallback.country),
-  //     location: cleanString(location) ?? cleanString(fallback.location),
-  //     rating: rating ?? fallback.rating,
-  //     totalProducts: totalProducts ?? fallback.totalProducts,
-  //     totalSales: totalSales ?? fallback.totalSales,
-  //     walletBalance: walletBalance ?? fallback.walletBalance,
-  //     commissionRate: commissionRate ?? fallback.commissionRate,
-  //     isActive: isActive ?? fallback.isActive,
-  //     status: cleanString(status) ?? cleanString(fallback.status),
-  //     submittedAt: submittedAt ?? fallback.submittedAt,
-  //     approvedAt: approvedAt ?? fallback.approvedAt,
-  //     createdAt: createdAt ?? fallback.createdAt,
-  //   );
-  // }
-
   String get displayName => cleanString(name) ?? 'Unknown Seller';
   String get displayOwnerName => cleanString(ownerName) ?? 'Unknown owner';
   String get displayBadge => cleanString(badge) ?? 'Verified Seller';

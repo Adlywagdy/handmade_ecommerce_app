@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -13,7 +11,6 @@ import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.d
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/logic/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/addresscolumn.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/cartproductitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/copounrow.dart';
@@ -327,15 +324,13 @@ class CheckoutButton extends StatelessWidget {
                       return;
                     }
 
-                    final orderPayment = PaymentDetailsModel.copywith(
-                      cartCubit.currentOrderSummary!,
+                    final orderPayment = cartCubit.currentOrderSummary!.copyWith(
                       paymentMethod: cartCubit.selectedPaymentMethod,
                     );
 
                     // fetch a new numeric order ID and set display id
                     orderCubit.orderID = await orderCubit.getNewOrderID();
 
-                    log(orderCubit.orderID.toString());
                     await orderCubit.placeNewOrder(
                       CustomerOrderModel(
                         customer: customerCubit.customerData,

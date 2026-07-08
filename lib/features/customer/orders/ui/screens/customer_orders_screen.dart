@@ -88,7 +88,6 @@ class CustomerOrdersScreen extends StatelessWidget {
                 current is GetFilteredOrdersLoadingState ||
                 current is GetFilteredOrdersSuccessState ||
                 current is GetFilteredOrdersFailedState ||
-                current is SearchOrdersSuccessState ||
                 current is CancelOrderSuccessState ||
                 current is PlaceOrderSuccessState;
           },
