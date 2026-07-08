@@ -17,7 +17,8 @@ List<SellerProductModel> mockSellerProducts = [
   const SellerProductModel(
     id: 'P001',
     name: 'Handmade Ceramic Plate',
-    description: 'Beautiful hand-painted ceramic plate with traditional patterns.',
+    description:
+        'Beautiful hand-painted ceramic plate with traditional patterns.',
     price: 25.00,
     stock: 15,
     category: 'Ceramics',
@@ -91,8 +92,16 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 75.00,
     status: 'Pending',
     items: [
-      SellerOrderItemModel(productName: 'Handmade Ceramic Plate', quantity: 2, price: 25.00),
-      SellerOrderItemModel(productName: 'Terra Cotta Vase', quantity: 1, price: 25.00),
+      SellerOrderItemModel(
+        productName: 'Handmade Ceramic Plate',
+        quantity: 2,
+        price: 25.00,
+      ),
+      SellerOrderItemModel(
+        productName: 'Terra Cotta Vase',
+        quantity: 1,
+        price: 25.00,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -102,7 +111,11 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 89.99,
     status: 'Delivered',
     items: [
-      SellerOrderItemModel(productName: 'Hand-Stitched Leather Bag', quantity: 1, price: 89.99),
+      SellerOrderItemModel(
+        productName: 'Hand-Stitched Leather Bag',
+        quantity: 1,
+        price: 89.99,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -112,7 +125,11 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 35.00,
     status: 'Pending',
     items: [
-      SellerOrderItemModel(productName: 'Woven Cotton Scarf', quantity: 1, price: 35.00),
+      SellerOrderItemModel(
+        productName: 'Woven Cotton Scarf',
+        quantity: 1,
+        price: 35.00,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -122,7 +139,11 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 55.50,
     status: 'Cancelled',
     items: [
-      SellerOrderItemModel(productName: 'Beaded Bracelet Set', quantity: 3, price: 18.50),
+      SellerOrderItemModel(
+        productName: 'Beaded Bracelet Set',
+        quantity: 3,
+        price: 18.50,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -132,7 +153,11 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 45.00,
     status: 'Delivered',
     items: [
-      SellerOrderItemModel(productName: 'Wooden Jewelry Box', quantity: 1, price: 45.00),
+      SellerOrderItemModel(
+        productName: 'Wooden Jewelry Box',
+        quantity: 1,
+        price: 45.00,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -142,7 +167,11 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 110.00,
     status: 'Delivered',
     items: [
-      SellerOrderItemModel(productName: 'Terra Cotta Vase', quantity: 2, price: 55.00),
+      SellerOrderItemModel(
+        productName: 'Terra Cotta Vase',
+        quantity: 2,
+        price: 55.00,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -152,7 +181,11 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 25.00,
     status: 'Pending',
     items: [
-      SellerOrderItemModel(productName: 'Handmade Ceramic Plate', quantity: 1, price: 25.00),
+      SellerOrderItemModel(
+        productName: 'Handmade Ceramic Plate',
+        quantity: 1,
+        price: 25.00,
+      ),
     ],
   ),
   const SellerOrderModel(
@@ -162,20 +195,26 @@ List<SellerOrderModel> mockSellerOrders = [
     totalAmount: 53.50,
     status: 'Cancelled',
     items: [
-      SellerOrderItemModel(productName: 'Beaded Bracelet Set', quantity: 1, price: 18.50),
-      SellerOrderItemModel(productName: 'Woven Cotton Scarf', quantity: 1, price: 35.00),
+      SellerOrderItemModel(
+        productName: 'Beaded Bracelet Set',
+        quantity: 1,
+        price: 18.50,
+      ),
+      SellerOrderItemModel(
+        productName: 'Woven Cotton Scarf',
+        quantity: 1,
+        price: 35.00,
+      ),
     ],
   ),
 ];
 
 // Category options for dropdowns
 const List<String> sellerCategories = [
-  'Ceramics',
-  'Textiles',
-  'Woodwork',
-  'Leather',
-  'Jewelry',
-  'Pottery',
-  'Glasswork',
-  'Metalwork',
+  "candles",
+  "ceramic_vases",
+  "crochet_products",
+  "handmade_lamps",
+  "macrame",
+  "wooden_shelves",
 ];
