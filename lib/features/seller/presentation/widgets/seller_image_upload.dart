@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerImageUpload extends StatelessWidget {
   final VoidCallback? onTap;
@@ -35,12 +36,12 @@ class SellerImageUpload extends StatelessWidget {
           ),
           SizedBox(height: 12.h),
         ],
-        if (images.isEmpty) _buildUploadArea(),
+        if (images.isEmpty) _buildUploadArea(context),
       ],
     );
   }
 
-  Widget _buildUploadArea() {
+  Widget _buildUploadArea(BuildContext context) {
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -72,7 +73,7 @@ class SellerImageUpload extends StatelessWidget {
             ),
             SizedBox(height: 12.h),
             Text(
-              'Click to upload or drag and drop',
+              context.l10n.clickToUploadOrDragAndDrop,
               style: TextStyle(
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
@@ -82,7 +83,7 @@ class SellerImageUpload extends StatelessWidget {
             ),
             SizedBox(height: 4.h),
             Text(
-              'PNG, JPG or PDF (max. 5MB)',
+              context.l10n.selPngJpgOrPdfMax5Mb,
               style: TextStyle(
                 fontSize: 11.sp,
                 fontWeight: FontWeight.w400,

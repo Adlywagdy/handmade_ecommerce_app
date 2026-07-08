@@ -9,6 +9,7 @@ import '../../models/seller_model.dart';
 import '../../models/data/seller_mock_data.dart';
 import '../widgets/seller_input_field.dart';
 import '../widgets/seller_image_upload.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerAddEditProductScreen extends StatefulWidget {
   final SellerProductModel product;
@@ -63,11 +64,11 @@ class _SellerAddEditProductScreenState
     final stock = int.tryParse(_stockController.text) ?? 0;
     String status;
     if (stock == 0) {
-      status = 'Out of Stock';
+      status = context.l10n.selOutOfStock;
     } else if (stock <= 5) {
-      status = 'Low Stock';
+      status = context.l10n.selLowStock;
     } else {
-      status = 'In Stock';
+      status = context.l10n.selInStock;
     }
 
     setState(() => _isLoading = true);
@@ -90,7 +91,7 @@ class _SellerAddEditProductScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Text('Product updated successfully'),
+            content: Text(context.l10n.selProductUpdatedSuccessfully),
             backgroundColor: const Color(0xff07880E),
             behavior: SnackBarBehavior.floating,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
@@ -102,7 +103,7 @@ class _SellerAddEditProductScreenState
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Error saving product: $e'),
+            content: Text(context.l10n.selErrorSavingProduct(e.toString())),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -146,7 +147,7 @@ class _SellerAddEditProductScreenState
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Edit Product',
+          context.l10n.selEditProduct,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -170,7 +171,7 @@ class _SellerAddEditProductScreenState
                     children: [
                       // Product Images
                       Text(
-                        'Product Images',
+                        context.l10n.selProductImages,
                         style: TextStyle(
                           fontSize: 14.sp,
                           fontWeight: FontWeight.w600,
@@ -188,15 +189,15 @@ class _SellerAddEditProductScreenState
 
                       // Product Name
                       SellerInputField(
-                        label: 'Product Name',
-                        hintText: 'Enter product name',
+                        label: context.l10n.productName,
+                        hintText: context.l10n.enterProductName,
                         controller: _nameController,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Product name is required';
+                            return context.l10n.productNameIsRequired;
                           }
                           if (value.trim().length < 3) {
-                            return 'Name must be at least 3 characters';
+                            return context.l10n.selNameMin3Chars;
                           }
                           return null;
                         },
@@ -208,7 +209,7 @@ class _SellerAddEditProductScreenState
                         children: [
                           Expanded(
                             child: SellerInputField(
-                              label: 'Price (\$)',
+                              label: context.l10n.price,
                               hintText: '0.00',
                               controller: _priceController,
                               keyboardType:
@@ -216,14 +217,14 @@ class _SellerAddEditProductScreenState
                                       decimal: true),
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Price is required';
+                                  return context.l10n.selPriceRequired;
                                 }
                                 final parsed = double.tryParse(value);
                                 if (parsed == null) {
-                                  return 'Invalid price';
+                                  return context.l10n.selInvalidPrice;
                                 }
                                 if (parsed < 0) {
-                                  return 'Price cannot be negative';
+                                  return context.l10n.selPriceCannotBeNegative;
                                 }
                                 return null;
                               },
@@ -232,20 +233,20 @@ class _SellerAddEditProductScreenState
                           SizedBox(width: 12.w),
                           Expanded(
                             child: SellerInputField(
-                              label: 'Stock',
+                              label: context.l10n.stock,
                               hintText: '0',
                               controller: _stockController,
                               keyboardType: TextInputType.number,
                               validator: (value) {
                                 if (value == null || value.trim().isEmpty) {
-                                  return 'Stock is required';
+                                  return context.l10n.selStockRequired;
                                 }
                                 final parsed = int.tryParse(value);
                                 if (parsed == null) {
-                                  return 'Invalid number';
+                                  return context.l10n.selInvalidNumber;
                                 }
                                 if (parsed < 0) {
-                                  return 'Stock cannot be negative';
+                                  return context.l10n.selStockCannotBeNegative;
                                 }
                                 return null;
                               },
@@ -260,7 +261,7 @@ class _SellerAddEditProductScreenState
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Category',
+                            context.l10n.category,
                             style: TextStyle(
                               fontSize: 13.sp,
                               fontWeight: FontWeight.w600,
@@ -282,7 +283,7 @@ class _SellerAddEditProductScreenState
                               fontFamily: 'Plus Jakarta Sans',
                             ),
                             decoration: InputDecoration(
-                              hintText: 'Select category',
+                              hintText: context.l10n.selSelectCategory,
                               hintStyle: TextStyle(
                                 fontSize: 13.sp,
                                 color: const Color(0xFF94A3B8),
@@ -316,7 +317,7 @@ class _SellerAddEditProductScreenState
                             ),
                             validator: (value) {
                               if (value == null) {
-                                return 'Please select a category';
+                                return context.l10n.selPleaseSelectCategory;
                               }
                               return null;
                             },
@@ -334,16 +335,16 @@ class _SellerAddEditProductScreenState
 
                       // Description
                       SellerInputField(
-                        label: 'Description',
-                        hintText: 'Describe your product...',
+                        label: context.l10n.description,
+                        hintText: context.l10n.describeYourProduct,
                         controller: _descriptionController,
                         maxLines: 4,
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
-                            return 'Description is required';
+                            return context.l10n.selDescriptionRequired;
                           }
                           if (value.trim().length < 10) {
-                            return 'Description must be at least 10 characters';
+                            return context.l10n.selDescriptionMin10Chars;
                           }
                           return null;
                         },
@@ -385,7 +386,7 @@ class _SellerAddEditProductScreenState
                             ),
                           ),
                           child: Text(
-                            'Discard',
+                            context.l10n.selDiscard,
                             style: TextStyle(
                               fontSize: 14.sp,
                               fontWeight: FontWeight.w600,
@@ -420,7 +421,7 @@ class _SellerAddEditProductScreenState
                                 child: const CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                               )
                             : Text(
-                                'Save Product',
+                                context.l10n.selSaveProduct,
                                 style: TextStyle(
                                   fontSize: 14.sp,
                                   fontWeight: FontWeight.w700,

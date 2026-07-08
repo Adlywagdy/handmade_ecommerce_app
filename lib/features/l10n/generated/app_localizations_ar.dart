@@ -1839,4 +1839,372 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get admSettingsNav => 'الإعدادات';
+
+  @override
+  String get selGlobalReach => 'انتشار عالمي';
+
+  @override
+  String get selSellToCustomersWorldwide => 'بيع للعملاء حول العالم';
+
+  @override
+  String get selSecureSales => 'مبيعات آمنة';
+
+  @override
+  String get selGuaranteedSafePayments => 'دفع آمن مضمون';
+
+  @override
+  String get selSupport247 => 'دعم على مدار الساعة';
+
+  @override
+  String get selEmailHint => 'مثال: seller@mail.com';
+
+  @override
+  String get selPleaseEnterValidEmail => 'يرجى إدخال بريد إلكتروني صالح';
+
+  @override
+  String get selPasswordHint => '6 أحرف على الأقل';
+
+  @override
+  String get selPasswordMin6Chars => 'يجب أن تكون كلمة المرور 6 أحرف على الأقل';
+
+  @override
+  String get selShopNameHint => 'مثال: حرف دمشق';
+
+  @override
+  String get selCraftSpecialty => 'التخصص الحرفي';
+
+  @override
+  String get selSelectYourPrimaryCraft => 'اختر تخصصك الرئيسي';
+
+  @override
+  String get selArtisanBio => 'سيرة الحرفي';
+
+  @override
+  String get selArtisanBioHint =>
+      'أخبرنا عن رحلتك وحرفتك وما يجعل منتجاتك فريدة...';
+
+  @override
+  String get selPortfolioAndProductSamples => 'المحفظة وعينات المنتجات';
+
+  @override
+  String get selPngJpgOrPdfMax10Mb => 'PNG، JPG أو PDF (حد أقصى 10 ميجا)';
+
+  @override
+  String get selISellerTermsOfService => 'شروط خدمة البائع';
+
+  @override
+  String get selAndAcknowledgeCommissionRates =>
+      ' والاعتراف\nبمعدلات عمولة المنصة على المبيعات.';
+
+  @override
+  String get selSubmitRequest => 'إرسال الطلب';
+
+  @override
+  String get selOrderDetails => 'تفاصيل الطلب';
+
+  @override
+  String get selOrderItems => 'عناصر الطلب';
+
+  @override
+  String get selTotalEarnings => 'إجمالي الأرباح';
+
+  @override
+  String get selMarkAsShipped => 'وضع تم الشحن';
+
+  @override
+  String get selMarkAsCompleted => 'وضع تم الإنجاز';
+
+  @override
+  String get selArchive => 'أرشفة';
+
+  @override
+  String get selCancelOrderTitle => 'إلغاء الطلب';
+
+  @override
+  String selCancelOrderContent(String orderId) {
+    return 'هل أنت متأكد أنك تريد إلغاء الطلب $orderId؟';
+  }
+
+  @override
+  String get selYesCancel => 'نعم، إلغاء';
+
+  @override
+  String get selOrderCancelledAndStockRestored =>
+      'تم إلغاء الطلب واستعادة المخزون';
+
+  @override
+  String selFailedToCancelOrder(String error) {
+    return 'فشل إلغاء الطلب: $error';
+  }
+
+  @override
+  String get selOrderArchivedSuccessfully => 'تم أرشفة الطلب بنجاح';
+
+  @override
+  String selOrderStatusUpdatedTo(String status) {
+    return 'تم تحديث حالة الطلب إلى $status';
+  }
+
+  @override
+  String selNoTabOrders(String tabName) {
+    return 'لا توجد طلبات $tabName';
+  }
+
+  @override
+  String selQtyLabel(int quantity) {
+    return 'الكمية: $quantity';
+  }
+
+  @override
+  String get selCustomerFallback => 'العميل';
+
+  @override
+  String get selOrderPrefix => 'الطلب';
+
+  @override
+  String get selItemSingular => 'عنصر';
+
+  @override
+  String get selItemPlural => 'عناصر';
+
+  @override
+  String selAvailableBalance(String amount) {
+    return 'الرصيد المتاح: $amount جنيه';
+  }
+
+  @override
+  String get selWithdrawTo => 'السحب إلى';
+
+  @override
+  String selWithdrawAmount(String amount) {
+    return 'سحب $amount جنيه';
+  }
+
+  @override
+  String get selEnterAmount => 'أدخل المبلغ';
+
+  @override
+  String get selDone => 'تم';
+
+  @override
+  String get selApplicationNotApproved => 'الطلب غير مقبول';
+
+  @override
+  String get selAccountUnderReview => 'الحساب قيد المراجعة';
+
+  @override
+  String get selApplicationRejectedMessage =>
+      'لم نتمكن من الموافقة على طلب البائع الخاص بك في الوقت الحالي. تواصل مع فريقنا إذا كنت تريد معرفة المزيد.';
+
+  @override
+  String get selApplicationPendingMessage =>
+      'شكراً للانضمام إلى أيادي. فريق التدقيق لدينا يراجع طلبك — سيتم إبلاغك في اللحظة التي يوافق فيها.';
+
+  @override
+  String get selSignOut => 'تسجيل الخروج';
+
+  @override
+  String get selEstimatedReviewTime => 'وقت المراجعة المقدر: 3-5 أيام عمل';
+
+  @override
+  String get selRefreshStatus => 'تحديث الحالة';
+
+  @override
+  String get selNotApproved => 'غير مقبول';
+
+  @override
+  String get selPendingApproval => 'في انتظار الموافقة';
+
+  @override
+  String get selApplicationSubmitted => 'تم تقديم الطلب';
+
+  @override
+  String get selReviewed => 'تمت المراجعة';
+
+  @override
+  String get selUnderReview => 'قيد المراجعة';
+
+  @override
+  String get selApprovedWelcomeAboard => 'تمت الموافقة — مرحباً بك';
+
+  @override
+  String get selApproved => 'مقبول';
+
+  @override
+  String get selApplicationNotApprovedSnack =>
+      'لم يتم قبول طلبك. يرجى الاتصال بالدعم.';
+
+  @override
+  String get selStillUnderReview => 'أنت لا تزال قيد المراجعة. سنخبرك قريباً.';
+
+  @override
+  String selCouldNotRefreshStatus(String error) {
+    return 'تعذر تحديث الحالة: $error';
+  }
+
+  @override
+  String get selDeleteProduct => 'حذف المنتج';
+
+  @override
+  String get selDeleteProductConfirm =>
+      'هل أنت متأكد أنك تريد حذف هذا المنتج؟ لا يمكن التراجع عن هذا الإجراء.';
+
+  @override
+  String get selProductDeletedSuccessfully => 'تم حذف المنتج بنجاح';
+
+  @override
+  String selFailedToDeleteProduct(String error) {
+    return 'فشل حذف المنتج: $error';
+  }
+
+  @override
+  String get selEditProduct => 'تعديل المنتج';
+
+  @override
+  String get selDelete => 'حذف';
+
+  @override
+  String selStockUnits(int stock) {
+    return 'المخزون: $stock وحدة';
+  }
+
+  @override
+  String get selActiveListing => 'إعلان نشط';
+
+  @override
+  String get selVisibleToCustomers => 'مرئي للعملاء في السوق';
+
+  @override
+  String get selPriceEgp => 'السعر (جنيه)';
+
+  @override
+  String get selProductTitle => 'عنوان المنتج';
+
+  @override
+  String get selProductTitleHint => 'مثال: طبق تقديم خزفي مرسوم يدوياً';
+
+  @override
+  String get selProductTitleRequired => 'عنوان المنتج مطلوب';
+
+  @override
+  String get selTitleMin3Chars => 'يجب أن يكون العنوان 3 أحرف على الأقل';
+
+  @override
+  String get selPriceRequired => 'السعر مطلوب';
+
+  @override
+  String get selEnterValidNumber => 'أدخل رقماً صالحاً';
+
+  @override
+  String get selPriceCannotBeNegative => 'لا يمكن أن يكون السعر سالباً';
+
+  @override
+  String get selStockRequired => 'المخزون مطلوب';
+
+  @override
+  String get selEnterValidInteger => 'أدخل رقماً صحيحاً';
+
+  @override
+  String get selStockCannotBeNegative => 'لا يمكن أن يكون المخزون سالباً';
+
+  @override
+  String get selDescriptionRequired => 'الوصف مطلوب';
+
+  @override
+  String get selDescriptionMin10Chars => 'يجب أن يكون الوصف 10 أحرف على الأقل';
+
+  @override
+  String get selProductImages => 'صور المنتج';
+
+  @override
+  String get selAddPhoto => 'إضافة صورة';
+
+  @override
+  String get selPleaseAddAtLeastOneImage =>
+      'يرجى إضافة صورة واحدة على الأقل للمنتج';
+
+  @override
+  String get selProductAddedSuccessfully => 'تم إضافة المنتج بنجاح!';
+
+  @override
+  String get selSaveProduct => 'حفظ المنتج';
+
+  @override
+  String get selDiscardChanges => 'تجاهل التغييرات';
+
+  @override
+  String get selOutOfStock => 'غير متوفر';
+
+  @override
+  String get selLowStock => 'مخزون منخفض';
+
+  @override
+  String get selInStock => 'متوفر';
+
+  @override
+  String get selNameMin3Chars => 'يجب أن يكون الاسم 3 أحرف على الأقل';
+
+  @override
+  String get selInvalidPrice => 'سعر غير صالح';
+
+  @override
+  String get selInvalidNumber => 'رقم غير صالح';
+
+  @override
+  String get selPleaseSelectCategory => 'يرجى اختيار فئة';
+
+  @override
+  String get selSelectCategory => 'اختر الفئة';
+
+  @override
+  String get selProductUpdatedSuccessfully => 'تم تحديث المنتج بنجاح';
+
+  @override
+  String selErrorSavingProduct(String error) {
+    return 'حدث خطأ أثناء حفظ المنتج: $error';
+  }
+
+  @override
+  String get selDiscard => 'تجاهل';
+
+  @override
+  String get selClickToUpload => 'انقر للتحميل أو اسحب وأفلت';
+
+  @override
+  String get selPngJpgOrPdfMax5Mb => 'PNG، JPG أو PDF (حد أقصى 5 ميجا)';
+
+  @override
+  String selWelcomeSeller(String name) {
+    return 'مرحباً بعودتك، $name';
+  }
+
+  @override
+  String get selHereWhatIsHappening => 'إليك ما يحدث في متجرك اليوم.';
+
+  @override
+  String get selTotalOrders => 'إجمالي الطلبات';
+
+  @override
+  String get selNoRecentOrders => 'لا توجد طلبات حديثة';
+
+  @override
+  String get selOrderItem => 'عنصر الطلب';
+
+  @override
+  String get selUnexpectedState => 'حالة غير متوقعة';
+
+  @override
+  String get selAyadySeller => 'بائع أيادي';
+
+  @override
+  String get selPleaseAgreeToTerms => 'يرجى الموافقة على شروط الخدمة';
+
+  @override
+  String get selThisFieldIsRequired => 'هذا الحقل مطلوب';
+
+  @override
+  String get selManageProducts => 'إدارة المنتجات';
+
+  @override
+  String get selNoProductsFound => 'لم يتم العثور على منتجات';
 }

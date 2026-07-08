@@ -8,6 +8,7 @@ import 'package:handmade_ecommerce_app/features/seller/cubit/seller_cubit.dart';
 import 'package:handmade_ecommerce_app/features/seller/cubit/seller_state.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/features/seller/presentation/screens/seller_add_edit_product_screen.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerManageProductsScreen extends StatefulWidget {
   final VoidCallback? onBackPressed;
@@ -54,7 +55,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
           icon: Icon(Icons.arrow_back, color: commonColor, size: 24.w),
         ),
         title: Text(
-          'Manage Products',
+          context.l10n.selManageProducts,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -125,7 +126,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
               ],
             );
           }
-          return const Center(child: Text('No products found'));
+          return Center(child: Text(context.l10n.selNoProductsFound));
         },
       ),
       floatingActionButton: FloatingActionButton(
@@ -165,10 +166,10 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
           fontWeight: FontWeight.w500,
           fontFamily: 'Plus Jakarta Sans',
         ),
-        tabs: const [
-          Tab(text: 'All'),
-          Tab(text: 'Active'),
-          Tab(text: 'Pending'),
+        tabs: [
+          Tab(text: context.l10n.all),
+          Tab(text: context.l10n.active),
+          Tab(text: context.l10n.pending),
         ],
       ),
     );
@@ -187,7 +188,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
             ),
             SizedBox(height: 16.h),
             Text(
-              'No products found',
+              context.l10n.selNoProductsFound,
               style: TextStyle(
                 color: const Color(0xFF64748B),
                 fontSize: 16.sp,
@@ -285,7 +286,7 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Stock: ${product.stock} units',
+                        context.l10n.selStockUnits(product.stock),
                         style: TextStyle(
                           color: const Color(0xFF64748B),
                           fontSize: 12.sp,
@@ -337,12 +338,12 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                     builder: (ctx) => AlertDialog(
                       backgroundColor: Colors.white,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16.r)),
-                      title: const Text('Delete Product'),
-                      content: const Text('Are you sure you want to delete this product? This action cannot be undone.'),
+                      title: Text(context.l10n.selDeleteProduct),
+                      content: Text(context.l10n.selDeleteProductConfirm),
                       actions: [
                         TextButton(
                           onPressed: () => Navigator.pop(ctx),
-                          child: const Text('Cancel', style: TextStyle(color: Color(0xFF64748B))),
+                          child: Text(context.l10n.cancel, style: TextStyle(color: Color(0xFF64748B))),
                         ),
                         TextButton(
                           onPressed: () async {
@@ -350,21 +351,21 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                             try {
                               await context.read<SellerCubit>().deleteProduct(product.id);
                               Get.snackbar(
-                                'Success',
-                                'Product deleted successfully',
+                                context.l10n.success,
+                                context.l10n.selProductDeletedSuccessfully,
                                 backgroundColor: Colors.green,
                                 colorText: Colors.white,
                               );
                             } catch (e) {
                               Get.snackbar(
-                                'Error',
-                                'Failed to delete product: $e',
+                                context.l10n.error,
+                                context.l10n.selFailedToDeleteProduct(e.toString()),
                                 backgroundColor: Colors.redAccent,
                                 colorText: Colors.white,
                               );
                             }
                           },
-                          child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                          child: Text(context.l10n.delete, style: TextStyle(color: Colors.red)),
                         ),
                       ],
                     ),
@@ -372,13 +373,13 @@ class _SellerManageProductsScreenState extends State<SellerManageProductsScreen>
                 }
               },
               itemBuilder: (BuildContext context) => [
-                const PopupMenuItem<String>(
+                PopupMenuItem<String>(
                   value: 'edit',
-                  child: Text('Edit Product'),
+                  child: Text(context.l10n.selEditProduct),
                 ),
-                const PopupMenuItem<String>(
+                PopupMenuItem<String>(
                   value: 'delete',
-                  child: Text('Delete', style: TextStyle(color: Colors.red)),
+                  child: Text(context.l10n.delete, style: TextStyle(color: Colors.red)),
                 ),
               ],
             ),

@@ -1853,4 +1853,376 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get admSettingsNav => 'Settings';
+
+  @override
+  String get selGlobalReach => 'Global Reach';
+
+  @override
+  String get selSellToCustomersWorldwide => 'Sell to customers worldwide';
+
+  @override
+  String get selSecureSales => 'Secure Sales';
+
+  @override
+  String get selGuaranteedSafePayments => 'Guaranteed safe payments';
+
+  @override
+  String get selSupport247 => '24/7 Support';
+
+  @override
+  String get selEmailHint => 'e.g. seller@mail.com';
+
+  @override
+  String get selPleaseEnterValidEmail => 'Please enter a valid email address';
+
+  @override
+  String get selPasswordHint => 'Min 6 characters';
+
+  @override
+  String get selPasswordMin6Chars => 'Password must be at least 6 characters';
+
+  @override
+  String get selShopNameHint => 'e.g. Damascus Woodcrafts';
+
+  @override
+  String get selCraftSpecialty => 'Craft Specialty';
+
+  @override
+  String get selSelectYourPrimaryCraft => 'Select your primary craft';
+
+  @override
+  String get selArtisanBio => 'Artisan Bio';
+
+  @override
+  String get selArtisanBioHint =>
+      'Tell us about your journey, your craft, and\nwhat makes your products unique...';
+
+  @override
+  String get selPortfolioAndProductSamples => 'Portfolio & Product Samples';
+
+  @override
+  String get selPngJpgOrPdfMax10Mb => 'PNG, JPG or PDF (max. 10MB)';
+
+  @override
+  String get selISellerTermsOfService => 'Seller Terms of Service';
+
+  @override
+  String get selAndAcknowledgeCommissionRates =>
+      ' and acknowledge\nthe platform commission rates on sales.';
+
+  @override
+  String get selSubmitRequest => 'Submit Request';
+
+  @override
+  String get selOrderDetails => 'Order Details';
+
+  @override
+  String get selOrderItems => 'Order Items';
+
+  @override
+  String get selTotalEarnings => 'Total Earnings';
+
+  @override
+  String get selMarkAsShipped => 'Mark as Shipped';
+
+  @override
+  String get selMarkAsCompleted => 'Mark as Completed';
+
+  @override
+  String get selArchive => 'Archive';
+
+  @override
+  String get selCancelOrderTitle => 'Cancel Order';
+
+  @override
+  String selCancelOrderContent(String orderId) {
+    return 'Are you sure you want to cancel order $orderId?';
+  }
+
+  @override
+  String get selYesCancel => 'Yes, Cancel';
+
+  @override
+  String get selOrderCancelledAndStockRestored =>
+      'Order has been cancelled and stock restored';
+
+  @override
+  String selFailedToCancelOrder(String error) {
+    return 'Failed to cancel order: $error';
+  }
+
+  @override
+  String get selOrderArchivedSuccessfully => 'Order archived successfully';
+
+  @override
+  String selOrderStatusUpdatedTo(String status) {
+    return 'Order status updated to $status';
+  }
+
+  @override
+  String selNoTabOrders(String tabName) {
+    return 'No $tabName Orders';
+  }
+
+  @override
+  String selQtyLabel(int quantity) {
+    return 'Qty: $quantity';
+  }
+
+  @override
+  String get selCustomerFallback => 'Customer';
+
+  @override
+  String get selOrderPrefix => 'Order';
+
+  @override
+  String get selItemSingular => 'item';
+
+  @override
+  String get selItemPlural => 'items';
+
+  @override
+  String selAvailableBalance(String amount) {
+    return 'Available balance: EGP $amount';
+  }
+
+  @override
+  String get selWithdrawTo => 'Withdraw to';
+
+  @override
+  String selWithdrawAmount(String amount) {
+    return 'Withdraw EGP $amount';
+  }
+
+  @override
+  String get selEnterAmount => 'Enter amount';
+
+  @override
+  String get selDone => 'Done';
+
+  @override
+  String get selApplicationNotApproved => 'Application Not Approved';
+
+  @override
+  String get selAccountUnderReview => 'Account Under Review';
+
+  @override
+  String get selApplicationRejectedMessage =>
+      'We were unable to approve your seller application at this time. Reach out to our team if you\'d like to know more.';
+
+  @override
+  String get selApplicationPendingMessage =>
+      'Thanks for joining Ayady. Our curation team is reviewing your application — you\'ll be notified the moment it\'s approved.';
+
+  @override
+  String get selSignOut => 'Sign out';
+
+  @override
+  String get selEstimatedReviewTime =>
+      'Estimated review time: 3–5 business days';
+
+  @override
+  String get selRefreshStatus => 'Refresh Status';
+
+  @override
+  String get selNotApproved => 'NOT APPROVED';
+
+  @override
+  String get selPendingApproval => 'PENDING APPROVAL';
+
+  @override
+  String get selApplicationSubmitted => 'Application submitted';
+
+  @override
+  String get selReviewed => 'Reviewed';
+
+  @override
+  String get selUnderReview => 'Under review';
+
+  @override
+  String get selApprovedWelcomeAboard => 'Approved — welcome aboard';
+
+  @override
+  String get selApproved => 'Approved';
+
+  @override
+  String get selApplicationNotApprovedSnack =>
+      'Your application was not approved. Please contact support.';
+
+  @override
+  String get selStillUnderReview =>
+      'You\'re still under review. We\'ll notify you soon.';
+
+  @override
+  String selCouldNotRefreshStatus(String error) {
+    return 'Could not refresh status: $error';
+  }
+
+  @override
+  String get selDeleteProduct => 'Delete Product';
+
+  @override
+  String get selDeleteProductConfirm =>
+      'Are you sure you want to delete this product? This action cannot be undone.';
+
+  @override
+  String get selProductDeletedSuccessfully => 'Product deleted successfully';
+
+  @override
+  String selFailedToDeleteProduct(String error) {
+    return 'Failed to delete product: $error';
+  }
+
+  @override
+  String get selEditProduct => 'Edit Product';
+
+  @override
+  String get selDelete => 'Delete';
+
+  @override
+  String selStockUnits(int stock) {
+    return 'Stock: $stock units';
+  }
+
+  @override
+  String get selActiveListing => 'Active Listing';
+
+  @override
+  String get selVisibleToCustomers => 'Visible to customers in the marketplace';
+
+  @override
+  String get selPriceEgp => 'Price (EGP)';
+
+  @override
+  String get selProductTitle => 'Product Title';
+
+  @override
+  String get selProductTitleHint => 'e.g. Hand-painted Ceramic Serving Dish';
+
+  @override
+  String get selProductTitleRequired => 'Product title is required';
+
+  @override
+  String get selTitleMin3Chars => 'Title must be at least 3 characters';
+
+  @override
+  String get selPriceRequired => 'Price is required';
+
+  @override
+  String get selEnterValidNumber => 'Enter a valid number';
+
+  @override
+  String get selPriceCannotBeNegative => 'Price cannot be negative';
+
+  @override
+  String get selStockRequired => 'Stock is required';
+
+  @override
+  String get selEnterValidInteger => 'Enter a valid integer';
+
+  @override
+  String get selStockCannotBeNegative => 'Stock cannot be negative';
+
+  @override
+  String get selDescriptionRequired => 'Description is required';
+
+  @override
+  String get selDescriptionMin10Chars =>
+      'Description must be at least 10 characters';
+
+  @override
+  String get selProductImages => 'Product Images';
+
+  @override
+  String get selAddPhoto => 'ADD PHOTO';
+
+  @override
+  String get selPleaseAddAtLeastOneImage =>
+      'Please add at least one product image';
+
+  @override
+  String get selProductAddedSuccessfully => 'Product added successfully!';
+
+  @override
+  String get selSaveProduct => 'Save Product';
+
+  @override
+  String get selDiscardChanges => 'Discard Changes';
+
+  @override
+  String get selOutOfStock => 'Out of Stock';
+
+  @override
+  String get selLowStock => 'Low Stock';
+
+  @override
+  String get selInStock => 'In Stock';
+
+  @override
+  String get selNameMin3Chars => 'Name must be at least 3 characters';
+
+  @override
+  String get selInvalidPrice => 'Invalid price';
+
+  @override
+  String get selInvalidNumber => 'Invalid number';
+
+  @override
+  String get selPleaseSelectCategory => 'Please select a category';
+
+  @override
+  String get selSelectCategory => 'Select category';
+
+  @override
+  String get selProductUpdatedSuccessfully => 'Product updated successfully';
+
+  @override
+  String selErrorSavingProduct(String error) {
+    return 'Error saving product: $error';
+  }
+
+  @override
+  String get selDiscard => 'Discard';
+
+  @override
+  String get selClickToUpload => 'Click to upload or drag and drop';
+
+  @override
+  String get selPngJpgOrPdfMax5Mb => 'PNG, JPG or PDF (max. 5MB)';
+
+  @override
+  String selWelcomeSeller(String name) {
+    return 'Welcome back, $name';
+  }
+
+  @override
+  String get selHereWhatIsHappening =>
+      'Here\'s what\'s happening with your shop today.';
+
+  @override
+  String get selTotalOrders => 'Total Orders';
+
+  @override
+  String get selNoRecentOrders => 'No recent orders';
+
+  @override
+  String get selOrderItem => 'Order Item';
+
+  @override
+  String get selUnexpectedState => 'Unexpected State';
+
+  @override
+  String get selAyadySeller => 'Ayady Seller';
+
+  @override
+  String get selPleaseAgreeToTerms => 'Please agree to the Terms of Service';
+
+  @override
+  String get selThisFieldIsRequired => 'This field is required';
+
+  @override
+  String get selManageProducts => 'Manage Products';
+
+  @override
+  String get selNoProductsFound => 'No products found';
 }

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/seller/models/seller_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class SellerOrderDetailsScreen extends StatelessWidget {
   final SellerOrderModel order;
@@ -59,7 +60,7 @@ class SellerOrderDetailsScreen extends StatelessWidget {
         : order.orderId.toUpperCase();
         
     final displayCustomer = (order.customerName.length > 20 && !order.customerName.contains(' '))
-        ? 'Customer'
+        ? context.l10n.selCustomerFallback
         : order.customerName;
 
     return Scaffold(
@@ -73,7 +74,7 @@ class SellerOrderDetailsScreen extends StatelessWidget {
           onPressed: () => Get.back(),
         ),
         title: Text(
-          'Order Details',
+          context.l10n.selOrderDetails,
           style: TextStyle(
             color: const Color(0xFF0F172A),
             fontSize: 18.sp,
@@ -177,7 +178,7 @@ class SellerOrderDetailsScreen extends StatelessWidget {
             
             // Order Items
             Text(
-              'Order Items',
+              context.l10n.selOrderItems,
               style: TextStyle(
                 color: const Color(0xFF0F172A),
                 fontSize: 16.sp,
@@ -221,7 +222,7 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                           ),
                           SizedBox(height: 4.h),
                           Text(
-                            'Qty: ${item.quantity}',
+                            context.l10n.qty(item.quantity),
                             style: TextStyle(
                               color: const Color(0xFF64748B),
                               fontSize: 13.sp,
@@ -255,7 +256,7 @@ class SellerOrderDetailsScreen extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Total Earnings',
+                  context.l10n.selTotalEarnings,
                   style: TextStyle(
                     color: const Color(0xFF334155),
                     fontSize: 16.sp,
