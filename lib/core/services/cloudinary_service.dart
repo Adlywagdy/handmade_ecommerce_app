@@ -13,7 +13,7 @@ class CloudinaryService {
   final Dio _dio = Dio();
 
   Future<String> uploadImage(File file) async {
-    final fileName = file.path.split('/').last;
+    final fileName = file.uri.pathSegments.last;
 
     final formData = FormData.fromMap({
       'file': await MultipartFile.fromFile(file.path, filename: fileName),
@@ -48,5 +48,14 @@ class CloudinaryService {
     } else {
       throw Exception('Failed to upload image: ${response.statusCode}');
     }
+  }
+
+  Future<List<String>> uploadImages(List<File> files) async {
+    final urls = <String>[];
+    for (final file in files) {
+      final url = await uploadImage(file);
+      urls.add(url);
+    }
+    return urls;
   }
 }

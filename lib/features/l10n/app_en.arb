@@ -248,6 +248,24 @@
   "@sendCode": {
     "description": "Button text used to request a password reset code."
   },
+  "notificationsTitle": "Notifications",
+  "@notificationsTitle": {},
+  "filterAll": "All",
+  "@filterAll": {},
+  "filterUnread": "Unread",
+  "@filterUnread": {},
+  "filterOrders": "Orders",
+  "@filterOrders": {},
+  "filterMessages": "Messages",
+  "@filterMessages": {},
+  "filterOffers": "Offers",
+  "@filterOffers": {},
+  "clearNotificationsDialogTitle": "Clear Notifications",
+  "@clearNotificationsDialogTitle": {},
+  "clearNotificationsConfirmation": "Are you sure you want to clear all notifications?",
+  "@clearNotificationsConfirmation": {},
+  "noNotificationsDescription": "You don't have any notifications yet.",
+  "@noNotificationsDescription": {},
   "verifyItsYou": "Verify it’s you",
   "@verifyItsYou": {
     "description": "Title text shown on the verification code screen."

@@ -245,7 +245,7 @@ class NotificationsScreen extends StatelessWidget {
     final notifications = state.filteredNotifications;
 
     // Group notifications by date
-    final grouped = _groupNotificationsByDate(notifications);
+    final grouped = _groupNotificationsByDate(context, notifications);
 
     return CupertinoScrollbar(
       child: RefreshIndicator(
@@ -333,6 +333,7 @@ class NotificationsScreen extends StatelessWidget {
 
   /// Group notifications into Today, Yesterday, and Earlier
   List<_NotificationGroup> _groupNotificationsByDate(
+    BuildContext context,
     List<NotificationModel> notifications,
   ) {
     final todayList = <NotificationModel>[];

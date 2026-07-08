@@ -323,6 +323,34 @@ class AppLocalizationsAr extends AppLocalizations {
   String get sendCode => 'إرسال الكود';
 
   @override
+  String get notificationsTitle => 'الإشعارات';
+
+  @override
+  String get filterAll => 'الكل';
+
+  @override
+  String get filterUnread => 'غير مقروء';
+
+  @override
+  String get filterOrders => 'الطلبات';
+
+  @override
+  String get filterMessages => 'الرسائل';
+
+  @override
+  String get filterOffers => 'العروض';
+
+  @override
+  String get clearNotificationsDialogTitle => 'مسح الإشعارات';
+
+  @override
+  String get clearNotificationsConfirmation =>
+      'هل أنت متأكد من مسح جميع الإشعارات؟';
+
+  @override
+  String get noNotificationsDescription => 'ليس لديك أي إشعارات حتى الآن.';
+
+  @override
   String get verifyItsYou => 'تحقق من هويتك';
 
   @override

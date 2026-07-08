@@ -5,8 +5,9 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 import '../../cubit/seller_cubit.dart';
+import '../../cubit/seller_state.dart';
 import '../../models/seller_model.dart';
-import '../../models/data/seller_mock_data.dart';
+import 'package:handmade_ecommerce_app/core/models/category_model.dart';
 import '../widgets/seller_input_field.dart';
 import '../widgets/seller_image_upload.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
@@ -25,33 +26,35 @@ class _SellerAddEditProductScreenState
     extends State<SellerAddEditProductScreen> {
   final _formKey = GlobalKey<FormState>();
   late final TextEditingController _nameController;
+  late final TextEditingController _nameARController;
   late final TextEditingController _priceController;
   late final TextEditingController _stockController;
   late final TextEditingController _descriptionController;
+  late final TextEditingController _descriptionARController;
   String? _selectedCategory;
   late List<String> _images;
 
   @override
   void initState() {
     super.initState();
-    _nameController =
-        TextEditingController(text: widget.product.name);
-    _priceController = TextEditingController(
-        text: widget.product.price.toStringAsFixed(2));
-    _stockController =
-        TextEditingController(text: widget.product.stock.toString());
-    _descriptionController =
-        TextEditingController(text: widget.product.description);
-    _selectedCategory = widget.product.category;
+    _nameController = TextEditingController(text: widget.product.name);
+    _nameARController = TextEditingController(text: widget.product.nameAR ?? '');
+    _priceController = TextEditingController(text: widget.product.price.toStringAsFixed(2));
+    _stockController = TextEditingController(text: widget.product.stock.toString());
+    _descriptionController = TextEditingController(text: widget.product.description);
+    _descriptionARController = TextEditingController(text: widget.product.descriptionAR ?? '');
+    _selectedCategory = widget.product.categoryId;
     _images = widget.product.images.toList();
   }
 
   @override
   void dispose() {
     _nameController.dispose();
+    _nameARController.dispose();
     _priceController.dispose();
     _stockController.dispose();
     _descriptionController.dispose();
+    _descriptionARController.dispose();
     super.dispose();
   }
 
@@ -62,31 +65,32 @@ class _SellerAddEditProductScreenState
     if (!_formKey.currentState!.validate()) return;
 
     final stock = int.tryParse(_stockController.text) ?? 0;
-    String status;
-    if (stock == 0) {
-      status = context.l10n.selOutOfStock;
-    } else if (stock <= 5) {
-      status = context.l10n.selLowStock;
-    } else {
-      status = context.l10n.selInStock;
-    }
+    String status = 'pending'; // Always go back to pending after edit
 
     setState(() => _isLoading = true);
 
     try {
       final cubit = context.read<SellerCubit>();
-      final product = SellerProductModel(
-        id: widget.product.id,
+      final existingImageUrls = _images.where((img) => img.startsWith('http')).toList();
+
+      final product = widget.product.copyWith(
         name: _nameController.text.trim(),
+        nameAR: _nameARController.text.trim(),
         description: _descriptionController.text.trim(),
+        descriptionAR: _descriptionARController.text.trim(),
         price: double.tryParse(_priceController.text) ?? 0,
         stock: stock,
-        category: _selectedCategory ?? 'Ceramics',
-        images: _images.isNotEmpty ? _images : ['https://via.placeholder.com/150'],
+        categoryId: _selectedCategory ?? widget.product.categoryId,
+        images: widget.product.images,
         isActive: stock > 0,
         status: status,
       );
-      await cubit.updateProduct(product);
+
+      await cubit.updateProductWithImages(
+        product: product,
+        newImageFiles: _newImages,
+        existingImageUrls: existingImageUrls,
+      );
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -204,6 +208,23 @@ class _SellerAddEditProductScreenState
                       ),
                       SizedBox(height: 20.h),
 
+                      // Product Name AR
+                      SellerInputField(
+                        label: 'Product Name (Arabic)',
+                        hintText: 'اسم المنتج بالعربي',
+                        controller: _nameARController,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Arabic name is required';
+                          }
+                          if (value.trim().length < 3) {
+                            return context.l10n.selNameMin3Chars;
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 20.h),
+
                       // Price and Stock
                       Row(
                         children: [
@@ -270,63 +291,80 @@ class _SellerAddEditProductScreenState
                             ),
                           ),
                           SizedBox(height: 8.h),
-                          DropdownButtonFormField<String>(
-                            initialValue: _selectedCategory,
-                            dropdownColor: Colors.white,
-                            icon: Icon(
-                              Icons.keyboard_arrow_down,
-                              color: const Color(0xFF94A3B8),
-                            ),
-                            style: TextStyle(
-                              fontSize: 14.sp,
-                              color: const Color(0xFF0F172A),
-                              fontFamily: 'Plus Jakarta Sans',
-                            ),
-                            decoration: InputDecoration(
-                              hintText: context.l10n.selSelectCategory,
-                              hintStyle: TextStyle(
-                                fontSize: 13.sp,
-                                color: const Color(0xFF94A3B8),
-                                fontFamily: 'Plus Jakarta Sans',
-                              ),
-                              filled: true,
-                              fillColor: const Color(0xFFF8FAFC),
-                              contentPadding: EdgeInsets.symmetric(
-                                horizontal: 16.w,
-                                vertical: 14.h,
-                              ),
-                              border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFFE2E8F0),
-                                ),
-                              ),
-                              enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xFFE2E8F0),
-                                ),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.r),
-                                borderSide: const BorderSide(
-                                  color: Color(0xff8B4513),
-                                  width: 1.5,
-                                ),
-                              ),
-                            ),
-                            validator: (value) {
-                              if (value == null) {
-                                return context.l10n.selPleaseSelectCategory;
+                          BlocBuilder<SellerCubit, SellerState>(
+                            builder: (context, state) {
+                              List<CategoryModel> categories = [];
+                              if (state is SellerLoaded) {
+                                categories = state.categories;
                               }
-                              return null;
-                            },
-                            items: sellerCategories.map((cat) {
-                              return DropdownMenuItem<String>(
-                                  value: cat, child: Text(cat));
-                            }).toList(),
-                            onChanged: (val) {
-                              setState(() => _selectedCategory = val);
+                              
+                              if (categories.isEmpty) {
+                                return Text('Loading categories...', style: TextStyle(color: Colors.grey, fontSize: 14.sp));
+                              }
+                              
+                              if (_selectedCategory == null || !categories.any((c) => c.id == _selectedCategory)) {
+                                _selectedCategory = categories.first.id;
+                              }
+
+                              return DropdownButtonFormField<String>(
+                                initialValue: _selectedCategory,
+                                dropdownColor: Colors.white,
+                                icon: Icon(
+                                  Icons.keyboard_arrow_down,
+                                  color: const Color(0xFF94A3B8),
+                                ),
+                                style: TextStyle(
+                                  fontSize: 14.sp,
+                                  color: const Color(0xFF0F172A),
+                                  fontFamily: 'Plus Jakarta Sans',
+                                ),
+                                decoration: InputDecoration(
+                                  hintText: context.l10n.selSelectCategory,
+                                  hintStyle: TextStyle(
+                                    fontSize: 13.sp,
+                                    color: const Color(0xFF94A3B8),
+                                    fontFamily: 'Plus Jakarta Sans',
+                                  ),
+                                  filled: true,
+                                  fillColor: const Color(0xFFF8FAFC),
+                                  contentPadding: EdgeInsets.symmetric(
+                                    horizontal: 16.w,
+                                    vertical: 14.h,
+                                  ),
+                                  border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFE2E8F0),
+                                    ),
+                                  ),
+                                  enabledBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xFFE2E8F0),
+                                    ),
+                                  ),
+                                  focusedBorder: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12.r),
+                                    borderSide: const BorderSide(
+                                      color: Color(0xff8B4513),
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                ),
+                                validator: (value) {
+                                  if (value == null) {
+                                    return context.l10n.selPleaseSelectCategory;
+                                  }
+                                  return null;
+                                },
+                                items: categories.map((cat) {
+                                  return DropdownMenuItem<String>(
+                                      value: cat.id, child: Text(cat.localizedTitle(false)));
+                                }).toList(),
+                                onChanged: (val) {
+                                  setState(() => _selectedCategory = val);
+                                },
+                              );
                             },
                           ),
                         ],
@@ -342,6 +380,24 @@ class _SellerAddEditProductScreenState
                         validator: (value) {
                           if (value == null || value.trim().isEmpty) {
                             return context.l10n.selDescriptionRequired;
+                          }
+                          if (value.trim().length < 10) {
+                            return context.l10n.selDescriptionMin10Chars;
+                          }
+                          return null;
+                        },
+                      ),
+                      SizedBox(height: 24.h),
+
+                      // Description AR
+                      SellerInputField(
+                        label: 'Product Description (Arabic)',
+                        hintText: 'وصف المنتج بالعربي',
+                        controller: _descriptionARController,
+                        maxLines: 4,
+                        validator: (value) {
+                          if (value == null || value.trim().isEmpty) {
+                            return 'Arabic description is required';
                           }
                           if (value.trim().length < 10) {
                             return context.l10n.selDescriptionMin10Chars;

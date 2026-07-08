@@ -55,11 +55,12 @@ class SellerOrderDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final shortOrderId = order.orderId.length > 6 
-        ? order.orderId.substring(0, 6).toUpperCase() 
+    final shortOrderId = order.orderId.length > 6
+        ? order.orderId.substring(0, 6).toUpperCase()
         : order.orderId.toUpperCase();
-        
-    final displayCustomer = (order.customerName.length > 20 && !order.customerName.contains(' '))
+
+    final displayCustomer =
+        (order.customerName.length > 20 && !order.customerName.contains(' '))
         ? context.l10n.selCustomerFallback
         : order.customerName;
 
@@ -116,7 +117,10 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                         ),
                       ),
                       Container(
-                        padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 4.h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 10.w,
+                          vertical: 4.h,
+                        ),
                         decoration: BoxDecoration(
                           color: _getStatusBgColor(),
                           borderRadius: BorderRadius.circular(100.r),
@@ -136,7 +140,11 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                   SizedBox(height: 12.h),
                   Row(
                     children: [
-                      Icon(Icons.person_outline, size: 20.w, color: const Color(0xFF64748B)),
+                      Icon(
+                        Icons.person_outline,
+                        size: 20.w,
+                        color: const Color(0xFF64748B),
+                      ),
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
@@ -156,7 +164,11 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                   SizedBox(height: 8.h),
                   Row(
                     children: [
-                      Icon(Icons.calendar_today_outlined, size: 20.w, color: const Color(0xFF64748B)),
+                      Icon(
+                        Icons.calendar_today_outlined,
+                        size: 20.w,
+                        color: const Color(0xFF64748B),
+                      ),
                       SizedBox(width: 8.w),
                       Expanded(
                         child: Text(
@@ -175,7 +187,7 @@ class SellerOrderDetailsScreen extends StatelessWidget {
               ),
             ),
             SizedBox(height: 24.h),
-            
+
             // Order Items
             Text(
               context.l10n.selOrderItems,
@@ -191,7 +203,8 @@ class SellerOrderDetailsScreen extends StatelessWidget {
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: order.items.length,
-              separatorBuilder: (context, index) => Divider(color: const Color(0xFFE2E8F0), height: 24.h),
+              separatorBuilder: (context, index) =>
+                  Divider(color: const Color(0xFFE2E8F0), height: 24.h),
               itemBuilder: (context, index) {
                 final item = order.items[index];
                 return Row(
@@ -203,8 +216,20 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                       decoration: BoxDecoration(
                         color: const Color(0xFFF1F5F9),
                         borderRadius: BorderRadius.circular(8.r),
+                        image: item.image != null && item.image!.isNotEmpty
+                            ? DecorationImage(
+                                image: NetworkImage(item.image!),
+                                fit: BoxFit.cover,
+                              )
+                            : null,
                       ),
-                      child: Icon(Icons.image_outlined, color: Colors.grey, size: 24.w),
+                      child: item.image == null || item.image!.isEmpty
+                          ? Icon(
+                              Icons.image_outlined,
+                              color: Colors.grey,
+                              size: 24.w,
+                            )
+                          : null,
                     ),
                     SizedBox(width: 12.w),
                     Expanded(
@@ -246,11 +271,11 @@ class SellerOrderDetailsScreen extends StatelessWidget {
                 );
               },
             ),
-            
+
             SizedBox(height: 24.h),
             Divider(color: const Color(0xFFE2E8F0), height: 1.h),
             SizedBox(height: 16.h),
-            
+
             // Payment Summary
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,

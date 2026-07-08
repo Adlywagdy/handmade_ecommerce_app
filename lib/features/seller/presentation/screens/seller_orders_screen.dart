@@ -266,7 +266,9 @@ class _SellerOrdersScreenState extends State<SellerOrdersScreen>
                   ? context.l10n.selMarkAsCompleted
                   : context.l10n.selArchive,
           isButtonFilled: statusLower == 'pending' || statusLower == 'shipped',
-          imageUrl: 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop',
+          imageUrl: order.items.isNotEmpty && order.items.first.image != null && order.items.first.image!.isNotEmpty
+              ? order.items.first.image!
+              : 'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?w=200&h=200&fit=crop',
           onCancelPressed: canCancel ? () {
             showDialog(
               context: context,

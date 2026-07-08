@@ -4,47 +4,79 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 class SellerProductModel {
   final String id;
   final String name;
+  final String? nameAR;
   final String description;
+  final String? descriptionAR;
   final double price;
   final int stock;
-  final String category;
+  final String categoryId;
   final List<String> images;
   final bool isActive;
-  final String status; // 'In Stock', 'Out of Stock', 'Low Stock'
+  final String status;
+  final String currency;
+  final double? discountedPrice;
+  final double rating;
+  final int reviewsCount;
+  final int salesCount;
+  final List<String> tags;
 
   const SellerProductModel({
     required this.id,
     required this.name,
+    this.nameAR,
     required this.description,
+    this.descriptionAR,
     required this.price,
     required this.stock,
-    required this.category,
+    required this.categoryId,
     required this.images,
     this.isActive = true,
     required this.status,
+    this.currency = 'EGP',
+    this.discountedPrice,
+    this.rating = 0.0,
+    this.reviewsCount = 0,
+    this.salesCount = 0,
+    this.tags = const [],
   });
 
   SellerProductModel copyWith({
     String? id,
     String? name,
+    String? nameAR,
     String? description,
+    String? descriptionAR,
     double? price,
     int? stock,
-    String? category,
+    String? categoryId,
     List<String>? images,
     bool? isActive,
     String? status,
+    String? currency,
+    double? discountedPrice,
+    double? rating,
+    int? reviewsCount,
+    int? salesCount,
+    List<String>? tags,
   }) {
     return SellerProductModel(
       id: id ?? this.id,
       name: name ?? this.name,
+      nameAR: nameAR ?? this.nameAR,
       description: description ?? this.description,
+      descriptionAR: descriptionAR ?? this.descriptionAR,
       price: price ?? this.price,
       stock: stock ?? this.stock,
-      category: category ?? this.category,
+      categoryId: categoryId ?? this.categoryId,
       images: images ?? this.images,
       isActive: isActive ?? this.isActive,
       status: status ?? this.status,
+      currency: currency ?? this.currency,
+      discountedPrice: discountedPrice ?? this.discountedPrice,
+      rating: rating ?? this.rating,
+      reviewsCount: reviewsCount ?? this.reviewsCount,
+      salesCount: salesCount ?? this.salesCount,
+      tags: tags ?? this.tags,
     );
   }
 
@@ -52,13 +84,21 @@ class SellerProductModel {
     return {
       'id': id,
       'name': name,
+      'nameAR': nameAR,
       'description': description,
+      'descriptionAR': descriptionAR,
       'price': price,
       'stock': stock,
-      'category': category,
+      'categoryId': categoryId,
       'images': images,
       'isActive': isActive,
       'status': status,
+      'currency': currency,
+      'discountedPrice': discountedPrice,
+      'rating': rating,
+      'reviewsCount': reviewsCount,
+      'salesCount': salesCount,
+      'tags': tags,
     };
   }
 
@@ -66,13 +106,21 @@ class SellerProductModel {
     return SellerProductModel(
       id: documentId,
       name: map['name'] ?? '',
+      nameAR: map['nameAR'],
       description: map['description'] ?? '',
+      descriptionAR: map['descriptionAR'],
       price: (map['price'] ?? 0).toDouble(),
       stock: map['stock']?.toInt() ?? 0,
-      category: map['category'] ?? '',
+      categoryId: map['categoryId'] ?? map['category'] ?? '',
       images: List<String>.from(map['images'] ?? []),
       isActive: map['isActive'] ?? true,
       status: map['status'] ?? 'In Stock',
+      currency: map['currency'] ?? 'EGP',
+      discountedPrice: map['discountedPrice'] != null ? (map['discountedPrice'] as num).toDouble() : null,
+      rating: (map['rating'] ?? 0).toDouble(),
+      reviewsCount: map['reviewsCount']?.toInt() ?? 0,
+      salesCount: map['salesCount']?.toInt() ?? 0,
+      tags: List<String>.from(map['tags'] ?? []),
     );
   }
 }
@@ -82,11 +130,13 @@ class SellerOrderItemModel {
   final String productName;
   final int quantity;
   final double price;
+  final String? image;
 
   const SellerOrderItemModel({
     required this.productName,
     required this.quantity,
     required this.price,
+    this.image,
   });
 
   Map<String, dynamic> toMap() {
@@ -94,14 +144,21 @@ class SellerOrderItemModel {
       'productName': productName,
       'quantity': quantity,
       'price': price,
+      'image': image,
     };
   }
 
   factory SellerOrderItemModel.fromMap(Map<String, dynamic> map) {
+    String? parsedImage = map['productImage']?.toString() ?? map['image']?.toString();
+    if ((parsedImage == null || parsedImage.isEmpty) && map['images'] is List && (map['images'] as List).isNotEmpty) {
+      parsedImage = (map['images'] as List)[0]?.toString();
+    }
+
     return SellerOrderItemModel(
       productName: map['productName'] ?? '',
       quantity: map['quantity']?.toInt() ?? 0,
       price: (map['price'] ?? 0).toDouble(),
+      image: parsedImage,
     );
   }
 }

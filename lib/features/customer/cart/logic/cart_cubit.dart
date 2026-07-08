@@ -66,6 +66,12 @@ class CartCubit extends Cubit<CartState> {
       emit(GetcartSuccessedstate(cartproducts: cartProductsList));
       getOrderSummary(products: cartProductsList);
     } catch (e) {
+      showSnack(
+        title: "Error",
+        message: e.toString().replaceAll('Exception: ', ''),
+        bgColor: Colors.red,
+        icon: Icons.error_outline,
+      );
       emit(AddcartproductFailedstate(errorMessage: e.toString()));
     }
   }
