@@ -266,7 +266,7 @@ class CustomerProfilesScreen extends StatelessWidget {
                             }
 
                             if (title == context.l10n.settings) {
-                              Get.toNamed(AppRoutes.customerNotifications);
+                              Get.toNamed(AppRoutes.notifications);
                             }
 
                             if (title == context.l10n.language) {

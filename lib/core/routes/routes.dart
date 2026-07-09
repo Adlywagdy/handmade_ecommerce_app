@@ -12,7 +12,6 @@ abstract class AppRoutes {
   static const String customerlayout = '/customer/layout';
 
   static const String customerSearch = '/customer/search';
-  static const String customerNotifications = '/customer/notifications';
   static const String customerCart = '/customer/cart';
   static const String customerProductDetails = '/customer/product-details';
   static const String customerShopDetails = '/customer/shop-details';

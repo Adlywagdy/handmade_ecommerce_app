@@ -11,7 +11,6 @@ import 'package:handmade_ecommerce_app/features/auth/ui/screens/register_screen.
 
 import 'package:handmade_ecommerce_app/features/auth/ui/screens/verify_password_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
-import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_notifications_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/screens/customer_cart_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/screens/customer_layout.dart';
@@ -115,11 +114,6 @@ class AppPages {
       page: () => CustomerBlocProviders(
         child: CustomerShopDetailsScreen(sellerId: Get.arguments as String),
       ),
-    ),
-    GetPage(
-      name: AppRoutes.customerNotifications,
-      page: () =>
-          const CustomerBlocProviders(child: CustomerNotificationsScreen()),
     ),
     GetPage(
       name: AppRoutes.customerWriteReview,
