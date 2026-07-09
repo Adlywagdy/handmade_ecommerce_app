@@ -9,12 +9,13 @@ import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
-import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
 import 'package:handmade_ecommerce_app/core/widgets/searchfield.dart';
 import 'package:handmade_ecommerce_app/features/customer/ai_chatbot/ui/screens/recommendation_chatbot_screen.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/logic/home_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
-import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/notifications/logic/notifications_cubit.dart';
+import 'package:handmade_ecommerce_app/features/notifications/logic/notifications_state.dart';
+import 'package:handmade_ecommerce_app/features/notifications/ui/widgets/notification_badge.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/categorieslist.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customfeaturerow.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/featuredproductitemlowercolumn.dart';
@@ -136,14 +137,25 @@ class CustomerHomeScreen extends StatelessWidget {
                 style: AppTextStyles.t_20w700.copyWith(color: commonColor),
               ),
               actions: [
-                CustomIconButton(
-                  backgroundColor: customerbackGroundColor,
-                  icon: Icons.notifications_none,
-                  iconcolor: darkblue,
-                  onPressed: () async {
-                    await context.read<CustomerCubit>().getNotifications();
+                GestureDetector(
+                  onTap: () {
                     Get.toNamed(AppRoutes.customerNotifications);
                   },
+                  child: BlocBuilder<NotificationsCubit, NotificationsState>(
+                    builder: (context, state) {
+                      final unreadCount = state is NotificationsLoaded
+                          ? state.unreadCount
+                          : 0;
+                      return NotificationBadge(
+                        unreadCount: unreadCount,
+                        child: Icon(
+                          Icons.notifications_none,
+                          color: darkblue,
+                          size: 24.sp,
+                        ),
+                      );
+                    },
+                  ),
                 ),
               ],
             ),
