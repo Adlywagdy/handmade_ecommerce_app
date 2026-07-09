@@ -12,14 +12,14 @@ import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/ui/widgets/customfeaturerow.dart';
 
-class AddressColumn extends StatefulWidget {
-  const AddressColumn({super.key});
+class DeliveryDetails extends StatefulWidget {
+  const DeliveryDetails({super.key});
 
   @override
-  State<AddressColumn> createState() => _AddressColumnState();
+  State<DeliveryDetails> createState() => _DeliveryDetailsState();
 }
 
-class _AddressColumnState extends State<AddressColumn> {
+class _DeliveryDetailsState extends State<DeliveryDetails> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CartCubit, CartState>(
@@ -34,6 +34,10 @@ class _AddressColumnState extends State<AddressColumn> {
         final displayAddress =
             cartCubit.selectedOrderAddress ??
             customerCubit.customerData.address;
+        final displayPhone =
+            cartCubit.selectedOrderPhone.isNotEmpty
+                ? cartCubit.selectedOrderPhone
+                : customerCubit.customerData.phone;
 
         if (state is OrderAddressLoading) {
           return Padding(
@@ -69,40 +73,70 @@ class _AddressColumnState extends State<AddressColumn> {
                   width: 1.5,
                 ),
               ),
-              child: ListTile(
-                leading: Card(
-                  color: Colors.white,
-
-                  shape: ContinuousRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(24.r),
-                  ),
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      bottom: 12.h,
-                      right: 12,
-                      left: 12,
-                      top: 10.h,
+              child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+                child: Row(
+                  children: [
+                    Card(
+                      color: Colors.white,
+                      shape: ContinuousRectangleBorder(
+                        borderRadius: BorderRadiusGeometry.circular(24.r),
+                      ),
+                      child: Padding(
+                        padding: EdgeInsets.all(12.r),
+                        child: Icon(
+                          Icons.location_on_outlined,
+                          color: commonColor,
+                          size: 26.r,
+                        ),
+                      ),
                     ),
-                    child: Icon(
-                      Icons.location_on_outlined,
-                      color: commonColor,
-                      size: 26.r,
+                    SizedBox(width: 12.w),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            displayAddress?.addresstitle ?? context.l10n.home,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.t_16w600.copyWith(
+                              color: blackDegree,
+                            ),
+                          ),
+                          SizedBox(height: 2.h),
+                          Text(
+                            displayAddress?.addressdescription ??
+                                "No address added yet",
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: AppTextStyles.t_14w400.copyWith(
+                              color: blackDegree.withValues(alpha: .7),
+                            ),
+                          ),
+                          if (displayPhone.isNotEmpty) ...[
+                            SizedBox(height: 4.h),
+                            Row(
+                              children: [
+                                Icon(
+                                  Icons.phone_outlined,
+                                  size: 14.r,
+                                  color: blackDegree.withValues(alpha: .5),
+                                ),
+                                SizedBox(width: 4.w),
+                                Text(
+                                  displayPhone,
+                                  style: AppTextStyles.t_12w400.copyWith(
+                                    color: blackDegree.withValues(alpha: .6),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ],
+                      ),
                     ),
-                  ),
-                ),
-                title: Text(
-                  displayAddress?.addresstitle ?? context.l10n.home,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.t_16w600.copyWith(color: blackDegree),
-                ),
-                subtitle: Text(
-                  displayAddress?.addressdescription ?? "No address added yet",
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.t_14w400.copyWith(
-                    color: blackDegree.withValues(alpha: .7),
-                  ),
+                  ],
                 ),
               ),
             ),
@@ -165,7 +199,9 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
     _country = TextEditingController(text: addr?.country ?? '');
     _zip = TextEditingController(text: addr?.zipCode.toString() ?? '');
     _phone = TextEditingController(
-      text: context.read<CartCubit>().selectedOrderPhone,
+      text: context.read<CartCubit>().selectedOrderPhone.isNotEmpty
+          ? context.read<CartCubit>().selectedOrderPhone
+          : context.read<CustomerCubit>().customerData.phone,
     );
   }
 
@@ -409,7 +445,10 @@ class _AddressInputBottomSheetState extends State<_AddressInputBottomSheet> {
                         if (_setAsDefault) {
                           await BlocProvider.of<CustomerCubit>(
                             context,
-                          ).setDefaultAddress(addressData);
+                          ).setDefaultDeliveryDetails(
+                            address: addressData,
+                            phone: _phone.text.trim(),
+                          );
                         }
 
                         if (context.mounted) {

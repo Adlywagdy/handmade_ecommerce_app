@@ -86,7 +86,7 @@ class OrderModel {
   final String id;
   final String orderNumber;
   final String customerId;
-  final String sellerId;
+  final List<String> sellerIds;
   final List<OrderItemModel> items;
   final double subtotal;
   final double deliveryFee;
@@ -110,7 +110,7 @@ class OrderModel {
     this.id = '',
     this.orderNumber = '',
     this.customerId = '',
-    this.sellerId = '',
+    this.sellerIds = const [],
     this.items = const [],
     this.subtotal = 0.0,
     this.deliveryFee = 0.0,
@@ -129,6 +129,9 @@ class OrderModel {
     this.sellerName,
   });
 
+  /// Backward-compatible getter: returns the first seller ID if any.
+  String get sellerId => sellerIds.isNotEmpty ? sellerIds.first : '';
+
   String get displayId => orderNumber.isNotEmpty ? orderNumber : id;
   double get price => totalPrice;
   String get date => createdAt != null
@@ -138,7 +141,7 @@ class OrderModel {
   Map<String, dynamic> toJson() => {
         'orderNumber': orderNumber,
         'customerId': customerId,
-        'sellerId': sellerId,
+        'sellerIds': sellerIds,
         'items': items.map((e) => e.toJson()).toList(),
         'subtotal': subtotal,
         'deliveryFee': deliveryFee,
@@ -159,11 +162,39 @@ class OrderModel {
 
   factory OrderModel.fromJson(Map<String, dynamic> json, {String? id}) {
     final rawItems = json['items'] as List<dynamic>? ?? [];
+
+    // Support both sellerIds (array) and legacy sellerId (string)
+    List<String> parsedSellerIds = [];
+    if (json['sellerIds'] is List) {
+      parsedSellerIds = (json['sellerIds'] as List)
+          .map((e) => e.toString())
+          .where((s) => s.isNotEmpty)
+          .toList();
+    } else if (json['sellerId'] != null && json['sellerId'].toString().isNotEmpty) {
+      parsedSellerIds = [json['sellerId'].toString()];
+    }
+
+    // Build seller display name from items if not provided
+    String? computedSellerName = json['sellerName']?.toString();
+    if (computedSellerName == null || computedSellerName.isEmpty) {
+      final sellerNames = rawItems
+          .whereType<Map<String, dynamic>>()
+          .map((item) => item['sellerName']?.toString() ?? '')
+          .where((name) => name.isNotEmpty)
+          .toSet()
+          .toList();
+      if (sellerNames.length == 1) {
+        computedSellerName = sellerNames.first;
+      } else if (sellerNames.length > 1) {
+        computedSellerName = sellerNames.join(', ');
+      }
+    }
+
     return OrderModel(
       id: id ?? json['id']?.toString() ?? '',
       orderNumber: json['orderNumber']?.toString() ?? '',
       customerId: json['customerId']?.toString() ?? '',
-      sellerId: json['sellerId']?.toString() ?? '',
+      sellerIds: parsedSellerIds,
       items: rawItems.whereType<Map<String, dynamic>>().map(OrderItemModel.fromJson).toList(),
       subtotal: (json['subtotal'] as num?)?.toDouble() ?? 0.0,
       deliveryFee: (json['deliveryFee'] as num?)?.toDouble() ?? 0.0,
@@ -181,7 +212,7 @@ class OrderModel {
       createdAt: (json['createdAt'] as Timestamp?)?.toDate(),
       updatedAt: (json['updatedAt'] as Timestamp?)?.toDate(),
       customerName: json['customerName']?.toString(),
-      sellerName: json['sellerName']?.toString(),
+      sellerName: computedSellerName,
     );
   }
 

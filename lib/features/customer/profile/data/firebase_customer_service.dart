@@ -65,6 +65,20 @@ class FirebaseCustomerService {
     }, SetOptions(merge: true));
   }
 
+  Future<void> setDefaultDeliveryDetails({
+    required AddressModel address,
+    required String phone,
+  }) async {
+    final user = _user;
+    if (user == null) throw Exception('User not authenticated');
+
+    await _users.doc(user.uid).set({
+      'address': address.toMap(),
+      'phone': phone,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
+  }
+
   // ─── Notifications ────────────────────────────────────
 
   Future<List<String>> getNotifications() async {

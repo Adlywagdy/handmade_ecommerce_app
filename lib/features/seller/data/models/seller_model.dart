@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
 /// Represents a product from the seller's perspective with stock management
 class SellerProductModel {
@@ -131,12 +132,14 @@ class SellerOrderItemModel {
   final int quantity;
   final double price;
   final String? image;
+  final String sellerId;
 
   const SellerOrderItemModel({
     required this.productName,
     required this.quantity,
     required this.price,
     this.image,
+    this.sellerId = '',
   });
 
   Map<String, dynamic> toMap() {
@@ -145,6 +148,7 @@ class SellerOrderItemModel {
       'quantity': quantity,
       'price': price,
       'image': image,
+      'sellerId': sellerId,
     };
   }
 
@@ -159,6 +163,7 @@ class SellerOrderItemModel {
       quantity: map['quantity']?.toInt() ?? 0,
       price: (map['price'] ?? 0).toDouble(),
       image: parsedImage,
+      sellerId: map['sellerId']?.toString() ?? '',
     );
   }
 }
@@ -210,7 +215,7 @@ class SellerOrderModel {
     };
   }
 
-      factory SellerOrderModel.fromMap(Map<String, dynamic> map, String documentId) {
+  factory SellerOrderModel.fromMap(Map<String, dynamic> map, String documentId) {
     String parsedCustomerName = map['customerName']?.toString() ?? '';
     if (parsedCustomerName.isEmpty) {
       if (map['customer'] is Map) {
@@ -219,14 +224,6 @@ class SellerOrderModel {
     }
     if (parsedCustomerName.isEmpty) {
       parsedCustomerName = map['customerId']?.toString() ?? 'Customer';
-    }
-
-    final rawTotal = map['totalAmount'] ?? map['totalPrice'] ?? 0;
-    double parsedTotalAmount = 0.0;
-    if (rawTotal is num) {
-      parsedTotalAmount = rawTotal.toDouble();
-    } else if (rawTotal is String) {
-      parsedTotalAmount = double.tryParse(rawTotal) ?? 0.0;
     }
 
     final rawDate = map['orderDate'] ?? map['createdAt'];
@@ -239,18 +236,33 @@ class SellerOrderModel {
       parsedDate = rawDate?.toString() ?? '';
     }
 
+    // Parse ALL items from the order
+    final allItems = List<SellerOrderItemModel>.from(
+      (map['items'] as List? ?? []).map((x) {
+        final itemMap = x is Map ? Map<String, dynamic>.from(x) : <String, dynamic>{};
+        return SellerOrderItemModel.fromMap(itemMap);
+      }),
+    );
+
+    // Filter to only this seller's items
+    final currentSellerId = FirebaseAuth.instance.currentUser?.uid ?? '';
+    final sellerItems = currentSellerId.isNotEmpty
+        ? allItems.where((item) => item.sellerId == currentSellerId).toList()
+        : allItems;
+
+    // Calculate seller-specific total from filtered items
+    final sellerTotal = sellerItems.fold<double>(
+      0,
+      (running, item) => running + (item.price * item.quantity),
+    );
+
     return SellerOrderModel(
       orderId: documentId,
       customerName: parsedCustomerName,
       orderDate: parsedDate,
-      totalAmount: parsedTotalAmount,
+      totalAmount: sellerTotal,
       status: (map['status']?.toString() ?? 'pending').toLowerCase(),
-      items: List<SellerOrderItemModel>.from(
-        (map['items'] as List? ?? []).map((x) {
-          final itemMap = x is Map ? Map<String, dynamic>.from(x) : <String, dynamic>{};
-          return SellerOrderItemModel.fromMap(itemMap);
-        }),
-      ),
+      items: sellerItems,
     );
   }
 }

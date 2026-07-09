@@ -50,6 +50,32 @@ class CustomerCubit extends Cubit<CustomerState> {
     }
   }
 
+  Future<void> setDefaultDeliveryDetails({
+    required AddressModel address,
+    required String phone,
+  }) async {
+    try {
+      await _customerService.setDefaultDeliveryDetails(
+        address: address,
+        phone: phone,
+      );
+      customerData.address = address;
+      customerData = CustomerModel(
+        id: customerData.id,
+        name: customerData.name,
+        email: customerData.email,
+        phone: phone,
+        role: customerData.role,
+        provider: customerData.provider,
+        image: customerData.image,
+        address: address,
+      );
+      emit(CustomerDataSuccess(customer: customerData));
+    } catch (e) {
+      emit(CustomerDataError(message: e.toString()));
+    }
+  }
+
   Future<void> updateCustomerProfile({
     required String name,
     String? phone,

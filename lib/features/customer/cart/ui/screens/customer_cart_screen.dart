@@ -11,7 +11,7 @@ import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.d
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/logic/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
-import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/addresscolumn.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/delivery_details.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/cartproductitem.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/copounrow.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/ordersummary.dart';
@@ -110,9 +110,7 @@ class CustomerCartScreen extends StatelessWidget {
                 } else if (state is CartSuccess) {
                   return SliverList.builder(
                     itemBuilder: (context, index) {
-                      return CartProductItem(
-                        product: state.products[index],
-                      );
+                      return CartProductItem(product: state.products[index]);
                     },
                     itemCount: state.products.length,
                   );
@@ -206,7 +204,7 @@ class CustomerCartScreen extends StatelessWidget {
                         SizedBox(height: 8.h),
                         CopounRow(),
                         SizedBox(height: 16.h),
-                        AddressColumn(),
+                        DeliveryDetails(),
                         SizedBox(height: 16.h),
                         PaymentColumn(),
                         Divider(color: commonColor.withValues(alpha: .2)),
@@ -214,7 +212,9 @@ class CustomerCartScreen extends StatelessWidget {
                         CheckoutButton(),
                         SizedBox(height: 16.h),
                         Text(
-                          context.l10n.byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy,
+                          context
+                              .l10n
+                              .byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy,
                           textAlign: TextAlign.center,
                           style: AppTextStyles.t_12w400.copyWith(
                             color: subTitleColor,
@@ -275,9 +275,7 @@ class CheckoutButton extends StatelessWidget {
 
           showSnack(
             title: isCancelled ? l10n.paymentCancelled : l10n.checkoutFailed,
-            message: isCancelled
-                ? l10n.paymentWasCancelled
-                : state.message,
+            message: isCancelled ? l10n.paymentWasCancelled : state.message,
             bgColor: redDegree,
             icon: Icons.error_outline,
           );
@@ -323,9 +321,10 @@ class CheckoutButton extends StatelessWidget {
                       return;
                     }
 
-                    final orderPayment = cartCubit.currentOrderSummary!.copyWith(
-                      paymentMethod: cartCubit.selectedPaymentMethod,
-                    );
+                    final orderPayment = cartCubit.currentOrderSummary!
+                        .copyWith(
+                          paymentMethod: cartCubit.selectedPaymentMethod,
+                        );
 
                     if (cartCubit.selectedOrderPhone.isEmpty) {
                       showSnack(

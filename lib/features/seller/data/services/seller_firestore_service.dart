@@ -252,13 +252,17 @@ class SellerFirestoreService {
         );
       }
 
-      // Restore stock if the seller cancels the order
+      // Restore stock if the seller cancels the order (only for this seller's items)
       if (newStatus.toLowerCase() == 'cancelled') {
         final itemsList =
             orderData?['items'] ?? orderData?['products'] as List?;
         if (itemsList != null && itemsList.isNotEmpty) {
           for (final item in itemsList) {
             if (item is Map) {
+              final String itemSellerId = item['sellerId']?.toString() ?? '';
+              // Only restore stock for items belonging to this seller
+              if (itemSellerId != currentSellerId) continue;
+
               final String? productId =
                   item['productId']?.toString() ?? item['id']?.toString();
               final int quantity = (item['quantity'] as num?)?.toInt() ?? 1;
@@ -283,11 +287,15 @@ class SellerFirestoreService {
           newStatus: newStatus,
         );
 
-        // If marked as delivered, trigger Review Request for products in this order
+        // If marked as delivered, trigger Review Request for this seller's products only
         if (newStatus.toLowerCase() == 'delivered') {
           final itemsList = orderData?['items'] as List?;
           if (itemsList != null && itemsList.isNotEmpty) {
             for (final item in itemsList) {
+              final String itemSellerId = item['sellerId']?.toString() ?? '';
+              // Only send review request for this seller's items
+              if (itemSellerId != currentSellerId) continue;
+
               final String? productId = item['productId']?.toString();
               final String? productName = item['productName']?.toString();
               if (productId != null && productName != null) {
