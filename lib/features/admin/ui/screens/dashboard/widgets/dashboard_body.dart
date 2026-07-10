@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/admin/logic/admin_cubit.dart';
 import 'package:handmade_ecommerce_app/features/admin/ui/screens/categories/categories_screen.dart';
@@ -30,7 +31,9 @@ class DashboardBody extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const DashboardHeader(),
+          DashboardHeader(
+            onNotificationTap: () => Get.toNamed(AppRoutes.notifications),
+          ),
           SizedBox(height: 20.h),
           Text(
             AppLocalizations.of(context)!.admGreetingMorning,

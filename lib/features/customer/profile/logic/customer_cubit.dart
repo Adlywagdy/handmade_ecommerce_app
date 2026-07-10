@@ -30,16 +30,6 @@ class CustomerCubit extends Cubit<CustomerState> {
     }
   }
 
-  Future<void> getNotifications() async {
-    emit(NotificationsLoading());
-    try {
-      final notificationslist = await _customerService.getNotifications();
-      emit(NotificationsSuccess(notifications: notificationslist));
-    } catch (e) {
-      emit(NotificationsError(message: e.toString()));
-    }
-  }
-
   Future<void> setDefaultAddress(AddressModel address) async {
     try {
       await _customerService.setDefaultAddress(address);

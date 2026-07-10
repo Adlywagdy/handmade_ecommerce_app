@@ -366,10 +366,52 @@ class NotificationGenerator {
           title: 'Product Pending Review 📦',
           body:
               '$sellerName added a new product "$productName" that requires your approval.',
-          type:
-              NotificationType.orderStatusUpdate, // Using existing type for now
+          type: NotificationType.reportedProduct,
           createdAt: DateTime.now(),
           targetId: productId,
+        ),
+      );
+    }
+  }
+
+  /// When a customer reports a product → notify all admins
+  static Future<void> onProductReported({
+    required String reporterName,
+    required String productName,
+    required String reason,
+    String? productId,
+  }) async {
+    final adminIds = await _getAdminIds();
+    for (final adminId in adminIds) {
+      await _sendToUser(
+        adminId,
+        NotificationModel(
+          id: _generateId(),
+          title: 'Product Reported ⚠️',
+          body: '$reporterName reported "$productName": $reason',
+          type: NotificationType.reportedProduct,
+          createdAt: DateTime.now(),
+          targetId: productId,
+        ),
+      );
+    }
+  }
+
+  /// System-wide alert to notify all admins
+  static Future<void> onSystemAlert({
+    required String title,
+    required String message,
+  }) async {
+    final adminIds = await _getAdminIds();
+    for (final adminId in adminIds) {
+      await _sendToUser(
+        adminId,
+        NotificationModel(
+          id: _generateId(),
+          title: title,
+          body: message,
+          type: NotificationType.systemAlert,
+          createdAt: DateTime.now(),
         ),
       );
     }

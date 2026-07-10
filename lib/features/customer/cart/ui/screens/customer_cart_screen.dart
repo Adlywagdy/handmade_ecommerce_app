@@ -326,7 +326,12 @@ class CheckoutButton extends StatelessWidget {
                           paymentMethod: cartCubit.selectedPaymentMethod,
                         );
 
-                    if (cartCubit.selectedOrderPhone.isEmpty) {
+                    final effectivePhone =
+                        cartCubit.selectedOrderPhone.isNotEmpty
+                            ? cartCubit.selectedOrderPhone
+                            : customerCubit.customerData.phone;
+
+                    if (effectivePhone.isEmpty) {
                       showSnack(
                         title: l10n.phone,
                         message: l10n.phoneHint,
@@ -344,7 +349,7 @@ class CheckoutButton extends StatelessWidget {
                         products: cartCubit.cartProductsList,
                         status: OrderStatus.pending,
                         address: effectiveAddress,
-                        phone: cartCubit.selectedOrderPhone,
+                        phone: effectivePhone,
                         orderid: "#AY-${orderCubit.orderID}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),

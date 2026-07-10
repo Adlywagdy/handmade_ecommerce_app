@@ -3,12 +3,17 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
 
+/// Handles all order-related Firebase operations for the current user.
 class CustomerOrderService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
   static const double _commissionRate = 0.1;
 
+  /// Returns current user ID, or null if not authenticated.
+  String? get _userId => _auth.currentUser?.uid;
+
+  /// Sorts orders by date (newest first).
   List<CustomerOrderModel> _sortOrders(
     List<QueryDocumentSnapshot<Map<String, dynamic>>> docs,
   ) {
@@ -17,6 +22,7 @@ class CustomerOrderService {
     return orders;
   }
 
+  /// Builds a Firestore query with optional filters (status, orderNumber, limit).
   Future<QuerySnapshot<Map<String, dynamic>>> _getOrdersSnapshot(
     String userId, {
     OrderStatus? status,
@@ -30,11 +36,9 @@ class CustomerOrderService {
     if (status != null) {
       query = query.where('status', isEqualTo: status.name);
     }
-
     if (orderNumber != null) {
       query = query.where('orderNumber', isEqualTo: orderNumber);
     }
-
     if (limit != null) {
       query = query.limit(limit);
     }
@@ -46,20 +50,21 @@ class CustomerOrderService {
     }
   }
 
+  /// Fetches all orders for the current user.
   Future<List<CustomerOrderModel>> getAllOrders() async {
-    final user = _auth.currentUser;
-    if (user == null) return [];
-    final docs = await _getOrdersSnapshot(user.uid);
+    if (_userId == null) return [];
+    final docs = await _getOrdersSnapshot(_userId!);
     return _sortOrders(docs.docs);
   }
 
+  /// Fetches orders filtered by status (e.g. pending, delivered).
   Future<List<CustomerOrderModel>> getFilteredOrders(OrderStatus status) async {
-    final user = _auth.currentUser;
-    if (user == null) return [];
-    final docs = await _getOrdersSnapshot(user.uid, status: status);
+    if (_userId == null) return [];
+    final docs = await _getOrdersSnapshot(_userId!, status: status);
     return _sortOrders(docs.docs);
   }
 
+  /// Finds a single order by any field (e.g. orderNumber, orderid).
   Future<CustomerOrderModel?> _findOrder(
     String userId,
     String field,
@@ -74,25 +79,7 @@ class CustomerOrderService {
     return snap.docs.isNotEmpty ? _orderFromSnapshot(snap.docs.first) : null;
   }
 
-  Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
-    final user = _auth.currentUser;
-    if (user == null) return null;
-
-    final rootDoc = await _firestore.collection('orders').doc(orderId).get();
-    if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
-      return _orderFromSnapshot(rootDoc);
-    }
-
-    final parsedNum = _extractNumeric(orderId);
-    if (parsedNum != null) {
-      final found = await _findOrder(user.uid, 'orderNumber', parsedNum);
-      if (found != null) return found;
-    }
-
-    return await _findOrder(user.uid, 'orderid', orderId) ??
-        await _findOrder(user.uid, 'orderNumber', orderId);
-  }
-
+  /// Extracts a numeric value from a string (e.g. "#AY-10042" → 10042).
   int? _extractNumeric(dynamic raw) {
     final s = raw?.toString() ?? '';
     final direct = int.tryParse(s);
@@ -101,19 +88,42 @@ class CustomerOrderService {
     return m != null ? int.tryParse(m.group(1)!) : null;
   }
 
-  Future<String> placeOrder(CustomerOrderModel order) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
+  /// Fetches order details by document ID, orderNumber, or orderid.
+  Future<CustomerOrderModel?> getOrderDetails(String orderId) async {
+    if (_userId == null) return null;
 
-    final rootOrderRef = _firestore.collection('orders').doc();
+    // Try direct document ID lookup first.
+    final rootDoc = await _firestore.collection('orders').doc(orderId).get();
+    if (rootDoc.exists && rootDoc.data()?['customerId'] == _userId) {
+      return _orderFromSnapshot(rootDoc);
+    }
+
+    // Try numeric orderNumber lookup.
+    final parsedNum = _extractNumeric(orderId);
+    if (parsedNum != null) {
+      final found = await _findOrder(_userId!, 'orderNumber', parsedNum);
+      if (found != null) return found;
+    }
+
+    // Try orderid field lookup.
+    return await _findOrder(_userId!, 'orderid', orderId) ??
+        await _findOrder(_userId!, 'orderNumber', orderId);
+  }
+
+  /// Places a new order: saves it to Firestore and decrements product stock.
+  /// Returns the new document ID.
+  Future<String> placeOrder(CustomerOrderModel order) async {
+    if (_userId == null) throw Exception('User not authenticated');
+
+    final orderRef = _firestore.collection('orders').doc();
     final subtotal = parseDouble(order.payment.subtotalPrice) ?? 0;
     final deliveryFee = parseDouble(order.payment.deliveryFee) ?? 0;
     final totalPrice = parseDouble(order.payment.totalPrice) ?? 0;
     final commission = subtotal * _commissionRate;
 
-    final orderPayload = {
+    final payload = {
       ...order.toMap(),
-      'customerId': user.uid,
+      'customerId': _userId,
       'commissionRate': _commissionRate,
       'commission': commission,
       'sellerEarning': subtotal - commission,
@@ -125,8 +135,9 @@ class CustomerOrderService {
       'updatedAt': FieldValue.serverTimestamp(),
     };
 
+    // Use a batch to atomically create order + update stock.
     final batch = _firestore.batch();
-    batch.set(rootOrderRef, orderPayload);
+    batch.set(orderRef, payload);
 
     for (final product in order.products) {
       if (product.id.isNotEmpty) {
@@ -139,37 +150,42 @@ class CustomerOrderService {
     }
 
     await batch.commit();
-    return rootOrderRef.id;
+    return orderRef.id;
   }
 
+  /// Cancels an order by setting its status to 'cancelled'.
   Future<void> cancelOrder(String orderId) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
+    if (_userId == null) throw Exception('User not authenticated');
 
     final cancelPayload = {
       'status': OrderStatus.cancelled.name,
       'updatedAt': FieldValue.serverTimestamp(),
     };
 
-    final rootDocRef = _firestore.collection('orders').doc(orderId);
-    final rootDoc = await rootDocRef.get();
-    if (rootDoc.exists && rootDoc.data()?['customerId'] == user.uid) {
-      await rootDocRef.update(cancelPayload);
+    // Try direct document ID.
+    final rootRef = _firestore.collection('orders').doc(orderId);
+    final rootDoc = await rootRef.get();
+    if (rootDoc.exists && rootDoc.data()?['customerId'] == _userId) {
+      await rootRef.update(cancelPayload);
     }
 
+    // Try numeric orderNumber.
     final parsedNum = _extractNumeric(orderId);
     if (parsedNum != null) {
-      final snap = await _findDoc(user.uid, 'orderNumber', parsedNum);
+      final snap = await _findDoc(_userId!, 'orderNumber', parsedNum);
       if (snap != null) await snap.reference.update(cancelPayload);
     }
 
-    final byId = await _findDoc(user.uid, 'orderid', orderId);
+    // Try orderid field.
+    final byId = await _findDoc(_userId!, 'orderid', orderId);
     if (byId != null) await byId.reference.update(cancelPayload);
 
-    final byNum = await _findDoc(user.uid, 'orderNumber', orderId);
+    // Try orderNumber as string.
+    final byNum = await _findDoc(_userId!, 'orderNumber', orderId);
     if (byNum != null) await byNum.reference.update(cancelPayload);
   }
 
+  /// Finds a raw document snapshot by any field.
   Future<DocumentSnapshot<Map<String, dynamic>>?> _findDoc(
     String userId,
     String field,
@@ -184,6 +200,8 @@ class CustomerOrderService {
     return snap.docs.isNotEmpty ? snap.docs.first : null;
   }
 
+  /// Converts a Firestore document into a CustomerOrderModel,
+  /// normalizing timestamps and field names.
   CustomerOrderModel _orderFromSnapshot(
     DocumentSnapshot<Map<String, dynamic>> doc,
   ) {
@@ -208,6 +226,7 @@ class CustomerOrderService {
     }, id: doc.id);
   }
 
+  /// Generates the next sequential order ID from a Firestore counter.
   Future<int> getNextOrderID() async {
     final counterRef = _firestore.collection('counters').doc('orderCounter');
 

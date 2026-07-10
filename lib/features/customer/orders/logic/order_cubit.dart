@@ -10,10 +10,11 @@ import 'package:handmade_ecommerce_app/features/notifications/data/services/noti
 
 part 'order_state.dart';
 
+/// Manages order state: fetch, filter, place, and cancel orders.
 class OrderCubit extends Cubit<OrderState> {
   OrderCubit({CustomerOrderService? orderService})
-    : _orderService = orderService ?? CustomerOrderService(),
-      super(OrderInitial());
+      : _orderService = orderService ?? CustomerOrderService(),
+        super(OrderInitial());
 
   final CustomerOrderService _orderService;
   List<CustomerOrderModel> allordersList = [];
@@ -21,12 +22,18 @@ class OrderCubit extends Cubit<OrderState> {
   OrderStatus? selectedStatus;
   int orderID = 1;
 
+  /// Refreshes the displayed list based on the currently active filter.
   Future<void> _refreshByCurrentFilter() async {
-    displayedordersList = selectedStatus == null
-        ? allordersList = await _orderService.getAllOrders()
-        : await _orderService.getFilteredOrders(selectedStatus!);
+    if (selectedStatus == null) {
+      allordersList = await _orderService.getAllOrders();
+      displayedordersList = allordersList;
+    } else {
+      displayedordersList =
+          await _orderService.getFilteredOrders(selectedStatus!);
+    }
   }
 
+  /// Loads all orders for the current user.
   Future<void> getAllOrders() async {
     selectedStatus = null;
     emit(GetAllOrdersLoading());
@@ -39,18 +46,19 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  /// Loads orders filtered by a specific status.
   Future<void> getFilteredOrders({required OrderStatus status}) async {
     selectedStatus = status;
     emit(GetFilteredOrdersLoading());
     try {
-      final fetched = await _orderService.getFilteredOrders(status);
-      displayedordersList = fetched;
-      emit(GetFilteredOrdersSuccess(orders: fetched));
+      displayedordersList = await _orderService.getFilteredOrders(status);
+      emit(GetFilteredOrdersSuccess(orders: displayedordersList));
     } catch (e) {
       emit(GetFilteredOrdersError(message: e.toString()));
     }
   }
 
+  /// Processes payment, saves the order, notifies sellers, and clears cart.
   Future<void> placeNewOrder(
     CustomerOrderModel newOrder,
     BuildContext context,
@@ -58,11 +66,16 @@ class OrderCubit extends Cubit<OrderState> {
     emit(PlaceOrderLoading());
     try {
       final cartCubit = context.read<CartCubit>();
+
+      // Process payment via the selected method (Visa/PayPal/Wallet/COD).
       await cartCubit.makePayment(newOrder.payment, context);
+
+      // Save order to Firestore and decrement stock.
       await _orderService.placeOrder(newOrder);
       allordersList.add(newOrder);
       await _refreshByCurrentFilter();
 
+      // Notify each seller about the new order.
       for (final product in newOrder.products) {
         final sellerEmail = product.seller.email;
         if (sellerEmail.isNotEmpty) {
@@ -74,6 +87,7 @@ class OrderCubit extends Cubit<OrderState> {
           );
         }
       }
+
       showSnack(
         title: AppLocalizations.of(Get.context!)!.success,
         message: AppLocalizations.of(Get.context!)!.orderPlacedSuccessfully,
@@ -85,10 +99,11 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  /// Cancels an order and notifies sellers of the cancellation.
   Future<void> cancelOrder(String orderId) async {
     emit(CancelOrderLoading());
     try {
-      // Find the order before cancelling it to extract sellers
+      // Find the order in local list to get seller info before cancelling.
       CustomerOrderModel? orderToCancel;
       try {
         orderToCancel = allordersList.firstWhere(
@@ -97,7 +112,8 @@ class OrderCubit extends Cubit<OrderState> {
 
       await _orderService.cancelOrder(orderId);
       await _refreshByCurrentFilter();
-      // Trigger notification to sellers if we found the order
+
+      // Notify sellers about cancellation.
       if (orderToCancel != null) {
         for (final product in orderToCancel.products) {
           final sellerEmail = product.seller.email;
@@ -111,7 +127,9 @@ class OrderCubit extends Cubit<OrderState> {
           }
         }
       }
+
       emit(CancelOrderSuccess());
+      // Re-emit the current list so UI updates.
       final state = selectedStatus == null
           ? GetAllOrdersSuccess(orders: displayedordersList) as OrderState
           : GetFilteredOrdersSuccess(orders: displayedordersList);
@@ -121,5 +139,6 @@ class OrderCubit extends Cubit<OrderState> {
     }
   }
 
+  /// Gets the next sequential order ID from the Firestore counter.
   Future<int> getNewOrderID() => _orderService.getNextOrderID();
 }

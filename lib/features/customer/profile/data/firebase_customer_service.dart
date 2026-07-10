@@ -78,23 +78,4 @@ class FirebaseCustomerService {
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
-
-  // ─── Notifications ────────────────────────────────────
-
-  Future<List<String>> getNotifications() async {
-    final user = _user;
-    if (user == null) return [];
-
-    final snapshot = await _users
-        .doc(user.uid)
-        .collection('notifications')
-        .orderBy('timestamp', descending: true)
-        .limit(20)
-        .get();
-
-    return snapshot.docs
-        .map((doc) => doc.data()['message'])
-        .whereType<String>()
-        .toList();
-  }
 }

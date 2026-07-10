@@ -17,7 +17,7 @@ class NotificationsCubit extends Cubit<NotificationsState> {
   // ─── Load Notifications ───
 
   /// Load notifications — from Hive cache instantly, then subscribe to Firestore
-  void loadNotifications({String role = 'seller'}) async {
+  void loadNotifications() async {
     try {
       // 1. Immediately emit local cached notifications for zero-latency startup
       final localNotifications = NotificationsService.fetchLocalNotifications();

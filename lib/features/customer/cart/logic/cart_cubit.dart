@@ -18,12 +18,14 @@ import 'package:handmade_ecommerce_app/features/payment/paypal/paypal_models.dar
 import 'package:handmade_ecommerce_app/features/payment/paypal/paypal_service.dart';
 part 'cart_state.dart';
 
+/// Manages cart state: add/remove products, order summary, payment, coupons.
 class CartCubit extends Cubit<CartState> {
   CartCubit({FirebaseCartService? cartService})
-    : _cartService = cartService ?? FirebaseCartService(),
-      super(CartInitial());
+      : _cartService = cartService ?? FirebaseCartService(),
+        super(CartInitial());
 
   final FirebaseCartService _cartService;
+
   List<ProductModel> cartProductsList = [];
   AddressModel? selectedOrderAddress;
   String selectedPaymentMethod = "Visa";
@@ -33,6 +35,7 @@ class CartCubit extends Cubit<CartState> {
   String _appliedCoupon = "";
   List<CouponModel> _coupons = [];
 
+  /// Loads cart products from Firestore and emits success/error state.
   Future<void> getcartProducts() async {
     emit(CartLoading());
     try {
@@ -44,13 +47,12 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  /// Adds a product to the cart, shows snackbar feedback, and refreshes list.
   Future<void> addCartProducts(ProductModel product) async {
     emit(AddProductLoading());
     try {
-      final alreadyExists = isItemExictedFun(
-        productslist: cartProductsList,
-        productID: product.id,
-      );
+      final alreadyExists =
+          isItemExictedFun(productslist: cartProductsList, productID: product.id);
 
       await _cartService.addToCart(product);
       cartProductsList = await _cartService.getCartProducts();
@@ -77,38 +79,38 @@ class CartCubit extends Cubit<CartState> {
     }
   }
 
+  /// Removes a product (decreases qty or deletes) and shows feedback.
   Future<void> deleteCartProducts(ProductModel product) async {
     emit(DeleteProductLoading());
     try {
-      if (isItemExictedFun(
-        productslist: cartProductsList,
-        productID: product.id,
-      )) {
-        await _cartService.removeFromCart(product.id);
-        final previousLength = cartProductsList.length;
-        cartProductsList = await _cartService.getCartProducts();
-
-        if (cartProductsList.length < previousLength &&
-            !isItemExictedFun(
-              productslist: cartProductsList,
-              productID: product.id,
-            )) {
-          showSnack(
-            title: "Product Deleted",
-            message: "${product.name} has been removed from your cart.",
-            bgColor: redDegree,
-            icon: CupertinoIcons.delete,
-          );
-        }
-        emit(DeleteProductSuccess());
-        emit(CartSuccess(products: cartProductsList));
-        getOrderSummary(products: cartProductsList);
+      if (!isItemExictedFun(
+          productslist: cartProductsList, productID: product.id)) {
+        return;
       }
+
+      final previousLength = cartProductsList.length;
+      await _cartService.removeFromCart(product.id);
+      cartProductsList = await _cartService.getCartProducts();
+
+      if (cartProductsList.length < previousLength &&
+          !isItemExictedFun(
+              productslist: cartProductsList, productID: product.id)) {
+        showSnack(
+          title: "Product Deleted",
+          message: "${product.name} has been removed from your cart.",
+          bgColor: redDegree,
+          icon: CupertinoIcons.delete,
+        );
+      }
+      emit(DeleteProductSuccess());
+      emit(CartSuccess(products: cartProductsList));
+      getOrderSummary(products: cartProductsList);
     } catch (e) {
       emit(DeleteProductError(message: e.toString()));
     }
   }
 
+  /// Calculates subtotal, applies coupon discount, and builds order summary.
   Future<void> getOrderSummary({
     required List<ProductModel> products,
     String? coupon,
@@ -124,16 +126,11 @@ class CartCubit extends Cubit<CartState> {
         _coupons = await _cartService.fetchCoupons();
       }
 
-      final ordersubtotalPrice = calculateOrdersubTotalPrice(
-        cartproducts: products,
-      );
+      final ordersubtotalPrice = calculateOrdersubTotalPrice(cartproducts: products);
       final double discount = showCouponFeedback
           ? applyCoupon(effectiveCoupon, _coupons, subtotal: ordersubtotalPrice)
           : getCouponDiscount(
-              effectiveCoupon,
-              _coupons,
-              subtotal: ordersubtotalPrice,
-            );
+              effectiveCoupon, _coupons, subtotal: ordersubtotalPrice);
       final totalPrice = ordersubtotalPrice + deliveryFee - discount;
 
       currentOrderSummary = PaymentDetailsModel(
@@ -144,28 +141,29 @@ class CartCubit extends Cubit<CartState> {
         paymentMethod: selectedPaymentMethod,
         currency: "EGP",
       );
-      emit(
-        OrderSummarySuccess(
-          subtotalPrice: ordersubtotalPrice,
-          totalPrice: totalPrice,
-          deliveryFee: deliveryFee,
-          discount: discount,
-        ),
-      );
+      emit(OrderSummarySuccess(
+        subtotalPrice: ordersubtotalPrice,
+        totalPrice: totalPrice,
+        deliveryFee: deliveryFee,
+        discount: discount,
+      ));
     } catch (e) {
       emit(OrderSummaryError(message: e.toString()));
     }
   }
 
+  /// Stores the selected delivery address.
   void getOrderaddress({required AddressModel address}) {
     selectedOrderAddress = address;
     emit(OrderAddressSuccess(address: address));
   }
 
+  /// Stores the customer's phone number for the order.
   void setOrderPhone(String phone) {
     selectedOrderPhone = phone;
   }
 
+  /// Processes payment via Visa, PayPal, Mobile Wallet, or Cash on Delivery.
   Future<void> makePayment(
     PaymentDetailsModel paymentmethoddetails,
     BuildContext context,
@@ -175,9 +173,7 @@ class CartCubit extends Cubit<CartState> {
         paymentmethoddetails.paymentMethod ?? selectedPaymentMethod;
     final amount = paymentmethoddetails.totalPrice?.round();
 
-    if (amount == null) {
-      throw Exception("Payment amount is missing");
-    }
+    if (amount == null) throw Exception("Payment amount is missing");
 
     switch (paymentMethod) {
       case 'Visa':
@@ -186,22 +182,20 @@ class CartCubit extends Cubit<CartState> {
           currency: "EGP",
           integrationId: Constants.integrationIdCard,
         );
-
         final url =
             "https://accept.paymob.com/api/acceptance/iframes/${Constants.iframeId}?payment_token=$paymentKey";
 
         if (!context.mounted) {
           throw Exception("Payment screen is no longer available");
         }
-
         final paymentResult = await Navigator.of(context).push<bool>(
           MaterialPageRoute(builder: (_) => PaymentWebView(paymentUrl: url)),
         );
-
         if (paymentResult != true) {
           throw Exception("Visa payment was not completed");
         }
         break;
+
       case 'PayPal':
         final paypalSuccess = await PayPAlService.makePayPalpayment(
           context,
@@ -216,38 +210,29 @@ class CartCubit extends Cubit<CartState> {
           ),
           ItemListModel(
             orderslist: cartProductsList
-                .map(
-                  (e) => OrderItemModel(
-                    name: e.name,
-                    quantity: e.quantity,
-                    price: e.price.toString(),
-                    currency: "USD",
-                  ),
-                )
+                .map((e) => OrderItemModel(
+                      name: e.name,
+                      quantity: e.quantity,
+                      price: e.price.toString(),
+                      currency: "USD",
+                    ))
                 .toList(),
           ),
         );
-
-        if (!paypalSuccess) {
-          throw Exception("PayPal payment was not completed");
-        }
+        if (!paypalSuccess) throw Exception("PayPal payment was not completed");
         break;
+
       case 'Mobile Wallets':
         final customerPhone = walletPhonenumber.trim().isNotEmpty
             ? walletPhonenumber.trim()
             : BlocProvider.of<CustomerCubit>(context).customerData.phone.trim();
 
         if (customerPhone.isEmpty) {
-          throw Exception(
-            "Customer phone number is required for wallet payment",
-          );
+          throw Exception("Customer phone number is required for wallet payment");
         }
-
         final phoneRegex = RegExp(r'^(\+201|01)[0-9]{9}$');
         if (!phoneRegex.hasMatch(customerPhone)) {
-          throw Exception(
-            "Customer phone number is invalid for wallet payment",
-          );
+          throw Exception("Customer phone number is invalid for wallet payment");
         }
 
         final paymentKey = await manager.getPaymentKey(
@@ -255,7 +240,6 @@ class CartCubit extends Cubit<CartState> {
           currency: "EGP",
           integrationId: Constants.integrationIdWallet,
         );
-
         final redirectUrl = await manager.payWithWallet(
           paymentKey: paymentKey,
           phone: customerPhone,
@@ -264,24 +248,24 @@ class CartCubit extends Cubit<CartState> {
         if (!context.mounted) {
           throw Exception("Payment screen is no longer available");
         }
-
         final paymentResult = await Navigator.of(context).push<bool>(
           MaterialPageRoute(
-            builder: (_) => PaymentWebView(paymentUrl: redirectUrl),
-          ),
+              builder: (_) => PaymentWebView(paymentUrl: redirectUrl)),
         );
-
         if (paymentResult != true) {
           throw Exception("Wallet payment was not completed");
         }
         break;
+
       case 'Cash on Delivery':
         break;
+
       default:
         throw Exception("Unsupported payment method: $paymentMethod");
     }
   }
 
+  /// Clears cart, products, and all order-related state.
   Future<void> clearCart() async {
     await _cartService.clearCart();
     cartProductsList.clear();

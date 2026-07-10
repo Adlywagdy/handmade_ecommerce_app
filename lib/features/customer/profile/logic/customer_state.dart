@@ -16,18 +16,6 @@ final class CustomerDataError extends CustomerState {
   CustomerDataError({required this.message});
 }
 
-final class NotificationsLoading extends CustomerState {}
-
-final class NotificationsSuccess extends CustomerState {
-  final List<String> notifications;
-  NotificationsSuccess({required this.notifications});
-}
-
-final class NotificationsError extends CustomerState {
-  final String message;
-  NotificationsError({required this.message});
-}
-
 final class ImageUploadLoading extends CustomerState {}
 
 final class ImageUploadSuccess extends CustomerState {
