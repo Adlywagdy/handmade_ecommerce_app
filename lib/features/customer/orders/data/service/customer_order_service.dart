@@ -110,7 +110,7 @@ class CustomerOrderService {
         await _findOrder(_userId!, 'orderNumber', orderId);
   }
 
-  /// Places a new order: saves it to Firestore and decrements product stock.
+  /// Places a new order: atomically validates stock, creates order, and decrements stock.
   /// Returns the new document ID.
   Future<String> placeOrder(CustomerOrderModel order) async {
     if (_userId == null) throw Exception('User not authenticated');
@@ -135,21 +135,37 @@ class CustomerOrderService {
       'updatedAt': FieldValue.serverTimestamp(),
     };
 
-    // Use a batch to atomically create order + update stock.
-    final batch = _firestore.batch();
-    batch.set(orderRef, payload);
+    // Use a transaction to atomically validate stock and create order.
+    // This prevents race conditions where concurrent orders could over-decrement stock.
+    await _firestore.runTransaction((transaction) async {
+      // 1. Read all product documents to validate stock atomically
+      final productRefs = <DocumentReference<Map<String, dynamic>>, int>{};
+      for (final product in order.products) {
+        if (product.id.isNotEmpty) {
+          final productRef = _firestore.collection('products').doc(product.id);
+          final productDoc = await transaction.get(productRef);
+          final stock = int.tryParse('${productDoc.data()?['stock']}') ?? 0;
+          if (stock < product.quantity) {
+            throw Exception(
+              'Insufficient stock for "${product.name}". Available: $stock, requested: ${product.quantity}',
+            );
+          }
+          productRefs[productRef] = product.quantity;
+        }
+      }
 
-    for (final product in order.products) {
-      if (product.id.isNotEmpty) {
-        final productRef = _firestore.collection('products').doc(product.id);
-        batch.update(productRef, {
-          'stock': FieldValue.increment(-product.quantity),
-          'salesCount': FieldValue.increment(product.quantity),
+      // 2. Create the order document
+      transaction.set(orderRef, payload);
+
+      // 3. Decrement stock and increment sales count for each product
+      for (final entry in productRefs.entries) {
+        transaction.update(entry.key, {
+          'stock': FieldValue.increment(-entry.value),
+          'salesCount': FieldValue.increment(entry.value),
         });
       }
-    }
+    });
 
-    await batch.commit();
     return orderRef.id;
   }
 

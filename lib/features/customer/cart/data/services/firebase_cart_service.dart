@@ -75,43 +75,46 @@ class FirebaseCartService {
   }
 
   /// Adds a product to the cart, or increments its quantity if already present.
+  /// Uses a transaction to atomically validate stock and update the cart.
   /// Throws if the product is out of stock or exceeds available stock.
   Future<void> addToCart(ProductModel product) async {
     if (_userId == null) throw Exception('User not authenticated');
 
-    final snapshot = await _carts.doc(_userId).get();
-    final items = _parseItems(snapshot.data()?['items']);
+    await _firestore.runTransaction((transaction) async {
+      // 1. Read product stock atomically
+      final productDoc = await transaction.get(
+        _firestore.collection('products').doc(product.id),
+      );
+      if (!productDoc.exists) throw Exception('Product not found');
+      final stock = int.tryParse('${productDoc.data()?['stock']}') ?? 0;
 
-    final productDoc = await _firestore
-        .collection('products')
-        .doc(product.id)
-        .get();
-    if (!productDoc.exists) throw Exception('Product not found');
-    final stock = int.tryParse('${productDoc.data()?['stock']}') ?? 0;
+      // 2. Read current cart
+      final cartDoc = await transaction.get(_carts.doc(_userId));
+      final items = _parseItems(cartDoc.data()?['items']);
 
-    final idx = items.indexWhere(
-      (i) => i['productId']?.toString() == product.id,
-    );
+      // 3. Find or add the product in the cart
+      final idx = items.indexWhere(
+        (i) => i['productId']?.toString() == product.id,
+      );
 
-    if (idx != -1) {
-      // Product already in cart — increase quantity if stock allows.
-      final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
-      if (currentQty + 1 > stock) {
-        throw Exception('Cannot exceed available stock ($stock)');
+      if (idx != -1) {
+        final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
+        if (currentQty + 1 > stock) {
+          throw Exception('Cannot exceed available stock ($stock)');
+        }
+        items[idx]['quantity'] = (currentQty + 1).toString();
+      } else {
+        if (1 > stock) throw Exception('Product is out of stock');
+        items.add(_toCartItem(product, quantity: 1));
       }
-      items[idx]['quantity'] = (currentQty + 1).toString();
-    } else {
-      // New product — add it if in stock.
-      if (1 > stock) throw Exception('Product is out of stock');
-      items.add(_toCartItem(product, quantity: 1));
-    }
 
-    await _carts
-        .doc(_userId)
-        .set(
-          _cartPayload(userId: _userId!, items: items),
-          SetOptions(merge: true),
-        );
+      // 4. Write the updated cart
+      transaction.set(
+        _carts.doc(_userId),
+        _cartPayload(userId: _userId!, items: items),
+        SetOptions(merge: true),
+      );
+    });
   }
 
   /// Decreases product quantity by 1, or removes it entirely if quantity is 1.

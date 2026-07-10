@@ -76,10 +76,11 @@ class FirebaseWishlistService {
     if (uid == null) throw Exception('User not authenticated');
 
     final docs = await _itemsRef(uid).get();
+    final batch = _firestore.batch();
     for (final doc in docs.docs) {
-      await doc.reference.delete();
+      batch.delete(doc.reference);
     }
-
-    await _rootRef(uid).set({'updatedAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+    batch.set(_rootRef(uid), {'updatedAt': FieldValue.serverTimestamp()}, SetOptions(merge: true));
+    await batch.commit();
   }
 }
