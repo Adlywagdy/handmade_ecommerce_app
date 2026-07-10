@@ -21,8 +21,8 @@ part 'cart_state.dart';
 /// Manages cart state: add/remove products, order summary, payment, coupons.
 class CartCubit extends Cubit<CartState> {
   CartCubit({FirebaseCartService? cartService})
-      : _cartService = cartService ?? FirebaseCartService(),
-        super(CartInitial());
+    : _cartService = cartService ?? FirebaseCartService(),
+      super(CartInitial());
 
   final FirebaseCartService _cartService;
 
@@ -51,8 +51,10 @@ class CartCubit extends Cubit<CartState> {
   Future<void> addCartProducts(ProductModel product) async {
     emit(AddProductLoading());
     try {
-      final alreadyExists =
-          isItemExictedFun(productslist: cartProductsList, productID: product.id);
+      final alreadyExists = isItemExictedFun(
+        productslist: cartProductsList,
+        productID: product.id,
+      );
 
       await _cartService.addToCart(product);
       cartProductsList = await _cartService.getCartProducts();
@@ -84,7 +86,9 @@ class CartCubit extends Cubit<CartState> {
     emit(DeleteProductLoading());
     try {
       if (!isItemExictedFun(
-          productslist: cartProductsList, productID: product.id)) {
+        productslist: cartProductsList,
+        productID: product.id,
+      )) {
         return;
       }
 
@@ -94,7 +98,9 @@ class CartCubit extends Cubit<CartState> {
 
       if (cartProductsList.length < previousLength &&
           !isItemExictedFun(
-              productslist: cartProductsList, productID: product.id)) {
+            productslist: cartProductsList,
+            productID: product.id,
+          )) {
         showSnack(
           title: "Product Deleted",
           message: "${product.name} has been removed from your cart.",
@@ -126,11 +132,16 @@ class CartCubit extends Cubit<CartState> {
         _coupons = await _cartService.fetchCoupons();
       }
 
-      final ordersubtotalPrice = calculateOrdersubTotalPrice(cartproducts: products);
+      final ordersubtotalPrice = calculateOrdersubTotalPrice(
+        cartproducts: products,
+      );
       final double discount = showCouponFeedback
           ? applyCoupon(effectiveCoupon, _coupons, subtotal: ordersubtotalPrice)
           : getCouponDiscount(
-              effectiveCoupon, _coupons, subtotal: ordersubtotalPrice);
+              effectiveCoupon,
+              _coupons,
+              subtotal: ordersubtotalPrice,
+            );
       final totalPrice = ordersubtotalPrice + deliveryFee - discount;
 
       currentOrderSummary = PaymentDetailsModel(
@@ -141,12 +152,14 @@ class CartCubit extends Cubit<CartState> {
         paymentMethod: selectedPaymentMethod,
         currency: "EGP",
       );
-      emit(OrderSummarySuccess(
-        subtotalPrice: ordersubtotalPrice,
-        totalPrice: totalPrice,
-        deliveryFee: deliveryFee,
-        discount: discount,
-      ));
+      emit(
+        OrderSummarySuccess(
+          subtotalPrice: ordersubtotalPrice,
+          totalPrice: totalPrice,
+          deliveryFee: deliveryFee,
+          discount: discount,
+        ),
+      );
     } catch (e) {
       emit(OrderSummaryError(message: e.toString()));
     }
@@ -197,25 +210,37 @@ class CartCubit extends Cubit<CartState> {
         break;
 
       case 'PayPal':
+        const double conversionRate = 50;
+        final convertedSubtotal =
+            paymentmethoddetails.subtotalPrice! / conversionRate;
+        final convertedShipping =
+            paymentmethoddetails.deliveryFee! / conversionRate;
+        final convertedDiscount =
+            paymentmethoddetails.discount! / conversionRate;
+        final convertedTotal =
+            paymentmethoddetails.totalPrice! / conversionRate;
+
         final paypalSuccess = await PayPAlService.makePayPalpayment(
           context,
           AmountPaymentModel(
-            total: ((paymentmethoddetails.totalPrice!) / 50).toString(),
+            total: convertedTotal.toStringAsFixed(2),
             currency: "USD",
             details: Details(
-              subtotal: paymentmethoddetails.subtotalPrice.toString(),
-              shipping: paymentmethoddetails.deliveryFee.toString(),
-              shippingDiscount: paymentmethoddetails.discount!.toInt(),
+              subtotal: convertedSubtotal.toStringAsFixed(2),
+              shipping: convertedShipping.toStringAsFixed(2),
+              shippingDiscount: convertedDiscount.toStringAsFixed(2),
             ),
           ),
           ItemListModel(
             orderslist: cartProductsList
-                .map((e) => OrderItemModel(
-                      name: e.name,
-                      quantity: e.quantity,
-                      price: e.price.toString(),
-                      currency: "USD",
-                    ))
+                .map(
+                  (e) => OrderItemModel(
+                    name: e.name,
+                    quantity: e.quantity,
+                    price: (e.price / conversionRate).toStringAsFixed(2),
+                    currency: "USD",
+                  ),
+                )
                 .toList(),
           ),
         );
@@ -228,11 +253,15 @@ class CartCubit extends Cubit<CartState> {
             : BlocProvider.of<CustomerCubit>(context).customerData.phone.trim();
 
         if (customerPhone.isEmpty) {
-          throw Exception("Customer phone number is required for wallet payment");
+          throw Exception(
+            "Customer phone number is required for wallet payment",
+          );
         }
         final phoneRegex = RegExp(r'^(\+201|01)[0-9]{9}$');
         if (!phoneRegex.hasMatch(customerPhone)) {
-          throw Exception("Customer phone number is invalid for wallet payment");
+          throw Exception(
+            "Customer phone number is invalid for wallet payment",
+          );
         }
 
         final paymentKey = await manager.getPaymentKey(
@@ -250,7 +279,8 @@ class CartCubit extends Cubit<CartState> {
         }
         final paymentResult = await Navigator.of(context).push<bool>(
           MaterialPageRoute(
-              builder: (_) => PaymentWebView(paymentUrl: redirectUrl)),
+            builder: (_) => PaymentWebView(paymentUrl: redirectUrl),
+          ),
         );
         if (paymentResult != true) {
           throw Exception("Wallet payment was not completed");
