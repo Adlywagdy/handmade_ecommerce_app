@@ -2,13 +2,13 @@
   "@@locale": "ar",
   "skip": "تخطي",
   "next": "التالي",
-  "getStarted": "ابدأ الآن",
+  "getStarted": "ابدأ",
   "discoverUniqueHandmadeItems": "اكتشف منتجات يدوية فريدة",
   "supportLocalArtisans": "ادعم الحرفيين المحليين",
   "shopWithConfidence": "تسوق بثقة",
-  "exploreThousandsHandcraftedProducts": "استكشف آلاف المنتجات المصنوعة يدوياً من حرفيين موهوبين من حول العالم.",
+  "exploreThousandsHandcraftedProducts": "استكشف آلاف المنتجات اليدوية المصنوعة من قبل حرفيين موهوبين من حول العالم.",
   "connectDirectlyWithMakers": "تواصل مباشرة مع الصانعين وادعم حرفتهم. كل عملية شراء تُحدث فرقاً.",
-  "securePaymentsVerifiedSellers": "مدفوعات آمنة، بائعون موثوقون، وتقييمات حقيقية. رضاك مضمون.",
+  "securePaymentsVerifiedSellers": "مدفوعات آمنة وبائعون موثوقون وتقييمات حقيقية. رضاك مضمون.",
   "filterAndSort": "فرز وتصفية",
   "rating": "التقييم",
   "priceSort": "فرز السعر",
@@ -26,6 +26,48 @@
   "technicalDifficulties": "نواجه صعوبات تقنية من جانبنا. فريقنا يعمل على حلها.",
   "goBack": "العودة",
   "noInternetConnection": "لا يوجد اتصال بالإنترنت",
+  "earnings": "الأرباح",
+  "welcomeBack": "مرحباً بعودتك، ",
+  "hereWhatIsHappeningWithYourShopToday": "إليك ما يحدث في متجرك اليوم.",
+  "totalRevenue": "إجمالي الإيرادات",
+  "premiumArtisan": "حرفي مميز",
+  "noTapnameOrders": "لا يوجد طلب {tapname}",
+  "@noTapnameOrders": {
+    "description": "Message shown when there are no orders for a specific tab.",
+    "placeholders": {
+      "tapname": {
+        "type": "String"
+      }
+    }
+  },
+  "totalBalance": "إجمالي الرصيد",
+  "withdrawFunds": "سحب الأموال",
+  "recentTransactions": "المعاملات الحديثة",
+  "viewAll": "عرض الكل ›",
+  "noRecentTransactions": "لا توجد معاملات حديثة",
+  "revenueStatistics": "إحصائيات الإيرادات",
+  "weekly": "أسبوعي",
+  "monthly": "شهري",
+  "weeklyEarnings": "أرباح أسبوعية",
+  "monthlyEarnings": "أرباح شهرية",
+  "ordersProcessed": "الطلبات المعالجة",
+  "avgOrderValue": "متوسط قيمة الطلب",
+  "startTypingToSeeMatchingProducts": "ابدأ الكتابة لرؤية المنتجات المطابقة",
+  "resultsFound": "نتائج وجدت",
+  "confirmed": "مؤكد",
+  "preparing": "قيد التحضير",
+  "allCategories": "جميع الفئات",
+  "noLineItems": "لا توجد عناصر",
+  "updateStatus": "تحديث الحالة",
+  "productDetails": "تفاصيل المنتج",
+  "noOrdersFoundInThisTab": "لا توجد طلبات في هذا القسم.",
+  "@noOrdersFoundInThisTab": {
+    "description": "Message shown when there are no orders for a specific tab."
+  },
+  "failedToLoadOrders": "فشل تحميل الطلبات. يرجى السحب للتحديث.",
+  "@failedToLoadOrders": {
+    "description": "Message shown when failed to load orders."
+  },
   "offlineMessage": "يبدو أنك غير متصل. يرجى التحقق من إعدادات الشبكة والمحاولة مرة أخرى.",
   "@offlineMessage": {
     "description": "Message shown when the user is offline."
@@ -34,7 +76,7 @@
   "@retryConnection": {
     "description": "Button label to retry a failed network request."
   },
-  "welcomeToAyady": "مرحبًا بك في أيادي",
+  "welcomeToAyady": "مرحباً بك في أيادي",
   "@welcomeToAyady": {
     "description": "Welcome message shown on the login screen."
   },
@@ -46,7 +88,6 @@
   "@emailAddress": {
     "description": "Label text for the email input field."
   },
-  
   "emailIsntValid": "البريد الإلكتروني غير صالح",
   "@emailIsntValid": {
     "description": "Validation message shown when the email input is invalid."
@@ -63,7 +104,7 @@
   "@loginSuccess": {
     "description": "Snack bar message shown after successful login."
   },
-  "googleSignInSuccess": "تم تسجيل الدخول بواسطة جوجل بنجاح",
+  "googleSignInSuccess": "تم تسجيل الدخول عبر جوجل بنجاح",
   "@googleSignInSuccess": {
     "description": "Snack bar message shown after successful Google login."
   },
@@ -95,7 +136,7 @@
   "@createAccount": {
     "description": "Button text for the register screen."
   },
-  "experienceTheEleganceOfHandcraftedItems": "اكتشف أناقة المنتجات المصنوعة يدويًا",
+  "experienceTheEleganceOfHandcraftedItems": "اكتشف أناقة المنتجات المصنوعة يدوياً",
   "@experienceTheEleganceOfHandcraftedItems": {
     "description": "Subtitle text shown on the register screen."
   },
@@ -103,7 +144,7 @@
   "@fullName": {
     "description": "Label text for the full name input field."
   },
-  "johnDoe": "John Doe",
+  "johnDoe": "جون دو",
   "@johnDoe": {
     "description": "Placeholder text for the full name input field."
   },
@@ -134,6 +175,46 @@
   "seller": "بائع",
   "@seller": {
     "description": "Role selection option text for seller registration."
+  },
+  "sellerDetailsSectionTitle": "بيانات البائع",
+  "@sellerDetailsSectionTitle": {
+    "description": "Section title for seller registration details."
+  },
+  "sellerDetailsSectionHint": "أكمل بياناتك حتى نتمكن من مراجعة طلبك.",
+  "@sellerDetailsSectionHint": {
+    "description": "Hint text for seller details section."
+  },
+  "specialtyLabel": "التخصص / الحرفة",
+  "@specialtyLabel": {
+    "description": "Label for specialty field."
+  },
+  "specialtyHint": "مثال: فخار يدوي",
+  "@specialtyHint": {
+    "description": "Hint text for specialty field."
+  },
+  "specialtyIsRequired": "التخصص مطلوب",
+  "@specialtyIsRequired": {
+    "description": "Validation message for missing specialty."
+  },
+  "phoneNumberLabel": "رقم الهاتف",
+  "@phoneNumberLabel": {
+    "description": "Label for phone number field."
+  },
+  "phoneNumberHint": "+20 1XX XXX XXXX",
+  "@phoneNumberHint": {
+    "description": "Hint text for phone number field."
+  },
+  "phoneIsRequired": "رقم الهاتف مطلوب",
+  "@phoneIsRequired": {
+    "description": "Validation message for missing phone."
+  },
+  "cityLabelOptional": "المدينة (اختياري)",
+  "@cityLabelOptional": {
+    "description": "Label for optional city field."
+  },
+  "countryLabelOptional": "الدولة (اختياري)",
+  "@countryLabelOptional": {
+    "description": "Label for optional country field."
   },
   "agreeToTerms": "أوافق على شروط الخدمة وسياسة الخصوصية.",
   "@agreeToTerms": {
@@ -171,6 +252,24 @@
   "@sendCode": {
     "description": "Button text used to request a password reset code."
   },
+  "notificationsTitle": "الإشعارات",
+  "@notificationsTitle": {},
+  "filterAll": "الكل",
+  "@filterAll": {},
+  "filterUnread": "غير مقروء",
+  "@filterUnread": {},
+  "filterOrders": "الطلبات",
+  "@filterOrders": {},
+  "filterMessages": "الرسائل",
+  "@filterMessages": {},
+  "filterOffers": "العروض",
+  "@filterOffers": {},
+  "clearNotificationsDialogTitle": "مسح الإشعارات",
+  "@clearNotificationsDialogTitle": {},
+  "clearNotificationsConfirmation": "هل أنت متأكد من مسح جميع الإشعارات؟",
+  "@clearNotificationsConfirmation": {},
+  "noNotificationsDescription": "ليس لديك أي إشعارات حتى الآن.",
+  "@noNotificationsDescription": {},
   "verifyItsYou": "تحقق من هويتك",
   "@verifyItsYou": {
     "description": "Title text shown on the verification code screen."
@@ -191,7 +290,7 @@
   "@createNewPassword": {
     "description": "Title text for the reset password screen."
   },
-  "createNewPasswordDescription": "يرجى إنشاء كلمة مرور آمنة لحسابك لحماية الحساب.",
+  "createNewPasswordDescription": "يرجى إنشاء كلمة مرور آمنة لحسابك لضمان حماية الحساب.",
   "@createNewPasswordDescription": {
     "description": "Subtitle text for the reset password screen."
   },
@@ -215,6 +314,1509 @@
   "@setPassword": {
     "description": "Button text used to save the new password."
   },
+  "ayady": "أيادي",
+  "@ayady": {
+    "description": "App title displayed in the home screen app bar."
+  },
+  "searchUniqueHandmadeCrafts": "ابحث عن حرف يدوية فريدة",
+  "@searchUniqueHandmadeCrafts": {
+    "description": "Hint text for the search field on the home screen."
+  },
+  "categories": "الفئات",
+  "@categories": {
+    "description": "Section title for the categories list."
+  },
+  "seeAll": "عرض الكل",
+  "@seeAll": {
+    "description": "Button text to view all items in a section."
+  },
+  "featuredProducts": "المنتجات المميزة",
+  "@featuredProducts": {
+    "description": "Section title for featured products."
+  },
+  "handpickedForYourStyle": "مختارة من أجلك",
+  "@handpickedForYourStyle": {
+    "description": "Subtitle for the featured products section."
+  },
+  "topRated": "الأعلى تقييماً",
+  "@topRated": {
+    "description": "Section title for top rated products."
+  },
+  "exploreAll": "استكشاف الكل",
+  "@exploreAll": {
+    "description": "Button text to explore all items in a section."
+  },
+  "error": "خطأ",
+  "@error": {
+    "description": "Generic error title for snackbar messages."
+  },
+  "searchForProducts": "ابحث عن منتجات",
+  "@searchForProducts": {
+    "description": "Hint text for the search field in the search screen."
+  },
+  "noFilters": "لا توجد فلاتر",
+  "@noFilters": {
+    "description": "Title for snackbar when trying to filter without search criteria."
+  },
+  "pleaseEnterSearchQueryOrSelectCategory": "يرجى إدخال استعلام بحث أو اختيار فئة للتصفية.",
+  "@pleaseEnterSearchQueryOrSelectCategory": {
+    "description": "Message shown when trying to filter without proper criteria."
+  },
+  "editProfile": "تعديل الملف الشخصي",
+  "@editProfile": {
+    "description": "Title for the edit profile bottom sheet."
+  },
+  "name": "الاسم",
+  "@name": {
+    "description": "Label for name input field."
+  },
+  "saveChanges": "حفظ التغييرات",
+  "@saveChanges": {
+    "description": "Button text to save profile changes."
+  },
+  "logout": "تسجيل الخروج",
+  "@logout": {
+    "description": "Button text and dialog title for logout action."
+  },
+  "areYouSureYouWantToLogout": "هل أنت متأكد أنك تريد تسجيل الخروج؟",
+  "@areYouSureYouWantToLogout": {
+    "description": "Confirmation message in logout dialog."
+  },
+  "profile": "الملف الشخصي",
+  "@profile": {
+    "description": "Title for the profile screen."
+  },
+  "myOrders": "طلباتي",
+  "@myOrders": {
+    "description": "Menu item title for orders section."
+  },
+  "trackAndManageYourPurchases": "تتبع وإدارة مشترياتك",
+  "@trackAndManageYourPurchases": {
+    "description": "Subtitle for the orders menu item."
+  },
+  "favorites": "المفضلات",
+  "@favorites": {
+    "description": "Menu item title for favorites section."
+  },
+  "itemsYouHaveSavedForLater": "العناصر المحفوظة لاحقاً",
+  "@itemsYouHaveSavedForLater": {
+    "description": "Subtitle for the favorites menu item."
+  },
+  "settings": "الإعدادات",
+  "@settings": {
+    "description": "Menu item title for settings section."
+  },
+  "notificationsAndPrivacy": "الإشعارات والخصوصية",
+  "@notificationsAndPrivacy": {
+    "description": "Subtitle for the settings menu item."
+  },
+  "nameBio": "الاسم، السيرة الذاتية",
+  "@nameBio": {
+    "description": "Subtitle for the edit profile menu item."
+  },
+  "home": "الصفحة الرئيسية",
+  "@home": {
+    "description": "Bottom navigation bar label for home tab."
+  },
+  "wishlist": "قائمة المفضلة",
+  "@wishlist": {
+    "description": "Bottom navigation bar label for wishlist tab."
+  },
+  "cart": "سلة التسوق",
+  "@cart": {
+    "description": "Bottom navigation bar label for cart tab."
+  },
+  "productUpdatedSuccessfully": "تم تحديث المنتج بنجاح",
+  "@productUpdatedSuccessfully": {
+    "description": "Success message when product is updated."
+  },
+  "errorSavingProduct": "حدث خطأ أثناء حفظ المنتج",
+  "@errorSavingProduct": {
+    "description": "Error message when saving product fails."
+  },
+  "prepare": "تحضير",
+  "@prepare": {
+    "description": "Button text to prepare an order."
+  },
+  "ship": "شحن",
+  "@ship": {
+    "description": "Button text to ship an order."
+  },
+  "deliver": "تسليم",
+  "@deliver": {
+    "description": "Button text to deliver an order."
+  },
+  "platformCommission": "عمولة المنصة",
+  "@platformCommission": {
+    "description": "Label for platform commission setting."
+  },
+  "eg15": "مثال: 15",
+  "@eg15": {
+    "description": "Example hint text for commission input."
+  },
+  "save": "حفظ",
+  "@save": {
+    "description": "Button text to save changes."
+  },
+  "pleaseAgreeToTermsOfService": "يرجى الموافقة على شروط الخدمة",
+  "@pleaseAgreeToTermsOfService": {
+    "description": "Error message for terms agreement."
+  },
+  "zeroPointZeroZero": "0.00",
+  "@zeroPointZeroZero": {
+    "description": "Default hint text for numeric input."
+  },
+  "deliveryFee": "رسوم التوصيل",
+  "@deliveryFee": {
+    "description": "Label for delivery fee setting."
+  },
+  "minimumOrderValue": "الحد الأدنى لقيمة الطلب",
+  "@minimumOrderValue": {
+    "description": "Label for minimum order value setting."
+  },
+  "supportEmail": "البريد الإلكتروني للدعم",
+  "@supportEmail": {
+    "description": "Label for support email setting."
+  },
+  "approve": "الموافقة",
+  "@approve": {
+    "description": "Button text to approve something."
+  },
+  "reject": "رفض",
+  "@reject": {
+    "description": "Button text to reject something."
+  },
+  "searchSellers": "ابحث عن البائعين...",
+  "@searchSellers": {
+    "description": "Hint text for seller search field."
+  },
+  "phone": "الهاتف",
+  "@phone": {
+    "description": "Label for phone number field."
+  },
+  "phoneHint": "أدخل رقم هاتفك",
+  "@phoneHint": {
+    "description": "Hint text for phone number field."
+  },
+  "location": "الموقع",
+  "@location": {
+    "description": "Label for location field."
+  },
+  "specialty": "التخصص",
+  "@specialty": {
+    "description": "Label for specialty field."
+  },
+  "totalSales": "إجمالي المبيعات",
+  "@totalSales": {
+    "description": "Label for total sales count."
+  },
+  "totalProducts": "إجمالي المنتجات",
+  "@totalProducts": {
+    "description": "Label for total products count."
+  },
+  "walletBalance": "رصيد المحفظة",
+  "@walletBalance": {
+    "description": "Label for wallet balance field."
+  },
+  "commissionRate": "معدل العمولة",
+  "@commissionRate": {
+    "description": "Label for commission rate field."
+  },
+  "submitted": "تم الإرسال",
+  "@submitted": {
+    "description": "Label for submitted date/status."
+  },
+  "active": "نشط",
+  "@active": {
+    "description": "Tab/status label for active items."
+  },
+  "delivered": "تم التوصيل",
+  "@delivered": {
+    "description": "Status label for delivered orders."
+  },
+  "searchOrderIdOrName": "ابحث برقم الطلب أو الاسم",
+  "@searchOrderIdOrName": {
+    "description": "Hint text for order search field."
+  },
+  "sellerNotFound": "لم يتم العثور على بائع",
+  "@sellerNotFound": {
+    "description": "Error message when seller is not found."
+  },
+  "approveCaps": "موافقة",
+  "@approveCaps": {
+    "description": "Button text to approve in uppercase."
+  },
+  "rejectCaps": "رفض",
+  "@rejectCaps": {
+    "description": "Button text to reject in uppercase."
+  },
+  "created": "تم الإنشاء",
+  "@created": {
+    "description": "Label for creation date."
+  },
+  "lastUpdate": "آخر تحديث",
+  "@lastUpdate": {
+    "description": "Label for last update date."
+  },
+  "subtotal": "المجموع الفرعي",
+  "@subtotal": {
+    "description": "Label for order subtotal."
+  },
+  "deliveryFeeLower": "رسوم التوصيل",
+  "@deliveryFeeLower": {
+    "description": "Label for delivery fee in order details."
+  },
+  "commission": "العمولة",
+  "@commission": {
+    "description": "Label for commission amount."
+  },
+  "sellerEarning": "ربح البائع",
+  "@sellerEarning": {
+    "description": "Label for seller earning amount."
+  },
+  "total": "الإجمالي",
+  "@total": {
+    "description": "Label for total amount."
+  },
+  "method": "الطريقة",
+  "@method": {
+    "description": "Label for payment method."
+  },
+  "street": "الشارع",
+  "@street": {
+    "description": "Label for street address."
+  },
+  "city": "المدينة",
+  "@city": {
+    "description": "Label for city field."
+  },
+  "governorate": "المحافظة",
+  "@governorate": {
+    "description": "Label for governorate field."
+  },
+  "country": "البلد",
+  "@country": {
+    "description": "Label for country field."
+  },
+  "zip": "الرمز البريدي",
+  "@zip": {
+    "description": "Label for zip code field."
+  },
+  "searchProducts": "ابحث عن منتجات...",
+  "@searchProducts": {
+    "description": "Hint text for product search field."
+  },
+  "order": "الطلب",
+  "@order": {
+    "description": "Title for order screen."
+  },
+  "orderNotFound": "لم يتم العثور على الطلب",
+  "@orderNotFound": {
+    "description": "Error message when order is not found."
+  },
+  "product": "المنتج",
+  "@product": {
+    "description": "Title for product screen."
+  },
+  "productNotFound": "لم يتم العثور على المنتج",
+  "@productNotFound": {
+    "description": "Error message when product is not found."
+  },
+  "totalUsers": "إجمالي المستخدمين",
+  "@totalUsers": {
+    "description": "Dashboard stat label for total users."
+  },
+  "totalSellers": "إجمالي البائعين",
+  "@totalSellers": {
+    "description": "Dashboard stat label for total sellers."
+  },
+  "totalOrders": "إجمالي الطلبات",
+  "@totalOrders": {
+    "description": "Dashboard stat label for total orders."
+  },
+  "revenue": "الإيرادات",
+  "@revenue": {
+    "description": "Dashboard stat label for revenue."
+  },
+  "stock": "المخزون",
+  "@stock": {
+    "description": "Label for stock quantity."
+  },
+  "category": "الفئة",
+  "@category": {
+    "description": "Label for product category."
+  },
+  "yes": "نعم",
+  "@yes": {
+    "description": "Affirmative response."
+  },
+  "no": "لا",
+  "@no": {
+    "description": "Negative response."
+  },
+  "reviews": "التقييمات",
+  "@reviews": {
+    "description": "Label for reviews count."
+  },
+  "sales": "المبيعات",
+  "@sales": {
+    "description": "Label for sales count."
+  },
+  "dashboard": "لوحة التحكم",
+  "@dashboard": {
+    "description": "Bottom navigation label for dashboard."
+  },
+  "sellers": "البائعون",
+  "@sellers": {
+    "description": "Bottom navigation label for sellers."
+  },
+  "products": "المنتجات",
+  "@products": {
+    "description": "Bottom navigation label for products."
+  },
+  "withdrawalRequested": "تم طلب السحب!",
+  "@withdrawalRequested": {
+    "description": "Title for withdrawal success dialog."
+  },
+  "withdrawalMessage": "سيتم تحويل {amount} جنيه مصري إلى حسابك خلال 2-3 أيام عمل.",
+  "@withdrawalMessage": {
+    "description": "Message for withdrawal success dialog.",
+    "placeholders": {
+      "amount": {
+        "type": "String"
+      }
+    }
+  },
+  "success": "نجاح",
+  "@success": {
+    "description": "Generic success title for snackbar messages."
+  },
+  "registrationCompleteAwaitingApproval": "اكتمل التسجيل! في انتظار موافقة المسؤول.",
+  "@registrationCompleteAwaitingApproval": {
+    "description": "Success message after seller registration."
+  },
+  "shopSettings": "إعدادات المتجر",
+  "@shopSettings": {
+    "description": "Menu item title for shop settings."
+  },
+  "viewYourShopInformation": "عرض معلومات متجرك",
+  "@viewYourShopInformation": {
+    "description": "Subtitle for shop settings menu item."
+  },
+  "openYourNotificationsCenter": "افتح مركز الإشعارات الخاص بك",
+  "@openYourNotificationsCenter": {
+    "description": "Subtitle for notifications menu item."
+  },
+  "helpAndSupport": "المساعدة والدعم",
+  "@helpAndSupport": {
+    "description": "Menu item title for help and support."
+  },
+  "contactSupportAndReviewHelpInfo": "اتصل بالدعم واستعرض معلومات المساعدة",
+  "@contactSupportAndReviewHelpInfo": {
+    "description": "Subtitle for help and support menu item."
+  },
+  "contact": "اتصل",
+  "@contact": {
+    "description": "Label for contact section."
+  },
+  "email": "البريد الإلكتروني",
+  "@email": {
+    "description": "Label for email field."
+  },
+  "shopInfo": "معلومات المتجر",
+  "@shopInfo": {
+    "description": "Title for shop information section."
+  },
+  "owner": "المالك",
+  "@owner": {
+    "description": "Label for shop owner."
+  },
+  "badge": "شارة",
+  "@badge": {
+    "description": "Label for seller badge."
+  },
+  "status": "الحالة",
+  "@status": {
+    "description": "Label for status field."
+  },
+  "emailSeller": "إرسال بريد إلكتروني للبائع",
+  "@emailSeller": {
+    "description": "Button text to email seller."
+  },
+  "customOrderRequestSubject": "طلب طلب مخصص",
+  "@customOrderRequestSubject": {
+    "description": "Default subject for custom order email."
+  },
+  "customOrderRequestMessage": "مرحباً {sellerName},\n\nأرغب في تقديم طلب مخصص. يرجى التواصل معي لمناقشة التفاصيل.\n\nشكراً لك!",
+  "@customOrderRequestMessage": {
+    "description": "Default message template for custom order email.",
+    "placeholders": {
+      "sellerName": {
+        "type": "String"
+      }
+    }
+  },
+  "sendEmail": "إرسال بريد",
+  "@sendEmail": {
+    "description": "Button text to send email."
+  },
+  "writeYourCustomRequestAndContinueInYourEmailApp": "اكتب طلبك المخصص واستمر في تطبيق البريد الإلكتروني.",
+  "@writeYourCustomRequestAndContinueInYourEmailApp": {
+    "description": "Instruction text for custom order email."
+  },
+  "pricePlaceholder": "أدخل السعر",
+  "@pricePlaceholder": {
+    "description": "Placeholder text for price input field."
+  },
+  "priceIsRequired": "السعر مطلوب",
+  "@priceIsRequired": {
+    "description": "Validation message for missing price."
+  },
+  "invalidPrice": "السعر غير صالح",
+  "@invalidPrice": {
+    "description": "Validation message for invalid price format."
+  },
+  "stockPlaceholder": "أدخل كمية المخزون",
+  "@stockPlaceholder": {
+    "description": "Placeholder text for stock input field."
+  },
+  "stockIsRequired": "المخزون مطلوب",
+  "@stockIsRequired": {
+    "description": "Validation message for missing stock."
+  },
+  "invalidNumber": "رقم غير صالح",
+  "@invalidNumber": {
+    "description": "Validation message for invalid number format."
+  },
+  "selectCategory": "اختر الفئة",
+  "@selectCategory": {
+    "description": "Placeholder text for category selection."
+  },
+  "pleaseSelectCategory": "يرجى اختيار فئة",
+  "@pleaseSelectCategory": {
+    "description": "Validation message for unselected category."
+  },
+  "descriptionIsRequired": "الوصف مطلوب",
+  "@descriptionIsRequired": {
+    "description": "Validation message for missing description."
+  },
+  "pending": "قيد التنفيذ",
+  "@pending": {
+    "description": "Status label for pending items."
+  },
+  "approved": "موافق عليه",
+  "@approved": {
+    "description": "Status label for approved items."
+  },
+  "rejected": "مرفوض",
+  "@rejected": {
+    "description": "Status label for rejected items."
+  },
+  "cancelled": "ملغى",
+  "@cancelled": {
+    "description": "Status label for cancelled items."
+  },
+  "editProduct": "تعديل المنتج",
+  "@editProduct": {
+    "description": "Button or title for editing a product."
+  },
+  "productName": "اسم المنتج",
+  "@productName": {
+    "description": "Label for product name field."
+  },
+  "enterProductName": "أدخل اسم المنتج",
+  "@enterProductName": {
+    "description": "Hint text for the product name input field."
+  },
+  "productNameIsRequired": "اسم المنتج مطلوب",
+  "@productNameIsRequired": {
+    "description": "Validation message shown when the product name is empty."
+  },
+  "price": "السعر",
+  "@price": {
+    "description": "Label text for the price field."
+  },
+  "discard": "تجاهل",
+  "@discard": {
+    "description": "Button text to discard changes."
+  },
+  "manageProducts": "إدارة المنتجات",
+  "@manageProducts": {
+    "description": "Title for the manage products screen."
+  },
+  "noProductsFound": "لم يتم العثور على منتجات",
+  "@noProductsFound": {
+    "description": "Message shown when there are no products available."
+  },
+  "units": "الوحدات",
+  "@units": {
+    "description": "Label text for the unit count display."
+  },
+  "delete": "حذف",
+  "@delete": {
+    "description": "Button text to delete an item."
+  },
+  "markAsShipped": "وضع تم الشحن",
+  "@markAsShipped": {
+    "description": "Button text to mark an order as shipped."
+  },
+  "markAsCompleted": "وضع تم الإنجاز",
+  "@markAsCompleted": {
+    "description": "Button text to mark an order as completed."
+  },
+  "orderCompleted": "اكتمل الطلب",
+  "@orderCompleted": {
+    "description": "Status text for a completed order."
+  },
+  "shipped": "تم الشحن",
+  "@shipped": {
+    "description": "Status label for shipped orders."
+  },
+  "completed": "مكتمل",
+  "@completed": {
+    "description": "Status label for completed orders."
+  },
+  "orderStatusUpdatedTo": "حالة الطلب تم تحديثها إلى {status}",
+  "@orderStatusUpdatedTo": {
+    "description": "Message shown when an order status changes.",
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "bestSellingItem": "أفضل منتج مبيعاً",
+  "@bestSellingItem": {
+    "description": "Title for the best selling item card."
+  },
+  "quickActions": "إجراءات سريعة",
+  "@quickActions": {
+    "description": "Title for the quick actions section."
+  },
+  "addProduct": "إضافة منتج",
+  "@addProduct": {
+    "description": "Button text to add a new product."
+  },
+  "viewProducts": "عرض المنتجات",
+  "@viewProducts": {
+    "description": "Button text to view products list."
+  },
+  "viewOrders": "عرض الطلبات",
+  "@viewOrders": {
+    "description": "Button text to view orders list."
+  },
+  "recentOrders": "الطلبات الأخيرة",
+  "@recentOrders": {
+    "description": "Section title for recent orders."
+  },
+  "noRecentOrders": "لا توجد طلبات حديثة",
+  "@noRecentOrders": {
+    "description": "Message shown when there are no recent orders."
+  },
+  "orderItem": "عنصر الطلب",
+  "@orderItem": {
+    "description": "Label for an order item in the details list."
+  },
+  "unexpectedState": "حالة غير متوقعة",
+  "@unexpectedState": {
+    "description": "Message shown when the state is unexpected."
+  },
+  "inventory": "المخزون",
+  "@inventory": {
+    "description": "Section title for inventory details."
+  },
+  "stats": "إحصائيات",
+  "@stats": {
+    "description": "Section title for product statistics."
+  },
+  "business": "الأعمال",
+  "@business": {
+    "description": "Section title for business information."
+  },
+  "timeline": "الجدول الزمني",
+  "@timeline": {
+    "description": "Section title for timeline information."
+  },
+  "parties": "الأطراف",
+  "@parties": {
+    "description": "Section title for parties involved."
+  },
+  "totals": "الإجماليات",
+  "@totals": {
+    "description": "Section title for totals information."
+  },
+  "payment": "الدفع",
+  "@payment": {
+    "description": "Section title for payment information."
+  },
+  "shipping": "الشحن",
+  "@shipping": {
+    "description": "Section title for shipping information."
+  },
+  "newArtisanRegistrations": "طلبات تسجيل حرفيين جديدة",
+  "@newArtisanRegistrations": {
+    "description": "Subtitle for new artisan registrations notification."
+  },
+  "qualityControlCheckRequired": "يتطلب فحص مراقبة الجودة",
+  "@qualityControlCheckRequired": {
+    "description": "Subtitle for quality control check notification."
+  },
+  "notifications": "الإشعارات",
+  "@notifications": {
+    "description": "Screen title for notifications."
+  },
+  "markAllAsRead": "تحديد الكل كمقروء",
+  "@markAllAsRead": {
+    "description": "Button label to mark all notifications as read."
+  },
+  "clearAll": "مسح الكل",
+  "@clearAll": {
+    "description": "Button label to clear all notifications."
+  },
+  "all": "الكل",
+  "@all": {
+    "description": "Filter label for all notifications."
+  },
+  "unread": "غير مقروء",
+  "@unread": {
+    "description": "Filter label for unread notifications."
+  },
+  "orders": "الطلبات",
+  "@orders": {
+    "description": "Filter label for order notifications."
+  },
+  "messages": "الرسائل",
+  "@messages": {
+    "description": "Filter label for message notifications."
+  },
+  "offers": "العروض",
+  "@offers": {
+    "description": "Filter label for offer notifications."
+  },
+  "notificationDeleted": "تم حذف الإشعار",
+  "@notificationDeleted": {
+    "description": "Message shown when a notification is deleted."
+  },
+  "today": "اليوم",
+  "@today": {
+    "description": "Date label for notifications from today."
+  },
+  "yesterday": "أمس",
+  "@yesterday": {
+    "description": "Date label for notifications from yesterday."
+  },
+  "earlier": "أسبق",
+  "@earlier": {
+    "description": "Date label for notifications from earlier."
+  },
+  "clearAllNotifications": "مسح كل الإشعارات",
+  "@clearAllNotifications": {
+    "description": "Dialog title for clearing all notifications."
+  },
+  "clearAllNotificationsMessage": "هل أنت متأكد أنك تريد حذف كل الإشعارات؟ لا يمكن التراجع عن هذا الإجراء.",
+  "@clearAllNotificationsMessage": {
+    "description": "Dialog message for clearing all notifications."
+  },
+  "noNotificationsMessage": "عند استلام الإشعارات، ستظهر هنا. ابقَ على اطلاع!",
+  "@noNotificationsMessage": {
+    "description": "Empty state message for notifications."
+  },
+  "completePayment": "إكمال الدفع",
+  "@completePayment": {
+    "description": "Title for payment completion screen."
+  },
+  "paymentTransactionDescription": "وصف معاملة الدفع.",
+  "@paymentTransactionDescription": {
+    "description": "Description for payment transaction."
+  },
+  "contactUsForQuestions": "اتصل بنا لأي أسئلة حول طلبك.",
+  "@contactUsForQuestions": {
+    "description": "Note for payment transaction."
+  },
+  "paymentError": "خطأ في الدفع",
+  "@paymentError": {
+    "description": "Error message prefix for payment failures."
+  },
+  "passwordResetLinkSent": "تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني",
+  "@passwordResetLinkSent": {
+    "description": "Success message for password reset email."
+  },
+  "paymentMethod": "طريقة الدفع",
+  "@paymentMethod": {
+    "description": "Section title for payment method selection."
+  },
+  "emailAppOpenedSuccessfully": "تم فتح تطبيق البريد بنجاح",
+  "@emailAppOpenedSuccessfully": {
+    "description": "Success message when email app opens."
+  },
+  "onlyPendingOrdersCanBeCancelled": "يمكن إلغاء الطلبات المعلقة فقط.",
+  "@onlyPendingOrdersCanBeCancelled": {
+    "description": "Error message for order cancellation."
+  },
+  "reviewDetails": "تفاصيل المراجعة",
+  "@reviewDetails": {
+    "description": "Section title for review details input."
+  },
+  "description": "الوصف",
+  "@description": {
+    "description": "Section title for product description."
+  },
+  "orderSummary": "ملخص الطلب",
+  "@orderSummary": {
+    "description": "Section title for order summary."
+  },
+  "allReviews": "كل التقييمات",
+  "@allReviews": {
+    "description": "Screen title for all reviews."
+  },
+  "addPhotos": "إضافة صور",
+  "@addPhotos": {
+    "description": "Button label for adding photos."
+  },
+  "yourCart": "سلتك",
+  "@yourCart": {
+    "description": "Screen title for cart screen."
+  },
+  "promoCode": "رمز العرض",
+  "@promoCode": {
+    "description": "Hint text for promo code input field."
+  },
+  "failedToLoadCart": "فشل تحميل السلة. يرجى المحاولة مرة أخرى.",
+  "@failedToLoadCart": {
+    "description": "Error message when cart fails to load."
+  },
+  "yourCartIsEmpty": "سلتك فارغة.",
+  "@yourCartIsEmpty": {
+    "description": "Message when cart is empty."
+  },
+  "startAddingYourFavoriteProducts": "ابدأ بإضافة منتجاتك المفضلة!",
+  "@startAddingYourFavoriteProducts": {
+    "description": "Suggestion message when cart is empty."
+  },
+  "failedToLoadOrderSummary": "فشل تحميل ملخص الطلب. يرجى المحاولة مرة أخرى.",
+  "@failedToLoadOrderSummary": {
+    "description": "Error message when order summary fails to load."
+  },
+  "byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy": "بالنقر على تأكيد، فإنك توافق على شروط الخدمة وسياسة الخصوصية الخاصة بنا.",
+  "@byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy": {
+    "description": "Terms agreement text for checkout."
+  },
+  "checkoutFailed": "فشل الدفع. حاول مرة أخرى.",
+  "@checkoutFailed": {
+    "description": "Error message for failed checkout."
+  },
+  "checkoutSuccessful": "تم الدفع بنجاح!",
+  "@checkoutSuccessful": {
+    "description": "Success message for successful checkout."
+  },
+  "proceedToCheckout": "المتابعة إلى الدفع",
+  "@proceedToCheckout": {
+    "description": "Button label for checkout action."
+  },
+  "noNotificationsYet": "لا توجد إشعارات حتى الآن",
+  "@noNotificationsYet": {
+    "description": "Message when there are no notifications."
+  },
+  "weWillNotifyYouAboutOrdersOffersAndUpdates": "سنخبرك بأحدث الطلبات والعروض والتحديثات.",
+  "@weWillNotifyYouAboutOrdersOffersAndUpdates": {
+    "description": "Subtitle message for empty notifications."
+  },
+  "failedToLoadNotifications": "فشل تحميل الإشعارات",
+  "@failedToLoadNotifications": {
+    "description": "Error message when notifications fail to load."
+  },
+  "justNow": "الآن",
+  "@justNow": {
+    "description": "Time label for recent notifications."
+  },
+  "comingSoon": "قريباً",
+  "@comingSoon": {
+    "description": "Title for feature under development."
+  },
+  "notificationsUnderDevelopment": "ميزة الإشعارات قيد التطوير.",
+  "@notificationsUnderDevelopment": {
+    "description": "Subtitle for notifications under development."
+  },
+  "language": "اللغة",
+  "@language": {
+    "description": "Label for language settings."
+  },
+  "changeAppLanguage": "تغيير لغة التطبيق",
+  "@changeAppLanguage": {
+    "description": "Subtitle for language settings tile."
+  },
+  "changeLanguage": "تغيير لغة التطبيق",
+  "@changeLanguage": {
+    "description": "Subtitle for language settings."
+  },
+  "becomeASeller": "كن بائعاً",
+  "@becomeASeller": {
+    "description": "Card title for becoming a seller."
+  },
+  "startSellingYourHandcraftedProductsToday": "ابدأ ببيع منتجاتك اليدوية اليوم.",
+  "@startSellingYourHandcraftedProductsToday": {
+    "description": "Card subtitle for becoming a seller."
+  },
+  "failedToRecoverImage": "فشل استرداد الصورة.",
+  "@failedToRecoverImage": {
+    "description": "Error message for image recovery failure."
+  },
+  "imagePickerIsUnavailableNowRestartTheAppAndTryAgain": "أداة اختيار الصور غير متاحة الآن. أعد تشغيل التطبيق وحاول مرة أخرى.",
+  "@imagePickerIsUnavailableNowRestartTheAppAndTryAgain": {
+    "description": "Error message for image picker unavailability."
+  },
+  "yourWishlist": "قائمة المفضلة الخاصة بك",
+  "@yourWishlist": {
+    "description": "Screen title for wishlist screen."
+  },
+  "savedItems": "العناصر المحفوظة",
+  "@savedItems": {
+    "description": "Label for count of saved items."
+  },
+  "yourFavoriteProductsAreReadyAnytime": "منتجاتك المفضلة جاهزة في أي وقت.",
+  "@yourFavoriteProductsAreReadyAnytime": {
+    "description": "Subtitle for wishlist."
+  },
+  "failedToLoadWishlist": "فشل تحميل قائمة المفضلة. يرجى المحاولة مرة أخرى.",
+  "@failedToLoadWishlist": {
+    "description": "Error message when wishlist fails to load."
+  },
+  "yourWishlistIsEmpty": "قائمة المفضلة الخاصة بك فارغة. \nابدأ بإضافة منتجاتك المفضلة!",
+  "@yourWishlistIsEmpty": {
+    "description": "Message when wishlist is empty."
+  },
+  "checkYourEmail": "تحقق من بريدك الإلكتروني",
+  "@checkYourEmail": {
+    "description": "Title for password reset verification screen."
+  },
+  "weSentAPasswordResetLinkTo": "أرسلنا رابط إعادة تعيين كلمة المرور إلى",
+  "@weSentAPasswordResetLinkTo": {
+    "description": "Message prefix for password reset email."
+  },
+  "pleaseOpenYourEmailAndFollowTheInstructions": "يرجى فتح بريدك الإلكتروني واتباع التعليمات.",
+  "@pleaseOpenYourEmailAndFollowTheInstructions": {
+    "description": "Instruction message for password reset."
+  },
+  "ifYouDontSeeTheEmailCheckYourSpamOrJunkFolder": "إذا لم ترَ البريد الإلكتروني، فتحقق من مجلد الرسائل غير المرغوب فيها أو البريد العشوائي.",
+  "@ifYouDontSeeTheEmailCheckYourSpamOrJunkFolder": {
+    "description": "Additional instruction for password reset."
+  },
+  "backToLogin": "العودة إلى تسجيل الدخول",
+  "@backToLogin": {
+    "description": "Button label to return to login screen."
+  },
+  "customerLabel": "العميل:",
+  "@customerLabel": {
+    "description": "Label for customer name in order details."
+  },
+  "item": "عنصر",
+  "@item": {
+    "description": "Singular form of item."
+  },
+  "items": "عناصر",
+  "@items": {
+    "description": "Plural form of items."
+  },
+  "totalLabel": "الإجمالي:",
+  "@totalLabel": {
+    "description": "Label for total amount."
+  },
+  "egp": "جنيه",
+  "@egp": {
+    "description": "Egyptian Pound currency code."
+  },
+  "clickToUploadOrDragAndDrop": "انقر للتحميل أو اسحب وأفلت",
+  "@clickToUploadOrDragAndDrop": {
+    "description": "Instruction text for file upload area."
+  },
+  "sellerRegistration": "تسجيل البائع",
+  "@sellerRegistration": {
+    "description": "Screen title for seller registration."
+  },
+  "support247": "دعم 24/7",
+  "@support247": {
+    "description": "Support feature title."
+  },
+  "dedicatedArtisanAssistance": "دعم مخصص للحرفيين",
+  "@dedicatedArtisanAssistance": {
+    "description": "Support feature subtitle."
+  },
+  "accountDetails": "تفاصيل الحساب",
+  "@accountDetails": {
+    "description": "Section title for account details."
+  },
+  "shopProfile": "ملف المتجر",
+  "@shopProfile": {
+    "description": "Section title for shop profile."
+  },
+  "shopName": "اسم المتجر",
+  "@shopName": {
+    "description": "Label for shop name field."
+  },
+  "curationTeamReview": "سيقوم فريق التدقيق بمراجعة طلبك خلال 3-5 أيام عمل.",
+  "@curationTeamReview": {
+    "description": "Footer text explaining the review process."
+  },
+  "bestSellingProduct": "المنتج الأكثر مبيعاً",
+  "@bestSellingProduct": {
+    "description": "Title for the best-selling product section."
+  },
+  "goodMorningAdmin": "صباح الخير، المدير",
+  "@goodMorningAdmin": {
+    "description": "Dashboard greeting for the admin user."
+  },
+  "pendingActions": "إجراءات معلقة",
+  "@pendingActions": {
+    "description": "Section title for pending admin actions."
+  },
+  "sellersAwaitingApproval": "{count} بائعين في انتظار الموافقة",
+  "@sellersAwaitingApproval": {
+    "description": "Label showing number of pending seller approvals.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "productsAwaitingReview": "{count} منتجات في انتظار المراجعة",
+  "@productsAwaitingReview": {
+    "description": "Label showing number of products awaiting review.",
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "review": "مراجعة",
+  "@review": {
+    "description": "Button text to review pending items."
+  },
+  "sellerApprovals": "موافقات البائعين",
+  "@sellerApprovals": {
+    "description": "App bar title for seller approvals screen."
+  },
+  "approveProducts": "الموافقة على المنتجات",
+  "@approveProducts": {
+    "description": "App bar title for approve products screen."
+  },
+  "noSellersFound": "لم يتم العثور على بائعين",
+  "@noSellersFound": {
+    "description": "Text shown when there are no sellers in the list."
+  },
+  "noOrdersFound": "لم يتم العثور على طلبات",
+  "@noOrdersFound": {
+    "description": "Text shown when there are no orders in the list."
+  },
+  "byVendor": "بواسطة {vendor}",
+  "@byVendor": {
+    "description": "Vendor attribution text for product cards.",
+    "placeholders": {
+      "vendor": {
+        "type": "String"
+      }
+    }
+  },
+  "submittedOn": "تم الإرسال: {date}",
+  "@submittedOn": {
+    "description": "Submitted date label for seller cards.",
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "sellerDetails": "تفاصيل البائع",
+  "@sellerDetails": {
+    "description": "Title for the seller details screen."
+  },
+  "sellerLabel": "البائع: {name}",
+  "@sellerLabel": {
+    "description": "Label to show seller name on an order card.",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noFurtherActions": "لا توجد إجراءات أخرى — {status}",
+  "@noFurtherActions": {
+    "description": "Text shown when no further actions are available for an order.",
+    "placeholders": {
+      "status": {
+        "type": "String"
+      }
+    }
+  },
+  "productTitle": "عنوان المنتج",
+  "@productTitle": {
+    "description": "Label for product title field."
+  },
+  "productImages": "صور المنتج",
+  "@productImages": {
+    "description": "Label for product images section."
+  },
+  "addPhoto": "إضافة صورة",
+  "@addPhoto": {
+    "description": "Text shown on the add photo button."
+  },
+  "priceEgp": "السعر (جنيه)",
+  "@priceEgp": {
+    "description": "Label for price field in EGP."
+  },
+  "describeYourProduct": "وصف منتجك...",
+  "@describeYourProduct": {
+    "description": "Placeholder text for product description field."
+  },
+  "activeListing": "إعلان نشط",
+  "@activeListing": {
+    "description": "Label for active listing toggle."
+  },
+  "visibleToCustomersInTheMarketplace": "مرئي للعملاء في السوق",
+  "@visibleToCustomersInTheMarketplace": {
+    "description": "Description of active listing toggle."
+  },
+  "saveProduct": "حفظ المنتج",
+  "@saveProduct": {
+    "description": "Button text to save a new product."
+  },
+  "discardChanges": "التراجع عن التغييرات",
+  "@discardChanges": {
+    "description": "Button text to discard product changes."
+  },
+  "pleaseAddAtLeastOneProductImage": "يرجى إضافة صورة واحدة على الأقل للمنتج",
+  "@pleaseAddAtLeastOneProductImage": {
+    "description": "Error message when no product images are added."
+  },
+  "productAddedSuccessfully": "تم إضافة المنتج بنجاح",
+  "@productAddedSuccessfully": {
+    "description": "Success message after adding a product."
+  },
+  "thisFieldIsRequired": "هذا الحقل مطلوب",
+  "@thisFieldIsRequired": {
+    "description": "Validation message for empty fields."
+  },
+  "hintHandPaintedCeramicServingDish": "مثال: طبق تقديم خزفي مرسوم يدوياً",
+  "@hintHandPaintedCeramicServingDish": {
+    "description": "Hint text for product title input field."
+  },
+
+  "buyNow": "اشتر الآن",
+  "@buyNow": {
+    "description": "Button label for purchasing a product immediately."
+  },
+  "added": "تمت الإضافة",
+  "@added": {
+    "description": "Button state text shown after adding item to cart."
+  },
+  "addToCart": "أضف إلى السلة",
+  "@addToCart": {
+    "description": "Button label for adding a product to the shopping cart."
+  },
+  "viewShop": "عرض المتجر",
+  "@viewShop": {
+    "description": "Button label to navigate to the seller's shop page."
+  },
+  "unableToLoadReviews": "غير قادر على تحميل التقييمات الآن",
+  "@unableToLoadReviews": {
+    "description": "Error message when reviews fail to load on product details."
+  },
+  "noReviewsYetForProduct": "لا توجد تقييمات بعد لهذا المنتج. كن أول من يشاركنا رأيك!",
+  "@noReviewsYetForProduct": {
+    "description": "Empty state message for product reviews section."
+  },
+  "shareYourExperience": "شارك تجربتك مع الحرفية والتوصيل والجودة الشاملة...",
+  "@shareYourExperience": {
+    "description": "Hint text for the review comment field."
+  },
+  "tapToRate": "اضغط للتقييم",
+  "@tapToRate": {
+    "description": "Prompt text shown when no rating has been selected."
+  },
+  "checkOutThisProduct": "تفقد هذا المنتج: {productName} بسعر {productPrice} في متجرنا!",
+  "@checkOutThisProduct": {
+    "description": "Share text template for sharing a product link.",
+    "placeholders": {
+      "productName": { "type": "String" },
+      "productPrice": { "type": "String" }
+    }
+  },
+
+  "deliveryAddress": "عنوان التوصيل",
+  "@deliveryAddress": {
+    "description": "Section title for delivery address on cart and order screens."
+  },
+  "deliveryDetails": "تفاصيل التوصيل",
+  "@deliveryDetails": {
+    "description": "Section title for delivery details on cart and order screens."
+  },
+  "change": "تغيير",
+  "@change": {
+    "description": "Button text to change an existing address."
+  },
+  "formTitle": "العنوان",
+  "@formTitle": {
+    "description": "Label for the address title form field."
+  },
+  "homeWork": "المنزل / العمل",
+  "@homeWork": {
+    "description": "Hint text for the address title field."
+  },
+  "address": "العنوان",
+  "@address": {
+    "description": "Label for the street address form field."
+  },
+  "streetBuilding": "الشارع، المبنى",
+  "@streetBuilding": {
+    "description": "Hint text for the street address field."
+  },
+  "city": "المدينة",
+  "@city": {
+    "description": "Label for the city form field."
+  },
+  "cairo": "القاهرة",
+  "@cairo": {
+    "description": "Hint text for the city field."
+  },
+  "zipCode": "الرمز البريدي",
+  "@zipCode": {
+    "description": "Label for the ZIP code form field."
+  },
+  "zipCodeHint": "12345",
+  "@zipCodeHint": {
+    "description": "Hint text for the ZIP code field."
+  },
+  "pleaseEnterValidZipCode": "يرجى إدخال رمز بريدي صالح",
+  "@pleaseEnterValidZipCode": {
+    "description": "Validation error for invalid ZIP code input."
+  },
+  "pleaseEnterValidPhoneNumber": "يرجى إدخال رقم هاتف صالح",
+  "@pleaseEnterValidPhoneNumber": {
+    "description": "Validation error for invalid phone number input."
+  },
+  "setAsDefaultAddress": "تعيين كعنوان افتراضي",
+  "@setAsDefaultAddress": {
+    "description": "Checkbox label to mark an address as default."
+  },
+  "tapToUseThisAddress": "انقر لاستخدام هذا العنوان للطلبات المستقبلية",
+  "@tapToUseThisAddress": {
+    "description": "Subtitle text for the default address checkbox."
+  },
+  "toggleOn": "تشغيل",
+  "@toggleOn": {
+    "description": "Toggle state label for enabled state."
+  },
+  "toggleOff": "إيقاف",
+  "@toggleOff": {
+    "description": "Toggle state label for disabled state."
+  },
+  "saveAddress": "حفظ العنوان",
+  "@saveAddress": {
+    "description": "Button label to save an address."
+  },
+  "enterWalletPhone": "أدخل رقم محفظة الهاتف (مثال: 201xxxxxxxxx+)",
+  "@enterWalletPhone": {
+    "description": "Hint text for mobile wallet phone number input."
+  },
+  "visa": "فيزا",
+  "@visa": {
+    "description": "Payment method name for Visa."
+  },
+  "paypal": "باي بال",
+  "@paypal": {
+    "description": "Payment method name for PayPal."
+  },
+  "mobileWallets": "المحافظ المحمولة",
+  "@mobileWallets": {
+    "description": "Payment method name for mobile wallets."
+  },
+  "cashOnDelivery": "الدفع عند الاستلام",
+  "@cashOnDelivery": {
+    "description": "Payment method name for cash on delivery."
+  },
+  "pleaseEnterPromoCode": "يرجى إدخال رمز العرض",
+  "@pleaseEnterPromoCode": {
+    "description": "Snackbar message when promo code field is empty."
+  },
+  "productDeleted": "تم حذف المنتج",
+  "@productDeleted": {
+    "description": "Snackbar title when a product is removed from cart."
+  },
+  "productRemovedFromCart": "تم إزالة {productName} من سلتك",
+  "@productRemovedFromCart": {
+    "description": "Snackbar message when a product is removed from cart.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "paymentCancelled": "تم إلغاء الدفع",
+  "@paymentCancelled": {
+    "description": "Snackbar title when payment is cancelled."
+  },
+  "paymentWasCancelled": "تم إلغاء الدفع. أكمل الدفع لتقديم الطلب",
+  "@paymentWasCancelled": {
+    "description": "Snackbar message when payment was cancelled."
+  },
+  "addressRequired": "العنوان مطلوب",
+  "@addressRequired": {
+    "description": "Snackbar title when address is missing."
+  },
+  "pleaseAddAnAddress": "يرجى إضافة عنوان للمتابعة إلى الدفع",
+  "@pleaseAddAnAddress": {
+    "description": "Snackbar message when address is missing."
+  },
+  "paymentDetailsMissing": "بيانات الدفع مفقودة",
+  "@paymentDetailsMissing": {
+    "description": "Snackbar title when payment details are missing."
+  },
+  "pleaseWaitForOrderSummary": "يرجى الانتظار حتى يتم تحميل ملخص الطلب",
+  "@pleaseWaitForOrderSummary": {
+    "description": "Snackbar message for missing payment details."
+  },
+
+  "ordersTab": "الطلبات",
+  "@ordersTab": {
+    "description": "Bottom navigation bar label for orders tab."
+  },
+  "aiHelp": "مساعدة الذكاء الاصطناعي",
+  "@aiHelp": {
+    "description": "FAB button label to open AI recommendation assistant."
+  },
+
+  "placedOn": "تم الطلب في {date}",
+  "@placedOn": {
+    "description": "Label showing the date an order was placed.",
+    "placeholders": {
+      "date": { "type": "String" }
+    }
+  },
+  "orderItems": "عناصر الطلب ({count})",
+  "@orderItems": {
+    "description": "Section title showing number of items in an order.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "deliveryAddressSection": "عنوان التوصيل",
+  "@deliveryAddressSection": {
+    "description": "Section title for delivery address in order details."
+  },
+  "cancelOrder": "إلغاء الطلب",
+  "@cancelOrder": {
+    "description": "Button label to cancel an order."
+  },
+  "ordersCanOnlyBeCancelledWhenPending": "يمكن إلغاء الطلبات فقط في حالة 'قيد الانتظار'",
+  "@ordersCanOnlyBeCancelledWhenPending": {
+    "description": "Info message about order cancellation eligibility."
+  },
+  "cancelOrderQuestion": "إلغاء الطلب؟",
+  "@cancelOrderQuestion": {
+    "description": "Alert dialog title for order cancellation confirmation."
+  },
+  "cancelOrderWarning": "سيتم إلغاء هذا الطلب ولا يمكن استعادته",
+  "@cancelOrderWarning": {
+    "description": "Alert dialog content for order cancellation confirmation."
+  },
+  "unknownCustomer": "عميل غير معروف",
+  "@unknownCustomer": {
+    "description": "Fallback label when customer name is not available."
+  },
+  "discount": "الخصم",
+  "@discount": {
+    "description": "Label for discount amount in order summary."
+  },
+  "totalAmount": "المبلغ الإجمالي",
+  "@totalAmount": {
+    "description": "Label for total amount in order summary."
+  },
+  "soldBy": "تم البيع بواسطة {sellerName}",
+  "@soldBy": {
+    "description": "Seller attribution label on product cards.",
+    "placeholders": {
+      "sellerName": { "type": "String" }
+    }
+  },
+  "qty": "الكمية: {quantity}",
+  "@qty": {
+    "description": "Label for product quantity display.",
+    "placeholders": {
+      "quantity": { "type": "int" }
+    }
+  },
+  "reviewAfterDelivery": "يمكنك تقييم هذا المنتج بعد التوصيل",
+  "@reviewAfterDelivery": {
+    "description": "Info message when user tries to review an undelivered product."
+  },
+  "writeReview": "اكتب تقييم",
+  "@writeReview": {
+    "description": "Button text to write a review for a delivered product."
+  },
+  "orderPlacedSuccessfully": "تم تقديم الطلب بنجاح",
+  "@orderPlacedSuccessfully": {
+    "description": "Snackbar message when order is placed."
+  },
+
+  "reviewMissing": "التقييم مفقود",
+  "@reviewMissing": {
+    "description": "Snackbar title when review submission is missing data."
+  },
+  "pleaseSelectStarRating": "يرجى اختيار تقييم قبل الإرسال",
+  "@pleaseSelectStarRating": {
+    "description": "Snackbar message when no rating is selected."
+  },
+  "pleaseWriteShortComment": "يرجى كتابة تعليق قصير قبل الإرسال",
+  "@pleaseWriteShortComment": {
+    "description": "Snackbar message when no comment is written."
+  },
+  "thankYou": "شكراً لك",
+  "@thankYou": {
+    "description": "Snackbar title on successful review submission."
+  },
+  "reviewSubmittedSuccessfully": "تم إرسال تقييمك بنجاح",
+  "@reviewSubmittedSuccessfully": {
+    "description": "Snackbar message on successful review submission."
+  },
+  "submitFailed": "فشل الإرسال",
+  "@submitFailed": {
+    "description": "Snackbar title when review submission fails."
+  },
+  "howWasYourExperience": "كيف كانت تجربتك؟",
+  "@howWasYourExperience": {
+    "description": "Prompt text on the review screen."
+  },
+  "yourFeedbackHelps": "ملاحظاتك تساعد مجتمع الحرفيين لدينا على النمو",
+  "@yourFeedbackHelps": {
+    "description": "Subtitle text on the review screen."
+  },
+  "submitReview": "إرسال التقييم",
+  "@submitReview": {
+    "description": "Button label for submitting a review."
+  },
+  "bySubmittingYouAgree": "بالإرسال، فإنك توافق على شروط الخدمة وسياسة الخصوصية في أيادي",
+  "@bySubmittingYouAgree": {
+    "description": "Legal disclaimer text on the review screen."
+  },
+  "noReviewsAvailable": "لا توجد تقييمات متاحة",
+  "@noReviewsAvailable": {
+    "description": "Empty state message for reviews."
+  },
+  "anonymousUser": "مستخدم {userId}",
+  "@anonymousUser": {
+    "description": "Fallback display name for anonymous users.",
+    "placeholders": {
+      "userId": { "type": "String" }
+    }
+  },
+  "viewAllReviews": "عرض كل {count} تقييم",
+  "@viewAllReviews": {
+    "description": "Button label to view all reviews.",
+    "placeholders": {
+      "count": { "type": "int" }
+    }
+  },
+  "youNeedToLoginBeforeReviewing": "يجب تسجيل الدخول قبل إرسال تقييم",
+  "@youNeedToLoginBeforeReviewing": {
+    "description": "Error message when not logged in."
+  },
+  "pleaseSelectRating": "يرجى اختيار تقييم بين 1 و 5",
+  "@pleaseSelectRating": {
+    "description": "Validation message for rating selection."
+  },
+
+  "noSubcategoriesFound": "لم يتم العثور على فئات فرعية. يتم عرض جميع العناصر في هذه الفئة",
+  "@noSubcategoriesFound": {
+    "description": "Snackbar message when no subcategories exist."
+  },
+
+  "shopDetails": "تفاصيل المتجر",
+  "@shopDetails": {
+    "description": "Screen title for shop details."
+  },
+  "shopNotFound": "لم يتم العثور على المتجر",
+  "@shopNotFound": {
+    "description": "Error message when shop is not found."
+  },
+  "weCouldNotLoadThisSeller": "لا يمكننا تحميل هذا البائع حالياً",
+  "@weCouldNotLoadThisSeller": {
+    "description": "Subtitle when shop fails to load."
+  },
+  "notAvailable": "غير متاح",
+  "@notAvailable": {
+    "description": "Fallback text when data is not available."
+  },
+  "continueToEmail": "المتابعة إلى البريد الإلكتروني",
+  "@continueToEmail": {
+    "description": "Button label to continue to email app."
+  },
+  "subject": "الموضوع",
+  "@subject": {
+    "description": "Label for email subject field."
+  },
+
+  "productRemovedFromWishlist": "تم إزالة {productName} من قائمة المفضلة",
+  "@productRemovedFromWishlist": {
+    "description": "Snackbar message when product is removed from wishlist.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+  "productAddedToWishlist": "تم إضافة {productName} إلى قائمة المفضلة",
+  "@productAddedToWishlist": {
+    "description": "Snackbar message when product is added to wishlist.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
+
+  "chatbotWelcomeMessage": "مرحباً! أخبرني عن حجم غرفتك والألوان والطراز والمنتج اليدوي الذي تبحث عنه",
+  "@chatbotWelcomeMessage": {
+    "description": "Initial welcome message from the AI chatbot."
+  },
+  "thinking": "جارٍ التفكير...",
+  "@thinking": {
+    "description": "Temporary typing indicator shown while the chatbot processes."
+  },
+  "needMoreDetails": "أحتاج إلى تفاصيل أكثر. يرجى إخباري بنوع الغرفة والحجم والألوان أو نوع المنتج الذي تريده",
+  "@needMoreDetails": {
+    "description": "Bot reply when no preferences could be extracted."
+  },
+  "noMatchingProductFound": "فهمت تفضيلاتك:\n\n{preferences}\n\nعذراً، لم أتمكن من العثور على منتج مطابق الآن. حاول تغيير اللون أو نوع الغرفة أو فئة المنتج",
+  "@noMatchingProductFound": {
+    "description": "Bot reply when no products match the user's preferences.",
+    "placeholders": {
+      "preferences": { "type": "String" }
+    }
+  },
+  "productsFound": "رائع! وجدت {count} منتجات يدوية قد تناسب غرفتك:\n\n{preferences}",
+  "@productsFound": {
+    "description": "Bot reply when matching products are found.",
+    "placeholders": {
+      "count": { "type": "int" },
+      "preferences": { "type": "String" }
+    }
+  },
+  "exampleMessage": "أحتاج منتجاً أنيقاً لغرفة نوم صغيرة، باللونين الوردي والأبيض، بأسلوب رومانسي",
+  "@exampleMessage": {
+    "description": "Example message shown as a suggestion in the chatbot."
+  },
+  "recommendationChatbot": "روبوت التوصيات",
+  "@recommendationChatbot": {
+    "description": "App bar title for the chatbot screen."
+  },
+  "describeYourRoom": "صِف غرفتك...",
+  "@describeYourRoom": {
+    "description": "Hint text for the chatbot input field."
+  },
+  "viewProduct": "عرض المنتج",
+  "@viewProduct": {
+    "description": "Button label to view a recommended product."
+  },
+  "productAddedToCart": "تم إضافة {productName} إلى سلتك",
+  "@productAddedToCart": {
+    "description": "Snackbar message when a product is added to cart.",
+    "placeholders": {
+      "productName": { "type": "String" }
+    }
+  },
 
   "admGreetingMorning": "مرحبا بعودتك!",
   "admStatLabelTotalUsers": "إجمالي المستخدمين",
@@ -224,8 +1826,14 @@
   "admLabelPlatformCommission": "عمولة المنصة",
   "admSectionPendingActions": "إجراءات معلّقة",
   "admPendingSellersTitle": "{count} بائعين في انتظار الموافقة",
+  "@admPendingSellersTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "admPendingSellersSubtitle": "تسجيلات حرفيين جديدة",
   "admPendingProductsTitle": "{count} منتجات في انتظار المراجعة",
+  "@admPendingProductsTitle": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "admPendingProductsSubtitle": "مطلوب فحص لمراقبة الجودة",
   "admButtonReview": "مراجعة",
   "admDialogTitleCommission": "عمولة المنصة",
@@ -240,6 +1848,9 @@
   "admSearchSellersHint": "ابحث عن البائعين...",
   "admNoSellersFound": "لا يوجد بائعون",
   "admSubmittedLabel": "تاريخ التقديم: {date}",
+  "@admSubmittedLabel": {
+    "placeholders": { "date": { "type": "String" } }
+  },
   "admApproveBtn": "قبول",
   "admRejectBtn": "رفض",
   "admSeller": "بائع",
@@ -295,6 +1906,9 @@
   "admSearchOrderPlaceholder": "ابحث برقم الطلب أو الاسم",
   "admNoOrdersFound": "لا توجد طلبات",
   "admSellerLabel": "البائع: {sellerName}",
+  "@admSellerLabel": {
+    "placeholders": { "sellerName": { "type": "String" } }
+  },
   "admOrderTitle": "طلب",
   "admOrderNotFound": "لم يتم العثور على الطلب",
   "admSectionParties": "الأطراف",
@@ -318,10 +1932,22 @@
   "admCountryLabel": "الدولة",
   "admZipLabel": "الرمز البريدي",
   "admItemsLabel": "العناصر ({count})",
+  "@admItemsLabel": {
+    "placeholders": { "count": { "type": "int" } }
+  },
   "admNoLineItems": "لا توجد عناصر",
   "admStatusHeaderSubtitle": "{price} • {count} عناصر",
+  "@admStatusHeaderSubtitle": {
+    "placeholders": {
+      "price": { "type": "String" },
+      "count": { "type": "int" }
+    }
+  },
   "admUpdateStatusLabel": "تحديث الحالة",
   "admNoFurtherActions": "لا توجد إجراءات أخرى — {status}",
+  "@admNoFurtherActions": {
+    "placeholders": { "status": { "type": "String" } }
+  },
 
   "admSettings": "الإعدادات",
   "admPlatformCommission": "عمولة المنصة",
@@ -336,16 +1962,592 @@
   "admDashboard": "لوحة التحكم",
   "admSellers": "البائعون",
   "admProducts": "المنتجات",
+  "admCoupons": "الكوبونات",
   "admSettingsNav": "الإعدادات",
 
-  "sellerDetailsSectionTitle": "بيانات البائع",
-  "sellerDetailsSectionHint": "أكمل بياناتك حتى نتمكن من مراجعة طلبك.",
-  "specialtyLabel": "التخصص / الحرفة",
-  "specialtyHint": "مثال: فخار يدوي",
-  "specialtyIsRequired": "التخصص مطلوب",
-  "phoneNumberLabel": "رقم الهاتف",
-  "phoneNumberHint": "+20 1XX XXX XXXX",
-  "phoneIsRequired": "رقم الهاتف مطلوب",
-  "cityLabelOptional": "المدينة (اختياري)",
-  "countryLabelOptional": "الدولة (اختياري)"
+  "selGlobalReach": "انتشار عالمي",
+  "@selGlobalReach": {
+    "description": "Info card title for seller registration."
+  },
+  "selSellToCustomersWorldwide": "بيع للعملاء حول العالم",
+  "@selSellToCustomersWorldwide": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSecureSales": "مبيعات آمنة",
+  "@selSecureSales": {
+    "description": "Info card title for seller registration."
+  },
+  "selGuaranteedSafePayments": "دفع آمن مضمون",
+  "@selGuaranteedSafePayments": {
+    "description": "Info card subtitle for seller registration."
+  },
+  "selSupport247": "دعم على مدار الساعة",
+  "@selSupport247": {
+    "description": "Info card title for seller registration."
+  },
+  "selEmailHint": "مثال: seller@mail.com",
+  "@selEmailHint": {
+    "description": "Hint text for email field in seller registration."
+  },
+  "selPleaseEnterValidEmail": "يرجى إدخال بريد إلكتروني صالح",
+  "@selPleaseEnterValidEmail": {
+    "description": "Validation message for invalid email in seller registration."
+  },
+  "selPasswordHint": "6 أحرف على الأقل",
+  "@selPasswordHint": {
+    "description": "Hint text for password field in seller registration."
+  },
+  "selPasswordMin6Chars": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+  "@selPasswordMin6Chars": {
+    "description": "Validation message for short password in seller registration."
+  },
+  "selShopNameHint": "مثال: حرف دمشق",
+  "@selShopNameHint": {
+    "description": "Hint text for shop name field in seller registration."
+  },
+  "selCraftSpecialty": "التخصص الحرفي",
+  "@selCraftSpecialty": {
+    "description": "Label for craft specialty field in seller registration."
+  },
+  "selSelectYourPrimaryCraft": "اختر تخصصك الرئيسي",
+  "@selSelectYourPrimaryCraft": {
+    "description": "Hint text for craft specialty field."
+  },
+  "selArtisanBio": "سيرة الحرفي",
+  "@selArtisanBio": {
+    "description": "Label for artisan bio field in seller registration."
+  },
+  "selArtisanBioHint": "أخبرنا عن رحلتك وحرفتك وما يجعل منتجاتك فريدة...",
+  "@selArtisanBioHint": {
+    "description": "Hint text for artisan bio field."
+  },
+  "selPortfolioAndProductSamples": "المحفظة وعينات المنتجات",
+  "@selPortfolioAndProductSamples": {
+    "description": "Label for portfolio section in seller registration."
+  },
+  "selPngJpgOrPdfMax10Mb": "PNG، JPG أو PDF (حد أقصى 10 ميجا)",
+  "@selPngJpgOrPdfMax10Mb": {
+    "description": "Subtitle text for upload area in seller registration."
+  },
+  "selISellerTermsOfService": "شروط خدمة البائع",
+  "@selISellerTermsOfService": {
+    "description": "Link text for seller terms of service."
+  },
+  "selAndAcknowledgeCommissionRates": " والاعتراف\nبمعدلات عمولة المنصة على المبيعات.",
+  "@selAndAcknowledgeCommissionRates": {
+    "description": "Text after seller terms link in registration."
+  },
+  "selSubmitRequest": "إرسال الطلب",
+  "@selSubmitRequest": {
+    "description": "Button text for seller registration submission."
+  },
+  "selOrderDetails": "تفاصيل الطلب",
+  "@selOrderDetails": {
+    "description": "AppBar title for order details screen."
+  },
+  "selOrderItems": "عناصر الطلب",
+  "@selOrderItems": {
+    "description": "Section heading for order items list."
+  },
+  "selTotalEarnings": "إجمالي الأرباح",
+  "@selTotalEarnings": {
+    "description": "Label for total earnings in order details."
+  },
+  "selMarkAsShipped": "وضع تم الشحن",
+  "@selMarkAsShipped": {
+    "description": "Button text to mark an order as shipped."
+  },
+  "selMarkAsCompleted": "وضع تم الإنجاز",
+  "@selMarkAsCompleted": {
+    "description": "Button text to mark an order as completed."
+  },
+  "selArchive": "أرشفة",
+  "@selArchive": {
+    "description": "Button text to archive a completed order."
+  },
+  "selCancelOrderTitle": "إلغاء الطلب",
+  "@selCancelOrderTitle": {
+    "description": "Dialog title for order cancellation."
+  },
+  "selCancelOrderContent": "هل أنت متأكد أنك تريد إلغاء الطلب {orderId}؟",
+  "@selCancelOrderContent": {
+    "description": "Dialog content for order cancellation confirmation.",
+    "placeholders": {
+      "orderId": { "type": "String" }
+    }
+  },
+  "selYesCancel": "نعم، إلغاء",
+  "@selYesCancel": {
+    "description": "Button text to confirm order cancellation."
+  },
+  "selOrderCancelledAndStockRestored": "تم إلغاء الطلب واستعادة المخزون",
+  "@selOrderCancelledAndStockRestored": {
+    "description": "Snackbar message after order cancellation."
+  },
+  "selFailedToCancelOrder": "فشل إلغاء الطلب: {error}",
+  "@selFailedToCancelOrder": {
+    "description": "Snackbar message when order cancellation fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selOrderArchivedSuccessfully": "تم أرشفة الطلب بنجاح",
+  "@selOrderArchivedSuccessfully": {
+    "description": "Snackbar message after order archival."
+  },
+  "selOrderStatusUpdatedTo": "تم تحديث حالة الطلب إلى {status}",
+  "@selOrderStatusUpdatedTo": {
+    "description": "Snackbar message after order status update.",
+    "placeholders": {
+      "status": { "type": "String" }
+    }
+  },
+  "selNoTabOrders": "لا توجد طلبات {tabName}",
+  "@selNoTabOrders": {
+    "description": "Empty state text when no orders in a tab.",
+    "placeholders": {
+      "tabName": { "type": "String" }
+    }
+  },
+  "selQtyLabel": "الكمية: {quantity}",
+  "@selQtyLabel": {
+    "description": "Label for quantity display.",
+    "placeholders": {
+      "quantity": { "type": "int" }
+    }
+  },
+  "selCustomerFallback": "العميل",
+  "@selCustomerFallback": {
+    "description": "Fallback customer name when not available."
+  },
+  "selOrderPrefix": "الطلب",
+  "@selOrderPrefix": {
+    "description": "Prefix for order ID display."
+  },
+  "selItemSingular": "عنصر",
+  "@selItemSingular": {
+    "description": "Singular form of item."
+  },
+  "selItemPlural": "عناصر",
+  "@selItemPlural": {
+    "description": "Plural form of items."
+  },
+  "selAvailableBalance": "الرصيد المتاح: {amount} جنيه",
+  "@selAvailableBalance": {
+    "description": "Subtitle showing available balance in withdraw sheet.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selWithdrawTo": "السحب إلى",
+  "@selWithdrawTo": {
+    "description": "Section label for withdraw destination."
+  },
+  "selWithdrawAmount": "سحب {amount} جنيه",
+  "@selWithdrawAmount": {
+    "description": "Button text for withdraw confirmation.",
+    "placeholders": {
+      "amount": { "type": "String" }
+    }
+  },
+  "selEnterAmount": "أدخل المبلغ",
+  "@selEnterAmount": {
+    "description": "Button text when no amount is entered."
+  },
+  "selDone": "تم",
+  "@selDone": {
+    "description": "Button text in withdrawal success dialog."
+  },
+  "selApplicationNotApproved": "الطلب غير مقبول",
+  "@selApplicationNotApproved": {
+    "description": "Title for rejected seller application."
+  },
+  "selAccountUnderReview": "الحساب قيد المراجعة",
+  "@selAccountUnderReview": {
+    "description": "Title for pending seller application."
+  },
+  "selApplicationRejectedMessage": "لم نتمكن من الموافقة على طلب البائع الخاص بك في الوقت الحالي. تواصل مع فريقنا إذا كنت تريد معرفة المزيد.",
+  "@selApplicationRejectedMessage": {
+    "description": "Description for rejected seller application."
+  },
+  "selApplicationPendingMessage": "شكراً للانضمام إلى أيادي. فريق التدقيق لدينا يراجع طلبك — سيتم إبلاغك في اللحظة التي يوافق فيها.",
+  "@selApplicationPendingMessage": {
+    "description": "Description for pending seller application."
+  },
+  "selSignOut": "تسجيل الخروج",
+  "@selSignOut": {
+    "description": "Button text to sign out from pending screen."
+  },
+  "selEstimatedReviewTime": "وقت المراجعة المقدر: 3-5 أيام عمل",
+  "@selEstimatedReviewTime": {
+    "description": "Info text for estimated review time."
+  },
+  "selRefreshStatus": "تحديث الحالة",
+  "@selRefreshStatus": {
+    "description": "Button text to refresh seller status."
+  },
+  "selNotApproved": "غير مقبول",
+  "@selNotApproved": {
+    "description": "Status pill label for rejected application."
+  },
+  "selPendingApproval": "في انتظار الموافقة",
+  "@selPendingApproval": {
+    "description": "Status pill label for pending application."
+  },
+  "selApplicationSubmitted": "تم تقديم الطلب",
+  "@selApplicationSubmitted": {
+    "description": "Timeline step label for submitted application."
+  },
+  "selReviewed": "تمت المراجعة",
+  "@selReviewed": {
+    "description": "Timeline step label for reviewed application (rejected)."
+  },
+  "selUnderReview": "قيد المراجعة",
+  "@selUnderReview": {
+    "description": "Timeline step label for under review application."
+  },
+  "selApprovedWelcomeAboard": "تمت الموافقة — مرحباً بك",
+  "@selApprovedWelcomeAboard": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApproved": "مقبول",
+  "@selApproved": {
+    "description": "Timeline step label for approved application."
+  },
+  "selApplicationNotApprovedSnack": "لم يتم قبول طلبك. يرجى الاتصال بالدعم.",
+  "@selApplicationNotApprovedSnack": {
+    "description": "Snackbar message for rejected application."
+  },
+  "selStillUnderReview": "أنت لا تزال قيد المراجعة. سنخبرك قريباً.",
+  "@selStillUnderReview": {
+    "description": "Snackbar message for pending application."
+  },
+  "selCouldNotRefreshStatus": "تعذر تحديث الحالة: {error}",
+  "@selCouldNotRefreshStatus": {
+    "description": "Snackbar message when status refresh fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDeleteProduct": "حذف المنتج",
+  "@selDeleteProduct": {
+    "description": "Dialog title for product deletion."
+  },
+  "selDeleteProductConfirm": "هل أنت متأكد أنك تريد حذف هذا المنتج؟ لا يمكن التراجع عن هذا الإجراء.",
+  "@selDeleteProductConfirm": {
+    "description": "Dialog content for product deletion confirmation."
+  },
+  "selProductDeletedSuccessfully": "تم حذف المنتج بنجاح",
+  "@selProductDeletedSuccessfully": {
+    "description": "Snackbar message after product deletion."
+  },
+  "selFailedToDeleteProduct": "فشل حذف المنتج: {error}",
+  "@selFailedToDeleteProduct": {
+    "description": "Snackbar message when product deletion fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selEditProduct": "تعديل المنتج",
+  "@selEditProduct": {
+    "description": "Popup menu item and AppBar title for editing product."
+  },
+  "selDelete": "حذف",
+  "@selDelete": {
+    "description": "Popup menu item for deleting product."
+  },
+  "selStockUnits": "المخزون: {stock} وحدة",
+  "@selStockUnits": {
+    "description": "Label showing stock quantity.",
+    "placeholders": {
+      "stock": { "type": "int" }
+    }
+  },
+  "selActiveListing": "إعلان نشط",
+  "@selActiveListing": {
+    "description": "Label for active listing toggle."
+  },
+  "selVisibleToCustomers": "مرئي للعملاء في السوق",
+  "@selVisibleToCustomers": {
+    "description": "Description for active listing toggle."
+  },
+  "selPriceEgp": "السعر (جنيه)",
+  "@selPriceEgp": {
+    "description": "Label for price field in EGP."
+  },
+  "selProductTitle": "عنوان المنتج",
+  "@selProductTitle": {
+    "description": "Label for product title field."
+  },
+  "selProductTitleHint": "مثال: طبق تقديم خزفي مرسوم يدوياً",
+  "@selProductTitleHint": {
+    "description": "Hint text for product title field."
+  },
+  "selProductTitleRequired": "عنوان المنتج مطلوب",
+  "@selProductTitleRequired": {
+    "description": "Validation message for missing product title."
+  },
+  "selTitleMin3Chars": "يجب أن يكون العنوان 3 أحرف على الأقل",
+  "@selTitleMin3Chars": {
+    "description": "Validation message for short product title."
+  },
+  "selPriceRequired": "السعر مطلوب",
+  "@selPriceRequired": {
+    "description": "Validation message for missing price."
+  },
+  "selEnterValidNumber": "أدخل رقماً صالحاً",
+  "@selEnterValidNumber": {
+    "description": "Validation message for invalid number format."
+  },
+  "selPriceCannotBeNegative": "لا يمكن أن يكون السعر سالباً",
+  "@selPriceCannotBeNegative": {
+    "description": "Validation message for negative price."
+  },
+  "selStockRequired": "المخزون مطلوب",
+  "@selStockRequired": {
+    "description": "Validation message for missing stock."
+  },
+  "selEnterValidInteger": "أدخل رقماً صحيحاً",
+  "@selEnterValidInteger": {
+    "description": "Validation message for invalid integer format."
+  },
+  "selStockCannotBeNegative": "لا يمكن أن يكون المخزون سالباً",
+  "@selStockCannotBeNegative": {
+    "description": "Validation message for negative stock."
+  },
+  "selDescriptionRequired": "الوصف مطلوب",
+  "@selDescriptionRequired": {
+    "description": "Validation message for missing description."
+  },
+  "selDescriptionMin10Chars": "يجب أن يكون الوصف 10 أحرف على الأقل",
+  "@selDescriptionMin10Chars": {
+    "description": "Validation message for short description."
+  },
+  "selProductImages": "صور المنتج",
+  "@selProductImages": {
+    "description": "Section heading for product images."
+  },
+  "selAddPhoto": "إضافة صورة",
+  "@selAddPhoto": {
+    "description": "Text on add photo button."
+  },
+  "selPleaseAddAtLeastOneImage": "يرجى إضافة صورة واحدة على الأقل للمنتج",
+  "@selPleaseAddAtLeastOneImage": {
+    "description": "Snackbar message when no images added."
+  },
+  "selProductAddedSuccessfully": "تم إضافة المنتج بنجاح!",
+  "@selProductAddedSuccessfully": {
+    "description": "Snackbar message after product creation."
+  },
+  "selSaveProduct": "حفظ المنتج",
+  "@selSaveProduct": {
+    "description": "Button text to save a product."
+  },
+  "selDiscardChanges": "تجاهل التغييرات",
+  "@selDiscardChanges": {
+    "description": "Button text to discard product changes."
+  },
+  "selOutOfStock": "غير متوفر",
+  "@selOutOfStock": {
+    "description": "Product stock status when stock is zero."
+  },
+  "selLowStock": "مخزون منخفض",
+  "@selLowStock": {
+    "description": "Product stock status when stock is low."
+  },
+  "selInStock": "متوفر",
+  "@selInStock": {
+    "description": "Product stock status when stock is available."
+  },
+  "selNameMin3Chars": "يجب أن يكون الاسم 3 أحرف على الأقل",
+  "@selNameMin3Chars": {
+    "description": "Validation message for short product name."
+  },
+  "selInvalidPrice": "سعر غير صالح",
+  "@selInvalidPrice": {
+    "description": "Validation message for invalid price."
+  },
+  "selInvalidNumber": "رقم غير صالح",
+  "@selInvalidNumber": {
+    "description": "Validation message for invalid number."
+  },
+  "selPleaseSelectCategory": "يرجى اختيار فئة",
+  "@selPleaseSelectCategory": {
+    "description": "Validation message for unselected category."
+  },
+  "selSelectCategory": "اختر الفئة",
+  "@selSelectCategory": {
+    "description": "Hint text for category selection."
+  },
+  "selProductUpdatedSuccessfully": "تم تحديث المنتج بنجاح",
+  "@selProductUpdatedSuccessfully": {
+    "description": "Snackbar message after product update."
+  },
+  "selErrorSavingProduct": "حدث خطأ أثناء حفظ المنتج: {error}",
+  "@selErrorSavingProduct": {
+    "description": "Snackbar message when product save fails.",
+    "placeholders": {
+      "error": { "type": "String" }
+    }
+  },
+  "selDiscard": "تجاهل",
+  "@selDiscard": {
+    "description": "Button text to discard changes."
+  },
+  "selClickToUpload": "انقر للتحميل أو اسحب وأفلت",
+  "@selClickToUpload": {
+    "description": "Instruction text for file upload area."
+  },
+  "selPngJpgOrPdfMax5Mb": "PNG، JPG أو PDF (حد أقصى 5 ميجا)",
+  "@selPngJpgOrPdfMax5Mb": {
+    "description": "Subtitle text for upload area in edit product."
+  },
+  "selWelcomeSeller": "مرحباً بعودتك، {name}",
+  "@selWelcomeSeller": {
+    "description": "Welcome message for seller dashboard.",
+    "placeholders": {
+      "name": { "type": "String" }
+    }
+  },
+  "selHereWhatIsHappening": "إليك ما يحدث في متجرك اليوم.",
+  "@selHereWhatIsHappening": {
+    "description": "Subtitle for seller dashboard."
+  },
+  "selTotalOrders": "إجمالي الطلبات",
+  "@selTotalOrders": {
+    "description": "Stat card title for total orders."
+  },
+  "selNoRecentOrders": "لا توجد طلبات حديثة",
+  "@selNoRecentOrders": {
+    "description": "Empty state text for no recent orders."
+  },
+  "selOrderItem": "عنصر الطلب",
+  "@selOrderItem": {
+    "description": "Fallback order item name."
+  },
+  "selUnexpectedState": "حالة غير متوقعة",
+  "@selUnexpectedState": {
+    "description": "Text shown when state is unexpected."
+  },
+  "selAyadySeller": "بائع أيادي",
+  "@selAyadySeller": {
+    "description": "Fallback seller display name."
+  },
+  "selPleaseAgreeToTerms": "يرجى الموافقة على شروط الخدمة",
+  "@selPleaseAgreeToTerms": {
+    "description": "Snackbar message when terms not accepted."
+  },
+  "selThisFieldIsRequired": "هذا الحقل مطلوب",
+  "@selThisFieldIsRequired": {
+    "description": "Default validation message for required fields."
+  },
+  "selManageProducts": "إدارة المنتجات",
+  "@selManageProducts": {
+    "description": "AppBar title for manage products screen."
+  },
+  "selNoProductsFound": "لم يتم العثور على منتجات",
+  "@selNoProductsFound": {
+    "description": "Empty state text when no products found."
+  },
+  "admCategories": "الأقسام",
+  "@admCategories": {
+    "description": "AppBar title for categories management screen."
+  },
+  "admSearchCategoriesHint": "بحث في الأقسام...",
+  "@admSearchCategoriesHint": {
+    "description": "Hint text for categories search bar."
+  },
+  "admNoCategoriesFound": "لا توجد أقسام بعد",
+  "@admNoCategoriesFound": {
+    "description": "Empty state text when no categories exist."
+  },
+  "admTapToAddCategory": "اضغط + لإضافة أول قسم",
+  "@admTapToAddCategory": {
+    "description": "Subtitle for empty categories state."
+  },
+  "admInactive": "غير نشط",
+  "@admInactive": {
+    "description": "Label for inactive status."
+  },
+  "admDeleteCategory": "حذف القسم",
+  "@admDeleteCategory": {
+    "description": "Title for delete category confirmation dialog."
+  },
+  "admDeleteCategoryConfirm": "حذف \"{name}\"؟",
+  "@admDeleteCategoryConfirm": {
+    "description": "Content for delete category confirmation dialog.",
+    "placeholders": {
+      "name": {
+        "type": "String",
+        "example": "Electronics"
+      }
+    }
+  },
+  "admCategoryDeleted": "تم حذف القسم بنجاح",
+  "@admCategoryDeleted": {
+    "description": "Snackbar message after category deletion."
+  },
+  "admCategoryAdded": "تمت إضافة القسم بنجاح",
+  "@admCategoryAdded": {
+    "description": "Snackbar message after adding a category."
+  },
+  "admCategoryUpdated": "تم تحديث القسم بنجاح",
+  "@admCategoryUpdated": {
+    "description": "Snackbar message after updating a category."
+  },
+  "admManageCategories": "إدارة الأقسام",
+  "@admManageCategories": {
+    "description": "Subtitle for manage categories action card."
+  },
+  "admCategoriesCount": "{count} أقسام",
+  "@admCategoriesCount": {
+    "description": "Title for manage categories action card.",
+    "placeholders": {
+      "count": {
+        "type": "int",
+        "example": "5"
+      }
+    }
+  },
+  "admManageCoupons": "إدارة الكوبونات",
+  "admAddCategory": "إضافة قسم",
+  "@admAddCategory": {
+    "description": "Title for add category bottom sheet."
+  },
+  "admEditCategory": "تعديل القسم",
+  "@admEditCategory": {
+    "description": "Title for edit category bottom sheet."
+  },
+  "admCategoryNameEN": "اسم القسم (إنجليزي)",
+  "@admCategoryNameEN": {
+    "description": "Label for English category name field."
+  },
+  "admCategoryNameAR": "اسم القسم (عربي)",
+  "@admCategoryNameAR": {
+    "description": "Label for Arabic category name field."
+  },
+  "admCategoryImage": "صورة القسم",
+  "@admCategoryImage": {
+    "description": "Label for category image picker."
+  },
+  "admTapToPickImage": "اضغط لاختيار صورة",
+  "@admTapToPickImage": {
+    "description": "Placeholder text for category image picker."
+  },
+  "admPleaseSelectImage": "يرجى اختيار صورة للقسم",
+  "@admPleaseSelectImage": {
+    "description": "Validation message when no image is selected."
+  },
+  "admDisplayOrder": "ترتيب العرض",
+  "@admDisplayOrder": {
+    "description": "Label for display order field."
+  },
+  "admEnglishNameRequired": "الاسم الإنجليزي مطلوب",
+  "@admEnglishNameRequired": {
+    "description": "Validation message for empty English name."
+  },
+  "admArabicNameRequired": "الاسم العربي مطلوب",
+  "@admArabicNameRequired": {
+    "description": "Validation message for empty Arabic name."
+  }
 }

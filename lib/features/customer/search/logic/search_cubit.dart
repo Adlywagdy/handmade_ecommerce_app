@@ -12,7 +12,9 @@ class SearchCubit extends Cubit<SearchState> {
   final FirebaseProductService _productService;
 
   CategoryModel? selectedCategory;
-  /* ------------------------------------------- */
+  List<CategoryModel> categoriesList = [];
+  List<ProductModel> searchedproductsList = [];
+  List<ProductModel> filteredproductsList = [];
 
   Future<void> resetSearchState() async {
     searchedproductsList = [];
@@ -21,65 +23,81 @@ class SearchCubit extends Cubit<SearchState> {
     emit(SearchInitial());
   }
 
-  List<CategoryModel> categoriesList = [];
   Future<void> getCategories() async {
-    emit(GetCategoriesLoadingstate());
+    emit(CategoriesLoading());
     try {
       categoriesList = await _productService.getCategories();
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetCategoriesSuccessedstate());
     } catch (e) {
       if (isClosed) return;
       emit(GetCategoriesFailedstate(errorMessage: e.toString()));
+=======
+      emit(CategoriesSuccess());
+    } catch (e) {
+      emit(CategoriesError(message: e.toString()));
+>>>>>>> main
     }
   }
 
-  /* ------------------------------------------- */
-  List<ProductModel> searchedproductsList = [];
   Future<void> searchproducts({required String productname}) async {
-    emit(SearchProductsLoadingstate());
+    emit(SearchProductsLoading());
     try {
       searchedproductsList = await _productService.searchProducts(productname);
+<<<<<<< HEAD
       if (isClosed) return;
       emit(SearchProductsSuccessedstate());
     } catch (e) {
       if (isClosed) return;
       emit(SearchProductsFailedstate(errorMessage: e.toString()));
+=======
+      emit(SearchProductsSuccess());
+    } catch (e) {
+      emit(SearchProductsError(message: e.toString()));
+>>>>>>> main
     }
   }
 
-  /* ------------------------------------------- */
-  List<ProductModel> filteredproductsList = [];
   Future<void> filterproducts({
     String? categoryname,
     double? minprice,
     double? maxprice,
-    double? rating /* + filter parameters */,
+    double? rating,
   }) async {
-    emit(FilterProductsLoadingstate());
+    emit(FilterProductsLoading());
     try {
-      String? categoryId;
+      String? resolvedCategoryId;
       if (categoryname != null && categoryname.trim().isNotEmpty) {
+        if (categoriesList.isEmpty) {
+          await getCategories();
+        }
         final normalized = categoryname.trim().toLowerCase();
         for (final category in categoriesList) {
           if (category.categorytitle.toLowerCase() == normalized) {
-            categoryId = category.id ?? category.categorytitle;
+            resolvedCategoryId = category.id ?? category.categorytitle;
             break;
           }
         }
       }
 
       filteredproductsList = await _productService.filterProducts(
-        categoryId: categoryId,
+        categoryId: resolvedCategoryId,
         minPrice: minprice,
         maxPrice: maxprice,
         minRating: rating,
       );
+<<<<<<< HEAD
       if (isClosed) return;
       emit(FilterProductsSuccessedstate());
     } catch (e) {
       if (isClosed) return;
       emit(FilterProductsFailedstate(errorMessage: e.toString()));
+=======
+      emit(FilterProductsSuccess());
+    } catch (e) {
+      emit(FilterProductsError(message: e.toString()));
+>>>>>>> main
     }
   }
 }

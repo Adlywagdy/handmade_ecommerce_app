@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ReviewCard extends StatelessWidget {
   const ReviewCard({super.key, required this.review});
@@ -32,7 +33,7 @@ class ReviewCard extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'User ${review.userId.substring(0, review.userId.length >= 6 ? 6 : review.userId.length)}',
+                  context.l10n.anonymousUser(review.userId.substring(0, review.userId.length >= 6 ? 6 : review.userId.length)),
                   style: AppTextStyles.t_14w700.copyWith(color: blackDegree),
                 ),
                 Text(
@@ -54,6 +55,8 @@ class ReviewCard extends StatelessWidget {
             ),
             Text(
               '"${review.comment}"',
+              maxLines: 3,
+              overflow: TextOverflow.ellipsis,
               style: AppTextStyles.t_14w400.copyWith(color: subTitleColor),
             ),
           ],

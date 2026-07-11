@@ -12,7 +12,6 @@ abstract class AppRoutes {
   static const String customerLayout = '/customer/layout';
 
   static const String customerSearch = '/customer/search';
-  static const String customerNotifications = '/customer/notifications';
   static const String customerCart = '/customer/cart';
   static const String customerProductDetails = '/customer/product-details';
   static const String customerShopDetails = '/customer/shop-details';
@@ -36,4 +35,6 @@ abstract class AppRoutes {
   static const String adminProducts = '/admin/products';
   static const String adminOrders = '/admin/orders';
   static const String adminSettings = '/admin/settings';
+  static const String adminCategories = '/admin/categories';
+  static const String adminCoupons = '/admin/coupons';
 }

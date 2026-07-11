@@ -1,0 +1,648 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:handmade_ecommerce_app/core/services/notification_service.dart';
+import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/utils/time_formatter.dart';
+import 'package:handmade_ecommerce_app/features/notifications/logic/notifications_cubit.dart';
+import 'package:handmade_ecommerce_app/features/notifications/logic/notifications_state.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/models/notifications_model.dart';
+import 'package:handmade_ecommerce_app/features/notifications/ui/widgets/notification_card.dart';
+import 'package:handmade_ecommerce_app/features/notifications/ui/widgets/notification_empty.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/services/fcm_service.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/services/notification_generator.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+
+class NotificationsScreen extends StatelessWidget {
+  const NotificationsScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: customerbackGroundColor,
+      appBar: _buildAppBar(context),
+      body: BlocBuilder<NotificationsCubit, NotificationsState>(
+        builder: (context, state) {
+          if (state is NotificationsLoaded) {
+            return Column(
+              children: [
+                // ── Filter Tabs ──
+                _buildFilterTabs(context, state),
+
+                // ── Content ──
+                Expanded(
+                  child: state.filteredNotifications.isEmpty
+                      ? const NotificationEmpty()
+                      : _buildNotificationsList(context, state),
+                ),
+              ],
+            );
+          }
+          return const Center(
+            child: CupertinoActivityIndicator(color: commonColor),
+          );
+        },
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Colors.white,
+      scrolledUnderElevation: 0,
+      elevation: 0,
+      leading: IconButton(
+        onPressed: () => Get.back(),
+        icon: Icon(
+          Icons.arrow_back_ios_new_rounded,
+          color: const Color(0xFF0F172A),
+          size: 20.w,
+        ),
+      ),
+      centerTitle: true,
+      title: Text(
+        context.l10n.notificationsTitle,
+        style: TextStyle(
+          color: const Color(0xFF0F172A),
+          fontSize: 18.sp,
+          fontFamily: 'Plus Jakarta Sans',
+          fontWeight: FontWeight.w700,
+        ),
+      ),
+      actions: [
+        BlocBuilder<NotificationsCubit, NotificationsState>(
+          builder: (context, state) {
+            if (state is NotificationsLoaded &&
+                state.notifications.isNotEmpty) {
+              return PopupMenuButton<String>(
+                icon: Icon(
+                  Icons.more_vert_rounded,
+                  color: const Color(0xFF334155),
+                  size: 22.w,
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12.r),
+                ),
+                color: Colors.white,
+                elevation: 6,
+                offset: Offset(0, 40.h),
+                onSelected: (value) {
+                  if (value == 'mark_all') {
+                    context.read<NotificationsCubit>().markAllAsRead();
+                  } else if (value == 'clear_all') {
+                    _showClearAllDialog(context);
+                  }
+                },
+                itemBuilder: (context) => [
+                  PopupMenuItem(
+                    value: 'mark_all',
+                    child: Row(
+                      children: [
+                        Icon(Icons.done_all, color: commonColor, size: 18.w),
+                        SizedBox(width: 10.w),
+                        Text(
+                          context.l10n.markAllAsRead,
+                          style: TextStyle(
+                            color: const Color(0xFF334155),
+                            fontSize: 14.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  PopupMenuItem(
+                    value: 'clear_all',
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.delete_outline,
+                          color: redDegree,
+                          size: 18.w,
+                        ),
+                        SizedBox(width: 10.w),
+                        Text(
+                          context.l10n.clearAllNotifications,
+                          style: TextStyle(
+                            color: redDegree,
+                            fontSize: 14.sp,
+                            fontFamily: 'Plus Jakarta Sans',
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              );
+            }
+            return const SizedBox.shrink();
+          },
+        ),
+      ],
+    );
+  }
+
+  /// Build the filter tabs bar
+  Widget _buildFilterTabs(BuildContext context, NotificationsLoaded state) {
+    final filters = [
+      _FilterTabData(
+        filter: NotificationFilter.all,
+        label: context.l10n.filterAll,
+        icon: Icons.all_inbox_outlined,
+      ),
+      _FilterTabData(
+        filter: NotificationFilter.unread,
+        label: context.l10n.filterUnread,
+        icon: Icons.mark_email_unread_outlined,
+      ),
+      _FilterTabData(
+        filter: NotificationFilter.orders,
+        label: context.l10n.filterOrders,
+        icon: Icons.shopping_bag_outlined,
+      ),
+      _FilterTabData(
+        filter: NotificationFilter.messages,
+        label: context.l10n.filterMessages,
+        icon: Icons.chat_bubble_outline,
+      ),
+      _FilterTabData(
+        filter: NotificationFilter.offers,
+        label: context.l10n.filterOffers,
+        icon: Icons.local_offer_outlined,
+      ),
+    ];
+
+    return Container(
+      color: Colors.white,
+      padding: EdgeInsets.only(bottom: 8.h),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        physics: const BouncingScrollPhysics(),
+        padding: EdgeInsets.symmetric(horizontal: 14.w),
+        child: Row(
+          children: filters.map((tab) {
+            final isActive = state.activeFilter == tab.filter;
+            return Padding(
+              padding: EdgeInsets.only(right: 8.w),
+              child: GestureDetector(
+                onTap: () {
+                  context.read<NotificationsCubit>().setFilter(tab.filter);
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  padding: EdgeInsets.symmetric(
+                    horizontal: 14.w,
+                    vertical: 8.h,
+                  ),
+                  decoration: BoxDecoration(
+                    color: isActive
+                        ? commonColor
+                        : commonColor.withValues(alpha: 0.06),
+                    borderRadius: BorderRadius.circular(20.r),
+                    border: Border.all(
+                      color: isActive
+                          ? commonColor
+                          : commonColor.withValues(alpha: 0.15),
+                      width: 0.8,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        tab.icon,
+                        size: 15.w,
+                        color: isActive
+                            ? Colors.white
+                            : const Color(0xFF64748B),
+                      ),
+                      SizedBox(width: 5.w),
+                      Text(
+                        tab.label,
+                        style: TextStyle(
+                          color: isActive
+                              ? Colors.white
+                              : const Color(0xFF64748B),
+                          fontSize: 12.sp,
+                          fontFamily: 'Plus Jakarta Sans',
+                          fontWeight: isActive
+                              ? FontWeight.w600
+                              : FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            );
+          }).toList(),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationsList(
+    BuildContext context,
+    NotificationsLoaded state,
+  ) {
+    // Use filtered notifications
+    final notifications = state.filteredNotifications;
+
+    // Group notifications by date
+    final grouped = _groupNotificationsByDate(context, notifications);
+
+    return CupertinoScrollbar(
+      child: RefreshIndicator(
+        color: commonColor,
+        onRefresh: () async {
+          context.read<NotificationsCubit>().loadNotifications();
+          await Future.delayed(const Duration(milliseconds: 500));
+        },
+        child: ListView.builder(
+          physics: const AlwaysScrollableScrollPhysics(
+            parent: BouncingScrollPhysics(),
+          ),
+          padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 8.h),
+          itemCount: grouped.length,
+          itemBuilder: (context, index) {
+            final group = grouped[index];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                // Section header (Today, Yesterday, Earlier)
+                Padding(
+                  padding: EdgeInsets.only(
+                    top: index == 0 ? 8.h : 16.h,
+                    bottom: 10.h,
+                    left: 4.w,
+                  ),
+                  child: Text(
+                    group.label,
+                    style: TextStyle(
+                      color: const Color(0xFF94A3B8),
+                      fontSize: 12.sp,
+                      fontFamily: 'Plus Jakarta Sans',
+                      fontWeight: FontWeight.w600,
+                      letterSpacing: 0.5,
+                    ),
+                  ),
+                ),
+                // Notification cards
+                ...group.notifications.map((notification) {
+                  return NotificationCard(
+                    notification: notification,
+                    onTap: () {
+                      context.read<NotificationsCubit>().markAsRead(
+                        notification.id,
+                      );
+                      // Smart navigation based on notification type
+                      NotificationService.handleNotificationTap(notification);
+                    },
+                    onDismissed: () {
+                      context.read<NotificationsCubit>().deleteNotification(
+                        notification.id,
+                      );
+
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text(
+                            context.l10n.notificationDeleted,
+                            style: TextStyle(
+                              fontFamily: 'Plus Jakarta Sans',
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                          backgroundColor: const Color(0xFF334155),
+                          behavior: SnackBarBehavior.floating,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.r),
+                          ),
+                          margin: EdgeInsets.symmetric(
+                            horizontal: 16.w,
+                            vertical: 12.h,
+                          ),
+                          duration: const Duration(seconds: 2),
+                        ),
+                      );
+                    },
+                  );
+                }),
+              ],
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  /// Group notifications into Today, Yesterday, and Earlier
+  List<_NotificationGroup> _groupNotificationsByDate(
+    BuildContext context,
+    List<NotificationModel> notifications,
+  ) {
+    final todayList = <NotificationModel>[];
+    final yesterdayList = <NotificationModel>[];
+    final earlierList = <NotificationModel>[];
+
+    for (final n in notifications) {
+      if (TimeFormatter.isToday(n.createdAt)) {
+        todayList.add(n);
+      } else if (TimeFormatter.isYesterday(n.createdAt)) {
+        yesterdayList.add(n);
+      } else {
+        earlierList.add(n);
+      }
+    }
+
+    final groups = <_NotificationGroup>[];
+    if (todayList.isNotEmpty) {
+      groups.add(_NotificationGroup(label: context.l10n.today, notifications: todayList));
+    }
+    if (yesterdayList.isNotEmpty) {
+      groups.add(
+        _NotificationGroup(label: context.l10n.yesterday, notifications: yesterdayList),
+      );
+    }
+    if (earlierList.isNotEmpty) {
+      groups.add(
+        _NotificationGroup(label: context.l10n.earlier, notifications: earlierList),
+      );
+    }
+
+    return groups;
+  }
+
+  /// Show confirmation dialog before clearing all notifications
+  void _showClearAllDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16.r),
+        ),
+        title: Text(
+          context.l10n.clearNotificationsDialogTitle,
+          style: TextStyle(
+            color: const Color(0xFF0F172A),
+            fontSize: 17.sp,
+            fontFamily: 'Plus Jakarta Sans',
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        content: Text(
+          context.l10n.clearNotificationsConfirmation,
+          style: TextStyle(
+            color: const Color(0xFF64748B),
+            fontSize: 14.sp,
+            fontFamily: 'Plus Jakarta Sans',
+            fontWeight: FontWeight.w400,
+            height: 1.4,
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(dialogContext).pop(),
+            child: Text(
+              context.l10n.cancel,
+              style: TextStyle(
+                color: const Color(0xFF94A3B8),
+                fontSize: 14.sp,
+                fontFamily: 'Plus Jakarta Sans',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              context.read<NotificationsCubit>().clearAll();
+              Navigator.of(dialogContext).pop();
+            },
+            child: Text(
+              context.l10n.clearAll,
+              style: TextStyle(
+                color: redDegree,
+                fontSize: 14.sp,
+                fontFamily: 'Plus Jakarta Sans',
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _triggerTestNotification(BuildContext context) {
+    showCupertinoModalPopup(
+      context: context,
+      builder: (modalContext) => CupertinoActionSheet(
+        title: const Text('Test Notification Triggers'),
+        message: const Text(
+          'Choose a notification event to simulate (writes directly to Firestore & triggers local Push).',
+        ),
+        actions: [
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(modalContext);
+              final currentUser = FirebaseAuth.instance.currentUser;
+              if (currentUser != null) {
+                final email = currentUser.email ?? 'seller@test.com';
+                // 1. Write to Firestore
+                await NotificationGenerator.onOrderCreated(
+                  sellerId: email,
+                  orderId: 'ORD-TEST-999',
+                  customerName: 'Ahmad M.',
+                  productName: 'Handmade Coffee Mug',
+                );
+                // 2. Trigger native local notification popup
+                await FCMService.showTestNotification(
+                  title: 'New Order Received! 🛒',
+                  body:
+                      'Order ORD-TEST-999 from Ahmad M. — "Handmade Coffee Mug"',
+                  type: 'newOrder',
+                  targetId: 'ORD-TEST-999',
+                );
+<<<<<<< HEAD:lib/features/notifications/presentation/screens/notifications_screen.dart
+                if (!context.mounted) return;
+                _showSuccessSnackbar(context, 'Order Created triggered for: $email');
+=======
+                _showSuccessSnackbar(
+                  context,
+                  'Order Created triggered for: $email',
+                );
+>>>>>>> main:lib/features/notifications/ui/screens/notifications_screen.dart
+              } else {
+                _showSuccessSnackbar(
+                  context,
+                  'Error: You must be logged in to test.',
+                );
+              }
+            },
+            child: const Text('Simulate New Order (for Seller)'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(modalContext);
+              final currentUser = FirebaseAuth.instance.currentUser;
+              if (currentUser != null) {
+                // 1. Write to Firestore
+                await NotificationGenerator.onOrderStatusChanged(
+                  customerId: currentUser.uid,
+                  orderId: 'ORD-TEST-100',
+                  newStatus: 'shipped',
+                );
+                // 2. Trigger native local notification popup
+                await FCMService.showTestNotification(
+                  title: 'Your Order is on the Way! 📦',
+                  body:
+                      'Order ORD-TEST-100 has been shipped. Expected delivery in 3-5 days.',
+                  type: 'orderShipped',
+                  targetId: 'ORD-TEST-100',
+                );
+<<<<<<< HEAD:lib/features/notifications/presentation/screens/notifications_screen.dart
+                if (!context.mounted) return;
+                _showSuccessSnackbar(context, 'Order Shipped triggered for current user');
+=======
+                _showSuccessSnackbar(
+                  context,
+                  'Order Shipped triggered for current user',
+                );
+>>>>>>> main:lib/features/notifications/ui/screens/notifications_screen.dart
+              } else {
+                _showSuccessSnackbar(
+                  context,
+                  'Error: You must be logged in to test.',
+                );
+              }
+            },
+            child: const Text('Simulate Order Shipped (for Customer)'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(modalContext);
+              final currentUser = FirebaseAuth.instance.currentUser;
+              if (currentUser != null) {
+                // 1. Write to Firestore
+                await NotificationGenerator.onPriceDrop(
+                  customerId: currentUser.uid,
+                  productName: 'Leather Wallet',
+                  oldPrice: '450',
+                  newPrice: '380',
+                );
+                // 2. Trigger native local notification popup
+                await FCMService.showTestNotification(
+                  title: 'Price Drop Alert! 💰',
+                  body: '"Leather Wallet" dropped from EGP 450 to EGP 380!',
+                  type: 'priceDropAlert',
+                  targetId: 'PROD-TEST-WALLET',
+                );
+<<<<<<< HEAD:lib/features/notifications/presentation/screens/notifications_screen.dart
+                if (!context.mounted) return;
+                _showSuccessSnackbar(context, 'Price Drop triggered for current user');
+=======
+                _showSuccessSnackbar(
+                  context,
+                  'Price Drop triggered for current user',
+                );
+>>>>>>> main:lib/features/notifications/ui/screens/notifications_screen.dart
+              } else {
+                _showSuccessSnackbar(
+                  context,
+                  'Error: You must be logged in to test.',
+                );
+              }
+            },
+            child: const Text('Simulate Price Drop (Wishlist)'),
+          ),
+          CupertinoActionSheetAction(
+            onPressed: () async {
+              Navigator.pop(modalContext);
+              final currentUser = FirebaseAuth.instance.currentUser;
+              if (currentUser != null) {
+                // 1. Write to Firestore
+                await NotificationGenerator.onReviewRequest(
+                  customerId: currentUser.uid,
+                  productName: 'Handwoven Shawl',
+                  productId: 'PROD-TEST-123',
+                );
+                // 2. Trigger native local notification popup
+                await FCMService.showTestNotification(
+                  title: 'Review your purchase ⭐',
+                  body:
+                      'How was your experience with "Handwoven Shawl"? Tap to leave a review.',
+                  type: 'productReview',
+                  targetId: 'PROD-TEST-123',
+                );
+<<<<<<< HEAD:lib/features/notifications/presentation/screens/notifications_screen.dart
+                if (!context.mounted) return;
+                _showSuccessSnackbar(context, 'Review Request triggered for current user');
+=======
+                _showSuccessSnackbar(
+                  context,
+                  'Review Request triggered for current user',
+                );
+>>>>>>> main:lib/features/notifications/ui/screens/notifications_screen.dart
+              } else {
+                _showSuccessSnackbar(
+                  context,
+                  'Error: You must be logged in to test.',
+                );
+              }
+            },
+            child: const Text('Simulate Review Request (for Customer)'),
+          ),
+        ],
+        cancelButton: CupertinoActionSheetAction(
+          isDefaultAction: true,
+          onPressed: () => Navigator.pop(modalContext),
+          child: const Text('Cancel'),
+        ),
+      ),
+    );
+  }
+
+  void _showSuccessSnackbar(BuildContext context, String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: TextStyle(fontFamily: 'Plus Jakarta Sans', fontSize: 13.sp),
+        ),
+        backgroundColor: Colors.green,
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.r),
+        ),
+        margin: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+}
+
+/// Internal model for grouped notifications
+class _NotificationGroup {
+  final String label;
+  final List<NotificationModel> notifications;
+
+  const _NotificationGroup({required this.label, required this.notifications});
+}
+
+/// Internal model for filter tab data
+class _FilterTabData {
+  final NotificationFilter filter;
+  final String label;
+  final IconData icon;
+
+  const _FilterTabData({
+    required this.filter,
+    required this.label,
+    required this.icon,
+  });
+}

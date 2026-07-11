@@ -16,22 +16,26 @@ class WishListCubit extends Cubit<WishListState> {
 
   List<ProductModel> wishlistProductsList = [];
 
-  /* ------------------------------------------- */
   Future<void> getWishlistProducts() async {
-    emit(GetWishlistLoadingstate());
+    emit(WishlistLoading());
     try {
       wishlistProductsList = await _wishlistService.getWishlistProducts();
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
     } catch (e) {
       if (isClosed) return;
       emit(GetWishlistFailedstate(errorMessage: e.toString()));
+=======
+      emit(WishlistSuccess(products: wishlistProductsList));
+    } catch (e) {
+      emit(WishlistError(message: e.toString()));
+>>>>>>> main
     }
   }
 
-  /* ------------------------------------------- */
   Future<void> addordeleteWishlistProducts(ProductModel product) async {
-    emit(AddOrDeleteWishlistLoadingstate());
+    emit(ToggleWishlistLoading());
     try {
       final alreadyExists = isItemExictedFun(
         productslist: wishlistProductsList,
@@ -58,12 +62,19 @@ class WishListCubit extends Cubit<WishListState> {
         );
       }
 
+<<<<<<< HEAD
       if (isClosed) return;
       emit(AddOrDeleteWishlistSuccessedstate());
       emit(GetWishlistSuccessedstate(wishlistproducts: wishlistProductsList));
     } catch (e) {
       if (isClosed) return;
       emit(AddOrDeleteWishlistFailedstate(errorMessage: e.toString()));
+=======
+      emit(ToggleWishlistSuccess());
+      emit(WishlistSuccess(products: wishlistProductsList));
+    } catch (e) {
+      emit(ToggleWishlistError(message: e.toString()));
+>>>>>>> main
     }
   }
 }

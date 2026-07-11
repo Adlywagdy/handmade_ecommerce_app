@@ -1,8 +1,11 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/services/reviews_service.dart';
+
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
 part 'reviews_state.dart';
 
@@ -26,7 +29,7 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     bool showLoading = true,
   }) async {
     if (showLoading) {
-      emit(ReviewsLoadingState(productId: productId));
+      emit(ReviewsLoading(productId: productId));
     }
 
     try {
@@ -37,14 +40,18 @@ class ReviewsCubit extends Cubit<ReviewsState> {
       _reviewsByProduct[productId] = currentProductReviews;
       if (isClosed) return;
       emit(
-        ReviewsLoadedState(
+        ReviewsLoaded(
           productId: productId,
           reviews: currentProductReviews,
         ),
       );
     } catch (e) {
+<<<<<<< HEAD
       if (isClosed) return;
       emit(ReviewsErrorState(productId: productId, errorMessage: e.toString()));
+=======
+      emit(ReviewsError(productId: productId, message: e.toString()));
+>>>>>>> main
     }
   }
 
@@ -56,8 +63,10 @@ class ReviewsCubit extends Cubit<ReviewsState> {
     final normalizedComment = comment.trim();
     if (normalizedComment.isEmpty) {
       emit(
-        SubmitReviewErrorState(
-          errorMessage: 'Please write a short comment before submitting.',
+        SubmitReviewError(
+          message: AppLocalizations.of(
+            Get.context!,
+          )!.pleaseWriteShortComment,
         ),
       );
       return;
@@ -65,19 +74,21 @@ class ReviewsCubit extends Cubit<ReviewsState> {
 
     if (rating < 1 || rating > 5) {
       emit(
-        SubmitReviewErrorState(
-          errorMessage: 'Please select a rating between 1 and 5.',
+        SubmitReviewError(
+          message: AppLocalizations.of(Get.context!)!.pleaseSelectRating,
         ),
       );
       return;
     }
 
-    emit(SubmitReviewLoadingState());
+    emit(SubmitReviewLoading());
 
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null || userId.trim().isEmpty) {
-        throw Exception('You need to login before submitting a review');
+        throw Exception(
+          AppLocalizations.of(Get.context!)!.youNeedToLoginBeforeReviewing,
+        );
       }
 
       await _reviewsService.addProductReview(
@@ -88,12 +99,19 @@ class ReviewsCubit extends Cubit<ReviewsState> {
         rating: rating,
       );
 
+<<<<<<< HEAD
       if (isClosed) return;
       emit(SubmitReviewSuccessState());
       await loadProductReviews(product.id, showLoading: false);
     } catch (e) {
       if (isClosed) return;
       emit(SubmitReviewErrorState(errorMessage: _formatError(e)));
+=======
+      emit(SubmitReviewSuccess());
+      await loadProductReviews(product.id, showLoading: false);
+    } catch (e) {
+      emit(SubmitReviewError(message: _formatError(e)));
+>>>>>>> main
     }
   }
 

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/services/image_picker_helper.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/custom_icon_button.dart';
@@ -12,9 +13,14 @@ import 'package:handmade_ecommerce_app/features/customer/home/data/customer_mode
 import 'package:image_picker/image_picker.dart';
 
 class CustomProfilePicture extends StatefulWidget {
-  const CustomProfilePicture({super.key, required this.customer});
+  const CustomProfilePicture({
+    super.key,
+    required this.customer,
+    this.onImagePicked,
+  });
 
   final CustomerModel customer;
+  final ValueChanged<XFile>? onImagePicked;
 
   @override
   State<CustomProfilePicture> createState() => _CustomProfilePictureState();
@@ -47,7 +53,7 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(
-          response.exception?.message ?? 'Failed to recover image.',
+          response.exception?.message ?? context.l10n.failedToRecoverImage,
         ),
         backgroundColor: redDegree,
       ),
@@ -72,12 +78,13 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
       if (pickedImage == null) return;
 
       await _setSelectedImage(pickedImage);
+      widget.onImagePicked?.call(pickedImage);
     } on PlatformException {
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Image picker is unavailable now. Restart the app and try again.',
+            context.l10n.imagePickerIsUnavailableNowRestartTheAppAndTryAgain,
           ),
         ),
       );
@@ -112,11 +119,13 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
     final String? imagePath = widget.customer.image;
 
     if (imagePath == null || imagePath.endsWith('.svg')) {
-      return SvgPicture.asset(
-        'assets/images/unknown_user_icon.svg',
-        width: 100.r,
-        height: 100.r,
-        fit: BoxFit.cover,
+      return ClipOval(
+        child: SvgPicture.asset(
+          'assets/images/unknown_user_icon.svg',
+          width: 150.r,
+          height: 150.r,
+          fit: BoxFit.cover,
+        ),
       );
     }
 
@@ -125,11 +134,13 @@ class _CustomProfilePictureState extends State<CustomProfilePicture> {
         ? NetworkImage(imagePath)
         : AssetImage(imagePath);
 
-    return Image(
-      image: imageProvider,
-      fit: BoxFit.cover,
-      width: 150.r,
-      height: 150.r,
+    return ClipOval(
+      child: Image(
+        image: imageProvider,
+        fit: BoxFit.cover,
+        width: 150.r,
+        height: 150.r,
+      ),
     );
   }
 

@@ -1,28 +1,5 @@
-// class ChatbotProductModel {
-//   final String id;
-//   final String name;
-//   final String category;
-//   final int price;
-//   final String imageUrl;
-//   final List<String> colors;
-//   final String style;
-//   final List<String> roomType;
-//   final List<String> roomSize;
-//   final List<String> tags;
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 
-//   ChatbotProductModel({
-//     required this.id,
-//     required this.name,
-//     required this.category,
-//     required this.price,
-//     required this.imageUrl,
-//     required this.colors,
-//     required this.style,
-//     required this.roomType,
-//     required this.roomSize,
-//     required this.tags,
-//   });
-// }
 class ChatbotProductModel {
   final String id;
   final String name;
@@ -46,10 +23,7 @@ class ChatbotProductModel {
     required this.images,
   });
 
-  String get imageUrl {
-    if (images.isEmpty) return '';
-    return images.first;
-  }
+  String get imageUrl => images.isNotEmpty ? images.first : '';
 
   factory ChatbotProductModel.fromFirestore({
     required String id,
@@ -60,39 +34,11 @@ class ChatbotProductModel {
       name: data['name'] ?? '',
       categoryId: data['categoryId'] ?? '',
       description: data['description'] ?? '',
-      price: _toDouble(data['price']),
-      rating: _toDouble(data['rating']),
-      stock: _toInt(data['stock']),
+      price: parseDouble(data['price']) ?? 0,
+      rating: parseDouble(data['rating']) ?? 0,
+      stock: parseInt(data['stock']) ?? 0,
       tags: List<String>.from(data['tags'] ?? []),
       images: List<String>.from(data['images'] ?? []),
     );
-  }
-
-  static double _toDouble(dynamic value) {
-    if (value == null) return 0;
-
-    if (value is int) return value.toDouble();
-
-    if (value is double) return value;
-
-    if (value is String) {
-      return double.tryParse(value) ?? 0;
-    }
-
-    return 0;
-  }
-
-  static int _toInt(dynamic value) {
-    if (value == null) return 0;
-
-    if (value is int) return value;
-
-    if (value is double) return value.toInt();
-
-    if (value is String) {
-      return int.tryParse(value) ?? 0;
-    }
-
-    return 0;
   }
 }

@@ -14,6 +14,7 @@ class AmountContainerButton extends StatelessWidget {
   final double verticalpadding;
   final double horizontalpadding;
   final double? spacingwidth;
+  final double? iconsize;
   const AmountContainerButton({
     super.key,
 
@@ -24,6 +25,7 @@ class AmountContainerButton extends StatelessWidget {
     this.horizontalpadding = 12,
     this.spacingwidth = 12,
     required this.product,
+    this.iconsize = 22,
   });
 
   @override
@@ -50,14 +52,14 @@ class AmountContainerButton extends StatelessWidget {
             onTap: () {
               context.read<CartCubit>().deleteCartProducts(product);
             },
-            child: Icon(Icons.remove, color: iconscolor, size: 22.r),
+            child: Icon(Icons.remove, color: iconscolor, size: iconsize!.r),
           ),
 
           BlocBuilder<CartCubit, CartState>(
             buildWhen: (previous, current) {
-              return current is AddcartproductSuccessedstate ||
-                  current is GetcartSuccessedstate ||
-                  current is DeletecartproductSuccessedstate;
+              return current is AddProductSuccess ||
+                  current is CartSuccess ||
+                  current is DeleteProductSuccess;
             },
             builder: (context, state) {
               final quantity =
@@ -85,7 +87,7 @@ class AmountContainerButton extends StatelessWidget {
             onTap: () async {
               await context.read<CartCubit>().addCartProducts(product);
             },
-            child: Icon(Icons.add, color: iconscolor, size: 22.r),
+            child: Icon(Icons.add, color: iconscolor, size: iconsize!.r),
           ),
         ],
       ),

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 
 class ChangeLanguageWidget extends StatelessWidget {
@@ -12,17 +12,13 @@ class ChangeLanguageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<LocaleCubit, Locale?>(
       builder: (context, locale) {
-        final currentLocale =
-            locale ?? Localizations.localeOf(context);
+        final currentLocale = locale ?? Localizations.localeOf(context);
 
-        final isArabic =
-            currentLocale.languageCode == 'ar';
+        final isArabic = currentLocale.languageCode == 'ar';
 
         return Container(
           height: 40.h,
-          padding: EdgeInsets.symmetric(
-            horizontal: 8.w,
-          ),
+          padding: EdgeInsets.symmetric(horizontal: 8.w),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(22.r),
             color: Colors.white.withValues(alpha: 0.75),
@@ -42,11 +38,7 @@ class ChangeLanguageWidget extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(
-                CupertinoIcons.globe,
-                color: commonColor,
-                size: 18.sp,
-              ),
+              Icon(CupertinoIcons.globe, color: commonColor, size: 18.sp),
 
               SizedBox(width: 4.w),
 
@@ -91,8 +83,7 @@ class ChangeLanguageWidget extends StatelessWidget {
                   onChanged: (value) {
                     if (value == null) return;
 
-                    final localeCubit =
-                        context.read<LocaleCubit>();
+                    final localeCubit = context.read<LocaleCubit>();
 
                     if (value == 'ar') {
                       localeCubit.switchToArabic();

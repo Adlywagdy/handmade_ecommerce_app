@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,17 +5,30 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+<<<<<<< HEAD
 import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
+=======
+import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+>>>>>>> main
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/logic/order_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/data/models/order_model.dart';
+<<<<<<< HEAD
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/address_column.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/cart_product_item.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/coupon_row.dart';
 import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/order_summary.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/payment_column.dart';
+=======
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/delivery_details.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/cartproductitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/copounrow.dart';
+import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/ordersummary.dart';
+import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/paymentcolumn.dart';
+>>>>>>> main
 
 class CustomerCartScreen extends StatelessWidget {
   const CustomerCartScreen({super.key});
@@ -37,7 +48,7 @@ class CustomerCartScreen extends StatelessWidget {
               scrolledUnderElevation: 0,
               centerTitle: true,
               title: Text(
-                'Your Cart',
+                context.l10n.yourCart,
                 style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
               ),
             ),
@@ -70,39 +81,38 @@ class CustomerCartScreen extends StatelessWidget {
             ),
             BlocBuilder<CartCubit, CartState>(
               buildWhen: (previous, current) {
-                return current is GetcartSuccessedstate ||
-                    current is GetcartLoadingstate ||
-                    current is GetcartFailedstate ||
-                    current is AddcartproductSuccessedstate ||
-                    current is DeletecartproductSuccessedstate;
+                return current is CartSuccess ||
+                    current is CartLoading ||
+                    current is CartError ||
+                    current is AddProductSuccess ||
+                    current is DeleteProductSuccess;
               },
               builder: (context, state) {
-                if (state is GetcartFailedstate) {
+                if (state is CartError) {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Text(
-                        'Failed to load cart. Please try again.',
+                        context.l10n.failedToLoadCart,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: redDegree,
                         ),
                       ),
                     ),
                   );
-                } else if (state is GetcartSuccessedstate &&
-                    state.cartproducts.isEmpty) {
+                } else if (state is CartSuccess && state.products.isEmpty) {
                   return SliverFillRemaining(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Your cart is empty.',
+                          context.l10n.yourCartIsEmpty,
                           style: AppTextStyles.t_24w500.copyWith(
                             color: subTitleColor,
                           ),
                         ),
                         Text(
-                          'Start adding your favorite products!',
+                          context.l10n.startAddingYourFavoriteProducts,
                           style: AppTextStyles.t_14w500.copyWith(
                             color: subTitleColor,
                           ),
@@ -110,14 +120,12 @@ class CustomerCartScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                } else if (state is GetcartSuccessedstate) {
+                } else if (state is CartSuccess) {
                   return SliverList.builder(
                     itemBuilder: (context, index) {
-                      return CartProductItem(
-                        product: state.cartproducts[index],
-                      );
+                      return CartProductItem(product: state.products[index]);
                     },
-                    itemCount: state.cartproducts.length,
+                    itemCount: state.products.length,
                   );
                 } else {
                   return SliverList.builder(
@@ -186,17 +194,17 @@ class CustomerCartScreen extends StatelessWidget {
             ),
             BlocBuilder<CartCubit, CartState>(
               buildWhen: (previous, current) {
-                return current is GetOrderSummarySuccessState ||
-                    current is GetOrderSummaryLoadingState ||
-                    current is GetOrderSummaryFailedState ||
-                    current is GetcartSuccessedstate;
+                return current is OrderSummarySuccess ||
+                    current is OrderSummaryLoading ||
+                    current is OrderSummaryError ||
+                    current is CartSuccess;
               },
               builder: (context, state) {
                 if (BlocProvider.of<CartCubit>(
                   context,
                 ).cartProductsList.isEmpty) {
                   return const SliverToBoxAdapter(child: SizedBox());
-                } else if (state is GetOrderSummarySuccessState) {
+                } else if (state is OrderSummarySuccess) {
                   return SliverToBoxAdapter(
                     child: Column(
                       children: [
@@ -209,7 +217,7 @@ class CustomerCartScreen extends StatelessWidget {
                         SizedBox(height: 8.h),
                         CouponRow(),
                         SizedBox(height: 16.h),
-                        AddressColumn(),
+                        DeliveryDetails(),
                         SizedBox(height: 16.h),
                         PaymentColumn(),
                         Divider(color: commonColor.withValues(alpha: .2)),
@@ -217,7 +225,9 @@ class CustomerCartScreen extends StatelessWidget {
                         CheckoutButton(),
                         SizedBox(height: 16.h),
                         Text(
-                          'By clicking confirm, you agree to our Terms of Service and Privacy Policy.',
+                          context
+                              .l10n
+                              .byClickingConfirmYouAgreeToOurTermsOfServiceAndPrivacyPolicy,
                           textAlign: TextAlign.center,
                           style: AppTextStyles.t_12w400.copyWith(
                             color: subTitleColor,
@@ -226,13 +236,13 @@ class CustomerCartScreen extends StatelessWidget {
                       ],
                     ),
                   );
-                } else if (state is GetOrderSummaryFailedState) {
+                } else if (state is OrderSummaryError) {
                   return SliverToBoxAdapter(
                     child: Center(
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: Text(
-                          'Failed to load order summary. Please try again.',
+                          context.l10n.failedToLoadOrderSummary,
                           textAlign: TextAlign.center,
                           style: AppTextStyles.t_14w500.copyWith(
                             color: redDegree,
@@ -265,33 +275,32 @@ class CheckoutButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = context.l10n;
     return BlocConsumer<OrderCubit, OrderState>(
-      listenWhen: (previous, current) => current is PlaceOrderFailedState,
+      listenWhen: (previous, current) => current is PlaceOrderError,
       listener: (context, state) {
-        if (state is PlaceOrderFailedState) {
-          final error = state.errorMessage.toLowerCase();
+        if (state is PlaceOrderError) {
+          final error = state.message.toLowerCase();
           final isCancelled =
               error.contains('not completed') ||
               error.contains('cancel') ||
               error.contains('closed');
 
           showSnack(
-            title: isCancelled ? "Payment cancelled" : "Checkout failed",
-            message: isCancelled
-                ? "Payment was cancelled. Complete payment to place the order."
-                : state.errorMessage,
+            title: isCancelled ? l10n.paymentCancelled : l10n.checkoutFailed,
+            message: isCancelled ? l10n.paymentWasCancelled : state.message,
             bgColor: redDegree,
             icon: Icons.error_outline,
           );
         }
       },
       buildWhen: (previous, current) {
-        return current is PlaceOrderSuccessState ||
-            current is PlaceOrderLoadingState ||
-            current is PlaceOrderFailedState;
+        return current is PlaceOrderSuccess ||
+            current is PlaceOrderLoading ||
+            current is PlaceOrderError;
       },
       builder: (context, state) {
-        final isLoading = state is PlaceOrderLoadingState;
+        final isLoading = state is PlaceOrderLoading;
 
         return Padding(
           padding: const EdgeInsets.only(top: 20, bottom: 15).h,
@@ -309,9 +318,8 @@ class CheckoutButton extends StatelessWidget {
 
                     if (effectiveAddress == null) {
                       showSnack(
-                        title: "Address required",
-                        message:
-                            "Please add an address to proceed to checkout.",
+                        title: l10n.addressRequired,
+                        message: l10n.pleaseAddAnAddress,
                         bgColor: redDegree,
                       );
                       return;
@@ -319,30 +327,48 @@ class CheckoutButton extends StatelessWidget {
 
                     if (cartCubit.currentOrderSummary == null) {
                       showSnack(
-                        title: "Payment details missing",
-                        message: "Please wait for order summary to load.",
+                        title: l10n.paymentDetailsMissing,
+                        message: l10n.pleaseWaitForOrderSummary,
                         bgColor: redDegree,
                       );
                       return;
                     }
 
-                    final orderPayment = PaymentDetailsModel.copywith(
-                      cartCubit.currentOrderSummary!,
-                      paymentMethod: cartCubit.selectedPaymentMethod,
-                    );
+                    final orderPayment = cartCubit.currentOrderSummary!
+                        .copyWith(
+                          paymentMethod: cartCubit.selectedPaymentMethod,
+                        );
+
+                    final effectivePhone =
+                        cartCubit.selectedOrderPhone.isNotEmpty
+                            ? cartCubit.selectedOrderPhone
+                            : customerCubit.customerData.phone;
+
+                    if (effectivePhone.isEmpty) {
+                      showSnack(
+                        title: l10n.phone,
+                        message: l10n.phoneHint,
+                        bgColor: redDegree,
+                      );
+                      return;
+                    }
 
                     // fetch a new numeric order ID and set display id
                     orderCubit.orderID = await orderCubit.getNewOrderID();
 
+<<<<<<< HEAD
                     log(orderCubit.orderID.toString());
                     if (!context.mounted) return;
+=======
+>>>>>>> main
                     await orderCubit.placeNewOrder(
                       CustomerOrderModel(
                         customer: customerCubit.customerData,
                         products: cartCubit.cartProductsList,
                         status: OrderStatus.pending,
                         address: effectiveAddress,
-                        orderid: "#AY-${orderCubit.orderID + 1}",
+                        phone: effectivePhone,
+                        orderid: "#AY-${orderCubit.orderID}",
                         payment: orderPayment,
                         orderDate: DateTime.now(),
                       ),
@@ -351,24 +377,24 @@ class CheckoutButton extends StatelessWidget {
                   },
             child: Builder(
               builder: (context) {
-                if (state is PlaceOrderLoadingState) {
+                if (state is PlaceOrderLoading) {
                   return CircularProgressIndicator(color: Colors.white);
-                } else if (state is PlaceOrderFailedState) {
+                } else if (state is PlaceOrderError) {
                   return Text(
-                    'Checkout Failed. Try Again.',
+                    l10n.checkoutFailed,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                   );
-                } else if (state is PlaceOrderSuccessState) {
+                } else if (state is PlaceOrderSuccess) {
                   return Text(
-                    'Checkout Successful!',
+                    l10n.checkoutSuccessful,
                     textAlign: TextAlign.center,
                     style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                   );
                 }
 
                 return Text(
-                  'Proceed to Checkout',
+                  l10n.proceedToCheckout,
                   textAlign: TextAlign.center,
                   style: AppTextStyles.t_16w700.copyWith(color: Colors.white),
                 );

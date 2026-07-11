@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -6,6 +7,7 @@ import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+<<<<<<< HEAD
 import 'package:handmade_ecommerce_app/core/widgets/custom_elevated_button.dart';
 import 'package:handmade_ecommerce_app/core/widgets/custom_icon_button.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
@@ -13,6 +15,17 @@ import 'package:handmade_ecommerce_app/features/customer/home/data/customer_mode
 import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/become_seller_card.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/customer_details_item.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/user_profile_details.dart';
+=======
+import 'package:handmade_ecommerce_app/core/widgets/change_language_dropdown_widget.dart';
+import 'package:handmade_ecommerce_app/core/widgets/customelevatedbutton.dart';
+import 'package:handmade_ecommerce_app/core/widgets/customiconbutton.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/logic/customer_cubit.dart';
+import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/becomesellercard.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/customerdetailsitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/profile/ui/widgets/userpofiledetails.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+>>>>>>> main
 
 class CustomerProfilesScreen extends StatelessWidget {
   final ValueChanged<int>? onNavigateToTab;
@@ -40,7 +53,71 @@ class CustomerProfilesScreen extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(24.r)),
       ),
+<<<<<<< HEAD
       builder: (_) => _EditProfileSheet(customer: customer, cubit: cubit),
+=======
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.fromLTRB(
+            16.w,
+            8.h,
+            16.w,
+            24.h + MediaQuery.of(context).viewInsets.bottom,
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(context.l10n.editProfile, style: AppTextStyles.t_18w700),
+              SizedBox(height: 12.h),
+              TextField(
+                controller: nameController,
+                cursorColor: commonColor,
+                decoration: InputDecoration(
+                  labelText: context.l10n.name,
+                  labelStyle: TextStyle(color: subTitleColor),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                  ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(color: Colors.grey),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(8)),
+                    borderSide: BorderSide(color: commonColor),
+                  ),
+                ),
+              ),
+              SizedBox(height: 14.h),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: () async {
+                    final updatedName = nameController.text.trim();
+                    if (updatedName.isEmpty) return;
+
+                    await context.read<CustomerCubit>().updateCustomerProfile(
+                      name: updatedName,
+                    );
+
+                    if (context.mounted) {
+                      Navigator.of(context).pop();
+                    }
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: commonColor,
+                    foregroundColor: Colors.white,
+                    padding: EdgeInsets.symmetric(vertical: 14.h),
+                  ),
+                  child: Text(context.l10n.saveChanges),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+>>>>>>> main
     );
   }
 
@@ -49,12 +126,12 @@ class CustomerProfilesScreen extends StatelessWidget {
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('Logout'),
-          content: const Text('Are you sure you want to logout?'),
+          title: Text(context.l10n.logout),
+          content: Text(context.l10n.areYouSureYouWantToLogout),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(false),
-              child: const Text('Cancel'),
+              child: Text(context.l10n.cancel),
             ),
             TextButton(
               onPressed: () {
@@ -62,7 +139,10 @@ class CustomerProfilesScreen extends StatelessWidget {
                 HiveHelper.clearEmailBox();
                 Navigator.of(context).pop(true);
               },
-              child: Text('Logout', style: TextStyle(color: redDegree)),
+              child: Text(
+                context.l10n.logout,
+                style: TextStyle(color: redDegree),
+              ),
             ),
           ],
         );
@@ -91,116 +171,164 @@ class CustomerProfilesScreen extends StatelessWidget {
         ],
 
         title: Text(
-          'Profile',
+          context.l10n.profile,
           textAlign: TextAlign.center,
           style: AppTextStyles.t_18w700,
         ),
       ),
-      body: SingleChildScrollView(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
-          child: BlocBuilder<CustomerCubit, CustomerState>(
-            buildWhen: (previous, current) {
-              return current is GetCustomerdataLoadingstate ||
-                  current is GetCustomerdataSuccessedstate ||
-                  current is GetCustomerdataFailedstate;
-            },
-            builder: (context, state) {
-              if (state is GetCustomerdataLoadingstate) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 80.h),
-                  child: const Center(
-                    child: CircularProgressIndicator(color: commonColor),
-                  ),
-                );
-              }
-
-              if (state is GetCustomerdataFailedstate) {
-                return Padding(
-                  padding: EdgeInsets.only(top: 80.h),
-                  child: Center(
-                    child: Text(
-                      state.errorMessage,
-                      textAlign: TextAlign.center,
-                      style: AppTextStyles.t_14w500.copyWith(color: redDegree),
+      body: BlocListener<CustomerCubit, CustomerState>(
+        listener: (context, state) {
+          if (state is ImageUploadLoading) {
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => const Center(
+                child: CircularProgressIndicator(color: commonColor),
+              ),
+            );
+          } else if (state is ImageUploadSuccess) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Profile picture updated'),
+                backgroundColor: Colors.green,
+              ),
+            );
+          } else if (state is ImageUploadError) {
+            Navigator.of(context).pop();
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text(state.message),
+                backgroundColor: redDegree,
+              ),
+            );
+          }
+        },
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
+            child: BlocBuilder<CustomerCubit, CustomerState>(
+              buildWhen: (previous, current) {
+                return current is CustomerDataLoading ||
+                    current is CustomerDataSuccess ||
+                    current is CustomerDataError;
+              },
+              builder: (context, state) {
+                if (state is CustomerDataLoading) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: 80.h),
+                    child: const Center(
+                      child: CircularProgressIndicator(color: commonColor),
                     ),
-                  ),
-                );
-              }
+                  );
+                }
 
-              final customer = context.read<CustomerCubit>().customerData;
+                if (state is CustomerDataError) {
+                  return Padding(
+                    padding: EdgeInsets.only(top: 80.h),
+                    child: Center(
+                      child: Text(
+                        state.message,
+                        textAlign: TextAlign.center,
+                        style: AppTextStyles.t_14w500.copyWith(
+                          color: redDegree,
+                        ),
+                      ),
+                    ),
+                  );
+                }
 
-              return Column(
-                spacing: 16.h,
-                children: [
-                  SizedBox(height: 16.h),
-                  UserProfileDetails(customer: customer),
-                  BecomeSellerCard(),
-                  Column(
-                    children: List.generate(_customerDetails.length, (index) {
-                      final title = _customerDetails[index]['title'] as String;
-                      return CustomerDetailsItem(
-                        item: _customerDetails[index],
-                        onTap: () {
-                          if (title == 'Edit Profile') {
-                            _showEditBottomSheet(context, customer);
-                            return;
-                          }
+                final customer = context.read<CustomerCubit>().customerData;
 
-                          if (title == 'My Orders') {
-                            _openTab(3);
-                            return;
-                          }
+                return Column(
+                  spacing: 16.h,
+                  children: [
+                    SizedBox(height: 16.h),
+                    UserProfileDetails(
+                      customer: customer,
+                      onImagePicked: (image) {
+                        context.read<CustomerCubit>().uploadAndSaveProfileImage(
+                          File(image.path),
+                        );
+                      },
+                    ),
+                    BecomeSellerCard(),
+                    Column(
+                      children: List.generate(customerDetails(context).length, (
+                        index,
+                      ) {
+                        final title =
+                            customerDetails(context)[index]['title'] as String;
+                        final trailing =
+                            customerDetails(context)[index]['trailing']
+                                as Widget?;
+                        return CustomerDetailsItem(
+                          item: customerDetails(context)[index],
+                          trailing: trailing,
+                          onTap: () {
+                            if (title == context.l10n.editProfile) {
+                              _showEditBottomSheet(context, customer);
+                              return;
+                            }
 
-                          if (title == 'Favorites') {
-                            _openTab(1);
-                            return;
-                          }
+                            if (title == context.l10n.myOrders) {
+                              _openTab(3);
+                              return;
+                            }
 
-                          if (title == 'Settings') {
-                            context.read<CustomerCubit>().getNotifications();
-                            Get.toNamed(AppRoutes.customerNotifications);
-                          }
-                        },
-                      );
-                    }),
-                  ),
-                  CustomElevatedButton(
-                    buttonheight: 70.h,
-                    onPressed: () => _confirmLogout(context),
-                    bordercolor: redDegree.withValues(alpha: .1),
-                    buttoncolor: redDegree.withValues(alpha: .07),
-                    child: Row(
-                      children: [
-                        Card(
-                          elevation: 0,
-                          shape: ContinuousRectangleBorder(
-                            borderRadius: BorderRadiusGeometry.circular(20.r),
-                          ),
-                          color: redDegree.withValues(alpha: .1),
-                          child: Padding(
-                            padding: const EdgeInsets.all(8.0).h,
-                            child: Icon(
-                              Icons.logout,
-                              color: redDegree,
-                              size: 25.r,
+                            if (title == context.l10n.favorites) {
+                              _openTab(1);
+                              return;
+                            }
+
+                            if (title == context.l10n.settings) {
+                              Get.toNamed(AppRoutes.notifications);
+                            }
+
+                            if (title == context.l10n.language) {
+                              // Language is handled by ChangeLanguageWidget
+                            }
+                          },
+                        );
+                      }),
+                    ),
+                    CustomElevatedButton(
+                      buttonheight: 70.h,
+                      onPressed: () => _confirmLogout(context),
+                      bordercolor: redDegree.withValues(alpha: .1),
+                      buttoncolor: redDegree.withValues(alpha: .07),
+                      child: Row(
+                        children: [
+                          Card(
+                            elevation: 0,
+                            shape: ContinuousRectangleBorder(
+                              borderRadius: BorderRadiusGeometry.circular(20.r),
+                            ),
+                            color: redDegree.withValues(alpha: .1),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0).h,
+                              child: Icon(
+                                Icons.logout,
+                                color: redDegree,
+                                size: 25.r,
+                              ),
                             ),
                           ),
-                        ),
-                        SizedBox(width: 8.w),
-                        Text(
-                          'Logout',
-                          style: AppTextStyles.t_16w600.copyWith(
-                            color: redDegree,
+                          SizedBox(width: 8.w),
+                          Text(
+                            context.l10n.logout,
+                            style: AppTextStyles.t_16w600.copyWith(
+                              color: redDegree,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 16.h),
-                ],
-              );
-            },
+                    SizedBox(height: 16.h),
+                  ],
+                );
+              },
+            ),
           ),
         ),
       ),
@@ -208,6 +336,7 @@ class CustomerProfilesScreen extends StatelessWidget {
   }
 }
 
+<<<<<<< HEAD
 /// Bottom-sheet body for editing the customer profile. Extracted into its own
 /// StatefulWidget so the [TextEditingController] is disposed properly.
 class _EditProfileSheet extends StatefulWidget {
@@ -298,24 +427,33 @@ class _EditProfileSheetState extends State<_EditProfileSheet> {
 }
 
 List<Map<String, dynamic>> _customerDetails = [
+=======
+List<Map<String, dynamic>> customerDetails(BuildContext context) => [
+>>>>>>> main
   {
-    'title': 'Edit Profile',
-    'subtitle': 'Name, bio ',
+    'title': context.l10n.editProfile,
+    'subtitle': context.l10n.nameBio,
     'icon': Icons.edit_outlined,
   },
   {
-    'title': 'My Orders',
-    'subtitle': 'Track and manage your purchases',
+    'title': context.l10n.myOrders,
+    'subtitle': context.l10n.trackAndManageYourPurchases,
     'icon': Icons.shopping_bag_outlined,
   },
   {
-    'title': 'Favorites',
-    'subtitle': 'Items you\'ve saved for later',
+    'title': context.l10n.favorites,
+    'subtitle': context.l10n.itemsYouHaveSavedForLater,
     'icon': Icons.favorite_border,
   },
   {
-    'title': 'Settings',
-    'subtitle': 'Notifications and privacy',
+    'title': context.l10n.settings,
+    'subtitle': context.l10n.notificationsAndPrivacy,
     'icon': Icons.settings_outlined,
+  },
+  {
+    'title': context.l10n.language,
+    'subtitle': context.l10n.changeLanguage,
+    'icon': Icons.language_outlined,
+    'trailing': const ChangeLanguageWidget(),
   },
 ];

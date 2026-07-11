@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class ReviewedProduct extends StatelessWidget {
   const ReviewedProduct({super.key, required this.product});
@@ -14,6 +17,8 @@ class ReviewedProduct extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Container(
       decoration: BoxDecoration(color: Colors.white),
       padding: EdgeInsets.all(12.w),
@@ -52,7 +57,7 @@ class ReviewedProduct extends StatelessWidget {
                     Expanded(
                       flex: 3,
                       child: Text(
-                        product.name,
+                        product.localizedName(isArabic),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
                         style: AppTextStyles.t_16w700,
@@ -62,7 +67,11 @@ class ReviewedProduct extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  'Sold by ${product.seller.name.isNotEmpty ? product.seller.name : product.seller.id}',
+                  context.l10n.soldBy(
+                    product.seller.name.isNotEmpty
+                        ? product.seller.name
+                        : (product.seller.id ?? ''),
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w500.copyWith(color: commonColor),

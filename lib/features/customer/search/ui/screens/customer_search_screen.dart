@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/functions/filter_sheet_fun.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_snackbar_fun.dart';
 import 'package:handmade_ecommerce_app/core/models/category_model.dart';
@@ -13,8 +14,14 @@ import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/core/widgets/custom_icon_button.dart';
 import 'package:handmade_ecommerce_app/core/widgets/search_field.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/logic/search_cubit.dart';
+<<<<<<< HEAD
 import 'package:handmade_ecommerce_app/core/widgets/product_item.dart';
 import 'package:handmade_ecommerce_app/features/customer/search/ui/widgets/searched_product_item_lower_column.dart';
+=======
+import 'package:handmade_ecommerce_app/core/widgets/productitem.dart';
+import 'package:handmade_ecommerce_app/features/customer/search/ui/widgets/searchedproductitemlowercolumn.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
+>>>>>>> main
 
 class CustomerSearchScreen extends StatefulWidget {
   const CustomerSearchScreen({super.key});
@@ -36,7 +43,8 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
     if (args is CategoryModel) {
       final cubit = _searchCubit;
       cubit.selectedCategory = args;
-      controller.text = args.categorytitle;
+      final isArabic = context.read<LocaleCubit>().state?.languageCode == 'ar';
+      controller.text = args.localizedTitle(isArabic);
       cubit.filterproducts(categoryname: args.categorytitle);
     } else if (args is Map && args['rating'] != null) {
       _searchCubit.filterproducts(rating: (args['rating'] as num).toDouble());
@@ -70,7 +78,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
             title: SearchField(
               controller: controller,
               autofocus: true,
-              hintText: 'Search for products',
+              hintText: context.l10n.searchForProducts,
               textstyle: AppTextStyles.t_14w500.copyWith(
                 color: commonColor.withValues(alpha: .6),
               ),
@@ -95,9 +103,9 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     );
                   } else {
                     showSnack(
-                      title: "No filters",
+                      title: context.l10n.noFilters,
                       message:
-                          "Please enter a search query or select a category to filter.",
+                          context.l10n.pleaseEnterSearchQueryOrSelectCategory,
                     );
                   }
                 },
@@ -141,17 +149,17 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
           BlocBuilder<SearchCubit, SearchState>(
             buildWhen: (previous, current) {
               return current is SearchInitial ||
-                  current is SearchProductsSuccessedstate ||
-                  current is FilterProductsSuccessedstate ||
-                  current is SearchProductsLoadingstate ||
-                  current is FilterProductsLoadingstate ||
-                  current is SearchProductsFailedstate ||
-                  current is FilterProductsFailedstate;
+                  current is SearchProductsSuccess ||
+                  current is FilterProductsSuccess ||
+                  current is SearchProductsLoading ||
+                  current is FilterProductsLoading ||
+                  current is SearchProductsError ||
+                  current is FilterProductsError;
             },
             builder: (context, state) {
-              if (state is SearchProductsSuccessedstate ||
-                  state is FilterProductsSuccessedstate) {
-                final resultsCount = state is SearchProductsSuccessedstate
+              if (state is SearchProductsSuccess ||
+                  state is FilterProductsSuccess) {
+                final resultsCount = state is SearchProductsSuccess
                     ? _searchCubit.searchedproductsList.length
                     : _searchCubit.filteredproductsList.length;
 
@@ -159,7 +167,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16.0).w,
                     child: Text(
-                      '$resultsCount RESULTS FOUND',
+                      '${resultsCount} ${context.l10n.resultsFound}',
                       style: AppTextStyles.t_14w500.copyWith(
                         color: commonColor.withValues(alpha: .6),
                       ),
@@ -177,18 +185,18 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
           BlocBuilder<SearchCubit, SearchState>(
             buildWhen: (previous, current) {
               return current is SearchInitial ||
-                  current is SearchProductsSuccessedstate ||
-                  current is FilterProductsSuccessedstate ||
-                  current is SearchProductsLoadingstate ||
-                  current is FilterProductsLoadingstate ||
-                  current is SearchProductsFailedstate ||
-                  current is FilterProductsFailedstate;
+                  current is SearchProductsSuccess ||
+                  current is FilterProductsSuccess ||
+                  current is SearchProductsLoading ||
+                  current is FilterProductsLoading ||
+                  current is SearchProductsError ||
+                  current is FilterProductsError;
             },
             builder: (context, state) {
-              if (state is SearchProductsSuccessedstate ||
-                  state is FilterProductsSuccessedstate) {
+              if (state is SearchProductsSuccess ||
+                  state is FilterProductsSuccess) {
                 final List<ProductModel> products =
-                    state is SearchProductsSuccessedstate
+                    state is SearchProductsSuccess
                     ? _searchCubit.searchedproductsList
                     : _searchCubit.filteredproductsList;
 
@@ -219,15 +227,15 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     );
                   },
                 );
-              } else if (state is SearchProductsFailedstate ||
-                  state is FilterProductsFailedstate) {
-                String errorMessage = state is SearchProductsFailedstate
-                    ? state.errorMessage
-                    : (state as FilterProductsFailedstate).errorMessage;
-                showSnack(title: "Error", message: errorMessage);
+              } else if (state is SearchProductsError ||
+                  state is FilterProductsError) {
+                String errorMessage = state is SearchProductsError
+                    ? state.message
+                    : (state as FilterProductsError).message;
+                showSnack(title: context.l10n.error, message: errorMessage);
                 return SliverToBoxAdapter(child: SizedBox(height: 200.h));
-              } else if (state is SearchProductsLoadingstate ||
-                  state is FilterProductsLoadingstate) {
+              } else if (state is SearchProductsLoading ||
+                  state is FilterProductsLoading) {
                 return SliverGrid(
                   gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 2,
@@ -247,7 +255,7 @@ class _CustomerSearchScreenState extends State<CustomerSearchScreen> {
                     height: 220.h,
                     child: Center(
                       child: Text(
-                        'Start typing to see matching products',
+                        context.l10n.startTypingToSeeMatchingProducts,
                         style: AppTextStyles.t_14w500.copyWith(
                           color: commonColor.withValues(alpha: .6),
                         ),

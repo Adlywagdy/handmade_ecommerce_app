@@ -1,8 +1,12 @@
+import 'package:flutter/widgets.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
+import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/data/models/payment_model.dart';
+import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
+/// Represents a customer order with products, payment, and delivery info.
 class CustomerOrderModel {
   final CustomerModel customer;
   final String orderid;
@@ -11,6 +15,8 @@ class CustomerOrderModel {
   final DateTime orderDate;
   final PaymentDetailsModel payment;
   final AddressModel address;
+  final String phone;
+
   CustomerOrderModel({
     required this.customer,
     required this.products,
@@ -19,7 +25,10 @@ class CustomerOrderModel {
     required this.orderDate,
     required this.payment,
     required this.address,
+    required this.phone,
   });
+
+  // --- Computed getters ---
 
   double get totalAmount => payment.totalPrice ?? 0;
   double get subtotalAmount => payment.subtotalPrice ?? totalAmount;
@@ -28,8 +37,8 @@ class CustomerOrderModel {
   double get commissionAmount => subtotalAmount * commissionRate;
   double get sellerEarningAmount => subtotalAmount - commissionAmount;
   String get deliveryAddress => address.addressdescription;
-  List<ProductModel> get items => products;
 
+  /// Returns 'pending' for COD, 'paid' for online payments.
   String get paymentStatus {
     if (payment.paymentMethod?.toLowerCase() == 'cash_on_delivery') {
       return 'pending';
@@ -37,6 +46,9 @@ class CustomerOrderModel {
     return 'paid';
   }
 
+  // --- Parsing helpers for fromMap ---
+
+  /// Safely casts any Map to Map of String to dynamic.
   static Map<String, dynamic> _asStringKeyedMap(dynamic value) {
     if (value is Map<String, dynamic>) return value;
     if (value is Map) {
@@ -45,6 +57,7 @@ class CustomerOrderModel {
     return <String, dynamic>{};
   }
 
+  /// Parses the products list from Firestore data.
   static List<ProductModel> _parseProducts(dynamic data) {
     if (data is! List) return [];
     return data
@@ -54,11 +67,7 @@ class CustomerOrderModel {
         .toList();
   }
 
-  static DateTime _parseDate(dynamic value) {
-    if (value is DateTime) return value;
-    return DateTime.tryParse(value?.toString() ?? '') ?? DateTime.now();
-  }
-
+  /// Builds customer map from flat fields if nested map is missing.
   static Map<String, dynamic> _buildCustomerMap(
     Map<String, dynamic> map,
     Map<String, dynamic> customerMap,
@@ -73,6 +82,7 @@ class CustomerOrderModel {
     };
   }
 
+  /// Merges payment data from both flat and nested sources.
   static Map<String, dynamic> _buildPaymentMap(
     Map<String, dynamic> map,
     Map<String, dynamic> paymentMap,
@@ -87,6 +97,7 @@ class CustomerOrderModel {
     };
   }
 
+  /// Creates a CustomerOrderModel from a Firestore or order-item map.
   factory CustomerOrderModel.fromMap(Map<String, dynamic> map, {String? id}) {
     final products = _parseProducts(map['products'] ?? map['items']);
     final orderStatus = OrderStatus.values.firstWhere(
@@ -106,7 +117,8 @@ class CustomerOrderModel {
       orderid:
           (map['orderId'] ?? map['orderid'] ?? map['orderNumber'] ?? id ?? '')
               .toString(),
-      orderDate: _parseDate(map['orderDate'] ?? map['createdAt']),
+      orderDate:
+          parseDateTime(map['orderDate'] ?? map['createdAt']) ?? DateTime.now(),
       payment: PaymentDetailsModel.fromMap(_buildPaymentMap(map, paymentMap)),
       address: addressMap.isNotEmpty
           ? AddressModel.fromMap(addressMap)
@@ -114,28 +126,38 @@ class CustomerOrderModel {
               addressdescription: (map['deliveryAddress'] ?? '').toString(),
               zipCode: 0,
             ),
+      phone: (map['phone'] ?? map['customerPhone'] ?? '').toString(),
     );
   }
 
+  /// Converts the model to a map for Firestore storage.
   Map<String, dynamic> toMap() {
     final numMatch = RegExp(r"(\d+)").firstMatch(orderid);
     final orderNum = numMatch != null ? int.tryParse(numMatch.group(1)!) : null;
+
+    final sellerIds = products
+        .map((p) => p.sellerId)
+        .where((id) => id.isNotEmpty)
+        .toSet()
+        .toList();
+
     final items = products
-        .map(
-          (p) => {
-            'productId': p.id,
-            'productName': p.name,
-            'price': p.price,
-            'quantity': p.quantity,
-            'sellerId': p.sellerId,
-            'subtotal': p.price * p.quantity,
-          },
-        )
+        .map((p) => {
+              'productId': p.id,
+              'productName': p.name,
+              'price': p.price,
+              'quantity': p.quantity,
+              'sellerId': p.sellerId,
+              'images': p.images,
+              'productImage': p.image,
+              'subtotal': p.price * p.quantity,
+            })
         .toList();
 
     return {
       'orderid': orderid,
       'orderNumber': orderNum,
+      'sellerIds': sellerIds,
       'items': items,
       'shippingAddress': {
         'street': address.street,
@@ -143,7 +165,9 @@ class CustomerOrderModel {
         'zipCode': address.zipCode,
         'country': address.country,
       },
+      'phone': phone,
       'customerId': customer.id,
+      'customerName': customer.name,
       'status': status.name,
       'subtotal': subtotalAmount,
       'deliveryFee': deliveryFeeAmount,
@@ -161,6 +185,7 @@ class CustomerOrderModel {
   }
 }
 
+/// All possible order statuses.
 enum OrderStatus {
   pending,
   confirmed,
@@ -168,4 +193,25 @@ enum OrderStatus {
   shipped,
   delivered,
   cancelled,
+}
+
+/// Provides localized labels for each order status.
+extension OrderStatusLocalization on OrderStatus {
+  String localizedLabel(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    switch (this) {
+      case OrderStatus.pending:
+        return l10n.pending;
+      case OrderStatus.confirmed:
+        return l10n.confirmed;
+      case OrderStatus.preparing:
+        return l10n.preparing;
+      case OrderStatus.shipped:
+        return l10n.shipped;
+      case OrderStatus.delivered:
+        return l10n.delivered;
+      case OrderStatus.cancelled:
+        return l10n.cancelled;
+    }
+  }
 }

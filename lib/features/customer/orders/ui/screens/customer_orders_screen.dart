@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/src/extension_navigation.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -13,14 +14,14 @@ import 'package:handmade_ecommerce_app/features/customer/orders/ui/widgets/order
 class CustomerOrdersScreen extends StatelessWidget {
   const CustomerOrdersScreen({super.key});
 
-  static const List<String> _tabs = [
-    'All',
-    'Pending',
-    'Confirmed',
-    'Preparing',
-    'Shipped',
-    'Delivered',
-    'Cancelled',
+  List<String> _tabs(BuildContext context) => [
+    context.l10n.all,
+    context.l10n.pending,
+    context.l10n.confirmed,
+    context.l10n.preparing,
+    context.l10n.shipped,
+    context.l10n.delivered,
+    context.l10n.cancelled,
   ];
 
   OrderStatus _statusFromTab(int tabIndex) {
@@ -55,14 +56,14 @@ class CustomerOrdersScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: _tabs.length,
+      length: _tabs(context).length,
       child: Scaffold(
         backgroundColor: customerbackGroundColor,
         appBar: AppBar(
           backgroundColor: customerbackGroundColor,
           scrolledUnderElevation: 0,
           centerTitle: true,
-          title: Text('My Orders', style: AppTextStyles.t_18w700),
+          title: Text(context.l10n.myOrders, style: AppTextStyles.t_18w700),
           bottom: TabBar(
             isScrollable: true,
 
@@ -76,39 +77,38 @@ class CustomerOrdersScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 12.0),
             labelStyle: AppTextStyles.t_14w700,
             unselectedLabelStyle: AppTextStyles.t_14w500,
-            tabs: _tabs.map((title) => Tab(text: title)).toList(),
+            tabs: _tabs(context).map((title) => Tab(text: title)).toList(),
           ),
         ),
         body: BlocBuilder<OrderCubit, OrderState>(
           buildWhen: (previous, current) {
-            return current is GetAllOrdersLoadingState ||
-                current is GetAllOrdersSuccessState ||
-                current is GetAllOrdersFailedState ||
-                current is GetFilteredOrdersLoadingState ||
-                current is GetFilteredOrdersSuccessState ||
-                current is GetFilteredOrdersFailedState ||
-                current is SearchOrdersSuccessState ||
-                current is CancelOrderSuccessState ||
-                current is PlaceOrderSuccessState;
+            return current is GetAllOrdersLoading ||
+                current is GetAllOrdersSuccess ||
+                current is GetAllOrdersError ||
+                current is GetFilteredOrdersLoading ||
+                current is GetFilteredOrdersSuccess ||
+                current is GetFilteredOrdersError ||
+                current is CancelOrderSuccess ||
+                current is PlaceOrderSuccess;
           },
           builder: (context, state) {
             final orderCubit = context.read<OrderCubit>();
             final orders = orderCubit.displayedordersList;
 
-            if ((state is GetAllOrdersLoadingState ||
-                    state is GetFilteredOrdersLoadingState) &&
+            if ((state is GetAllOrdersLoading ||
+                    state is GetFilteredOrdersLoading) &&
                 orders.isEmpty) {
               return const Center(
                 child: CircularProgressIndicator(color: commonColor),
               );
             }
 
-            if ((state is GetAllOrdersFailedState ||
-                    state is GetFilteredOrdersFailedState) &&
+            if ((state is GetAllOrdersError ||
+                    state is GetFilteredOrdersError) &&
                 orders.isEmpty) {
               return Center(
                 child: Text(
-                  'Failed to load orders. Pull to refresh.',
+                  context.l10n.failedToLoadOrders,
                   style: AppTextStyles.t_14w500.copyWith(color: redDegree),
                 ),
               );
@@ -124,7 +124,7 @@ class CustomerOrdersScreen extends StatelessWidget {
                             SizedBox(height: 140.h),
                             Center(
                               child: Text(
-                                'No orders found in this tab.',
+                                context.l10n.noOrdersFoundInThisTab,
                                 style: AppTextStyles.t_14w500.copyWith(
                                   color: subTitleColor,
                                 ),

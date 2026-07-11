@@ -35,7 +35,7 @@ class PayPAlService {
           clientId:
               "AeV7F4kmJMM5jGe7eEXzxwOm74Fd6Rbq6lmhqHH8dAZDwmlqhncdUKu2ALrfgnY3owDvnVkvJTlwSSjl",
           secretKey:
-              "EJxaQFcQozr0MC5uhwjGUoyYtvmG2PSe3H1a8zJpUafruKW9t8Fv0EoT5TGMYCBT7MMObYbmgGHZPA82",
+              "EPcpr-WP2JfaMjkj4H3gg8P8Nc820FmKNk-XE8-A6n5QRFDzZltSlvx0-Xle54e2_UFHkiTb6junfuRt",
           transactions: [
             {
               "amount": amount.toJson(),

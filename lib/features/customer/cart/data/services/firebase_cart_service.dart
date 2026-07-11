@@ -1,54 +1,38 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
+import 'package:handmade_ecommerce_app/core/models/coupon_model.dart';
 
+/// Handles all cart-related Firebase operations for the current user.
 class FirebaseCartService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CollectionReference<Map<String, dynamic>> get _cartsRef =>
+  CollectionReference<Map<String, dynamic>> get _carts =>
       _firestore.collection('carts');
 
-  List<Map<String, dynamic>> _normalizeItems(dynamic rawItems) {
-    if (rawItems is! List) return <Map<String, dynamic>>[];
-    return rawItems
+  String? get _userId => _auth.currentUser?.uid;
+
+  /// Safely converts raw Firestore data into a list of item maps.
+  List<Map<String, dynamic>> _parseItems(dynamic raw) {
+    if (raw is! List) return [];
+    return raw
         .whereType<Map>()
-        .map((item) => Map<String, dynamic>.from(item))
+        .map((e) => Map<String, dynamic>.from(e))
         .toList();
   }
 
-  double _calculateSubtotal(List<Map<String, dynamic>> items) {
-    return items.fold(0, (subtotal, item) {
-      final rawPrice = item['price'];
-      final rawQuantity = item['quantity'];
-      final price = rawPrice is num
-          ? rawPrice.toDouble()
-          : double.tryParse(rawPrice?.toString() ?? '') ?? 0;
-      final quantity = rawQuantity is int
-          ? rawQuantity
-          : int.tryParse(rawQuantity?.toString() ?? '') ?? 0;
-      return subtotal + (price * quantity);
+  /// Calculates the total price of all items (price × quantity).
+  double _subtotal(List<Map<String, dynamic>> items) {
+    return items.fold(0, (acc, item) {
+      final price = (item['price'] as num?)?.toDouble() ?? 0;
+      final qty = int.tryParse('${item['quantity']}') ?? 0;
+      return acc + price * qty;
     });
   }
 
-  Map<String, dynamic> _toCartItem(
-    ProductModel product, {
-    required int quantity,
-  }) {
-    return {
-      'productId': product.id,
-      'name': product.name,
-      'title': product.name,
-      'images': product.images,
-      'productImage': product.image ?? '',
-      'imageUrl': product.image ?? '',
-      'price': product.price,
-      'quantity': quantity.toString(),
-      'sellerId': product.sellerId,
-    };
-  }
-
-  Map<String, dynamic> _buildCartPayload({
+  /// Builds the cart document payload with metadata.
+  Map<String, dynamic> _cartPayload({
     required String userId,
     required List<Map<String, dynamic>> items,
   }) {
@@ -56,156 +40,125 @@ class FirebaseCartService {
       'userId': userId,
       'items': items,
       'itemsCount': items.length,
-      'subtotal': _calculateSubtotal(items),
+      'subtotal': _subtotal(items),
       'updatedAt': FieldValue.serverTimestamp(),
     };
   }
 
-  Future<DocumentSnapshot<Map<String, dynamic>>?> _getCartDocument(
-    User user,
-  ) async {
-    final byId = await _cartsRef.doc(user.uid).get();
-    if (byId.exists) return byId;
+  /// Converts a ProductModel into a cart-item map for Firestore.
 
-    final byUid = await _cartsRef
-        .where('userId', isEqualTo: user.uid)
-        .limit(1)
-        .get();
-
-    if (byUid.docs.isNotEmpty) return byUid.docs.first;
-
-    return null;
+  Map<String, dynamic> _toCartItem(ProductModel product, {int quantity = 1}) {
+    return {
+      'productId': product.id,
+      'name': product.name,
+      'images': product.images,
+      'productImage': product.image ?? '',
+      'price': product.price,
+      'quantity': quantity.toString(),
+      'sellerId': product.sellerId,
+    };
   }
 
-  Future<DocumentReference<Map<String, dynamic>>> _getOrCreateCartDocRef(
-    User user,
-  ) async {
-    final userCartRef = _cartsRef.doc(user.uid);
-    final userCartSnapshot = await userCartRef.get();
-    if (userCartSnapshot.exists) {
-      return userCartRef;
-    }
-
-    final existing = await _getCartDocument(user);
-    if (existing != null && existing.id != user.uid) {
-      await userCartRef.set(existing.data() ?? <String, dynamic>{});
-      await existing.reference.delete();
-    }
-
-    return userCartRef;
+  /// Fetches the current user's cart document, or null if none exists.
+  Future<DocumentSnapshot<Map<String, dynamic>>?> _getCartDoc() async {
+    if (_userId == null) return null;
+    final doc = await _carts.doc(_userId).get();
+    return doc.exists ? doc : null;
   }
 
-  /// Get user's cart products
+  /// Returns all products currently in the user's cart.
   Future<List<ProductModel>> getCartProducts() async {
-    final user = _auth.currentUser;
-    if (user == null) return [];
-
-    final cartsDoc = await _getCartDocument(user);
-    if (cartsDoc == null) return [];
-
-    final data = cartsDoc.data() ?? <String, dynamic>{};
-    final items = _normalizeItems(data['items']);
+    final doc = await _getCartDoc();
+    if (doc == null) return [];
+    final items = _parseItems(doc.data()?['items']);
     return items.map((item) => ProductModel.fromMap(item)).toList();
   }
 
-  /// Add product to cart or increase quantity
+  /// Adds a product to the cart, or increments its quantity if already present.
+  /// Uses a transaction to atomically validate stock and update the cart.
+  /// Throws if the product is out of stock or exceeds available stock.
   Future<void> addToCart(ProductModel product) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
+    if (_userId == null) throw Exception('User not authenticated');
 
-    final cartRef = await _getOrCreateCartDocRef(user);
-    final snapshot = await cartRef.get();
-    final currentData = snapshot.data() ?? <String, dynamic>{};
-    final items = _normalizeItems(currentData['items']);
-
-    final index = items.indexWhere(
-      (item) => item['productId']?.toString() == product.id,
-    );
-
-    if (index != -1) {
-      final currentQuantity =
-          int.tryParse(items[index]['quantity']?.toString() ?? '0') ?? 0;
-      items[index]['quantity'] = (currentQuantity + 1).toString();
-    } else {
-      items.add(_toCartItem(product, quantity: 1));
-    }
-
-    await cartRef.set(
-      _buildCartPayload(
-        userId: currentData['userId']?.toString() ?? user.uid,
-        items: items,
-      ),
-      SetOptions(merge: true),
-    );
-  }
-
-  /// Remove product from cart or decrease quantity
-  Future<void> removeFromCart(String productId) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
-
-    final cartDoc = await _getCartDocument(user);
-    if (cartDoc == null) return;
-
-    final data = cartDoc.data() ?? <String, dynamic>{};
-    final items = _normalizeItems(data['items']);
-    final index = items.indexWhere(
-      (item) => item['productId']?.toString() == productId,
-    );
-
-    if (index == -1) return;
-
-    final currentQuantity =
-        int.tryParse(items[index]['quantity']?.toString() ?? '0') ?? 0;
-
-    if (currentQuantity > 1) {
-      items[index]['quantity'] = (currentQuantity - 1).toString();
-    } else {
-      items.removeAt(index);
-    }
-
-    await cartDoc.reference.update(
-      _buildCartPayload(userId: user.uid, items: items),
-    );
-  }
-
-  /// Clear entire cart
-  Future<void> clearCart() async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
-
-    final cartDoc = await _getCartDocument(user);
-    if (cartDoc != null) {
-      await cartDoc.reference.update(
-        _buildCartPayload(userId: user.uid, items: <Map<String, dynamic>>[]),
+    await _firestore.runTransaction((transaction) async {
+      // 1. Read product stock atomically
+      final productDoc = await transaction.get(
+        _firestore.collection('products').doc(product.id),
       );
-    }
-  }
+      if (!productDoc.exists) throw Exception('Product not found');
+      final stock = int.tryParse('${productDoc.data()?['stock']}') ?? 0;
 
-  /// Update product quantity in cart
-  Future<void> updateCartItemQuantity(String productId, int quantity) async {
-    final user = _auth.currentUser;
-    if (user == null) throw Exception('User not authenticated');
+      // 2. Read current cart
+      final cartDoc = await transaction.get(_carts.doc(_userId));
+      final items = _parseItems(cartDoc.data()?['items']);
 
-    final cartDoc = await _getCartDocument(user);
-    if (cartDoc != null) {
-      final data = cartDoc.data() ?? <String, dynamic>{};
-      final items = _normalizeItems(data['items']);
-      final index = items.indexWhere(
-        (item) => item['productId']?.toString() == productId,
+      // 3. Find or add the product in the cart
+      final idx = items.indexWhere(
+        (i) => i['productId']?.toString() == product.id,
       );
 
-      if (index == -1) return;
-
-      if (quantity <= 0) {
-        items.removeAt(index);
+      if (idx != -1) {
+        final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
+        if (currentQty + 1 > stock) {
+          throw Exception('Cannot exceed available stock ($stock)');
+        }
+        items[idx]['quantity'] = (currentQty + 1).toString();
       } else {
-        items[index]['quantity'] = quantity.toString();
+        if (1 > stock) throw Exception('Product is out of stock');
+        items.add(_toCartItem(product, quantity: 1));
       }
 
-      await cartDoc.reference.update(
-        _buildCartPayload(userId: user.uid, items: items),
+      // 4. Write the updated cart
+      transaction.set(
+        _carts.doc(_userId),
+        _cartPayload(userId: _userId!, items: items),
+        SetOptions(merge: true),
       );
+    });
+  }
+
+  /// Decreases product quantity by 1, or removes it entirely if quantity is 1.
+  Future<void> removeFromCart(String productId) async {
+    if (_userId == null) throw Exception('User not authenticated');
+
+    final doc = await _getCartDoc();
+    if (doc == null) return;
+
+    final items = _parseItems(doc.data()?['items']);
+    final idx = items.indexWhere(
+      (i) => i['productId']?.toString() == productId,
+    );
+    if (idx == -1) return;
+
+    final currentQty = int.tryParse('${items[idx]['quantity']}') ?? 0;
+    if (currentQty > 1) {
+      items[idx]['quantity'] = (currentQty - 1).toString();
+    } else {
+      items.removeAt(idx);
     }
+
+    await _carts
+        .doc(_userId)
+        .update(_cartPayload(userId: _userId!, items: items));
+  }
+
+  /// Empties the entire cart for the current user.
+  Future<void> clearCart() async {
+    if (_userId == null) throw Exception('User not authenticated');
+
+    final doc = await _getCartDoc();
+    if (doc != null) {
+      await _carts
+          .doc(_userId)
+          .update(_cartPayload(userId: _userId!, items: []));
+    }
+  }
+
+  /// Fetches all available coupons from Firestore.
+  Future<List<CouponModel>> fetchCoupons() async {
+    final snapshot = await _firestore.collection('coupons').get();
+    return snapshot.docs
+        .map((doc) => CouponModel.fromJson(doc.data(), id: doc.id))
+        .toList();
   }
 }

@@ -1,6 +1,6 @@
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
-import 'package:handmade_ecommerce_app/features/notifications/models/notifications_model.dart';
+import 'package:handmade_ecommerce_app/features/notifications/data/models/notifications_model.dart';
 
 /// Core notification service — handles notification tap navigation
 /// and is prepared for future FCM integration

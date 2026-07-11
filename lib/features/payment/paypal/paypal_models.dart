@@ -29,14 +29,14 @@ class AmountPaymentModel {
 class Details {
   String? subtotal;
   String? shipping;
-  int? shippingDiscount;
+  String? shippingDiscount;
 
   Details({this.subtotal, this.shipping, this.shippingDiscount});
 
   factory Details.fromJson(Map<String, dynamic> json) => Details(
     subtotal: json['subtotal'] as String?,
     shipping: json['shipping'] as String?,
-    shippingDiscount: json['shipping_discount'] as int?,
+    shippingDiscount: json['shipping_discount'] as String?,
   );
 
   Map<String, dynamic> toJson() => {

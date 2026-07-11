@@ -3,6 +3,7 @@ import 'package:handmade_ecommerce_app/core/models/seller_model.dart';
 import 'package:handmade_ecommerce_app/core/utils/parse_utils.dart';
 import 'package:handmade_ecommerce_app/features/customer/reviews/data/models/reviews_model.dart';
 
+/// Represents a product with all its details (name, price, images, seller, etc.).
 class ProductModel {
   final String id;
   final String name;
@@ -24,7 +25,6 @@ class ProductModel {
   final List<String> images;
   final List<String>? tags;
   final SellerModel seller;
-
   final CategoryModel? category;
 
   ProductModel({
@@ -51,6 +51,7 @@ class ProductModel {
     this.reviews,
   });
 
+  /// Returns a copy with optional field overrides.
   ProductModel copyWith({
     String? id,
     String? name,
@@ -99,22 +100,47 @@ class ProductModel {
     );
   }
 
+  /// First image URL, or null if no images.
   String? get image => images.isNotEmpty ? images.first : null;
+
+  /// Product rating, defaults to 0.
   double get rating => totalrate ?? 0;
+
+  /// Seller ID used across the app.
   String get sellerId => seller.primaryIdentifier;
+
+  /// Category ID or title as fallback.
   String? get categoryId => category?.id ?? category?.categorytitle;
 
+  /// Returns name in Arabic or English based on locale.
+  String localizedName(bool isArabic) {
+    if (isArabic && nameAR != null && nameAR!.isNotEmpty) return nameAR!;
+    return name;
+  }
+
+  /// Returns description in Arabic or English based on locale.
+  String localizedDescription(bool isArabic) {
+    if (isArabic && descriptionAR != null && descriptionAR!.isNotEmpty) {
+      return descriptionAR!;
+    }
+    return description;
+  }
+
+  /// Parses images from various Firestore field formats.
   static List<String> _parseImages(Map<String, dynamic> map) {
     if (map['images'] is List) {
       return (map['images'] as List).map((e) => e.toString()).toList();
     }
-    final single = map['productImage']?.toString() ?? map['imageUrl']?.toString();
+    final single =
+        map['productImage']?.toString() ?? map['imageUrl']?.toString();
     return (single != null && single.isNotEmpty) ? [single] : [];
   }
 
+  /// Parses seller info from embedded map or flat fields.
   static SellerModel _parseSeller(Map<String, dynamic> map) {
     final sellerMap = map['seller'];
-    final refId = SellerModel.normalizeReferenceId(sellerMap) ??
+    final refId =
+        SellerModel.normalizeReferenceId(sellerMap) ??
         SellerModel.normalizeReferenceId(map['sellerId']);
     if (sellerMap is Map<String, dynamic>) {
       return SellerModel.fromMap(sellerMap, fallbackId: refId?.toString());
@@ -131,9 +157,11 @@ class ProductModel {
     }, fallbackId: (refId ?? map['sellerId'])?.toString());
   }
 
+  /// Parses category from embedded map or flat fields.
   static CategoryModel? _parseCategory(Map<String, dynamic> map) {
     final categoryMap = map['category'];
-    final refId = CategoryModel.normalizeReferenceId(categoryMap) ??
+    final refId =
+        CategoryModel.normalizeReferenceId(categoryMap) ??
         CategoryModel.normalizeReferenceId(map['categoryId']);
     if (categoryMap is Map<String, dynamic>) {
       return CategoryModel.fromMap(categoryMap, id: refId);
@@ -147,17 +175,19 @@ class ProductModel {
     return null;
   }
 
+  /// Creates a ProductModel from a Firestore or cart-item map.
   factory ProductModel.fromMap(Map<String, dynamic> map, {String? id}) {
     return ProductModel(
       id: id ?? map['id']?.toString() ?? map['productId']?.toString() ?? '',
-      name: map['name']?.toString() ??
+      name:
+          map['name']?.toString() ??
           map['productName']?.toString() ??
           map['title']?.toString() ??
           '',
       nameAR: map['nameAR']?.toString() ?? map['name_ar']?.toString(),
       description: map['description']?.toString() ?? '',
-      descriptionAR: map['descriptionAR']?.toString() ??
-          map['description_ar']?.toString(),
+      descriptionAR:
+          map['descriptionAR']?.toString() ?? map['description_ar']?.toString(),
       price: parseDouble(map['price']) ?? 0,
       discountedPrice: parseDouble(map['discountedPrice']),
       currency: map['currency']?.toString() ?? 'EGP',
@@ -178,8 +208,9 @@ class ProductModel {
     );
   }
 
+  /// Converts the model back to a map for Firestore storage.
   Map<String, dynamic> toMap() {
-    final data = <String, dynamic>{
+    return {
       'productId': id,
       'name': name,
       'nameAR': nameAR,
@@ -196,14 +227,11 @@ class ProductModel {
       'categoryId': category?.id,
       'tags': tags ?? <String>[],
       'isActive': isActive,
-      'status': status ?? 'approved',
+      'status': status ?? 'pending',
       'salesCount': salesCount ?? 0,
       'createdAt': createdAt ?? DateTime.now(),
       'updatedAt': updatedAt ?? DateTime.now(),
+      'discountedPrice': discountedPrice,
     };
-
-    data['discountedPrice'] = discountedPrice;
-
-    return data;
   }
 }

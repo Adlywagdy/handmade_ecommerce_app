@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/ui/widgets/payment_methods_list.dart';
@@ -27,8 +28,13 @@ class PaymentColumn extends StatelessWidget {
         spacing: 12.h,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+<<<<<<< HEAD:lib/features/customer/cart/ui/widgets/payment_column.dart
           Text('Payment Method', style: AppTextStyles.t_18w700),
           PaymentMethodsList(),
+=======
+          Text(context.l10n.paymentMethod, style: AppTextStyles.t_18w700),
+          PaymentsMethodsList(),
+>>>>>>> main:lib/features/customer/cart/ui/widgets/paymentcolumn.dart
         ],
       ),
     );

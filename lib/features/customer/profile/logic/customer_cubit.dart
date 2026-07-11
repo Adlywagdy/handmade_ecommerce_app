@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:handmade_ecommerce_app/core/services/cloudinary_service.dart';
 import 'package:handmade_ecommerce_app/features/customer/profile/data/firebase_customer_service.dart';
 import 'package:handmade_ecommerce_app/core/models/address_model.dart';
 import 'package:handmade_ecommerce_app/features/customer/home/data/customer_model.dart';
@@ -6,17 +9,22 @@ import 'package:handmade_ecommerce_app/features/customer/home/data/customer_mode
 part 'customer_state.dart';
 
 class CustomerCubit extends Cubit<CustomerState> {
-  CustomerCubit({FirebaseCustomerService? customerService})
-    : _customerService = customerService ?? FirebaseCustomerService(),
-      super(CustomerInitial());
+  CustomerCubit({
+    FirebaseCustomerService? customerService,
+    CloudinaryService? cloudinaryService,
+  })  : _customerService = customerService ?? FirebaseCustomerService(),
+        _cloudinaryService = cloudinaryService ?? CloudinaryService(),
+        super(CustomerInitial());
 
   final FirebaseCustomerService _customerService;
+  final CloudinaryService _cloudinaryService;
   CustomerModel customerData = CustomerModel.empty();
 
   Future<void> getCustomerdata() async {
-    emit(GetCustomerdataLoadingstate());
+    emit(CustomerDataLoading());
     try {
       customerData = await _customerService.getCustomerData() ?? customerData;
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
@@ -34,6 +42,11 @@ class CustomerCubit extends Cubit<CustomerState> {
     } catch (e) {
       if (isClosed) return;
       emit(NotificationsFailedstate(errorMessage: e.toString()));
+=======
+      emit(CustomerDataSuccess(customer: customerData));
+    } catch (e) {
+      emit(CustomerDataError(message: e.toString()));
+>>>>>>> main
     }
   }
 
@@ -41,11 +54,43 @@ class CustomerCubit extends Cubit<CustomerState> {
     try {
       await _customerService.setDefaultAddress(address);
       customerData.address = address;
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetCustomerdataSuccessedstate(customer: customerData));
     } catch (e) {
       if (isClosed) return;
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+=======
+      emit(CustomerDataSuccess(customer: customerData));
+    } catch (e) {
+      emit(CustomerDataError(message: e.toString()));
+    }
+  }
+
+  Future<void> setDefaultDeliveryDetails({
+    required AddressModel address,
+    required String phone,
+  }) async {
+    try {
+      await _customerService.setDefaultDeliveryDetails(
+        address: address,
+        phone: phone,
+      );
+      customerData.address = address;
+      customerData = CustomerModel(
+        id: customerData.id,
+        name: customerData.name,
+        email: customerData.email,
+        phone: phone,
+        role: customerData.role,
+        provider: customerData.provider,
+        image: customerData.image,
+        address: address,
+      );
+      emit(CustomerDataSuccess(customer: customerData));
+    } catch (e) {
+      emit(CustomerDataError(message: e.toString()));
+>>>>>>> main
     }
   }
 
@@ -54,7 +99,7 @@ class CustomerCubit extends Cubit<CustomerState> {
     String? phone,
     String? image,
   }) async {
-    emit(GetCustomerdataLoadingstate());
+    emit(CustomerDataLoading());
     try {
       await _customerService.updateCustomerProfile(
         name: name,
@@ -64,8 +109,40 @@ class CustomerCubit extends Cubit<CustomerState> {
       if (isClosed) return;
       await getCustomerdata();
     } catch (e) {
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetCustomerdataFailedstate(errorMessage: e.toString()));
+=======
+      emit(CustomerDataError(message: e.toString()));
+    }
+  }
+
+  Future<void> uploadAndSaveProfileImage(File imageFile) async {
+    emit(ImageUploadLoading());
+    try {
+      final imageUrl = await _cloudinaryService.uploadImage(imageFile);
+
+      await _customerService.updateCustomerProfile(
+        name: customerData.name,
+        phone: customerData.phone,
+        image: imageUrl,
+      );
+
+      customerData = CustomerModel(
+        id: customerData.id,
+        name: customerData.name,
+        email: customerData.email,
+        phone: customerData.phone,
+        role: customerData.role,
+        provider: customerData.provider,
+        image: imageUrl,
+        address: customerData.address,
+      );
+
+      emit(ImageUploadSuccess(customer: customerData));
+    } catch (e) {
+      emit(ImageUploadError(message: e.toString()));
+>>>>>>> main
     }
   }
 }

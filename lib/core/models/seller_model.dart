@@ -49,7 +49,11 @@ class SellerModel {
     this.createdAt,
   });
 
-  static String? _first(Iterable<dynamic> keys, Map<String, dynamic> map, {String? fallback}) {
+  static String? _first(
+    Iterable<dynamic> keys,
+    Map<String, dynamic> map, {
+    String? fallback,
+  }) {
     for (final key in keys) {
       final val = cleanString(map[key]);
       if (val != null) return val;
@@ -65,19 +69,34 @@ class SellerModel {
     return SellerModel(
       id: _first(['id', 'uid', 'sellerId'], map, fallback: fallbackId),
       name: _first(['name', 'ownerName', 'fullName'], map) ?? '',
-      email: _first(['email', 'sellerEmail', 'uid', 'sellerId'], map, fallback: fallbackId) ?? '',
+      email:
+          _first(
+            ['email', 'sellerEmail', 'uid', 'sellerId'],
+            map,
+            fallback: fallbackId,
+          ) ??
+          '',
       specialty: _first(['specialty', 'shopName', 'storeName'], map) ?? '',
-      submittedDate: cleanString(map['submittedDate']) ?? _formatDate(submittedAt),
+      submittedDate:
+          cleanString(map['submittedDate']) ?? _formatDate(submittedAt),
       ownerName: cleanString(map['ownerName']),
       phone: cleanString(map['phone']),
       badge: cleanString(map['badge']),
-      image: _first(['avatar', 'profileImage', 'image', 'photoUrl', 'sellerImage'], map),
+      image: _first([
+        'avatar',
+        'profileImage',
+        'image',
+        'photoUrl',
+        'sellerImage',
+      ], map),
       city: cleanString(map['city']),
       country: cleanString(map['country']),
-      location: composeLocation(
-        city: cleanString(map['city']),
-        country: cleanString(map['country']),
-      ) ?? _first(['location', 'address', 'sellerLocation'], map),
+      location:
+          composeLocation(
+            city: cleanString(map['city']),
+            country: cleanString(map['country']),
+          ) ??
+          _first(['location', 'address', 'sellerLocation'], map),
       rating: parseDouble(map['rating']),
       totalProducts: parseInt(map['totalProducts']),
       totalSales: parseInt(map['totalSales']),
@@ -88,34 +107,6 @@ class SellerModel {
       submittedAt: submittedAt,
       approvedAt: approvedAt,
       createdAt: createdAt,
-    );
-  }
-
-  SellerModel mergedWith(SellerModel fallback) {
-    return SellerModel(
-      id: cleanString(id) ?? cleanString(fallback.id),
-      name: cleanString(name) ?? cleanString(fallback.name) ?? '',
-      email: cleanString(email) ?? cleanString(fallback.email) ?? '',
-      specialty: cleanString(specialty) ?? cleanString(fallback.specialty) ?? '',
-      submittedDate:
-          cleanString(submittedDate) ?? cleanString(fallback.submittedDate) ?? '',
-      ownerName: cleanString(ownerName) ?? cleanString(fallback.ownerName),
-      phone: cleanString(phone) ?? cleanString(fallback.phone),
-      badge: cleanString(badge) ?? cleanString(fallback.badge),
-      image: cleanString(image) ?? cleanString(fallback.image),
-      city: cleanString(city) ?? cleanString(fallback.city),
-      country: cleanString(country) ?? cleanString(fallback.country),
-      location: cleanString(location) ?? cleanString(fallback.location),
-      rating: rating ?? fallback.rating,
-      totalProducts: totalProducts ?? fallback.totalProducts,
-      totalSales: totalSales ?? fallback.totalSales,
-      walletBalance: walletBalance ?? fallback.walletBalance,
-      commissionRate: commissionRate ?? fallback.commissionRate,
-      isActive: isActive ?? fallback.isActive,
-      status: cleanString(status) ?? cleanString(fallback.status),
-      submittedAt: submittedAt ?? fallback.submittedAt,
-      approvedAt: approvedAt ?? fallback.approvedAt,
-      createdAt: createdAt ?? fallback.createdAt,
     );
   }
 

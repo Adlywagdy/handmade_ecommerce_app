@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomStarsRatingReview extends StatelessWidget {
   const CustomStarsRatingReview({
@@ -47,7 +48,7 @@ class CustomStarsRatingReview extends StatelessWidget {
         Text(
           selectedRating > 0
               ? getReviewLabel(selectedRating).name.toUpperCase()
-              : 'TAP TO RATE',
+              : context.l10n.tapToRate,
           textAlign: TextAlign.center,
           style: AppTextStyles.t_18w700.copyWith(
             color: selectedRating > 0

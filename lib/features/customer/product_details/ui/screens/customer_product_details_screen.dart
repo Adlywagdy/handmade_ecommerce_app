@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
@@ -13,6 +14,7 @@ import 'package:handmade_ecommerce_app/core/widgets/product_item.dart';
 import 'package:handmade_ecommerce_app/features/customer/cart/logic/cart_cubit.dart';
 import 'package:handmade_ecommerce_app/features/customer/product_details/ui/widgets/product_details_lower_column.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 
 class CustomerProductDetailsScreen extends StatelessWidget {
   final ProductModel product;
@@ -20,6 +22,8 @@ class CustomerProductDetailsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isArabic = context.watch<LocaleCubit>().state?.languageCode == 'ar';
+
     return Scaffold(
       backgroundColor: customerbackGroundColor,
 
@@ -43,17 +47,17 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                 icon: Icons.share_outlined,
                 iconcolor: commonColor,
                 onPressed: () {
-                  SharePlus.instance.share(
-                    ShareParams(
-                      text:
-                          'check out this product: ${product.name} for \$${product.price} at our store!',
-                    ),
-                  );
+                  final productName = product.localizedName(isArabic);
+                  final deepLink =
+                      'https://handmade-ecommerce-app.web.app/product/${product.id}';
+                  final shareText =
+                      '${context.l10n.checkOutThisProduct(productName, 'EGP ${product.price}')}\n$deepLink';
+                  SharePlus.instance.share(ShareParams(text: shareText));
                 },
               ),
             ],
             title: Text(
-              'Product Details',
+              context.l10n.productDetails,
               textAlign: TextAlign.center,
               style: AppTextStyles.t_18w700.copyWith(color: blackDegree),
             ),
@@ -81,8 +85,8 @@ class CustomerProductDetailsScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Container(
-              height: 490.h,
-              constraints: BoxConstraints(maxHeight: 550.h, minHeight: 350.h),
+              height: 450.h,
+              constraints: BoxConstraints(maxHeight: 500.h, minHeight: 300.h),
               child: ProductItem(
                 product: product,
                 imageflex: 3.h.toInt(),
@@ -94,17 +98,20 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                 cardclipBehavior: Clip.none,
                 lowercolumn: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      product.name,
-
-                      style: AppTextStyles.t_30w700.copyWith(
+                      product.localizedName(isArabic),
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: AppTextStyles.t_24w700.copyWith(
                         color: blackDegree,
                       ),
                     ),
+                    SizedBox(height: 4.h),
                     Text(
-                      '\$${product.price}',
-                      style: AppTextStyles.t_24w700.copyWith(
+                      'EGP ${product.price}',
+                      style: AppTextStyles.t_20w700.copyWith(
                         color: commonColor,
                       ),
                     ),
@@ -119,7 +126,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              padding: EdgeInsets.symmetric(horizontal: 16.w),
               child: ProductDetailsLowerColumn(product: product),
             ),
           ),
@@ -145,7 +152,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                       },
                       buttoncolor: commonColor,
                       child: Text(
-                        'Buy Now',
+                        context.l10n.buyNow,
                         textAlign: TextAlign.center,
                         style: AppTextStyles.t_16w600.copyWith(
                           color: Colors.white,
@@ -165,18 +172,18 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                       },
                       child: BlocBuilder<CartCubit, CartState>(
                         buildWhen: (previous, current) {
-                          return current is AddcartproductSuccessedstate ||
-                              current is AddcartproductFailedstate ||
-                              current is AddcartproductLoadingstate;
+                          return current is AddProductSuccess ||
+                              current is AddProductError ||
+                              current is AddProductLoading;
                         },
                         builder: (context, state) {
-                          if (state is AddcartproductLoadingstate) {
+                          if (state is AddProductLoading) {
                             return CircularProgressIndicator(
                               color: commonColor,
                               strokeWidth: 1.5,
                             );
                           }
-                          if (state is AddcartproductSuccessedstate) {
+                          if (state is AddProductSuccess) {
                             return Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
@@ -187,7 +194,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                                 ),
                                 SizedBox(width: 8.w),
                                 Text(
-                                  'Added',
+                                  context.l10n.added,
                                   textAlign: TextAlign.center,
                                   style: AppTextStyles.t_16w600.copyWith(
                                     color: commonColor,
@@ -206,7 +213,7 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                               ),
                               SizedBox(width: 8.w),
                               Text(
-                                'Add to Cart',
+                                context.l10n.addToCart,
                                 textAlign: TextAlign.center,
                                 style: AppTextStyles.t_16w600.copyWith(
                                   color: commonColor,

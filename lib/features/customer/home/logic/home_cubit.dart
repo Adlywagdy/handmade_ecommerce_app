@@ -11,29 +11,39 @@ class HomeCubit extends Cubit<HomeState> {
 
   final FirebaseProductService _productService;
 
-  /* ------------------------------------------- */
   Future<void> getFeaturedProducts() async {
-    emit(GetFeaturedLoadingstate());
+    emit(FeaturedLoading());
     try {
       final featuredProducts = await _productService.getFeaturedProducts();
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetFeaturedSuccessedstate(products: featuredProducts));
     } catch (e) {
       if (isClosed) return;
       emit(GetFeaturedFailedstate(errorMessage: e.toString()));
+=======
+      emit(FeaturedSuccess(products: featuredProducts));
+    } catch (e) {
+      emit(FeaturedError(message: e.toString()));
+>>>>>>> main
     }
   }
 
-  /* ------------------------------------------- */
   Future<void> getTopRatedProducts() async {
-    emit(GetTopRatedLoadingstate());
+    emit(TopRatedLoading());
     try {
       final topRatedProducts = await _productService.getTopRatedProducts();
+<<<<<<< HEAD
       if (isClosed) return;
       emit(GetTopRatedSuccessedstate(products: topRatedProducts));
     } catch (e) {
       if (isClosed) return;
       emit(GetTopRatedFailedstate(errorMessage: e.toString()));
+=======
+      emit(TopRatedSuccess(products: topRatedProducts));
+    } catch (e) {
+      emit(TopRatedError(message: e.toString()));
+>>>>>>> main
     }
   }
 }

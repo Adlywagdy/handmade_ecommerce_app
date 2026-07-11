@@ -7,18 +7,21 @@ class FirebaseCustomerService {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
-  CollectionReference<Map<String, dynamic>> get _usersCollection =>
+  CollectionReference<Map<String, dynamic>> get _users =>
       _firestore.collection('users');
 
-  /// Get current user's profile data from Firestore
+  User? get _user => _auth.currentUser;
+
+  // ─── Profile ──────────────────────────────────────────
+
   Future<CustomerModel?> getCustomerData() async {
-    final user = _auth.currentUser;
+    final user = _user;
     if (user == null) return null;
 
-    final doc = await _usersCollection.doc(user.uid).get();
+    final doc = await _users.doc(user.uid).get();
     if (!doc.exists) return null;
 
-    final data = doc.data() ?? <String, dynamic>{};
+    final data = doc.data() ?? {};
     return CustomerModel.fromMap({
       ...data,
       'uid': data['uid'] ?? user.uid,
@@ -28,16 +31,15 @@ class FirebaseCustomerService {
     });
   }
 
-  /// Update customer profile
   Future<void> updateCustomerProfile({
     required String name,
     required String phone,
     String? image,
   }) async {
-    final user = _auth.currentUser;
+    final user = _user;
     if (user == null) throw Exception('User not authenticated');
 
-    await _usersCollection.doc(user.uid).set({
+    await _users.doc(user.uid).set({
       'uid': user.uid,
       'fullName': name,
       'name': name,
@@ -51,32 +53,29 @@ class FirebaseCustomerService {
     }
   }
 
-  /// Set default address for customer
+  // ─── Address ──────────────────────────────────────────
+
   Future<void> setDefaultAddress(AddressModel address) async {
-    final user = _auth.currentUser;
+    final user = _user;
     if (user == null) throw Exception('User not authenticated');
 
-    await _usersCollection.doc(user.uid).set({
+    await _users.doc(user.uid).set({
       'address': address.toMap(),
       'updatedAt': FieldValue.serverTimestamp(),
     }, SetOptions(merge: true));
   }
 
-  /// Get customer notifications
-  Future<List<String>> getNotifications() async {
-    final user = _auth.currentUser;
-    if (user == null) return [];
+  Future<void> setDefaultDeliveryDetails({
+    required AddressModel address,
+    required String phone,
+  }) async {
+    final user = _user;
+    if (user == null) throw Exception('User not authenticated');
 
-    final doc = await _usersCollection
-        .doc(user.uid)
-        .collection('notifications')
-        .orderBy('timestamp', descending: true)
-        .limit(20)
-        .get();
-
-    return doc.docs
-        .map((notificationDoc) => notificationDoc.data()['message'])
-        .whereType<String>()
-        .toList();
+    await _users.doc(user.uid).set({
+      'address': address.toMap(),
+      'phone': phone,
+      'updatedAt': FieldValue.serverTimestamp(),
+    }, SetOptions(merge: true));
   }
 }
