@@ -47,13 +47,13 @@ class CustomerProductDetailsScreen extends StatelessWidget {
                 icon: Icons.share_outlined,
                 iconcolor: commonColor,
                 onPressed: () {
+                  final productName = product.localizedName(isArabic);
+                  final deepLink =
+                      'https://handmade-ecommerce-app.web.app/product/${product.id}';
+                  final shareText =
+                      '${context.l10n.checkOutThisProduct(productName, 'EGP ${product.price}')}\n$deepLink';
                   SharePlus.instance.share(
-                    ShareParams(
-                      text: context.l10n.checkOutThisProduct(
-                        product.localizedName(isArabic),
-                        'EGP ${product.price}',
-                      ),
-                    ),
+                    ShareParams(text: shareText),
                   );
                 },
               ),
