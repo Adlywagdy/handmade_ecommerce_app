@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/extension/localization_extension.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/routes/routes.dart';
@@ -97,7 +97,7 @@ class ProductItemOfOrder extends StatelessWidget {
                           elevation: 0,
                           child: Padding(
                             padding: const EdgeInsets.all(8.0).r,
-                            child:                             Text(
+                            child: Text(
                               context.l10n.qty(product.quantity),
                               style: AppTextStyles.t_12w500,
                             ),

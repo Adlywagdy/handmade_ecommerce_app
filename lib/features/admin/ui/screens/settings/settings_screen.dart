@@ -4,7 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:handmade_ecommerce_app/features/l10n/generated/app_localizations.dart';
 
-import '../../../../../core/cubit/locale_cubit.dart';
+import '../../../../l10n/cubit/locale_cubit.dart';
 import '../../../../../core/routes/routes.dart';
 import '../../../../../core/theme/app_theme.dart';
 import '../../../../../core/theme/colors.dart';

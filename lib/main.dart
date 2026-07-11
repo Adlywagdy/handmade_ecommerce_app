@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/debugging/bloc_observer.dart';
 import 'package:handmade_ecommerce_app/core/functions/get_initial_route.dart';
 import 'package:handmade_ecommerce_app/core/services/hivehelper_service.dart';

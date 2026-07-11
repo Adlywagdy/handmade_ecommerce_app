@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:handmade_ecommerce_app/core/cubit/locale_cubit.dart';
+import 'package:handmade_ecommerce_app/features/l10n/cubit/locale_cubit.dart';
 import 'package:handmade_ecommerce_app/core/models/product_model.dart';
 import 'package:handmade_ecommerce_app/core/theme/app_theme.dart';
 import 'package:handmade_ecommerce_app/core/theme/colors.dart';
@@ -67,7 +67,11 @@ class ReviewedProduct extends StatelessWidget {
                 ),
                 SizedBox(height: 4.h),
                 Text(
-                  context.l10n.soldBy(product.seller.name.isNotEmpty ? product.seller.name : (product.seller.id ?? '')),
+                  context.l10n.soldBy(
+                    product.seller.name.isNotEmpty
+                        ? product.seller.name
+                        : (product.seller.id ?? ''),
+                  ),
                   maxLines: 1,
                   overflow: TextOverflow.ellipsis,
                   style: AppTextStyles.t_14w500.copyWith(color: commonColor),
